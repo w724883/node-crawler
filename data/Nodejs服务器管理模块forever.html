@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Nodejs服务器管理模块forever | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Nodejs服务器管理模块forever Comments Feed" href="http://blog.fens.me/nodejs-server-forever/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Commander写自己的Nodejs命令' href='http://blog.fens.me/nodejs-commander/' />
+<link rel='next' title='解读Nodejs多核处理模块cluster' href='http://blog.fens.me/nodejs-core-cluster/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-server-forever/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=2639' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-server-forever%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-server-forever%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,forever,服务器管理" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-2639 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Nodejs服务器管理模块forever</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-2639 post type-post status-publish format-standard hentry category-javascript tag-forever tag-nodejs tag-313">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-server-forever/" title="Nodejs服务器管理模块forever" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Sep 26, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/forever/" rel="tag">forever</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ae%a1%e7%90%86/" rel="tag">服务器管理</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-server-forever/#comments"><span class="dsq-postid" data-dsqidentifier="2639 http://blog.fens.me/?p=2639">29 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Nodejs服务器管理模块forever</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs服务器管理模块forever" href="http://blog.fens.me/nodejs-server-forever/" target="_blank">http://blog.fens.me/nodejs-server-forever/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/09/nodejs-forever.png"><img src="http://blog.fens.me/wp-content/uploads/2013/09/nodejs-forever.png" alt="nodejs-forever" width="600" height="400" class="alignnone size-full wp-image-2667" /></a></p>
+<p><strong>目前</strong></p>
+<p>又说到服务器管理了，上次说的时候用的是<a title="upstart封装nodejs应用为系统服务" href="http://blog.fens.me/linux-upstart-nodejs/" target="_blank">Linux系统服务upstart</a>, 今天准备尝试一下Nodejs自己模块化解决方案forever。</p>
+<p>服务器管理是系统上线后，必须要面对的问题。最好有一个软件可以提供整套的服务器运行解决方案：要求运行稳定，支持高并发，启动/停止命令简单，支持热部署，宕机重启，监控界面和日志，集群环境。</p>
+<p>接下来，就让我们看看forever能不能实现目标。</p>
+<p><strong>前言</strong></p>
+<ol>
+<li>forever介绍</li>
+<li>forever安装</li>
+<li>forever命令行的中文解释</li>
+<li>forever服务器管理</li>
+<li>forever在Ubuntu进行服务器管理</li>
+<li>模拟服务器宕机</li>
+<li>开发环境和生产环境的启动配置</li>
+</ol>
+<h2>1. forever介绍</h2>
+<p>forever是一个简单的命令式nodejs的守护进程，能够启动，停止，重启App应用。forever完全基于命令行操作，在forever进程之下，创建node的子进程，通过monitor监控node子进程的运行情况，一旦文件更新，或者进程挂掉，forever会自动重启node服务器，确保应用正常运行。</p>
+<h2>2. forever安装</h2>
+<p>全局安装forever</p>
+<pre><code>
+~ D:\workspace\javascript&gt;npm install -g forever
+D:\toolkit\nodejs\forever -&gt; D:\toolkit\nodejs\node_modules\forever\bin\forever
+D:\toolkit\nodejs\foreverd -&gt; D:\toolkit\nodejs\node_modules\forever\bin\foreverd
+</code></pre>
+<p>查看forever帮助</p>
+<pre><code>
+~ D:\workspace\javascript&gt;forever -h
+help: usage: forever [action] [options] SCRIPT [script-options]
+help:
+help: Monitors the script specified in the current process or as a daemon
+help:
+help: actions:
+help: start Start SCRIPT as a daemon
+help: stop Stop the daemon SCRIPT
+help: stopall Stop all running forever scripts
+help: restart Restart the daemon SCRIPT
+help: restartall Restart all running forever scripts
+help: list List all running forever scripts
+help: config Lists all forever user configuration
+help: set &lt;key&gt; &lt;val&gt; Sets the specified forever config &lt;key&gt;
+help: clear &lt;key&gt; Clears the specified forever config &lt;key&gt;
+help: logs Lists log files for all forever processes
+help: logs &lt;script|index&gt; Tails the logs for &lt;script|index&gt;
+help: columns add &lt;col&gt; Adds the specified column to the output in `forever list`
+help: columns rm &lt;col&gt; Removed the specified column from the output in `forever list`
+help: columns set &lt;cols&gt; Set all columns for the output in `forever list`
+help: cleanlogs [CAREFUL] Deletes all historical forever log files
+help:
+help: options:
+help: -m MAX Only run the specified script MAX times
+help: -l LOGFILE Logs the forever output to LOGFILE
+help: -o OUTFILE Logs stdout from child script to OUTFILE
+help: -e ERRFILE Logs stderr from child script to ERRFILE
+help: -p PATH Base path for all forever related files (pid files, etc.)
+help: -c COMMAND COMMAND to execute (defaults to node)
+help: -a, --append Append logs
+help: -f, --fifo Stream logs to stdout
+help: -n, --number Number of log lines to print
+help: --pidFile The pid file
+help: --sourceDir The source directory for which SCRIPT is relative to
+help: --minUptime Minimum uptime (millis) for a script to not be considered "spinning"
+help: --spinSleepTime Time to wait (millis) between launches of a spinning script.
+help: --colors --no-colors will disable output coloring
+help: --plain alias of --no-colors
+help: -d, --debug Forces forever to log debug output
+help: -v, --verbose Turns on the verbose messages from Forever
+help: -s, --silent Run the child script silencing stdout and stderr
+help: -w, --watch Watch for file changes
+help: --watchDirectory Top-level directory to watch from
+help: --watchIgnore To ignore pattern when watch is enabled (multiple option is allowed)
+help: -h, --help You're staring at it
+help:
+help: [Long Running Process]
+help: The forever process will continue to run outputting log messages to the console.
+help: ex. forever -o out.log -e err.log my-script.js
+help:
+help: [Daemon]
+help: The forever process will run as a daemon which will make the target process start
+help: in the background. This is extremely useful for remote starting simple node.js scripts
+help: without using nohup. It is recommended to run start with -o -l, &amp; -e.
+help: ex. forever start -l forever.log -o out.log -e err.log my-daemon.js
+help: forever stop my-daemon.js
+help:
+</code></pre>
+<p>通过“<a href="http://blog.fens.me/nodejs-commander/" title="Commander写自己的Nodejs命令" target="_blank">Commander写自己的Nodejs命令</a>”一文的介绍，我们已经知道如何看懂，并实现自定义的命令行了。虽然，forever不是基于Commander的，而是基于另一个命令行开发包optimist，原理都是类似的。</p>
+<p>所以，我们看到forever支持的命令和配置项确实不少，应该是偏命令行的管理工具。</p>
+<h2>3. forever命令行的中文解释</h2>
+<p>子命令actions：</p>
+<ul>
+<li>start:启动守护进程</li>
+<li>stop:停止守护进程</li>
+<li>stopall:停止所有的forever进程</li>
+<li>restart:重启守护进程</li>
+<li>restartall:重启所有的foever进程</li>
+<li>list:列表显示forever进程</li>
+<li>config:列出所有的用户配置项</li>
+<li>set &lt;key&gt; &lt;val&gt;: 设置用户配置项</li>
+<li>clear &lt;key&gt;: 清楚用户配置项</li>
+<li>logs: 列出所有forever进程的日志</li>
+<li>logs &lt;script|index&gt;: 显示最新的日志</li>
+<li>columns add &lt;col&gt;: 自定义指标到forever list</li>
+<li>columns rm &lt;col&gt;: 删除forever list的指标</li>
+<li>columns set&lt;cols&gt;: 设置所有的指标到forever list</li>
+<li>cleanlogs: 删除所有的forever历史日志</li>
+</ul>
+<p>配置参数options：</p>
+<ul>
+<li>-m MAX: 运行指定脚本的次数</li>
+<li>-l LOGFILE: 输出日志到LOGFILE</li>
+<li>-o OUTFILE: 输出控制台信息到OUTFILE</li>
+<li>-e ERRFILE: 输出控制台错误在ERRFILE</li>
+<li>-p PATH: 根目录</li>
+<li>-c COMMAND: 执行命令，默认是node</li>
+<li>-a, &#8211;append: 合并日志</li>
+<li>-f, &#8211;fifo: 流式日志输出</li>
+<li>-n, &#8211;number: 日志打印行数</li>
+<li>&#8211;pidFile: pid文件</li>
+<li>&#8211;sourceDir: 源代码目录</li>
+<li>&#8211;minUptime: 最小spinn更新时间(ms)</li>
+<li>&#8211;spinSleepTime: 两次spin间隔时间</li>
+<li>&#8211;colors: 控制台输出着色</li>
+<li>&#8211;plain: &#8211;no-colors的别名，控制台输出无色</li>
+<li>-d, &#8211;debug: debug模式</li>
+<li>-v, &#8211;verbose: 打印详细输出</li>
+<li>-s, &#8211;silent: 不打印日志和错误信息</li>
+<li>-w, &#8211;watch: 监控文件改变</li>
+<li>&#8211;watchDirectory: 监控顶级目录</li>
+<li>&#8211;watchIgnore: 通过模式匹配忽略监控</li>
+<li>-h, &#8211;help: 命令行帮助信息</li>
+</ul>
+<h2>4. forever服务器管理</h2>
+<p>创建一个web项目(express3+ejs)，使用forever管理服务器。</p>
+<p>安装express3</p>
+<pre><code>
+~ D:\workspace\javascript>express -e nodejs-forever
+~ D:\workspace\javascript>cd nodejs-forever && npm install
+</code></pre>
+<p>通过forever启动应用</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-forever>forever start app.js
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: app.js
+</code></pre>
+<p>打开浏览器: http://localhost:3000，可以看到web界面</p>
+<p>在win下面查看forever状态</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-forever>forever list
+info:    No forever processes running
+
+~ D:\workspace\javascript\nodejs-forever>forever stop app.js
+error:   Forever cannot find process with index: app.js
+</code></pre>
+<p>我们发现forever的程序，工作不对了！！程序明明是运行状态，通过list确看不到。接下来，切换成Linux Ubuntu继续测试。</p>
+<h2>5. forever在Ubuntu进行服务器管理</h2>
+<p>Linux的系统环境</p>
+<ul>
+<li>Linux: Ubuntu 12.04.2 64bit Server</li>
+<li>Node: v0.11.2</li>
+<li>Npm: 1.2.21</li>
+</ul>
+<p>初始化项目：安装命令不解释了</p>
+<pre><code>
+~ cd /home/conan/nodejs
+~ express -e nodejs-forever
+~ cd nodejs-forever && npm install
+~ sudo npm install forever -g
+</code></pre>
+<p>启动forever</p>
+<pre><code>
+~ forever start app.js
+warn:    --minUptime not set. Defaulting to: 1000ms
+warn:    --spinSleepTime not set. Your script will exit if it does not stay up for at least 1000ms
+info:    Forever processing file: app.js
+</code></pre>
+<p>查看node服务器状态</p>
+<pre><code>
+~ forever list
+info:    Forever processes running
+data:        uid  command             script forever pid   logfile                       uptime
+data:    [0] L2tY /usr/local/bin/node app.js 18276   18279 /home/conan/.forever/L2tY.log 0:0:0:37.792
+
+# 系统进程
+~ ps -aux|grep node
+Warning: bad ps syntax, perhaps a bogus '-'? See http://procps.sf.net/faq.html
+conan    18296  0.5  1.1 597696 23776 ?        Ssl  15:48   0:00 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor app.js
+conan    18299  0.4  0.8 630340 18392 ?        Sl   15:48   0:00 /usr/local/bin/node /home/conan/nodejs/nodejs-forever/app.js
+
+# 端口占用
+~ netstat -nltp|grep node
+tcp        0      0 0.0.0.0:3000            0.0.0.0:*               LISTEN      18299/node
+</code></pre>
+<p>停止服务器</p>
+<pre><code>
+~ forever stop app.js
+info:    Forever stopped process:
+data:        uid  command             script forever pid   logfile                       uptime
+[0] L2tY /usr/local/bin/node app.js 18276   18279 /home/conan/.forever/L2tY.log 0:0:0:45.621
+</code></pre>
+<p>我们看到在Linux Ubuntu环境中是正常的。</p>
+<h2>6. 模拟服务器宕机</h2>
+<p>两种测试方案：</p>
+<ul>
+<li>1. 用Linux命令，直接杀死node进程</li>
+<li>2. 在应用中，模拟异常退出</li>
+</ul>
+<p><strong>1). 用Linux命令，直接杀死node进程</strong></p>
+<pre><code>
+# 查看node进程，PID=18299  
+~ ps -aux|grep node
+
+conan    18296  0.0  1.1 597696 23776 ?        Ssl  15:48   0:00 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor app.js
+conan    18299  0.0  0.8 630340 18392 ?        Sl   15:48   0:00 /usr/local/bin/node /home/conan/nodejs/nodejs-forever/app.js
+conan    18315  0.0  0.0  13584   956 pts/5    R+   15:52   0:00 grep --color=auto node
+
+# 杀死PID=19299
+~ kill -9 18299
+
+# 再看node进程，node自动重启，新的PID=18324  
+~ ps -aux|grep node
+
+conan    18296  0.0  1.1 597696 23916 ?        Ssl  15:48   0:00 /usr/local/bin/node /usr/local/lib/node_modules/forever/bin/monitor app.js
+conan    18316  2.6  0.8 630340 18412 ?        Sl   15:52   0:00 /usr/local/bin/node /home/conan/nodejs/nodejs-forever/app.js
+conan    18324  0.0  0.0  13584   956 pts/5    R+   15:52   0:00 grep --color=auto node
+</code></pre>
+<p>我们看到看杀死node进程，forever会帮助我们，重启node。</p>
+<p>杀死forever的monitor</p>
+<pre><code>
+~ kill -9  18296
+~ ps -aux|grep node
+
+conan    18316  0.0  0.9 630340 18644 ?        Sl   15:52   0:00 /usr/local/bin/node /home/conan/nodejs/nodejs-forever/app.js
+conan    18333  0.0  0.0  13584   952 pts/5    S+   15:57   0:00 grep --color=auto node
+
+# 再杀死node进程
+~ kill -9 18316
+~ ps -aux|grep node
+
+conan    18336  0.0  0.0  13584   956 pts/5    S+   15:58   0:00 grep --color=auto node
+</code></pre>
+<p>我们尝试杀死了forever的monitor，monitor程序没有自动重启，然后再杀死node进程后，node也不会自动重启了。</p>
+<p><strong>2). 在应用中，模拟异常退出</strong><br />
+修改文件：app.js</p>
+<pre><code>
+~ vi app.js
+
+//..
+http.createServer(app).listen(app.get('port'), function(){
+  console.log(new Date());
+  console.log('Express server listening on port ' + app.get('port'));
+});
+
+setTimeout(function(){
+  console.log(new Date());
+  throw new Error('App is error from inner!');
+},10*1000);
+</code></pre>
+<p>通过node命令启动</p>
+<pre><code>
+~ node app.js
+Thu Sep 26 2013 16:08:44 GMT+0800 (CST)
+Express server listening on port 3000
+Thu Sep 26 2013 16:08:54 GMT+0800 (CST)
+
+/home/conan/nodejs/nodejs-forever/app.js:41
+  throw new Error('App is error from inner!');
+        ^
+Error: App is error from inner!
+    at null._onTimeout (/home/conan/nodejs/nodejs-forever/app.js:41:9)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+</code></pre>
+<p>10秒后，由于内部错误， node进程挂掉了。</p>
+<p>通过forever命令启动</p>
+<pre><code>
+~ mkdir logs
+~ chmod 777 -R logs
+~ forever -p . -l ./logs/access.log -e ./logs/error.log start app.js
+
+# 检查错误日志
+~ cat logs/access.log ls
+Thu Sep 26 2013 16:15:02 GMT+0800 (CST)
+Express server listening on port 3000
+Thu Sep 26 2013 16:15:12 GMT+0800 (CST)
+
+/home/conan/nodejs/nodejs-forever/app.js:41
+  throw new Error('App is error from inner!');
+        ^
+Error: App is error from inner!
+    at null._onTimeout (/home/conan/nodejs/nodejs-forever/app.js:41:9)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+error: Forever detected script exited with code: 8
+error: Forever restarting script for 1 time
+Thu Sep 26 2013 16:15:13 GMT+0800 (CST)
+Express server listening on port 3000
+Thu Sep 26 2013 16:15:23 GMT+0800 (CST)
+
+/home/conan/nodejs/nodejs-forever/app.js:41
+  throw new Error('App is error from inner!');
+        ^
+Error: App is error from inner!
+    at null._onTimeout (/home/conan/nodejs/nodejs-forever/app.js:41:9)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+error: Forever detected script exited with code: 8
+error: Forever restarting script for 2 time
+Thu Sep 26 2013 16:15:23 GMT+0800 (CST)
+Express server listening on port 3000
+Thu Sep 26 2013 16:15:33 GMT+0800 (CST)
+
+/home/conan/nodejs/nodejs-forever/app.js:41
+  throw new Error('App is error from inner!');
+        ^
+Error: App is error from inner!
+    at null._onTimeout (/home/conan/nodejs/nodejs-forever/app.js:41:9)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+error: Forever detected script exited with code: 8
+error: Forever restarting script for 3 time
+Thu Sep 26 2013 16:15:33 GMT+0800 (CST)
+Express server listening on port 3000
+Thu Sep 26 2013 16:15:43 GMT+0800 (CST)
+
+/home/conan/nodejs/nodejs-forever/app.js:41
+  throw new Error('App is error from inner!');
+        ^
+Error: App is error from inner!
+    at null._onTimeout (/home/conan/nodejs/nodejs-forever/app.js:41:9)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+error: Forever detected script exited with code: 8
+error: Forever restarting script for 4 time
+</code></pre>
+<p>我们发现每10秒种，node内部挂掉，然后再被forever重启！！</p>
+<p>通过list我们手动刷新几次也可以看到pid是变的。</p>
+<pre><code>
+~ forever list
+info:    Forever processes running
+data:        uid  command             script forever pid   logfile         uptime
+data:    [0] SmtT /usr/local/bin/node app.js 18444   18579 logs/access.log 0:0:0:7.211
+
+~ forever list
+info:    Forever processes running
+data:        uid  command             script forever pid   logfile         uptime
+data:    [0] SmtT /usr/local/bin/node app.js 18444   18579 logs/access.log 0:0:0:8.921
+
+~ forever list
+info:    Forever processes running
+data:        uid  command             script forever pid   logfile         uptime
+data:    [0] SmtT /usr/local/bin/node app.js 18444   18604 logs/access.log 0:0:0:0.177
+
+~ forever list
+info:    Forever processes running
+data:        uid  command             script forever pid   logfile         uptime
+data:    [0] SmtT /usr/local/bin/node app.js 18444   18604 logs/access.log 0:0:0:2.206
+</code></pre>
+<p>这样forever就帮助我们完成了，几项比较重要服务器管理功能：“启动/停止命令简单”，“支持热部署”，“宕机重启”，“监控界面和日志”。</p>
+<p>比起<a title="upstart封装nodejs应用为系统服务" href="http://blog.fens.me/linux-upstart-nodejs/" target="_blank">upstart管理</a>，省略了配置脚本的步骤(/etc/init/nodejs-xx.conf)。其他的功能，还要更近一步的使用才知道。</p>
+<h2>7. 开发环境和生产环境的启动配置</h2>
+<p>开发环境</p>
+<pre><code>
+~ cd /home/conan/nodejs/nodejs-forever/
+~ forever -p . -l ./logs/access.log -e ./logs/error.log -a -w start app.js
+</code></pre>
+<p>生产环境</p>
+<pre><code>
+~ export LOG=/var/log/nodejs/project
+~ export PID=/var/log/nodejs/project/forever.pid
+~ export APP_PATH=/home/conan/nodejs/nodejs-forever
+~ export APP=$APP_PATH/app.js
+
+~ forever -p $APP_PATH -l $LOG/access.log -e $LOG/error.log -o $LOG/out.log -a --pidFile $PID start $APP
+</code></pre>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs服务器管理模块forever" href="http://blog.fens.me/nodejs-server-forever/" target="_blank">http://blog.fens.me/nodejs-server-forever/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-450">
+        <div id="dsq-comment-header-450" class="dsq-comment-header">
+            <cite id="dsq-cite-450">
+                <span id="dsq-author-user-450">deepure</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-450" class="dsq-comment-body">
+            <div id="dsq-comment-message-450" class="dsq-comment-message"><p>介绍下pm2吧</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-451">
+        <div id="dsq-comment-header-451" class="dsq-comment-header">
+            <cite id="dsq-cite-451">
+                <a id="dsq-author-user-451" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-451" class="dsq-comment-body">
+            <div id="dsq-comment-message-451" class="dsq-comment-message"><p>嗯，抽时间写一下。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1404">
+        <div id="dsq-comment-header-1404" class="dsq-comment-header">
+            <cite id="dsq-cite-1404">
+                <span id="dsq-author-user-1404">aballam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1404" class="dsq-comment-body">
+            <div id="dsq-comment-message-1404" class="dsq-comment-message"><p>用forever输出log 是不是无法在控制台查看 只能通过文件方式查看？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1406">
+        <div id="dsq-comment-header-1406" class="dsq-comment-header">
+            <cite id="dsq-cite-1406">
+                <a id="dsq-author-user-1406" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1406" class="dsq-comment-body">
+            <div id="dsq-comment-message-1406" class="dsq-comment-message"><p>是的，标准的服务器日志都是这种方式的。</p>
+<p>通过下面的命令，可以一直跟着log显示。<br />
+tail -f xx.log</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1422">
+        <div id="dsq-comment-header-1422" class="dsq-comment-header">
+            <cite id="dsq-cite-1422">
+                <span id="dsq-author-user-1422">aballam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1422" class="dsq-comment-body">
+            <div id="dsq-comment-message-1422" class="dsq-comment-message"><p>嗯 我知道 我只是想了解一下dev的时候哪个方式好 dev还是觉得log4js好一点 主要是有颜色 而且步骤也没那么多。正式环境用forever是挺好的。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1423">
+        <div id="dsq-comment-header-1423" class="dsq-comment-header">
+            <cite id="dsq-cite-1423">
+                <a id="dsq-author-user-1423" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1423" class="dsq-comment-body">
+            <div id="dsq-comment-message-1423" class="dsq-comment-message"><p>dev，我一般直接就用console.log</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1480">
+        <div id="dsq-comment-header-1480" class="dsq-comment-header">
+            <cite id="dsq-cite-1480">
+                <span id="dsq-author-user-1480">kazaff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1480" class="dsq-comment-body">
+            <div id="dsq-comment-message-1480" class="dsq-comment-message"><p>我想知道你安装forever的node环境是啥，我在win7 64bit下的node v0.10.25下提示部分依赖版本不满足~~</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1483">
+        <div id="dsq-comment-header-1483" class="dsq-comment-header">
+            <cite id="dsq-cite-1483">
+                <a id="dsq-author-user-1483" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1483" class="dsq-comment-body">
+            <div id="dsq-comment-message-1483" class="dsq-comment-message"><p>Linux: Ubuntu 12.04.2 64bit Server<br />
+Node: v0.11.2<br />
+Npm: 1.2.21</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1568">
+        <div id="dsq-comment-header-1568" class="dsq-comment-header">
+            <cite id="dsq-cite-1568">
+                <span id="dsq-author-user-1568">小欧</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1568" class="dsq-comment-body">
+            <div id="dsq-comment-message-1568" class="dsq-comment-message"><p>node v0.11.2楼主是说这个版本win开始支持forever吗，但是现在官方最新版只能下v0.10.26啊</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1569">
+        <div id="dsq-comment-header-1569" class="dsq-comment-header">
+            <cite id="dsq-cite-1569">
+                <a id="dsq-author-user-1569" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1569" class="dsq-comment-body">
+            <div id="dsq-comment-message-1569" class="dsq-comment-message"><p>不支持win</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-1487">
+        <div id="dsq-comment-header-1487" class="dsq-comment-header">
+            <cite id="dsq-cite-1487">
+                <span id="dsq-author-user-1487">youxiachai</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1487" class="dsq-comment-body">
+            <div id="dsq-comment-message-1487" class="dsq-comment-message"><p>forever 什么时候能在windows 下用&#8230;.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2730">
+        <div id="dsq-comment-header-2730" class="dsq-comment-header">
+            <cite id="dsq-cite-2730">
+                <span id="dsq-author-user-2730">rookie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2730" class="dsq-comment-body">
+            <div id="dsq-comment-message-2730" class="dsq-comment-message"><p>您好，我用的日志是log4js按日期生成的比如今天access-2014-10-24.log,我怎么能把forever的日志输出到这个里面呢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2736">
+        <div id="dsq-comment-header-2736" class="dsq-comment-header">
+            <cite id="dsq-cite-2736">
+                <a id="dsq-author-user-2736" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2736" class="dsq-comment-body">
+            <div id="dsq-comment-message-2736" class="dsq-comment-message"><p>forever本身有自己的日志，启动时默认会写到一个文件中。我没有测试过，如何把forever的日志，写到log4js里面，因为没特别的必要了，二者选其一就行了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2785">
+        <div id="dsq-comment-header-2785" class="dsq-comment-header">
+            <cite id="dsq-cite-2785">
+                <span id="dsq-author-user-2785">abc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2785" class="dsq-comment-body">
+            <div id="dsq-comment-message-2785" class="dsq-comment-message"><p>我想问下生产环境用 export 生成的环境变量应该是暂时的，关了是不是就没了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2788">
+        <div id="dsq-comment-header-2788" class="dsq-comment-header">
+            <cite id="dsq-cite-2788">
+                <a id="dsq-author-user-2788" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2788" class="dsq-comment-body">
+            <div id="dsq-comment-message-2788" class="dsq-comment-message"><p>export是一次性的，有2种加载办法：</p>
+<p>1. 把export写到你的程序的脚本里面，这样每次程序启动都会自动加载了。<br />
+2. 把export写到/etc/environment文件中，每次重新系统的时候，这些参数会全局自动加载。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2793">
+        <div id="dsq-comment-header-2793" class="dsq-comment-header">
+            <cite id="dsq-cite-2793">
+                <span id="dsq-author-user-2793">abc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2793" class="dsq-comment-body">
+            <div id="dsq-comment-message-2793" class="dsq-comment-message"><p>谢啦，是不是写个比如shell脚本，然后把export放里面<br />
+用脚本启动</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2796">
+        <div id="dsq-comment-header-2796" class="dsq-comment-header">
+            <cite id="dsq-cite-2796">
+                <a id="dsq-author-user-2796" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2796" class="dsq-comment-body">
+            <div id="dsq-comment-message-2796" class="dsq-comment-message"><p>是的，是这样的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3038">
+        <div id="dsq-comment-header-3038" class="dsq-comment-header">
+            <cite id="dsq-cite-3038">
+                <span id="dsq-author-user-3038">macykung</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3038" class="dsq-comment-body">
+            <div id="dsq-comment-message-3038" class="dsq-comment-message"><p>win的環境下 你可以試試看這個指令<br />
+forever -c node app.js<br />
+OK的<br />
+這issue有說 : <a href="https://github.com/nodejitsu/forever/issues/422" rel="nofollow">https://github.com/nodejitsu/forever/issues/422</a><br />
+你可以試試看</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3039">
+        <div id="dsq-comment-header-3039" class="dsq-comment-header">
+            <cite id="dsq-cite-3039">
+                <a id="dsq-author-user-3039" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3039" class="dsq-comment-body">
+            <div id="dsq-comment-message-3039" class="dsq-comment-message"><p>好的，谢谢。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3127">
+        <div id="dsq-comment-header-3127" class="dsq-comment-header">
+            <cite id="dsq-cite-3127">
+                <span id="dsq-author-user-3127">boia</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3127" class="dsq-comment-body">
+            <div id="dsq-comment-message-3127" class="dsq-comment-message"><p>能不能用web界面管理</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3128">
+        <div id="dsq-comment-header-3128" class="dsq-comment-header">
+            <cite id="dsq-cite-3128">
+                <a id="dsq-author-user-3128" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3128" class="dsq-comment-body">
+            <div id="dsq-comment-message-3128" class="dsq-comment-message"><p>forever没有界面管理，PM2有界面。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3159">
+        <div id="dsq-comment-header-3159" class="dsq-comment-header">
+            <cite id="dsq-cite-3159">
+                <a id="dsq-author-user-3159" href="http://www.yfnice.com" target="_blank" rel="nofollow">杨帆</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3159" class="dsq-comment-body">
+            <div id="dsq-comment-message-3159" class="dsq-comment-message"><p>很好哦，谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3179">
+        <div id="dsq-comment-header-3179" class="dsq-comment-header">
+            <cite id="dsq-cite-3179">
+                <a id="dsq-author-user-3179" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3179" class="dsq-comment-body">
+            <div id="dsq-comment-message-3179" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3248">
+        <div id="dsq-comment-header-3248" class="dsq-comment-header">
+            <cite id="dsq-cite-3248">
+                <span id="dsq-author-user-3248">萝卜先生</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3248" class="dsq-comment-body">
+            <div id="dsq-comment-message-3248" class="dsq-comment-message"><p>如果我想在启动的时候开启ES6支持应该如何配置？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3252">
+        <div id="dsq-comment-header-3252" class="dsq-comment-header">
+            <cite id="dsq-cite-3252">
+                <a id="dsq-author-user-3252" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3252" class="dsq-comment-body">
+            <div id="dsq-comment-message-3252" class="dsq-comment-message"><p>我还没试ES6，准备近期用ES6做个项目。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4341">
+        <div id="dsq-comment-header-4341" class="dsq-comment-header">
+            <cite id="dsq-cite-4341">
+                <span id="dsq-author-user-4341">zkaip</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4341" class="dsq-comment-body">
+            <div id="dsq-comment-message-4341" class="dsq-comment-message"><p>感觉PM2更强大一些&#8230;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4342">
+        <div id="dsq-comment-header-4342" class="dsq-comment-header">
+            <cite id="dsq-cite-4342">
+                <a id="dsq-author-user-4342" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4342" class="dsq-comment-body">
+            <div id="dsq-comment-message-4342" class="dsq-comment-message"><p>是的，PM2不错。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4709">
+        <div id="dsq-comment-header-4709" class="dsq-comment-header">
+            <cite id="dsq-cite-4709">
+                <span id="dsq-author-user-4709">ggg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4709" class="dsq-comment-body">
+            <div id="dsq-comment-message-4709" class="dsq-comment-message"><p>不错，大概入了个门。<br />
+假如我判断的依据不是程序挂了，而是网络进出流量，5min内，input远远大于output就直接重启服务，这个是不是需要添加额外的逻辑</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4762">
+        <div id="dsq-comment-header-4762" class="dsq-comment-header">
+            <cite id="dsq-cite-4762">
+                <a id="dsq-author-user-4762" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4762" class="dsq-comment-body">
+            <div id="dsq-comment-message-4762" class="dsq-comment-message"><p>不清楚，是不是你说的问题。不过，在项目的issue里，好像没人提这个BUG。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-server-forever/';
+var disqus_identifier = '2639 http://blog.fens.me/?p=2639';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Nodejs服务器管理模块forever";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=2639';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

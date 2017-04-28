@@ -1,0 +1,2670 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Hexo在github上构建免费的Web应用 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Hexo在github上构建免费的Web应用 Comments Feed" href="http://blog.fens.me/hexo-blog-github/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='揭开R语言中环境空间的神秘面纱' href='http://blog.fens.me/r-environments/' />
+<link rel='next' title='读优美博文了解低风险套利策略' href='http://blog.fens.me/finance-arbitrage-strategy/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/hexo-blog-github/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=6332' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fhexo-blog-github%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fhexo-blog-github%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="javascript,nodejs,hexo,github,web,blog,jekyll,wordpress" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-6332 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Hexo在github上构建免费的Web应用</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-6332 post type-post status-publish format-standard hentry category-javascript tag-blog tag-github tag-hexo tag-javascript tag-jekyll tag-nodejs tag-web tag-wordpress">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/hexo-blog-github/" title="Hexo在github上构建免费的Web应用" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">May 7, 2014</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/blog/" rel="tag">blog</a><a href="http://blog.fens.me/tag/github/" rel="tag">github</a><a href="http://blog.fens.me/tag/hexo/" rel="tag">hexo</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/jekyll/" rel="tag">jekyll</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/web/" rel="tag">web</a><a href="http://blog.fens.me/tag/wordpress/" rel="tag">wordpress</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/hexo-blog-github/#comments"><span class="dsq-postid" data-dsqidentifier="6332 http://blog.fens.me/?p=6332">115 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Hexo在github上构建免费的Web应用</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Hexo在github上构建免费的Web应用" href="http://blog.fens.me/hexo-blog-github/" target="_blank">http://blog.fens.me/hexo-blog-github/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-github1.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-github1.png" alt="hexo-github" width="600" height="400" class="alignnone size-full wp-image-6390" /></a></p>
+<p><strong>前言</strong></p>
+<p>很多次想把博客从wordpress迁移到github，为此还特意学了一下Ruby和<a href="http://blog.fens.me/jekyll-bootstarp-github/" title="Jekyll在github上构建免费的Web应用" target="_blank">Jekyll</a>。但由于迁移过程过于复杂，我又没有很多时间，这个计划就被搁置了。慢慢地文章积累越来越多了，更没有时间来整理了，所以就先用着wordpress吧。</p>
+<p>不过，了迁移博客我也有一些新的发现。hexo,一个基于Node的博客框架，同样可以实现基于github的博客，而且更轻更快，更适合Node的开���程序员。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Hexo介绍</li>
+<li>Hexo安装</li>
+<li>Hexo的使用</li>
+<li>发布到项目到github</li>
+<li>替换皮肤</li>
+<li>配置常用插件</li>
+</ol>
+<h2>1. Hexo介绍</h2>
+<p>Hexo 是一个简单地、轻量地、基于Node的一个静态博客框架。通过Hexo我们可以快速创建自己的博客，仅需要几条命令就可以完成。</p>
+<p>发布时，Hexo可以部署在自己的Node服务器上面，也可以部署github上面。对于个人用户来说，部署在github上好处颇多，不仅可以省去服务器的成本，还可以减少各种系统运维的麻烦事(系统管理、备份、网络)。所以，基于github的个人站点，正在开始流行起来&#8230;.</p>
+<p>Hexo的官方网站：<a href="http://hexo.io/" target="_blank" ref="nofollow">http://hexo.io/</a> ，也是基于Github构建的网站。</p>
+<h2>2. Hexo安装</h2>
+<p>系统环境：</p>
+<ul>
+<li>win7 64bit</li>
+<li>node v0.10.5</li>
+<li>npm 1.2.19</li>
+</ul>
+<p>Hexo安装，要用全局安装，加-g参数。</p>
+<pre><code>
+D:\> npm install -g hexo
+</code></pre>
+<p>查看hexo的版本</p>
+<pre><code>
+D:\> hexo version
+hexo: 2.5.5
+os: Windows_NT 6.1.7601 win32 x64
+http_parser: 1.0
+node: 0.10.5
+v8: 3.14.5.8
+ares: 1.9.0-DEV
+uv: 0.10.5
+zlib: 1.2.3
+modules: 11
+openssl: 1.0.1e
+</code></pre>
+<p>安装好后，我们就可以使用Hexo创建项目了。</p>
+<pre><code>
+D:\workspace\javascript> hexo init nodejs-hexo 
+[info] Creating file: source/_posts/hello-world.md
+[info] Creating file: package.json
+[info] Creating file: .gitignore
+[info] Copying file: _config.yml
+[info] Copying file: scaffolds/draft.md
+[info] Copying file: scaffolds/page.md
+[info] Copying file: scaffolds/photo.md
+[info] Copying file: scaffolds/post.md
+[info] Creating folder: source/_drafts
+[info] Creating folder: scripts
+[info] Copying theme data...
+[info] Initialization has been done. Start blogging with Hexo!
+</code></pre>
+<p>我们看到当前在目录下，出现了一个文件夹，包括初始化的文件。</p>
+<p>进入目录，并启动Hexo服务器。</p>
+<pre><code>
+# 进入目录
+D:\workspace\javascript>cd nodejs-hexo
+
+# 启动hexo服务器
+D:\workspace\nodejs-hexo>hexo server
+[info] Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.
+</code></pre>
+<p>这时端口4000被打开了，我们能过浏览器打开地址，http://localhost:4000/ 。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-web.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-web.png" alt="hexo-web" width="882" height="758" class="alignnone size-full wp-image-6338" /></a></p>
+<p>出现了默认的网页界面，是不是很容易呢！！</p>
+<h2>3. Hexo的使用</h2>
+<p>接下来，我们要对Hexo做更全面的了解，才能做出个性化一的博客。</p>
+<p><strong>3.1 目录和文件</strong></p>
+<p>先来看一下，默认生成了哪些东西。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-folder.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-folder.png" alt="hexo-folder" width="359" height="570" class="alignnone size-full wp-image-6340" /></a></p>
+<ul>
+<li>scaffolds 脚手架，也就是一个工具模板</li>
+<li>scripts 写文件的js，扩展hexo的功能</li>
+<li>source 存放博客正文内容</li>
+<li>source/_drafts 草稿箱</li>
+<li>source/_posts 文件箱</li>
+<li>themes 存放皮肤的目录</li>
+<li>themes/landscape 默认的皮肤</li>
+<li>_config.yml 全局的配置文件</li>
+<li>db.json 静态常量</li>
+</ul>
+<p>在这里，我们每次用到的就是_posts目录里的文件，而_config.yml文件和themes目录是第一次配置好就行了。</p>
+<p>_posts目录：Hexo是一个静态博客框架，因此没有数据库。文章内容都是以文本文件方式进行存储的，直接存储在_posts的目录。Hexo天生集成了markdown，我们可以直接使用markdown语法格式写博客，例如:hello-world.md。新增加一篇文章，就在_posts目录，新建一个xxx.md的文件。</p>
+<p>themes目录：是存放皮肤的，包括一套Javascript+CSS样式和基于EJS的模板设置。通过在themes目录下，新建一个子目录，就可以创建一套新的皮肤，当然我们也可以直接在landscape上面修改。</p>
+<p><strong>3.2 全局配置</strong></p>
+<p>_config.yml是全局的配置文件：很多的网站配置都在这个文件中定义。</p>
+<ul>
+<li>站点信息: 定义标题，作者，语言</li>
+<li>URL: URL访问路径</li>
+<li>文件目录: 正文的存储目录</li>
+<li>写博客配置：文章标题，文章类型，外部链接等</li>
+<li>目录和标签：默认分类，分类图，标签图</li>
+<li>归档设置：归档的类型</li>
+<li>服务器设置：IP，访问端口，日志输出</li>
+<li>时间和日期格式： 时间显示格式，日期显示格式</li>
+<li>分页设置：每页显示数量</li>
+<li>评论：外挂的Disqus评论系统</li>
+<li>插件和皮肤：换皮肤，安装插件</li>
+<li>Markdown语言：markdown的标准</li>
+<li>CSS的stylus格式：是否允许压缩</li>
+<li>部署配置：github发布</li>
+</ul>
+<p>查看文件：_config.yml</p>
+<pre><code>
+# Hexo Configuration
+## Docs: http://hexo.io/docs/configuration.html
+## Source: https://github.com/tommy351/hexo/
+
+# 站点信息
+title: Hexo博客
+subtitle: 新的开始
+description: blog.fens.me
+author: bsspirit
+email: bsspirit@gmail.com
+language: zh-CN
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://blog.fens.me
+root: /
+permalink: :year/:month/:day/:title/
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+
+# 文件目录
+source_dir: source
+public_dir: public
+
+# 写博客配置
+new_post_name: :title.md # File name of new posts
+default_layout: post
+auto_spacing: false # Add spaces between asian characters and western characters
+titlecase: false # Transform title into titlecase
+external_link: true # Open external links in new tab
+max_open_file: 100
+multi_thread: true
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+highlight:
+  enable: true
+  line_number: true
+  tab_replace:
+
+# 目录和标签
+default_category: uncategorized
+category_map:
+tag_map:
+
+# 归档设置
+## 2: Enable pagination
+## 1: Disable pagination
+## 0: Fully Disable
+archive: 2
+category: 2
+tag: 2
+
+# 服务器设置
+## Hexo uses Connect as a server
+## You can customize the logger format as defined in
+## http://www.senchalabs.org/connect/logger.html
+port: 4000
+server_ip: 0.0.0.0
+logger: false
+logger_format:
+
+# 时间和日期格式
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: MMM D YYYY
+time_format: H:mm:ss
+
+# 分页设置
+## Set per_page to 0 to disable pagination
+per_page: 10
+pagination_dir: page
+
+# 评论
+disqus_shortname:
+
+# 插件和皮肤
+## Plugins: https://github.com/tommy351/hexo/wiki/Plugins
+## Themes: https://github.com/tommy351/hexo/wiki/Themes
+theme: landscape
+exclude_generator:
+
+# Markdown语法
+## https://github.com/chjj/marked
+markdown:
+  gfm: true
+  pedantic: false
+  sanitize: false
+  tables: true
+  breaks: true
+  smartLists: true
+  smartypants: true
+
+# CSS的stylus格式
+stylus:
+  compress: false
+
+# 部署配置
+## Docs: http://hexo.io/docs/deployment.html
+deploy:
+  type:
+</code></pre>
+<p><strong>3.3 命令行使用</strong></p>
+<p>查看命令行帮助</p>
+<pre><code>
+D:\> hexo help
+Usage: hexo <command>
+
+Commands:
+  help      Get help on a command
+  init      Create a new Hexo folder
+  migrate   Migrate your site from other system to Hexo
+  version   Display version information
+
+Global Options:
+  --config   Specify config file instead of using _config.yml
+  --debug    Display all verbose messages in the terminal
+  --safe     Disable all plugins and scripts
+  --silent   Hide output on console
+
+For more help, you can use `hexo help [command]` for the detailed information
+or you can check the docs: http://hexo.io/docs/
+</code></pre>
+<p>命令行解释：</p>
+<ul>
+<li>help 查看帮助信息</li>
+<li>init 创建一个hexo项目</li>
+<li>migrate 从其他系统向hexo迁移</li>
+<li>version 查看hexo的版本</li>
+<li>&#8211;config参数，指定配置文件，代替默认的_config.yml</li>
+<li>&#8211;debug参数，调试模式，输出所有日志信息</li>
+<li>&#8211;safe参数，安全模式，禁用所有的插件和脚本</li>
+<li>&#8211;silent参数，无日志输出模式</li>
+</ul>
+<p><strong>3.4 创建新文章</strong></p>
+<p>接下来，我们开始新博客了，创建第一博客文章。Hexo建议通过命令行操作，当然你也可以直接在_posts目录下创建文件。</p>
+<p>通过命令创建新文章</p>
+<pre><code>
+D:\workspace\javascript\nodejs-hexo>hexo new 新的开始
+[info] File created at D:\workspace\javascript\nodejs-hexo\source\_posts\新的开始.md
+</code></pre>
+<p>在_posts目录下，就会生成文件：&#8221;新的开始.md&#8221;。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-post.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-post.png" alt="hexo-post" width="909" height="355" class="alignnone size-full wp-image-6349" /></a></p>
+<p>然后，我们编辑文件：&#8221;新的开始.md&#8221;，以markdown语法写文章，然后保存。</p>
+<pre><code>
+title: 新的开始
+date: 2014-05-07 18:44:12
+tags:
+- 开始
+- 我
+- 日记
+categories: 日志
+---
+
+这是**新的开始**，我用hexo创建了第一篇文章。
+
+通过下面的命令，就可以创建新文章
+```{bash}
+D:\workspace\javascript\nodejs-hexo>hexo new 新的开始
+[info] File created at D:\workspace\javascript\nodejs-hexo\source\_posts\新的开始.md
+```
+
+感觉非常好。
+</code></pre>
+<p>在命令行，启动服务器。</p>
+<pre><code>
+D:\workspace\javascript\nodejs-hexo>hexo server
+[info] Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.
+</code></pre>
+<p>通过浏览器打开， http://localhost:4000/ ，就出现了我们新写的文章。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-index.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-index.png" alt="hexo-index" width="1168" height="798" class="alignnone size-full wp-image-6350" /></a></p>
+<p>同时，网页的右侧还会出现Categories(目录)，Tags(标签)，Tag Cloud(标签云)的显示。</p>
+<p><strong>3.5 文章的语法</strong></p>
+<p>我们在写文章时，有一些语法的要求。</p>
+<p>语法包括3部分：</p>
+<ul>
+<li>基本信息：标题，发布日期，分类目录，标签，类型，固定发布链接</li>
+<li>正文：markdown语法和Swig语法(掌握一个就行)</li>
+<li>特殊标记：引用，链接，图片，代码块，iframe，youtube视频</li>
+</ul>
+<p><strong>3.5.1 基本信息</strong></p>
+<p>必须在文件的顶部，&#8212;的行之前的部分。如：</p>
+<pre><code>
+title: 新的开始
+date: 2014-05-07 18:44:12
+updated	: 2014-05-10 18:44:12
+permalink: abc
+tags:
+- 开始
+- 我
+- 日记
+categories:
+- 日志
+- 第一天
+
+---
+</code></pre>
+<p>我们可以对刚才发的文章，做上面的修改，再看效果。</p>
+<p><strong>3.5.2 正文</strong></p>
+<p>hexo的正文要求使用markdown的语法，这里就不在多说，请自行查看markdwon的文档。</p>
+<p><strong>3.5.3 特殊标记</strong></p>
+<p>hexo对于一些有特殊标记 文字块，做了特殊的定义。</p>
+<p>引用</p>
+<pre><code>
+# Swig语法
+{% blockquote Seth Godin http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html Welcome to Island Marketing %}
+Every interaction is both precious and an opportunity to delight.
+{% endblockquote %}
+
+# Markdown语法
+&gt; Every interaction is both precious and an opportunity to delight.
+</code></pre>
+<p>代码块</p>
+<pre><code>
+# Swig语法
+{% codeblock .compact http://underscorejs.org/#compact Underscore.js %}
+.compact([0, 1, false, 2, ‘’, 3]);
+=> [1, 2, 3]
+{% endcodeblock %}
+
+# Markdown语法
+```{bash}
+.compact([0, 1, false, 2, ‘’, 3]);
+=> [1, 2, 3]
+```
+</code></pre>
+<p>链接</p>
+<pre><code>
+{% link 粉丝日志 http://blog.fens.me true 粉丝日志 %}
+
+# Markdown语法
+[粉丝日志](http://blog.fens.me)
+</code></pre>
+<p>图片，对于本地图片，需要在source目录下面新建一个目录images，然后把图片放到目录中。</p>
+<pre><code>
+# Swig语法
+{% img /images/fens.me.png 400 600 这是一张图片 %}
+
+# Markdown语法
+![这是一张图片](/images/fens.me.png)
+</code></pre>
+<p>在浏览器中看到效果。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-content.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-content.png" alt="hexo-content" class="alignnone size-medium wp-image-6360" /></a></p>
+<p>我们发现Swig的语法比markdown语法有更多的配置项，可以让页面更丰富，下面显示完整的基于Swig代码。</p>
+<pre><code>
+title: 新的开始
+date: 2014-05-07 18:44:12
+permalink: abc
+tags:
+- 开始
+- 我
+- 日记
+categories:
+- 日志
+- 第一天
+
+---
+
+这是**新的开始**，我用hexo创建了第一篇文章。
+
+通过下面的命令，就可以创建新文章
+```{bash}
+D:\workspace\javascript\nodejs-hexo>hexo new 新的开始
+[info] File created at D:\workspace\javascript\nodejs-hexo\source\_posts\新的开始.md
+```
+
+感觉非常好。
+
+
+## 引用
+{% blockquote Seth Godin http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html Welcome to Island Marketing %}
+Every interaction is both precious and an opportunity to delight.
+{% endblockquote %}
+
+## 代码块
+{% codeblock .compact http://underscorejs.org/#compact Underscore.js %}
+.compact([0, 1, false, 2, ‘’, 3]);
+=> [1, 2, 3]
+{% endcodeblock %}
+
+## 链接
+{% link 粉丝日志 http://blog.fens.me true 粉丝日志 %}
+
+## 图片
+{% img /images/fens.me.png 400 600 这是一张图片 %}
+
+</code></pre>
+<h2>4. 发布到项目到github</h2>
+<p><strong>4.1 静态化处理</strong></p>
+<p>写完了文章，我们就可以发布了。要说明的一点是hexo的静态博客框架，那什么是静态博客呢？静态博客，是只包含html, javascript, css文件的网站，没有动态的脚本。虽然我们是用Node进行的开发，但博客的发布后就与Node无关了。在发布之前，我们要通过一条命令，把所有的文章都做静态化处理，就是生成对应的html, javascript, css，使得所有的文章都是由静态文件组成的。</p>
+<p>静态化命令</p>
+<pre><code>
+D:\workspace\javascript\nodejs-hexo>hexo generate
+[info] Files loaded in 0.895s
+[create] Public: js\script.js
+[create] Public: css\fonts\fontawesome-webfont.svg
+[create] Public: css\fonts\FontAwesome.otf
+[create] Public: css\fonts\fontawesome-webfont.ttf
+[create] Public: css\fonts\fontawesome-webfont.eot
+[create] Public: css\fonts\fontawesome-webfont.woff
+[create] Public: fancybox\blank.gif
+[create] Public: fancybox\fancybox_loading@2x.gif
+[create] Public: fancybox\fancybox_overlay.png
+[create] Public: css\images\banner.jpg
+[create] Public: fancybox\fancybox_sprite.png
+[create] Public: fancybox\jquery.fancybox.css
+[create] Public: fancybox\fancybox_loading.gif
+[create] Public: fancybox\fancybox_sprite@2x.png
+[create] Public: fancybox\jquery.fancybox.js
+[create] Public: fancybox\jquery.fancybox.pack.js
+[create] Public: fancybox\helpers\jquery.fancybox-buttons.js
+[create] Public: fancybox\helpers\fancybox_buttons.png
+[create] Public: fancybox\helpers\jquery.fancybox-buttons.css
+[create] Public: fancybox\helpers\jquery.fancybox-media.js
+[create] Public: fancybox\helpers\jquery.fancybox-thumbs.css
+[create] Public: fancybox\helpers\jquery.fancybox-thumbs.js
+[create] Public: archives\index.html
+[create] Public: images\fens.me.png
+[create] Public: archives\2014\index.html
+[create] Public: archives\2014\05\index.html
+[create] Public: css\style.css
+[create] Public: index.html
+[create] Public: categories\日志\index.html
+[create] Public: categories\日志\第一天\index.html
+[create] Public: 2014\05\07\abc\index.html
+[create] Public: 2014\05\07\hello-world\index.html
+[create] Public: tags\开始\index.html
+[create] Public: tags\我\index.html
+[create] Public: tags\日记\index.html
+[info] 35 files generated in 0.711s
+</code></pre>
+<p>在本地目录下，会生成一个public的目录，里面包括了所有静态化的文件。</p>
+<p><strong>4.2 发布到github</strong></p>
+<p>接下来，我们把这个博客发布到github。</p>
+<p>在github中创建一个项目nodejs-hexo，项目地址：<a href="https://github.com/bsspirit/nodejs-hexo" target="_blank" ref="nofollow">https://github.com/bsspirit/nodejs-hexo</a></p>
+<p>编辑全局配置文件：_config.yml，找到deploy的部分，设置github的项目地址。</p>
+<pre><code>
+deploy:
+  type: github
+  repo: git@github.com:bsspirit/nodejs-hexo.git
+</code></pre>
+<p>然后，通过命令进行部署。</p>
+<pre><code>
+D:\workspace\javascript\nodejs-hexo>hexo deploy
+[info] Start deploying: github
+[info] Setting up GitHub deployment...
+Initialized empty Git repository in D:/workspace/javascript/nodejs-hexo/.deploy/.git/
+[master (root-commit) 43873d3] First commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 placeholder
+[info] Clearing .deploy folder...
+[info] Copying files from public folder...
+
+// 省略部分输出
+
+Branch gh-pages set up to track remote branch gh-pages from github.
+To git@github.com:bsspirit/nodejs-hexo.git
+ * [new branch]      gh-pages -> gh-pages
+[info] Deploy done: github
+</code></pre>
+<p>这个静态的web网站就被部署到了github，检查一下分支是gh-pages。gh-pages是github为了web项目特别设置的分支。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-github.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-github.png" alt="hexo-github" width="974" height="724" class="alignnone size-full wp-image-6368" /></a></p>
+<p>然后，点击&#8221;Settings&#8221;，找到GitHub Pages，提示“Your site is published at http://bsspirit.github.io/nodejs-hexo”，打开网页 <a href="http://bsspirit.github.io/nodejs-hexo" target="_blank" ref="nofllow">http://bsspirit.github.io/nodejs-hexo</a>，就是我们刚刚发布的站点。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-github-page.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-github-page.png" alt="hexo-github-page" width="1028" height="782" class="alignnone size-full wp-image-6370" /></a></p>
+<p><strong>4.3 设置域名</strong></p>
+<p>看起来css和js的加载路径不太对，不过没有关系。接下来，我们配置好域名，这个路径就会正确的。比如，我有一个域名是 52u.me，为了中国DNS解析，我先把域名绑定在Dnspod管理，再做跳转。</p>
+<p>域名有两种配置方式：</p>
+<ul>
+<li>主域名绑定：直接绑定主域名52u.me</li>
+<li>子域名绑定：绑定子域名blog.52u.me</li>
+<ul>
+<p><strong>4.3.1 主域名绑定</strong></p>
+<p>在dnspod控制台，设置主机记录@，类型A，到IP 192.30.252.153。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/dnspod-1.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/dnspod-1.png" alt="dnspod-1" width="797" height="339" class="alignnone size-full wp-image-6373" /></a></p>
+<p>大概等几分钟会生效。判断生效，对域名执行ping或者dig命令。</p>
+<pre><code>
+D:\workspace\javascript\nodejs-hexo>ping 52u.me
+
+正在 Ping 52u.me [192.30.252.153] 具有 32 字节的数据:
+来自 192.30.252.153 的回复: 字节=32 时间=321ms TTL=48
+来自 192.30.252.153 的回复: 字节=32 时间=325ms TTL=48
+来自 192.30.252.153 的回复: 字节=32 时间=329ms TTL=48
+来自 192.30.252.153 的回复: 字节=32 时间=326ms TTL=48
+
+192.30.252.153 的 Ping 统计信息:
+    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，
+往返行程的估计时间(以毫秒为单位):
+    最短 = 321ms，最长 = 329ms，平均 = 325ms
+</code></pre>
+<p>在github项目中，新建一个文件CNAME，文件中写出你要绑定的域名52u.me。通过浏览器，访问http://52u.me，就打开了我们建好的博客站点。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/52u.me_.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/52u.me_.png" alt="52u.me" width="1026" height="862" class="alignnone size-full wp-image-6376" /></a></p>
+<p><strong>4.3.2 子域名绑定</strong></p>
+<p>有时候，我们的主域名正在使用着，需要先新建一个博客绑定到子域名，比如: blog.52u.me。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/dnspod-2.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/dnspod-2.png" alt="dnspod-2" width="792" height="460" class="alignnone size-full wp-image-6377" /></a></p>
+<p>在dnspod控制台，我们要做3步设置。</p>
+<ul>
+<li>设置主机记录github，类型A，到IP 199.27.76.133</li>
+<li>设置主机记录bsspirit.github.io，类型CNAME，到github.52u.me. </li>
+<li>设置主机记录blog，类型CNAME，到 bsspirit.github.io</li>
+</ul>
+<p>记得我们还要修改文件CNAME，改为blog.52u.me。通过浏览器，访问http://blog.52u.me，就可以打开了我们的博客站点了，而这次用的是二级域名。</p>
+<p>由于每次执行deploy的时候，gh-pages分支所有的文件都会被覆盖，所以我们最好在source目录下创建这个CNAME文件，这样每次部署就不用动手创建了。</p>
+<h2>5. 替换皮肤</h2>
+<p>博客系统流行的原因，是因为他的个人性，而皮肤正式个性化的一种体现。</p>
+<p>利用hexo替换皮肤，还是比较简单的，3步完成。</p>
+<p><strong>5.1 找到一个皮肤或者自己开发一个皮肤</strong></p>
+<p>打开hexo的皮肤列表页面，你可以找到很多的皮肤，网页地址： https://github.com/tommy351/hexo/wiki/Themes。 </p>
+<p><strong>5.2. 放到themes目录下</strong></p>
+<p>比如，我觉得pacman(https://github.com/A-limon/pacman)这个皮肤还不错，我就可以下载皮肤到themes目录下面。</p>
+<p>通过git命令下载皮肤</p>
+<pre><code>
+git clone https://github.com/A-limon/pacman.git themes/pacman
+</code></pre>
+<p><strong>5.3. 在_config.yml指定皮肤</strong></p>
+<p>编辑文件_config.yml，找到theme一行，改成 theme: pacman</p>
+<p>本地启动hexo服务器，打开浏览器 http://localhost:4000</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/hexo-theme.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/hexo-theme.png" alt="hexo-theme" width="1007" height="781" class="alignnone size-full wp-image-6380" /></a></p>
+<p>新皮肤的效果还不错吧，然后静态化处理，再发布到github，就完成了站点的改版。</p>
+<h2>6. 配置常用插件</h2>
+<p><strong>6.1 Disqus评论系统</strong></p>
+<p>首先登陆http://disqus.com/ 网站，申请一个新网站的shortname，配置到_config.yml文件里，disqus_shortname: blog52ume</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/disqus.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/disqus.png" alt="disqus" width="885" height="717" class="alignnone size-full wp-image-6382" /></a></p>
+<p>然后，你会得到一段js代码，把他复制文件 themes/pacman/layout/_partial/comment.ejs 。继续修改themes/pacman/layout/layout.ejs文件，增加对comment.ejs的引用。具体修改请详见代码。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/disqus-comment.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/disqus-comment.png" alt="disqus-comment" width="985" height="799" class="alignnone size-full wp-image-6383" /></a></p>
+<p>这样，评论系统就增加好了！！</p>
+<p><strong>6.2 RSS订阅</strong></p>
+<p>这个功能非常简单，因为已经有人写好了插件，我们只要安装插件就行了。</p>
+<pre><code>
+D:\workspace\javascript\nodejs-hexo>npm install hexo-generator-feed
+npm WARN package.json hexo-site@2.5.5 No readme data!
+npm http GET https://registry.npmjs.org/hexo-generator-feed
+npm http 304 https://registry.npmjs.org/hexo-generator-feed
+npm http GET https://registry.npmjs.org/ejs/0.8.5
+npm http GET https://registry.npmjs.org/lodash/2.4.1
+npm http 304 https://registry.npmjs.org/ejs/0.8.5
+npm http 200 https://registry.npmjs.org/lodash/2.4.1
+npm http GET https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz
+npm http 200 https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz
+hexo-generator-feed@0.1.0 node_modules\hexo-generator-feed
+├── ejs@0.8.5
+└── lodash@2.4.1
+</code></pre>
+<p>启动服务器，用浏览器打开 http://localhost:4000/atom.xml， 就可以看到RSS已经生效了。</p>
+<p><strong>6.3 Sitemap站长地图</strong></p>
+<p>同样是一条命令，就可以完成。</p>
+<pre><code>
+D:\workspace\javascript\nodejs-hexo>npm install hexo-generator-sitemap
+npm WARN package.json hexo-site@2.5.5 No readme data!
+npm http GET https://registry.npmjs.org/hexo-generator-sitemap
+npm http 304 https://registry.npmjs.org/hexo-generator-sitemap
+npm http GET https://registry.npmjs.org/ejs/0.8.5
+npm http GET https://registry.npmjs.org/lodash/2.4.1
+npm http 304 https://registry.npmjs.org/lodash/2.4.1
+npm http 304 https://registry.npmjs.org/ejs/0.8.5
+hexo-generator-sitemap@0.1.1 node_modules\hexo-generator-sitemap
+├── ejs@0.8.5
+└── lodash@2.4.1
+</code></pre>
+<p>启动服务器，用浏览器打开 http://localhost:4000/sitemap.xml， 就可以看到sitemap已经生效了。</p>
+<p><strong>6.4 mathjax数学公式</strong></p>
+<p>有时候，我们还需要一些高级功能，比如在网页上显示数学公式。</p>
+<p>新建一个文件themes/pacman/layout/_partial/mathjax.ejs，找到mathjax的调用代码复制到文件。</p>
+<pre><code>
+&lt;!-- mathjax config similar to math.stackexchange --&gt;
+
+&lt;script type="text/x-mathjax-config"&gt;
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+&lt;/script&gt;
+
+&lt;script type="text/x-mathjax-config"&gt;
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+&lt;/script&gt;
+
+&lt;script type="text/x-mathjax-config"&gt;
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i &lt; all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+&lt;/script&gt;
+
+&lt;script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;
+&lt;/script&gt;
+</code></pre>
+<p>在themes/pacman/layout/_partial/after_footer.ejs 的最后一行，增加对mathjax的引用，详细内容请查看源代码。</p>
+<p>我们修改文章：source/_posts/新的开始.md</p>
+<p>增加公式：</p>
+<pre><code>
+## 公式
+$$J\_\alpha(x)=\sum _{m=0}^\infty \frac{(-1)^ m}{m! \, \Gamma (m + \alpha + 1)}{\left({\frac{x}{2}}\right)}^{2 m + \alpha }$$
+</code></pre>
+<p>启动服务器，查看效果：</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/05/math.png"><img src="http://blog.fens.me/wp-content/uploads/2014/05/math.png" alt="math" width="752" height="798" class="alignnone size-full wp-image-6384" /></a></p>
+<p>当然，除了这些还有很多需要的功能，像Google分析，百度统计，微薄转发等，大家可以自己找找，也可以自己开发一些插件！</p>
+<p>最后，本文的中代码已经上传的github，<a href="https://github.com/bsspirit/nodejs-hexo" ref="nofollow" target="_blank">https://github.com/bsspirit/nodejs-hexo</a>。 其中master分支是项目源代码，gh-pages分支是发布的站点。</p>
+<p>Hexo框架确实如同它介绍中的话: &#8220;A fast, simple &#038; powerful blog framework, powered by Node.js.&#8221;，Noder还等什么，赶紧搭建一个博客吧！！</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Hexo在github上构建免费的Web应用" href="http://blog.fens.me/hexo-bootstarp-github/" target="_blank">http://blog.fens.me/hexo-bootstarp-github/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-1635">
+        <div id="dsq-comment-header-1635" class="dsq-comment-header">
+            <cite id="dsq-cite-1635">
+                <a id="dsq-author-user-1635" href="http://beader.me" target="_blank" rel="nofollow">beaderchen</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1635" class="dsq-comment-body">
+            <div id="dsq-comment-message-1635" class="dsq-comment-message"><p>欢迎加入hexo的世界。<br />
+另，有个小小的疑问，您在deploy的时候会自动同时更新master分支和gh-pages分支么？貌似我的只会产生master分支，难道是因为我是deploy到 ***.github.io而不是子项目***.github.io/xxx 的关系？</p>
+<p>另，hexo用起来不错，只是他的markdown引擎marked常常与mathjax起冲突，受尽其苦啊。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1636">
+        <div id="dsq-comment-header-1636" class="dsq-comment-header">
+            <cite id="dsq-cite-1636">
+                <a id="dsq-author-user-1636" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1636" class="dsq-comment-body">
+            <div id="dsq-comment-message-1636" class="dsq-comment-message"><p>你的回复速度很快啊！<br />
+1. deploy默认是到gh-pages，master是我自己上传的。<br />
+2. 我写了几篇文章，还没有发现marked和mathjax的冲突。latex的语法和mathjax要稍微有点不同。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1638">
+        <div id="dsq-comment-header-1638" class="dsq-comment-header">
+            <cite id="dsq-cite-1638">
+                <a id="dsq-author-user-1638" href="http://beader.me" target="_blank" rel="nofollow">beaderchen</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1638" class="dsq-comment-body">
+            <div id="dsq-comment-message-1638" class="dsq-comment-message"><p>可以试试$x_1+x_2+x_3$</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1639">
+        <div id="dsq-comment-header-1639" class="dsq-comment-header">
+            <cite id="dsq-cite-1639">
+                <a id="dsq-author-user-1639" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1639" class="dsq-comment-body">
+            <div id="dsq-comment-message-1639" class="dsq-comment-message"><p>下划线，要加转义&#8221;_&#8221;，这就是其中一个不同点。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-1640">
+        <div id="dsq-comment-header-1640" class="dsq-comment-header">
+            <cite id="dsq-cite-1640">
+                <a id="dsq-author-user-1640" href="http://beader.me" target="_blank" rel="nofollow">beaderchen</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1640" class="dsq-comment-body">
+            <div id="dsq-comment-message-1640" class="dsq-comment-message"><p>果然是大神啊，当年这个问题困扰了我好久。不过久经考验下我也快摸透他们习性了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1730">
+        <div id="dsq-comment-header-1730" class="dsq-comment-header">
+            <cite id="dsq-cite-1730">
+                <span id="dsq-author-user-1730">CGL</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1730" class="dsq-comment-body">
+            <div id="dsq-comment-message-1730" class="dsq-comment-message"><p>具体怎么将本地的项目传到github上面啊这个不懂。</p>
+<p>fatal: &#8216;github&#8217; does not appear to be a git repository</p>
+<p>fatal: Could not read from remote repository.</p>
+<p>Please make sure you have the correct access rights</p>
+<p>and the repository exists.</p>
+<p>[info] Deploy done: github</p>
+<p>还有这些错误  不知道怎么回事</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1731">
+        <div id="dsq-comment-header-1731" class="dsq-comment-header">
+            <cite id="dsq-cite-1731">
+                <a id="dsq-author-user-1731" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1731" class="dsq-comment-body">
+            <div id="dsq-comment-message-1731" class="dsq-comment-message"><p>你要在github建一个免费项目，然后把生成的静态文件传上去。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1735">
+        <div id="dsq-comment-header-1735" class="dsq-comment-header">
+            <cite id="dsq-cite-1735">
+                <span id="dsq-author-user-1735">BAD星星</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1735" class="dsq-comment-body">
+            <div id="dsq-comment-message-1735" class="dsq-comment-message"><p>您好，我想问下，我安装hexo后本地访问出现代码，猜测应该是partial这个函数没有识别，但是我不知道该怎么解决。求教了。。403860586@qq.com希望能够得到解答。谢谢了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1737">
+        <div id="dsq-comment-header-1737" class="dsq-comment-header">
+            <cite id="dsq-cite-1737">
+                <a id="dsq-author-user-1737" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1737" class="dsq-comment-body">
+            <div id="dsq-comment-message-1737" class="dsq-comment-message"><p>不应该出现不partial函数没有识别的问题，联系包的作者问吧！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2129">
+        <div id="dsq-comment-header-2129" class="dsq-comment-header">
+            <cite id="dsq-cite-2129">
+                <span id="dsq-author-user-2129">snaketears</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2129" class="dsq-comment-body">
+            <div id="dsq-comment-message-2129" class="dsq-comment-message"><p>参见这个地址：http://hexo.io/docs/setup.html<br />
+要在hexo的文件夹npm install一下。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-1739">
+        <div id="dsq-comment-header-1739" class="dsq-comment-header">
+            <cite id="dsq-cite-1739">
+                <span id="dsq-author-user-1739">yan9yu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1739" class="dsq-comment-body">
+            <div id="dsq-comment-message-1739" class="dsq-comment-message"><p>我也出现这个问题了, 后来到hexo的主页上看了下, 在&#8217;hexo server&#8217;这一步骤之前, 还有&#8217;npm install&#8217; 这一步, 然后问题就解决了. 希望@Conan Zhang:disqus在博文里也能加上.  具体可参见 <a href="http://hexo.io/" rel="nofollow">http://hexo.io/</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-1742">
+        <div id="dsq-comment-header-1742" class="dsq-comment-header">
+            <cite id="dsq-cite-1742">
+                <a id="dsq-author-user-1742" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1742" class="dsq-comment-body">
+            <div id="dsq-comment-message-1742" class="dsq-comment-message"><p>好吧，如果是因为npm install这一条命令引起的错误，而且自己不会解决。那我只能说先去学基础吧，hexo不适合你。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2345">
+        <div id="dsq-comment-header-2345" class="dsq-comment-header">
+            <cite id="dsq-cite-2345">
+                <span id="dsq-author-user-2345">suwey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2345" class="dsq-comment-body">
+            <div id="dsq-comment-message-2345" class="dsq-comment-message"><p>什么意思？这个命令本来之前的版本就不用。。我最近更新版本也遇到这个问题。。什么学学基础。。语气让人讨厌</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-2360">
+        <div id="dsq-comment-header-2360" class="dsq-comment-header">
+            <cite id="dsq-cite-2360">
+                <span id="dsq-author-user-2360">mokingone</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2360" class="dsq-comment-body">
+            <div id="dsq-comment-message-2360" class="dsq-comment-message"><p>这个 你创建项目的时候会有提示，不看提示 。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-4" id="dsq-comment-2414">
+        <div id="dsq-comment-header-2414" class="dsq-comment-header">
+            <cite id="dsq-cite-2414">
+                <span id="dsq-author-user-2414">骏宇 梁</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2414" class="dsq-comment-body">
+            <div id="dsq-comment-message-2414" class="dsq-comment-message"><p>2.6 以后就更新了 </p>
+<p>要自己安装</p>
+<p>$ npm install hexo-renderer-ejs &#8211;save<br />
+$ npm install hexo-renderer-stylus &#8211;save<br />
+$ npm install hexo-renderer-marked &#8211;save</p>
+<p><a href="https://github.com/hexojs/hexo/issues/632" rel="nofollow">https://github.com/hexojs/hexo/issues/632</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1780">
+        <div id="dsq-comment-header-1780" class="dsq-comment-header">
+            <cite id="dsq-cite-1780">
+                <a id="dsq-author-user-1780" href="http://rnaer.github.io/" target="_blank" rel="nofollow">Zech</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1780" class="dsq-comment-body">
+            <div id="dsq-comment-message-1780" class="dsq-comment-message"><p>我想看看你是怎么修改pacman来添加disqus和mathjax的，但上面你的github repository的pacman文件夹是空的，介意分享一下吗？谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1784">
+        <div id="dsq-comment-header-1784" class="dsq-comment-header">
+            <cite id="dsq-cite-1784">
+                <a id="dsq-author-user-1784" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1784" class="dsq-comment-body">
+            <div id="dsq-comment-message-1784" class="dsq-comment-message"><p>已经上传。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-1785">
+        <div id="dsq-comment-header-1785" class="dsq-comment-header">
+            <cite id="dsq-cite-1785">
+                <a id="dsq-author-user-1785" href="http://rnaer.github.io/" target="_blank" rel="nofollow">Zech</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1785" class="dsq-comment-body">
+            <div id="dsq-comment-message-1785" class="dsq-comment-message"><p>thanks!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-1789">
+        <div id="dsq-comment-header-1789" class="dsq-comment-header">
+            <cite id="dsq-cite-1789">
+                <span id="dsq-author-user-1789">Hsins</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1789" class="dsq-comment-body">
+            <div id="dsq-comment-message-1789" class="dsq-comment-message"><p>呃..怎麼我還是找不到呢&#8230;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1790">
+        <div id="dsq-comment-header-1790" class="dsq-comment-header">
+            <cite id="dsq-cite-1790">
+                <a id="dsq-author-user-1790" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1790" class="dsq-comment-body">
+            <div id="dsq-comment-message-1790" class="dsq-comment-message"><p><a href="https://github.com/bsspirit/nodejs-hexo/tree/master/themes/pacman" rel="nofollow">https://github.com/bsspirit/nodejs-hexo/tree/master/themes/pacman</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-1791">
+        <div id="dsq-comment-header-1791" class="dsq-comment-header">
+            <cite id="dsq-cite-1791">
+                <span id="dsq-author-user-1791">Hsins</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1791" class="dsq-comment-body">
+            <div id="dsq-comment-message-1791" class="dsq-comment-message"><p>Thanks!!!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2147">
+        <div id="dsq-comment-header-2147" class="dsq-comment-header">
+            <cite id="dsq-cite-2147">
+                <span id="dsq-author-user-2147">vamcc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2147" class="dsq-comment-body">
+            <div id="dsq-comment-message-2147" class="dsq-comment-message"><p>您好，问一下，我更换主题的时候遇到错误：<br />
+$ hexo generate<br />
+[error] { name: &#8216;HexoError&#8217;,<br />
+  reason: &#8216;incomplete explicit mapping pair; a key node is missed&#8217;,<br />
+  mark:<br />
+   { name: null,<br />
+     buffer: &#8216;categories: Categoriesnsearch: Searchntags: Tagsntagcloud: Tag<br />
+Cloudnprev: Prevnnext: Nextncomment: Commentsncontents: Contentsnarchive_a:<br />
+ Archivesnarchive_b: Archives: %snpage: Page %dnrecent_posts: Recent Postsnm<br />
+enu: Menunlinks: Linksnrss: RSSnshowsidebar: Show Sidebarnhidesidebar: Hide<br />
+Sidebarnupdated: Updatednu0000&#8217;,<br />
+     position: 167,<br />
+     line: 9,<br />
+     column: 19 },<br />
+  message: &#8216;Process failed: languages/default.yml&#8217;,<br />
+  domain:<br />
+   { domain: null,<br />
+     _events: { error: [Function] },<br />
+     _maxListeners: 10,<br />
+     members: [ [Object] ] },<br />
+  domainThrown: true,<br />
+  stack: undefined }<br />
+不知道如何解决，谢谢！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2150">
+        <div id="dsq-comment-header-2150" class="dsq-comment-header">
+            <cite id="dsq-cite-2150">
+                <a id="dsq-author-user-2150" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2150" class="dsq-comment-body">
+            <div id="dsq-comment-message-2150" class="dsq-comment-message"><p>换皮肤出错是正常的。<br />
+1. 自己修改源代码，解决问题。<br />
+2. 放弃这个皮肤，换个不会出错的皮肤。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2151">
+        <div id="dsq-comment-header-2151" class="dsq-comment-header">
+            <cite id="dsq-cite-2151">
+                <a id="dsq-author-user-2151" href="http://vamcc.github.com" target="_blank" rel="nofollow">vamcc</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2151" class="dsq-comment-body">
+            <div id="dsq-comment-message-2151" class="dsq-comment-message"><p>刚问完，瞬间找到错误了。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2153">
+        <div id="dsq-comment-header-2153" class="dsq-comment-header">
+            <cite id="dsq-cite-2153">
+                <a id="dsq-author-user-2153" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2153" class="dsq-comment-body">
+            <div id="dsq-comment-message-2153" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2361">
+        <div id="dsq-comment-header-2361" class="dsq-comment-header">
+            <cite id="dsq-cite-2361">
+                <span id="dsq-author-user-2361">mokingone</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2361" class="dsq-comment-body">
+            <div id="dsq-comment-message-2361" class="dsq-comment-message"><p>## 图片<br />
+{% img /images/ik.jpg 400 600 这是一张图片 %}</p>
+<p>我在自己建的项目目录下创建了 images 里面放了一张ik.jpg图片     用以上方法引用。</p>
+<p>type 类型 怎么 成了 text/html   引用图片有什么需要特别注意？</p>
+<p>GET <a href="http://localhost:4000/images/ik.jpg" rel="nofollow">http://localhost:4000/images/ik.jpg</a> 404 (Not Found)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2364">
+        <div id="dsq-comment-header-2364" class="dsq-comment-header">
+            <cite id="dsq-cite-2364">
+                <a id="dsq-author-user-2364" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2364" class="dsq-comment-body">
+            <div id="dsq-comment-message-2364" class="dsq-comment-message"><p>type类型，估计是404引起的，找到图片就应该是图片类型了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2616">
+        <div id="dsq-comment-header-2616" class="dsq-comment-header">
+            <cite id="dsq-cite-2616">
+                <span id="dsq-author-user-2616">Alan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2616" class="dsq-comment-body">
+            <div id="dsq-comment-message-2616" class="dsq-comment-message"><p>您好，我deploy到github上后发现css和js到加载路径不对，我没有自己到域名，该怎么解决呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2618">
+        <div id="dsq-comment-header-2618" class="dsq-comment-header">
+            <cite id="dsq-cite-2618">
+                <a id="dsq-author-user-2618" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2618" class="dsq-comment-body">
+            <div id="dsq-comment-message-2618" class="dsq-comment-message"><p>自己调整一下目录吧，把css和js放到正确的目录中。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2627">
+        <div id="dsq-comment-header-2627" class="dsq-comment-header">
+            <cite id="dsq-cite-2627">
+                <span id="dsq-author-user-2627">shaosh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2627" class="dsq-comment-body">
+            <div id="dsq-comment-message-2627" class="dsq-comment-message"><p>谢谢大神指点。你的js的文章写的真棒！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2629">
+        <div id="dsq-comment-header-2629" class="dsq-comment-header">
+            <cite id="dsq-cite-2629">
+                <a id="dsq-author-user-2629" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2629" class="dsq-comment-body">
+            <div id="dsq-comment-message-2629" class="dsq-comment-message"><p>过奖 🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2821">
+        <div id="dsq-comment-header-2821" class="dsq-comment-header">
+            <cite id="dsq-cite-2821">
+                <span id="dsq-author-user-2821">lololsiyuan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2821" class="dsq-comment-body">
+            <div id="dsq-comment-message-2821" class="dsq-comment-message"><p>麻烦问一下，那个设置评论插件的，js代码是从哪里获得的，我表示对于英文网站，基本一句都看不懂</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2823">
+        <div id="dsq-comment-header-2823" class="dsq-comment-header">
+            <cite id="dsq-cite-2823">
+                <a id="dsq-author-user-2823" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2823" class="dsq-comment-body">
+            <div id="dsq-comment-message-2823" class="dsq-comment-message"><p>要去网站注册才能获得对应的JS，http://disqus.com/</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4425">
+        <div id="dsq-comment-header-4425" class="dsq-comment-header">
+            <cite id="dsq-cite-4425">
+                <a id="dsq-author-user-4425" href="http://blog.gaoquan.wang" target="_blank" rel="nofollow">coffee</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4425" class="dsq-comment-body">
+            <div id="dsq-comment-message-4425" class="dsq-comment-message"><p>注册完了，怎么没有获得的？怎么获得啊</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2991">
+        <div id="dsq-comment-header-2991" class="dsq-comment-header">
+            <cite id="dsq-cite-2991">
+                <span id="dsq-author-user-2991">kuangkuang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2991" class="dsq-comment-body">
+            <div id="dsq-comment-message-2991" class="dsq-comment-message"><p>上传到github时出问题了</p>
+<p>D:nodejs-hexo&gt;hexo deploy<br />
+[info] Start deploying: github<br />
+[info] Clearing .deploy folder&#8230;<br />
+[info] Copying files from public folder&#8230;<br />
+[error] Error: spawn ENOENT<br />
+Error: spawn ENOENT<br />
+    at errnoException (child_process.js:1001:11)<br />
+    at Process.ChildProcess._handle.onexit (child_process.js:792:34)</p>
+<p>[error] Error: spawn ENOENT<br />
+Error: spawn ENOENT<br />
+    at errnoException (child_process.js:1001:11)<br />
+    at Process.ChildProcess._handle.onexit (child_process.js:792:34)</p>
+<p>[error] Error: spawn ENOENT<br />
+Error: spawn ENOENT<br />
+    at errnoException (child_process.js:1001:11)<br />
+    at Process.ChildProcess._handle.onexit (child_process.js:792:34)</p>
+<p>[info] Deploy done: github</p>
+<p>求助！！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3107">
+        <div id="dsq-comment-header-3107" class="dsq-comment-header">
+            <cite id="dsq-cite-3107">
+                <a id="dsq-author-user-3107" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3107" class="dsq-comment-body">
+            <div id="dsq-comment-message-3107" class="dsq-comment-message"><p>应该github访问出错了，先试试git命令是否正常。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3092">
+        <div id="dsq-comment-header-3092" class="dsq-comment-header">
+            <cite id="dsq-cite-3092">
+                <span id="dsq-author-user-3092">zhuzhezhe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3092" class="dsq-comment-body">
+            <div id="dsq-comment-message-3092" class="dsq-comment-message"><p>您好，新建文章时，直接在_posts目录下创建文件。运行$hexo g    $hexo s时，在博客中会出现三篇相同的内容。why？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3093">
+        <div id="dsq-comment-header-3093" class="dsq-comment-header">
+            <cite id="dsq-cite-3093">
+                <a id="dsq-author-user-3093" href="http://endless.logdown.com/" target="_blank" rel="nofollow">Σndless</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3093" class="dsq-comment-body">
+            <div id="dsq-comment-message-3093" class="dsq-comment-message"><p>最好先hexo clear之后再hexo g</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3097">
+        <div id="dsq-comment-header-3097" class="dsq-comment-header">
+            <cite id="dsq-cite-3097">
+                <a id="dsq-author-user-3097" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3097" class="dsq-comment-body">
+            <div id="dsq-comment-message-3097" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-3104">
+        <div id="dsq-comment-header-3104" class="dsq-comment-header">
+            <cite id="dsq-cite-3104">
+                <span id="dsq-author-user-3104">zhuzhezhe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3104" class="dsq-comment-body">
+            <div id="dsq-comment-message-3104" class="dsq-comment-message"><p>ok，解决了。非常感谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3110">
+        <div id="dsq-comment-header-3110" class="dsq-comment-header">
+            <cite id="dsq-cite-3110">
+                <a id="dsq-author-user-3110" href="http://weakish.github.io/" target="_blank" rel="nofollow">weakish</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3110" class="dsq-comment-body">
+            <div id="dsq-comment-message-3110" class="dsq-comment-message"><p>&gt; 不过，了迁移博客我也有一些新的发现</p>
+<p>s/了/为了/</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3113">
+        <div id="dsq-comment-header-3113" class="dsq-comment-header">
+            <cite id="dsq-cite-3113">
+                <a id="dsq-author-user-3113" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3113" class="dsq-comment-body">
+            <div id="dsq-comment-message-3113" class="dsq-comment-message"><p>有了什么新发现</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3120">
+        <div id="dsq-comment-header-3120" class="dsq-comment-header">
+            <cite id="dsq-cite-3120">
+                <a id="dsq-author-user-3120" href="http://weakish.github.io/" target="_blank" rel="nofollow">weakish</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3120" class="dsq-comment-body">
+            <div id="dsq-comment-message-3120" class="dsq-comment-message"><p>typo &#8220;了迁移博客&#8221;前好像漏了“为”字</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3236">
+        <div id="dsq-comment-header-3236" class="dsq-comment-header">
+            <cite id="dsq-cite-3236">
+                <span id="dsq-author-user-3236">wking</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3236" class="dsq-comment-body">
+            <div id="dsq-comment-message-3236" class="dsq-comment-message"><p>子域名为什么这样设置？本来CNMAE指向一个网站，A记录指向一个IP，现在全乱了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3239">
+        <div id="dsq-comment-header-3239" class="dsq-comment-header">
+            <cite id="dsq-cite-3239">
+                <a id="dsq-author-user-3239" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3239" class="dsq-comment-body">
+            <div id="dsq-comment-message-3239" class="dsq-comment-message"><p>Github官方给出的</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3329">
+        <div id="dsq-comment-header-3329" class="dsq-comment-header">
+            <cite id="dsq-cite-3329">
+                <span id="dsq-author-user-3329">lenchs</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3329" class="dsq-comment-body">
+            <div id="dsq-comment-message-3329" class="dsq-comment-message"><p>卡住了，hexo deploy上传不了，一直nothing added to commit but untrackek files present 和src refspec gh-pages does not match any报这两个错，请求支援，先谢谢啦</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3336">
+        <div id="dsq-comment-header-3336" class="dsq-comment-header">
+            <cite id="dsq-cite-3336">
+                <a id="dsq-author-user-3336" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3336" class="dsq-comment-body">
+            <div id="dsq-comment-message-3336" class="dsq-comment-message"><p>是不是本地的git没装好？</p>
+<p>1. nothing added to commit but untrackek files present，本地的git add 命令出错了。<br />
+2. src refspec gh-pages does not match any，分支gh-pages没有。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-3713">
+        <div id="dsq-comment-header-3713" class="dsq-comment-header">
+            <cite id="dsq-cite-3713">
+                <span id="dsq-author-user-3713">jason</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3713" class="dsq-comment-body">
+            <div id="dsq-comment-message-3713" class="dsq-comment-message"><p>遇到同样的问题，但是我手动添加add 是可以用的</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-3719">
+        <div id="dsq-comment-header-3719" class="dsq-comment-header">
+            <cite id="dsq-cite-3719">
+                <a id="dsq-author-user-3719" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3719" class="dsq-comment-body">
+            <div id="dsq-comment-message-3719" class="dsq-comment-message"><p>看一下其他人的评论，应该有能解决你的问题的答案。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3331">
+        <div id="dsq-comment-header-3331" class="dsq-comment-header">
+            <cite id="dsq-cite-3331">
+                <span id="dsq-author-user-3331">lenchs</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3331" class="dsq-comment-body">
+            <div id="dsq-comment-message-3331" class="dsq-comment-message"><p>没有域名，后面操作不了，赞</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3335">
+        <div id="dsq-comment-header-3335" class="dsq-comment-header">
+            <cite id="dsq-cite-3335">
+                <a id="dsq-author-user-3335" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3335" class="dsq-comment-body">
+            <div id="dsq-comment-message-3335" class="dsq-comment-message"><p>买个域名吧，1年也就几十块钱。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4227">
+        <div id="dsq-comment-header-4227" class="dsq-comment-header">
+            <cite id="dsq-cite-4227">
+                <span id="dsq-author-user-4227">silentsong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4227" class="dsq-comment-body">
+            <div id="dsq-comment-message-4227" class="dsq-comment-message"><p>那些地方买域名不用备案呢？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3535">
+        <div id="dsq-comment-header-3535" class="dsq-comment-header">
+            <cite id="dsq-cite-3535">
+                <span id="dsq-author-user-3535">英俊 李</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3535" class="dsq-comment-body">
+            <div id="dsq-comment-message-3535" class="dsq-comment-message"><p>gh-pages中的index.html是怎么生成的</p>
+<p>我的只能进入每个文章，文章的url都是日期+题目那种<br />
+我知道首页对应的是index.html,这个是得自己手写吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3537">
+        <div id="dsq-comment-header-3537" class="dsq-comment-header">
+            <cite id="dsq-cite-3537">
+                <span id="dsq-author-user-3537">英俊 李</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3537" class="dsq-comment-body">
+            <div id="dsq-comment-message-3537" class="dsq-comment-message"><p>我的输入localhost:4000/<br />
+显示cannot get /</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3538">
+        <div id="dsq-comment-header-3538" class="dsq-comment-header">
+            <cite id="dsq-cite-3538">
+                <a id="dsq-author-user-3538" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3538" class="dsq-comment-body">
+            <div id="dsq-comment-message-3538" class="dsq-comment-message"><p>都是自动生成的，你再查一下官方文档吧，是不是因为包升级的原因。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-3541">
+        <div id="dsq-comment-header-3541" class="dsq-comment-header">
+            <cite id="dsq-cite-3541">
+                <span id="dsq-author-user-3541">英俊 李</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3541" class="dsq-comment-body">
+            <div id="dsq-comment-message-3541" class="dsq-comment-message"><p>好使了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-3542">
+        <div id="dsq-comment-header-3542" class="dsq-comment-header">
+            <cite id="dsq-cite-3542">
+                <a id="dsq-author-user-3542" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3542" class="dsq-comment-body">
+            <div id="dsq-comment-message-3542" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-3828">
+        <div id="dsq-comment-header-3828" class="dsq-comment-header">
+            <cite id="dsq-cite-3828">
+                <span id="dsq-author-user-3828">康寿伟</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3828" class="dsq-comment-body">
+            <div id="dsq-comment-message-3828" class="dsq-comment-message"><p>怎么好使的？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-4247">
+        <div id="dsq-comment-header-4247" class="dsq-comment-header">
+            <cite id="dsq-cite-4247">
+                <span id="dsq-author-user-4247">kino_c</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4247" class="dsq-comment-body">
+            <div id="dsq-comment-message-4247" class="dsq-comment-message"><p>怎么解决的？我也是这个问题</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-3848">
+        <div id="dsq-comment-header-3848" class="dsq-comment-header">
+            <cite id="dsq-cite-3848">
+                <span id="dsq-author-user-3848">李博越</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3848" class="dsq-comment-body">
+            <div id="dsq-comment-message-3848" class="dsq-comment-message"><p>我也是Cannot GET / 求怎么解决的？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3547">
+        <div id="dsq-comment-header-3547" class="dsq-comment-header">
+            <cite id="dsq-cite-3547">
+                <span id="dsq-author-user-3547">Jim</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3547" class="dsq-comment-body">
+            <div id="dsq-comment-message-3547" class="dsq-comment-message"><p>楼主，为什么主域名解析的ip是192.30.252.153呢，192.30.252.153是github的ip吗？这个自己需不需要改？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3548">
+        <div id="dsq-comment-header-3548" class="dsq-comment-header">
+            <cite id="dsq-cite-3548">
+                <a id="dsq-author-user-3548" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3548" class="dsq-comment-body">
+            <div id="dsq-comment-message-3548" class="dsq-comment-message"><p>是的，他指定的路由IP。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3571">
+        <div id="dsq-comment-header-3571" class="dsq-comment-header">
+            <cite id="dsq-cite-3571">
+                <span id="dsq-author-user-3571">allengaller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3571" class="dsq-comment-body">
+            <div id="dsq-comment-message-3571" class="dsq-comment-message"><p>hello, hexo deploy的时候一直是直接回复ERROR Deployer not found: github</p>
+<p>请问是怎么回事？　各种google 百度都无果啊！</p>
+<p>感激不尽！</p>
+<p><a href="mailto:allengaller@qq.com">allengaller@qq.com</a>/ <a href="mailto:allengaller@gmail.com">allengaller@gmail.com</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3572">
+        <div id="dsq-comment-header-3572" class="dsq-comment-header">
+            <cite id="dsq-cite-3572">
+                <span id="dsq-author-user-3572">cengy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3572" class="dsq-comment-body">
+            <div id="dsq-comment-message-3572" class="dsq-comment-message"><p>deploy:    type: git(后面是有个空格的,hexo3.0之后type填写git)<br />
+    repo: <a href="mailto:git@github.com">git@github.com</a>:username/username.github.io.git</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3579">
+        <div id="dsq-comment-header-3579" class="dsq-comment-header">
+            <cite id="dsq-cite-3579">
+                <a id="dsq-author-user-3579" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3579" class="dsq-comment-body">
+            <div id="dsq-comment-message-3579" class="dsq-comment-message"><p>感谢回复！！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-3606">
+        <div id="dsq-comment-header-3606" class="dsq-comment-header">
+            <cite id="dsq-cite-3606">
+                <span id="dsq-author-user-3606">Guest</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3606" class="dsq-comment-body">
+            <div id="dsq-comment-message-3606" class="dsq-comment-message"><p>加了空格, 还是一样!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-3607">
+        <div id="dsq-comment-header-3607" class="dsq-comment-header">
+            <cite id="dsq-cite-3607">
+                <span id="dsq-author-user-3607">Guest</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3607" class="dsq-comment-body">
+            <div id="dsq-comment-message-3607" class="dsq-comment-message"><p>git, github 两种都是报错 deployer not found. 官网文档看了&#8230;.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-3608">
+        <div id="dsq-comment-header-3608" class="dsq-comment-header">
+            <cite id="dsq-cite-3608">
+                <span id="dsq-author-user-3608">allengaller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3608" class="dsq-comment-body">
+            <div id="dsq-comment-message-3608" class="dsq-comment-message"><p>解决了, 要安装插件:</p>
+<p>$ npm install hexo-deployer-git &#8211;save</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-3578">
+        <div id="dsq-comment-header-3578" class="dsq-comment-header">
+            <cite id="dsq-cite-3578">
+                <a id="dsq-author-user-3578" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3578" class="dsq-comment-body">
+            <div id="dsq-comment-message-3578" class="dsq-comment-message"><p>hexo的版本有升级，需要进一步查看官方文档。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-3745">
+        <div id="dsq-comment-header-3745" class="dsq-comment-header">
+            <cite id="dsq-cite-3745">
+                <span id="dsq-author-user-3745">小康</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3745" class="dsq-comment-body">
+            <div id="dsq-comment-message-3745" class="dsq-comment-message"><p>我安装了npm install hexo-deployer-git &#8211;save之后还是这样这么办呢？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3609">
+        <div id="dsq-comment-header-3609" class="dsq-comment-header">
+            <cite id="dsq-cite-3609">
+                <span id="dsq-author-user-3609">allengaller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3609" class="dsq-comment-body">
+            <div id="dsq-comment-message-3609" class="dsq-comment-message"><p>请问公钥问题怎么破?</p>
+<p>INFO  Deploying: git<br />
+INFO  Clearing .deploy folder&#8230;<br />
+INFO  Copying files from public folder&#8230;<br />
+On branch master<br />
+nothing to commit, working directory clean<br />
+The authenticity of host &#8216;github.com (192.30.252.129)&#8217; can&#8217;t be established.<br />
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.<br />
+Are you sure you want to continue connecting (yes/no)? yes<br />
+Warning: Permanently added &#8216;github.com,192.30.252.129&#8217; (RSA) to the list of known hosts.<br />
+Permission denied (publickey).<br />
+fatal: Could not read from remote repository.</p>
+<p>Please make sure you have the correct access rights<br />
+and the repository exists.<br />
+FATAL Something&#8217;s wrong. Maybe you can find the solution here: <a href="http://hexo.io/docs/troubleshooting.html" rel="nofollow">http://hexo.io/docs/troubleshooting.html</a><br />
+Error: Warning: Permanently added &#8216;github.com,192.30.252.129&#8217; (RSA) to the list of known hosts.<br />
+Permission denied (publickey).<br />
+fatal: Could not read from remote repository.</p>
+<p>Please make sure you have the correct access rights<br />
+and the repository exists.</p>
+<p>    at ChildProcess. (/home/ag/Github/allengaller.github.io/node_modules/hexo-deployer-git/node_modules/hexo-util/lib/spawn.js:42:17)<br />
+    at ChildProcess.emit (events.js:110:17)<br />
+    at maybeClose (child_process.js:1015:16)<br />
+    at Process.ChildProcess._handle.onexit (child_process.js:1087:5)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3614">
+        <div id="dsq-comment-header-3614" class="dsq-comment-header">
+            <cite id="dsq-cite-3614">
+                <a id="dsq-author-user-3614" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3614" class="dsq-comment-body">
+            <div id="dsq-comment-message-3614" class="dsq-comment-message"><p>公钥，应该是之前在github上面配置好的。<br />
+私钥，在你的本地环境git命令工具也配置好。</p>
+<p>hexo是直接调用本地的git命令工具。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-3615">
+        <div id="dsq-comment-header-3615" class="dsq-comment-header">
+            <cite id="dsq-cite-3615">
+                <span id="dsq-author-user-3615">allengaller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3615" class="dsq-comment-body">
+            <div id="dsq-comment-message-3615" class="dsq-comment-message"><p>解决, 不能用git协议, 要http</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-3625">
+        <div id="dsq-comment-header-3625" class="dsq-comment-header">
+            <cite id="dsq-cite-3625">
+                <a id="dsq-author-user-3625" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3625" class="dsq-comment-body">
+            <div id="dsq-comment-message-3625" class="dsq-comment-message"><p>解决就好，:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3612">
+        <div id="dsq-comment-header-3612" class="dsq-comment-header">
+            <cite id="dsq-cite-3612">
+                <span id="dsq-author-user-3612">allengaller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3612" class="dsq-comment-body">
+            <div id="dsq-comment-message-3612" class="dsq-comment-message"><p>ag@ag:~/Github/allengaller.github.io$ hexo deploy<br />
+INFO  Deploying: git<br />
+INFO  Clearing .deploy folder&#8230;<br />
+FATAL Something&#8217;s wrong. Maybe you can find the solution here: <a href="http://hexo.io/docs/troubleshooting.html" rel="nofollow">http://hexo.io/docs/troubleshooting.html</a><br />
+Error: EACCES, unlink &#8216;/home/ag/Github/allengaller.github.io/.deploy_git/archives/index.html&#8217;<br />
+    at Error (native)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3613">
+        <div id="dsq-comment-header-3613" class="dsq-comment-header">
+            <cite id="dsq-cite-3613">
+                <span id="dsq-author-user-3613">allengaller</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3613" class="dsq-comment-body">
+            <div id="dsq-comment-message-3613" class="dsq-comment-message"><p>这个问题解决了, 要加sudo</p>
+<p>sudo hexo deploy</p>
+<p>但是仍然有Permission denied (publickey).</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3646">
+        <div id="dsq-comment-header-3646" class="dsq-comment-header">
+            <cite id="dsq-cite-3646">
+                <span id="dsq-author-user-3646">mqliutie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3646" class="dsq-comment-body">
+            <div id="dsq-comment-message-3646" class="dsq-comment-message"><p>作者你好，我出现了访问github那个项目css和js没有加载的情况，按照你说的设置域名，那个域名是随便的吗？还是我提前已经有这么一个域名了呢.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3724">
+        <div id="dsq-comment-header-3724" class="dsq-comment-header">
+            <cite id="dsq-cite-3724">
+                <span id="dsq-author-user-3724">xzball</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3724" class="dsq-comment-body">
+            <div id="dsq-comment-message-3724" class="dsq-comment-message"><p>您好楼主，你这个是什么文本编辑器啊</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3730">
+        <div id="dsq-comment-header-3730" class="dsq-comment-header">
+            <cite id="dsq-cite-3730">
+                <a id="dsq-author-user-3730" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3730" class="dsq-comment-body">
+            <div id="dsq-comment-message-3730" class="dsq-comment-message"><p>Webstorm，最近发现 Visual Studio Code也不错。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3725">
+        <div id="dsq-comment-header-3725" class="dsq-comment-header">
+            <cite id="dsq-cite-3725">
+                <span id="dsq-author-user-3725">xzball</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3725" class="dsq-comment-body">
+            <div id="dsq-comment-message-3725" class="dsq-comment-message"><p>你好楼主你用的这是什么文本编辑器啊</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3757">
+        <div id="dsq-comment-header-3757" class="dsq-comment-header">
+            <cite id="dsq-cite-3757">
+                <span id="dsq-author-user-3757">Danel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3757" class="dsq-comment-body">
+            <div id="dsq-comment-message-3757" class="dsq-comment-message"><p>我用的是jackman主题,从pacman改装的,但是不太会用</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3761">
+        <div id="dsq-comment-header-3761" class="dsq-comment-header">
+            <cite id="dsq-cite-3761">
+                <a id="dsq-author-user-3761" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3761" class="dsq-comment-body">
+            <div id="dsq-comment-message-3761" class="dsq-comment-message"><p>查一下主题的帮助文档吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3802">
+        <div id="dsq-comment-header-3802" class="dsq-comment-header">
+            <cite id="dsq-cite-3802">
+                <a id="dsq-author-user-3802" href="http://zhangnew.com" target="_blank" rel="nofollow">zhangnew</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3802" class="dsq-comment-body">
+            <div id="dsq-comment-message-3802" class="dsq-comment-message"><p>十分感谢。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3809">
+        <div id="dsq-comment-header-3809" class="dsq-comment-header">
+            <cite id="dsq-cite-3809">
+                <a id="dsq-author-user-3809" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3809" class="dsq-comment-body">
+            <div id="dsq-comment-message-3809" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3872">
+        <div id="dsq-comment-header-3872" class="dsq-comment-header">
+            <cite id="dsq-cite-3872">
+                <span id="dsq-author-user-3872">胖子</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3872" class="dsq-comment-body">
+            <div id="dsq-comment-message-3872" class="dsq-comment-message"><p>请问, 我是按照您教程来,gh-pages分支也出来了,但是页面一直都是404 至今没解决, 这是我的地址 谢谢 <a href="https://github.com/thinkerchan/thinkerchan.github.io/" rel="nofollow">https://github.com/thinkerchan/thinkerchan.github.io/</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3890">
+        <div id="dsq-comment-header-3890" class="dsq-comment-header">
+            <cite id="dsq-cite-3890">
+                <a id="dsq-author-user-3890" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3890" class="dsq-comment-body">
+            <div id="dsq-comment-message-3890" class="dsq-comment-message"><p>你的 <a href="http://thinkerchan.com/" rel="nofollow">http://thinkerchan.com/</a> 的域名指向的IP是 103.245.222.133， 并不是github指定的域名。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3891">
+        <div id="dsq-comment-header-3891" class="dsq-comment-header">
+            <cite id="dsq-cite-3891">
+                <span id="dsq-author-user-3891">胖子</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3891" class="dsq-comment-body">
+            <div id="dsq-comment-message-3891" class="dsq-comment-message"><p>请问 我现在去掉了域名绑定 直接访问thinkerchan.github.io也访问不了 这是为啥?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3903">
+        <div id="dsq-comment-header-3903" class="dsq-comment-header">
+            <cite id="dsq-cite-3903">
+                <span id="dsq-author-user-3903">RyanXu1987</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3903" class="dsq-comment-body">
+            <div id="dsq-comment-message-3903" class="dsq-comment-message"><p>wo ma</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3960">
+        <div id="dsq-comment-header-3960" class="dsq-comment-header">
+            <cite id="dsq-cite-3960">
+                <span id="dsq-author-user-3960">mxiaochi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3960" class="dsq-comment-body">
+            <div id="dsq-comment-message-3960" class="dsq-comment-message"><p>请教下 按楼主的步骤基本搞定了 但在git的setting页面显示的是Your site is ready to be published at <a href="http://ftnn.github.io/ftnn" rel="nofollow">http://ftnn.github.io/ftnn</a>. 并不是Your site is published at <a href="http://bsspirit.github.io/nodejs-hexo，为何" rel="nofollow">http://bsspirit.github.io/nodejs-hexo，为何</a> 缺了什么步骤吗？谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3972">
+        <div id="dsq-comment-header-3972" class="dsq-comment-header">
+            <cite id="dsq-cite-3972">
+                <a id="dsq-author-user-3972" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3972" class="dsq-comment-body">
+            <div id="dsq-comment-message-3972" class="dsq-comment-message"><p>在本文发布后，hexo有升级，和本文有出入的地方，请参考官方文档。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3974">
+        <div id="dsq-comment-header-3974" class="dsq-comment-header">
+            <cite id="dsq-cite-3974">
+                <span id="dsq-author-user-3974">mxiaochi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3974" class="dsq-comment-body">
+            <div id="dsq-comment-message-3974" class="dsq-comment-message"><p>OK 多谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4107">
+        <div id="dsq-comment-header-4107" class="dsq-comment-header">
+            <cite id="dsq-cite-4107">
+                <span id="dsq-author-user-4107">hennzr</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4107" class="dsq-comment-body">
+            <div id="dsq-comment-message-4107" class="dsq-comment-message"><p>博主求救，我按照你那张图上的dnspod设置，ping的时候显示的不是192.30.252.153</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4112">
+        <div id="dsq-comment-header-4112" class="dsq-comment-header">
+            <cite id="dsq-cite-4112">
+                <a id="dsq-author-user-4112" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4112" class="dsq-comment-body">
+            <div id="dsq-comment-message-4112" class="dsq-comment-message"><p>要定位问题，看看是dnspod，还是github的问题。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4176">
+        <div id="dsq-comment-header-4176" class="dsq-comment-header">
+            <cite id="dsq-cite-4176">
+                <a id="dsq-author-user-4176" href="http://www.miaocode.tk" target="_blank" rel="nofollow">Nick Wong</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4176" class="dsq-comment-body">
+            <div id="dsq-comment-message-4176" class="dsq-comment-message"><p>一直想在github上搞静态blog，先mark一下。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4189">
+        <div id="dsq-comment-header-4189" class="dsq-comment-header">
+            <cite id="dsq-cite-4189">
+                <a id="dsq-author-user-4189" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4189" class="dsq-comment-body">
+            <div id="dsq-comment-message-4189" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4228">
+        <div id="dsq-comment-header-4228" class="dsq-comment-header">
+            <cite id="dsq-cite-4228">
+                <span id="dsq-author-user-4228">silentsong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4228" class="dsq-comment-body">
+            <div id="dsq-comment-message-4228" class="dsq-comment-message"><p>@bsspirit:disqus 请教一下，我的博客 <a href="http://dmoneh.github.io/silentsong/" rel="nofollow">http://dmoneh.github.io/silentsong/</a> 文章的底部的评论，点击一下应该可以跳转到对应博文。但是我的有问题，我看了一下链接地址，少了silentsong这部分，所有404了。由于这部分貌似是disqus生成的，我实在不知道怎么设置。 能帮我看一下吗？ 谢谢。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4248">
+        <div id="dsq-comment-header-4248" class="dsq-comment-header">
+            <cite id="dsq-cite-4248">
+                <a id="dsq-author-user-4248" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4248" class="dsq-comment-body">
+            <div id="dsq-comment-message-4248" class="dsq-comment-message"><p>在你的博客上面留言了，看上去没有问题。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4290">
+        <div id="dsq-comment-header-4290" class="dsq-comment-header">
+            <cite id="dsq-cite-4290">
+                <span id="dsq-author-user-4290">riader</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4290" class="dsq-comment-body">
+            <div id="dsq-comment-message-4290" class="dsq-comment-message"><p>为什么我hexo deploy时提示：ERROR: Repository not found。事实上是github上的Repository已经存在了，执行ssh -T <a href="mailto:git@github.com">git@github.com</a>都能提示连上了那个库</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4291">
+        <div id="dsq-comment-header-4291" class="dsq-comment-header">
+            <cite id="dsq-cite-4291">
+                <a id="dsq-author-user-4291" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4291" class="dsq-comment-body">
+            <div id="dsq-comment-message-4291" class="dsq-comment-message"><p>估计是哪里配置出了问题，再重新运行一遍试试。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4510">
+        <div id="dsq-comment-header-4510" class="dsq-comment-header">
+            <cite id="dsq-cite-4510">
+                <span id="dsq-author-user-4510">gavinyee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4510" class="dsq-comment-body">
+            <div id="dsq-comment-message-4510" class="dsq-comment-message"><p>博主，我想请问一下，我在敲hexo deploy命令的时候，命令行中总出现不了start deploying:github等输出信息，直接就到待输入下一条命令的状态，而且也没有部署成功到github上。_config.yml文件按照您说的修改了。请问这是什么问题。谢谢！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4511">
+        <div id="dsq-comment-header-4511" class="dsq-comment-header">
+            <cite id="dsq-cite-4511">
+                <span id="dsq-author-user-4511">gavinyee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4511" class="dsq-comment-body">
+            <div id="dsq-comment-message-4511" class="dsq-comment-message"><p>输入hexo deploy就是这样：</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4519">
+        <div id="dsq-comment-header-4519" class="dsq-comment-header">
+            <cite id="dsq-cite-4519">
+                <a id="dsq-author-user-4519" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4519" class="dsq-comment-body">
+            <div id="dsq-comment-message-4519" class="dsq-comment-message"><p>好像是hexo的新版本修改了API，查一下官方的文档吧。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4525">
+        <div id="dsq-comment-header-4525" class="dsq-comment-header">
+            <cite id="dsq-cite-4525">
+                <span id="dsq-author-user-4525">bruce yee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4525" class="dsq-comment-body">
+            <div id="dsq-comment-message-4525" class="dsq-comment-message"><p>好的，谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-4615">
+        <div id="dsq-comment-header-4615" class="dsq-comment-header">
+            <cite id="dsq-cite-4615">
+                <span id="dsq-author-user-4615">美国的华莱士比你们不知道高到哪里去了</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4615" class="dsq-comment-body">
+            <div id="dsq-comment-message-4615" class="dsq-comment-message"><p>用git bash不要用windows的cmd</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-4531">
+        <div id="dsq-comment-header-4531" class="dsq-comment-header">
+            <cite id="dsq-cite-4531">
+                <span id="dsq-author-user-4531">Jimmy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4531" class="dsq-comment-body">
+            <div id="dsq-comment-message-4531" class="dsq-comment-message"><p>请教博主，你现在这个blog是hexo做的吗？是在自己的服务器上搭建的吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4539">
+        <div id="dsq-comment-header-4539" class="dsq-comment-header">
+            <cite id="dsq-cite-4539">
+                <a id="dsq-author-user-4539" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4539" class="dsq-comment-body">
+            <div id="dsq-comment-message-4539" class="dsq-comment-message"><p>现在的blog是wordpress，是付费的服务器。hexo对于很大量的文章，更新是很慢的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-4824">
+        <div id="dsq-comment-header-4824" class="dsq-comment-header">
+            <cite id="dsq-cite-4824">
+                <span id="dsq-author-user-4824">Sam Hu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4824" class="dsq-comment-body">
+            <div id="dsq-comment-message-4824" class="dsq-comment-message"><p>博主，我照你的方式设置二级域名，死都不行啊，救解答啊</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4834">
+        <div id="dsq-comment-header-4834" class="dsq-comment-header">
+            <cite id="dsq-cite-4834">
+                <a id="dsq-author-user-4834" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4834" class="dsq-comment-body">
+            <div id="dsq-comment-message-4834" class="dsq-comment-message"><p>再查一下github的文档吧，可能有更新了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-4842">
+        <div id="dsq-comment-header-4842" class="dsq-comment-header">
+            <cite id="dsq-cite-4842">
+                <span id="dsq-author-user-4842">Sam Hu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4842" class="dsq-comment-body">
+            <div id="dsq-comment-message-4842" class="dsq-comment-message"><p>已经解决了，多谢博主啊</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-4884">
+        <div id="dsq-comment-header-4884" class="dsq-comment-header">
+            <cite id="dsq-cite-4884">
+                <span id="dsq-author-user-4884">Sam Hu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4884" class="dsq-comment-body">
+            <div id="dsq-comment-message-4884" class="dsq-comment-message"><p>多谢，问题已解决</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4895">
+        <div id="dsq-comment-header-4895" class="dsq-comment-header">
+            <cite id="dsq-cite-4895">
+                <a id="dsq-author-user-4895" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4895" class="dsq-comment-body">
+            <div id="dsq-comment-message-4895" class="dsq-comment-message"><p>太好了！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4927">
+        <div id="dsq-comment-header-4927" class="dsq-comment-header">
+            <cite id="dsq-cite-4927">
+                <a id="dsq-author-user-4927" href="http://todddebugger.github.io/" target="_blank" rel="nofollow">todd</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4927" class="dsq-comment-body">
+            <div id="dsq-comment-message-4927" class="dsq-comment-message"><p>Hi, You can try hugo, that is more easy to use.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-5073">
+        <div id="dsq-comment-header-5073" class="dsq-comment-header">
+            <cite id="dsq-cite-5073">
+                <span id="dsq-author-user-5073">Jason Zhang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5073" class="dsq-comment-body">
+            <div id="dsq-comment-message-5073" class="dsq-comment-message"><p>css和js的加载路径不正确，可在Hexo的_config.yml中修改。<br />
+url: <a href="http://hellojasonzhang.github.io" rel="nofollow">http://hellojasonzhang.github.io</a><br />
+root: /blog/</p>
+<p>修改完毕后http://hellojasonzhang.github.io/blog/就可以正常访问。<br />
+希望作者能够修改过来，以免初学者带来误解</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-5579">
+        <div id="dsq-comment-header-5579" class="dsq-comment-header">
+            <cite id="dsq-cite-5579">
+                <span id="dsq-author-user-5579">Rachel Wijaya</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5579" class="dsq-comment-body">
+            <div id="dsq-comment-message-5579" class="dsq-comment-message"><p><a href="https://lidyawijaya.tumblr.com/" rel="nofollow">https://lidyawijaya.tumblr.com/</a></p>
+<p>  <a href="https://agenjudiqiuqiuonline.tumblr.com/" rel="nofollow">https://agenjudiqiuqiuonline.tumblr.com/</a></p>
+<p>  <a href="https://agenjudionlinedominoqiuqiu.tumblr.com/" rel="nofollow">https://agenjudionlinedominoqiuqiu.tumblr.com/</a></p>
+<p>  <a href="http://beritaterkini99.logdown.com/" rel="nofollow">http://beritaterkini99.logdown.com/</a></p>
+<p>  <a href="http://newsupdate.logdown.com" rel="nofollow">http://newsupdate.logdown.com</a></p>
+<p>  <a href="http://feliciawinarto-blog.logdown.com" rel="nofollow">http://feliciawinarto-blog.logdown.com</a></p>
+<p>  <a href="http://beritaterpercaya88.logdown.com/" rel="nofollow">http://beritaterpercaya88.logdown.com/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/hexo-blog-github/';
+var disqus_identifier = '6332 http://blog.fens.me/?p=6332';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Hexo在github上构建免费的Web应用";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=6332';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

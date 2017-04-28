@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>让Nodejs来管理定时任务later | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; 让Nodejs来管理定时任务later Comments Feed" href="http://blog.fens.me/nodejs-cron-later/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='快速创建基于npm的nodejs库' href='http://blog.fens.me/nodejs-npm-package/' />
+<link rel='next' title='了解国债' href='http://blog.fens.me/finance-treasury-bond/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-cron-later/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=4431' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-cron-later%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-cron-later%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="linux,cron,later,javascript,nodejs" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-4431 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>让Nodejs来管理定时任务later</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-4431 post type-post status-publish format-standard hentry category-javascript category-20 tag-cron tag-javascript tag-later tag-linux tag-nodejs">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-cron-later/" title="让Nodejs来管理定时任务later" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Dec 26, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/cron/" rel="tag">cron</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/later/" rel="tag">later</a><a href="http://blog.fens.me/tag/linux/" rel="tag">linux</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-cron-later/#comments"><span class="dsq-postid" data-dsqidentifier="4431 http://blog.fens.me/?p=4431">17 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>让Nodejs来管理定时任务later</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="让Nodejs来管理定时任务later" href="http://blog.fens.me/nodejs-cron-later/ " target="_blank">http://blog.fens.me/nodejs-cron-later/‎</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-later.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-later.png" alt="nodejs-later" width="600" height="400" class="alignnone size-full wp-image-4457" /></a></p>
+<p><strong>前言</strong></p>
+<p>一个完整的系统少不了定时任务，大多数情况我们都选用使用Linux CRON，通过操作系统命令进行定时任务。当我们要维护多台计算机，几十个，几百个定时任务的时候，用CRON会带来非常大的运维成本。可能写到程序中，就是一个不错的选择了。</p>
+<p>Later提供了一个Nodejs的定时任务解决方案，让我来看看他是怎么工作的吧！！</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>什么是定时任务？</li>
+<li>Later介绍</li>
+<li>Later安装</li>
+<li>Later基本使用</li>
+<li>Later Schedules &#8211; 设置时间表</li>
+<li>Later Time Periods &#8211; 时间定义和时间计算</li>
+<li>Later Modifiers &#8211; 行为修饰符</li>
+<li>Later Parsers &#8211; 规则解释器</li>
+<li>Later Occurrences &#8211; 时间控制</li>
+<li>Later Executing &#8211; 启动运行</li>
+</ol>
+<h2>1. ���么是定时任务？</h2>
+<p>定时任务(计划任务)，是任务在约定的时间执行已经计划好的工作，这是表面的意思。在Linux中，我们经常用到 cron 服务器来完成这项工作。cron服务器可以根据配置文件约定的时间来执行特定的作务。比如我们可以在配置文件中约定每天早上4点，对httpd 服务器重新启动，这就是一个计划任务；</p>
+<p>crontab文件的格式：M H D m d cmd.</p>
+<ul>
+<li>M: 分钟（0-59）。</li>
+<li>H：小时（0-23）。</li>
+<li>D：天（1-31）。</li>
+<li>m: 月（1-12）。</li>
+<li>d: 一星期内的天（0~6，0为星期天）。</li>
+</ul>
+<p>每两个小时</p>
+<pre><code>0 */2 * * * echo "Have a break now." >> /tmp/test.txt</code></pre>
+<p>晚上11点到早上8点之间每两个小时，早上八点</p>
+<pre><code>0 23-7/2，8 * * * echo "Have a good dream：）" >> /tmp/test.txt</code></pre>
+<p>每个月的4号和每个礼拜的礼拜一到礼拜三的早上11点</p>
+<pre><code>0 11 4 * 1-3 command line</code></pre>
+<p>1月1日早上4点</p>
+<pre><code>0 4 1 1 * command line</code></pre>
+<p>关于CRON的介绍，摘自：<a href="http://baike.baidu.com/view/660015.htm" target="_blank" ref="nofollow">http://baike.baidu.com/view/660015.htm</a></p>
+<h2>2. Later介绍</h2>
+<p>Later是一个基于Nodejs的工具库，用最简单的方式执行定时任务。Later可以运行在Node和浏览器中。</p>
+<p>Later.js官方主页：<a target="_blank" ref="nofollow" href="http://bunkat.github.io/later/index.html">http://bunkat.github.io/later/index.html</a></p>
+<h2>3. Later安装</h2>
+<p>Later可以运行在Node和浏览器中，分别用npm和bower进行依赖管理。关于NPM的介绍，请参考：<a title="快速创建基于npm的nodejs库" target="_blank" href="http://blog.fens.me/nodejs-npm-package/">快速创建基于npm的nodejs库</a>, 关于Bower的介绍，请参考：<a title="bower解决js的依赖管理" target="_blank" href="http://blog.fens.me/nodejs-bower-intro/">bower解决js的依赖管理</a></p>
+<p>系统环境</p>
+<ul>
+<li>Linux: Ubuntu 12.04.2 LTS 64bit deskop</li>
+<li>Nodejs: npm 1.2.21</li>
+<li>node v0.11.2</li>
+</ul>
+<p>安装later</p>
+<pre><code>
+~ cd /home/conan/nodejs
+~ mkdir nodejs-later && cd nodejs-later
+
+~ sudo npm install later
+npm http GET https://registry.npmjs.org/later
+npm http 200 https://registry.npmjs.org/later
+npm http GET https://registry.npmjs.org/later/-/later-1.1.6.tgz
+npm http 200 https://registry.npmjs.org/later/-/later-1.1.6.tgz
+later@1.1.6 node_modules/later
+</code></pre>
+<p>没有其他包的依赖，这样就安装完成了！</p>
+<h2>4. Later基本使用</h2>
+<p>创建一个每5分钟启动的定时器规则，输出启动时间。</p>
+<p>创建启动文件：app.js</p>
+<pre><code>
+~ vi app.js
+
+var later = require('later');
+var sched = later.parse.text('every 5 mins'),
+    occurrences = later.schedule(sched).next(10);
+
+for(var i=0;i<10;i++){
+    console.log(occurrences[i]);
+}
+</code></pre>
+<p>运程程序：</p>
+<pre><code>
+~ node app.js
+Thu Dec 26 2013 10:45:00 GMT+0800 (CST)
+Thu Dec 26 2013 10:50:00 GMT+0800 (CST)
+Thu Dec 26 2013 10:55:00 GMT+0800 (CST)
+Thu Dec 26 2013 11:00:00 GMT+0800 (CST)
+Thu Dec 26 2013 11:05:00 GMT+0800 (CST)
+Thu Dec 26 2013 11:10:00 GMT+0800 (CST)
+Thu Dec 26 2013 11:15:00 GMT+0800 (CST)
+Thu Dec 26 2013 11:20:00 GMT+0800 (CST)
+Thu Dec 26 2013 11:25:00 GMT+0800 (CST)
+Thu Dec 26 2013 11:30:00 GMT+0800 (CST)
+</code></pre>
+<h2>5. Later Schedules - 设置时间表</h2>
+<p>Schedules模块用来设置定时规则，提供3种规则设置。</p>
+<ul>
+<li>Basic schedules：基本时间表</li>
+<li>Composite schedules: 组合时间表</li>
+<li>Exception schedules: 异常时间表</li>
+</ul>
+<p><strong>1). Basic schedules：基本时间表</strong></p>
+<p>设置每日10:15am , 10:45am启动</p>
+<pre><code>
+var basic = {h: [10], m: [15,45]};
+</code></pre>
+<p><strong>2). Composite schedules: 组合时间表</strong></p>
+<p>设置每日10:15am , 10:45am, 和17:40pm 启动</p>
+<pre><code>
+ var composite = [
+    {h: [10], m: [15,45]},
+    {h: [17], m: [30]}
+  ];
+</code></pre>
+<p><strong>3). Exception schedules: 异常时间表</strong></p>
+<p>用于设置一下无效的日期：设置 每年1月 和 每周一，六，日 时间表无效</p>
+<pre><code>
+var exception = [
+    {M: [1]},
+    {dw: [1,6,7]}
+];
+</code></pre>
+<p><strong>4). 程序实现</strong></p>
+<p>新建测试文件：schedules.js</p>
+<pre><code>
+~ vi schedules.js
+
+var later = require('later');
+
+var basic = {h: [10], m: [15,45]};
+var composite = [
+    basic,
+    {h: [17], m: [30]}
+];
+var exception = [
+    {M: [1]},
+    {dw: [1,6,7]}
+];
+
+var sched = {
+    schedules:composite,
+    exceptions:exception
+};
+
+later.date.localTime();
+
+console.log("Now:"+new Date());
+var occurrences = later.schedule(sched).next(10);
+for(var i = 0; i < occurrences.length; i++) {
+    console.log(occurrences[i]);
+}
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node schedules.js
+Now:Thu Dec 26 2013 11:40:27 GMT+0800 (CST)
+Thu Dec 26 2013 17:30:00 GMT+0800 (CST)
+Mon Dec 30 2013 10:15:00 GMT+0800 (CST)
+Mon Dec 30 2013 10:45:00 GMT+0800 (CST)
+Mon Dec 30 2013 17:30:00 GMT+0800 (CST)
+Tue Dec 31 2013 10:15:00 GMT+0800 (CST)
+Tue Dec 31 2013 10:45:00 GMT+0800 (CST)
+Tue Dec 31 2013 17:30:00 GMT+0800 (CST)
+Mon Feb 03 2014 10:15:00 GMT+0800 (CST)
+Mon Feb 03 2014 10:45:00 GMT+0800 (CST)
+Mon Feb 03 2014 17:30:00 GMT+0800 (CST)
+</code></pre>
+<p>当前时间为：2013-12-26 11:40:27</p>
+<p>从结果中看到，接下来的10个时间点。</p>
+<ul>
+<li>第1个：2013-12-26 17:30:00</li>
+<li>第2个：2013-12-30 10:15:00 (排除了2013-12-27,28,29的3天)</li>
+<li>第8个：2014-02-01 10:15:00 (排除了2014的1月份)</li>
+</ul>
+<p>还有比这种方式，更便捷定义时间表的么！！太神奇了！</p>
+<h2>6. Later Time Periods - 时间定义和时间计算</h2>
+<p>Time Periods模块用于时间定义和时间计算。</p>
+<p><strong>1). 时间定义</strong></p>
+<p>在之前的代码中，我们是这样的定义的</p>
+<pre><code>{h: [17], m: [30]}</code></pre>
+<p>h代表小时，m代表分钟。</p>
+<p>时间定义完整列表：</p>
+<ul>
+<li>Second, s: 秒, 取值范围:[0-59]</li>
+<li>minute, m：分, 取值范围:[0-59]</li>
+<li>hour, h: 时, 取值范围:[0-23]</li>
+<li>time, t: 秒每日, 取值范围:[0-86399]</li>
+<li>day, D: 日, 取值范围:[1-31]</li>
+<li>dayOfWeek, dw, d: 日每周, 取值范围:[1-7]</li>
+<li>dayOfYear, dy: 日每年，取值范围:[1-365]</li>
+<li>weekOfMonth, wm: 周每月，取值范围:[1-5]</li>
+<li>weekOfYear, wy: 周每年，取值范围:[1-52]</li>
+<li>month, M: 月，取值范围:[1-12]</li>
+<li>year, Y: 年，取值范围:[1970-2099]</li>
+</ul>
+<p><strong>2). 时间计算</strong></p>
+<ul>
+<li>name: 名称</li>
+<li>range: 取值范围计数</li>
+<li>val(date): 当前时间段的值</li>
+<li>isValid(date, value): 检验输入是否是当前时间段的值</li>
+<li>extent(date): 取值范围</li>
+<li>start(date): 开始时间点</li>
+<li>end(date): 结束时间点</li>
+<li>next(date, value): value之后的时间点</li>
+<li>prev(date, value): value之前的时间点</li>
+</ul>
+<p><strong>3). 程序实现</strong></p>
+<p>新建测试文件：time.js</p>
+<pre><code>
+~ vi time.js
+
+var later = require('later');
+later.date.localTime();
+
+var d = new Date();
+
+console.log(d);
+console.log(later.hour.name);
+console.log(later.hour.range);
+console.log(later.hour.val(d));
+console.log(later.hour.isValid(d, 2));
+console.log(later.hour.isValid(d, 12));
+console.log(later.hour.extent());
+console.log(later.hour.start(d));
+console.log(later.hour.end(d));
+console.log(later.hour.next(d, 5));
+console.log(later.hour.prev(d, 21));
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node time.js
+
+Thu Dec 26 2013 12:30:42 GMT+0800 (CST)
+hour
+3600
+12
+false
+true
+[ 0, 23 ]
+Thu Dec 26 2013 12:00:00 GMT+0800 (CST)
+Thu Dec 26 2013 12:59:59 GMT+0800 (CST)
+Fri Dec 27 2013 05:00:00 GMT+0800 (CST)
+Wed Dec 25 2013 21:59:59 GMT+0800 (CST)
+</code></pre>
+<p>输出结果的解释：</p>
+<ul>
+<li>当前时间：2013-12-26 12:30:42</li>
+<li>以小时定义时间</li>
+<li>每小时3600个计数点</li>
+<li>当前时间段的的值是12</li>
+<li>检查2不是当前时间段的值</li>
+<li>检查12不是当前时间段的值</li>
+<li>取值范围[0，23]</li>
+<li>当前时间段的开始时间点：12:00:00</li>
+<li>当前时间段的结束时间点：12:59:59</li>
+<li>下一个周期第5个时间段开始点：2013-12-27 05:00:00</li>
+<li>上一个周期第21个时间段结束点：2013-12-25 21:59:59</li>
+</ul>
+<h2>7. Later Modifiers - 行为修饰符</h2>
+<p>Later可以编写自定义修饰符，可以改变现有的时间周期的行为，通过 _(modifier-id) 这样的格式定义。</p>
+<ul>
+<li>after(_a): 之后时间修饰符</li>
+<li>before(_b): 之前时间修饰符</li>
+</ul>
+<p><strong>1). after(_a)</strong></p>
+<p>以小时定义，设置17:00pm之前都是合法的时间</p>
+<pre><code>
+var demo1_a = {schedules: [{h_a: [17]}]};
+
+#等价定义
+var demo1 = {schedules: [{h: [17,18,19,20,21,22,23]}]};
+</code></pre>
+<p><strong>2). before(_b)</strong></p>
+<p>以小时定义，设置17:00pm之后都是合法的时间</p>
+<pre><code>
+var demo2_b = {schedules: [{h_b: [17]}]};
+
+#等价定义
+var demo2 = {schedules: [{h: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]}]};
+</code></pre>
+<p><strong>3). 程序实现</strong></p>
+<p>新建文件：modifiers.js</p>
+<pre><code>
+~ vi modifiers.js
+
+var later = require('later');
+later.date.localTime();
+
+console.log("Now:"+new Date());
+
+var demo1_a = {schedules: [{h_a: [17]}]};
+var demo2_b = {schedules: [{h_b: [17]}]};
+
+var occurrences = later.schedule(demo1_a).next(3);
+for(var i = 0; i < occurrences.length; i++) {
+    console.log(occurrences[i]);
+}
+
+occurrences = later.schedule(demo2_b).next(3);
+for(var i = 0; i < occurrences.length; i++) {
+    console.log(occurrences[i]);
+}
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node modifiers.js
+
+Now:Thu Dec 26 2013 13:04:06 GMT+0800 (CST)
+Thu Dec 26 2013 17:00:00 GMT+0800 (CST)
+Thu Dec 26 2013 18:00:00 GMT+0800 (CST)
+Thu Dec 26 2013 19:00:00 GMT+0800 (CST)
+Thu Dec 26 2013 13:04:06 GMT+0800 (CST)
+Thu Dec 26 2013 14:00:00 GMT+0800 (CST)
+Thu Dec 26 2013 15:00:00 GMT+0800 (CST)
+</code></pre>
+<p>当前时间：2013-12-26 13:04:06</p>
+<ul>
+<li>17点后的时间表(h_a)：17:00:00</li>
+<li>17点前的时间表(h_b)：13:04:06</li>
+</ul>
+<p>Later支持我们可以定义自己的修饰符，有兴趣的同学自己查文档吧。</p>
+<h2>8. Later Parsers - 规则解释器</h2>
+<p>Parsers模块提供了3种规则解释器，方便定义时间表。</p>
+<ul>
+<li>Recur: 链式API定义</li>
+<li>Cron Parser: CRON格式定义</li>
+<li>Text Parser：自然语言定义</li>
+</ul>
+<p><strong>1). Recur: 链式API定义</strong></p>
+<p>设置每小时第5分0秒启动</p>
+<pre><code>
+var sched = later.parse.recur().on(5).minute();
+</code></pre>
+<p>时间定义API</p>
+<pre><code>
+  second();
+  minute();
+  hour();
+  time();
+  dayOfWeek();
+  dayOfWeekCount();
+  dayOfMonth();
+  dayOfYear();
+  weekOfMonth();
+  weekOfYear();
+  month();
+  year();
+</code></pre>
+<p>时间计算API</p>
+<ul>
+<li>on(vals): 设置时间值</li>
+<li>first(): 最小的时间值</li>
+<li>last(): 最大的时间值</li>
+<li>onWeekend(): 周末，等价于on(1,7).dayOfWeek()</li>
+<li>onWeekday(): 工作日，等价于on(2,3,4,5,6).dayOfWeek()</li>
+<li>every(val): 循环每个时间</li>
+<li>after(val): 在之后</li>
+<li>before(val): 在之前</li>
+<li>startingOn(val): 每个时间段开始的偏移量</li>
+<li>between(start, end): 在两个时间之间</li>
+<li>and(): </li>
+<li>except(): </li>
+<li>customPeriod(id): </li>
+<li>customModifier(id, vals): </li>
+</ul>
+<p><strong>2). Cron Parser: CRON格式定义</strong></p>
+<p>通过原CRON格式进行定义。</p>
+<p>设置每小时第5分0秒启动</p>
+<pre><code>
+var cron = later.parse.cron('5 * * * *');
+</code></pre>
+<p><strong>3). Text Parser：自然语言定义</strong></p>
+<p>通过关键字格式进行定义。</p>
+<pre><code>
+var text = later.parse.text('every 5th mins');
+</code></pre>
+<h2>9. Later Occurrences - 时间控制</h2>
+<p>时区设置</p>
+<pre><code>
+//默认UTF时区
+later.date.UTC();
+
+//设置本地时区
+later.date.localTime();
+</code></pre>
+<p>构造对象</p>
+<pre><code>
+var schedule = {schedules: [{m: [5]}]};
+var occurrences = later.schedule(schedule);
+</code></pre>
+<p>时间控制API</p>
+<ul>
+<li>later.schedule(schedule).next(count, start, end): 取下N个有效时间点</li>
+<li>later.schedule(schedule).prev(count, start, end): 取上N个有效时间点</li>
+<li>later.schedule(schedule).nextRange(count, start, end): 取下N个有效时间段</li>
+<li>later.schedule(schedule).prevRange(count, start, end): 取上N个有效时间段</li>
+</ul>
+<h2>10. Later Executing - 启动运行</h2>
+<p>Executing模块定义了setTimeout和setInterval两种方式，实现运行。</p>
+<ul>
+<li>setTimeout: 设置一段时间后运行，只运行1次</li>
+<li>setInterval: 循环运行，直到clear</li>
+</ul>
+<p><strong>1). setTimeout</strong></p>
+<p>定义：5秒后运行，只运行一次！</p>
+<p>新建文件：settimeout.js</p>
+<pre><code>
+~ vi settimeout.js
+
+var later = require('later');
+later.date.localTime();
+
+console.log("Now:"+new Date());
+
+var sched = later.parse.recur().every(5).second(),
+    t = later.setTimeout(function() {
+        test(5);
+    }, sched);
+
+function test(val) {
+   console.log(new Date());
+   console.log(val);
+}
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node settimeout.js
+Now:Thu Dec 26 2013 14:12:36 GMT+0800 (CST)
+Thu Dec 26 2013 14:12:40 GMT+0800 (CST)
+5
+</code></pre>
+<p><strong>2). setInterval</strong></p>
+<p>定义：2秒后运行，循环运行，直到15秒后，clear停止！</p>
+<p>新建文件：setinterval.js</p>
+<pre><code>
+~ vi setInterval.js
+
+var later = require('later');
+later.date.localTime();
+
+console.log("Now:"+new Date());
+
+var sched = later.parse.recur().every(2).second(),
+    t = later.setInterval(function() {
+        test(Math.random(10));
+    }, sched);
+
+function test(val) {
+   console.log(new Date());
+   console.log(val);
+}
+
+setTimeout(function(){
+   t.clear();
+   console.log("Clear");
+},15*1000);
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~  node setinterval.js
+Now:Thu Dec 26 2013 14:17:54 GMT+0800 (CST)
+Thu Dec 26 2013 14:17:56 GMT+0800 (CST)
+0.5084630874916911
+Thu Dec 26 2013 14:17:58 GMT+0800 (CST)
+0.47506075259298086
+Thu Dec 26 2013 14:18:00 GMT+0800 (CST)
+0.957129133399576
+Thu Dec 26 2013 14:18:02 GMT+0800 (CST)
+0.7480122991837561
+Thu Dec 26 2013 14:18:04 GMT+0800 (CST)
+0.9212428922764957
+Thu Dec 26 2013 14:18:06 GMT+0800 (CST)
+0.030472515616565943
+Thu Dec 26 2013 14:18:08 GMT+0800 (CST)
+0.9528024469036609
+Clear
+</code></pre>
+<p><strong>转载请注明出处：</strong><br />
+<a title="让Nodejs来管理定时任务later" href="http://blog.fens.me/nodejs-cron-later/ " target="_blank">http://blog.fens.me/nodejs-cron-later/‎</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a>, <a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" rel="category tag">操作系统</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-806">
+        <div id="dsq-comment-header-806" class="dsq-comment-header">
+            <cite id="dsq-cite-806">
+                <span id="dsq-author-user-806">zieglar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-806" class="dsq-comment-body">
+            <div id="dsq-comment-message-806" class="dsq-comment-message"><p>第五段异常时间跳过每周一，六，日，但是12月27日是周五，为何会被跳过呢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1495">
+        <div id="dsq-comment-header-1495" class="dsq-comment-header">
+            <cite id="dsq-cite-1495">
+                <span id="dsq-author-user-1495">kazaff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1495" class="dsq-comment-body">
+            <div id="dsq-comment-message-1495" class="dsq-comment-message"><p>很不错的工具，收藏了！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2011">
+        <div id="dsq-comment-header-2011" class="dsq-comment-header">
+            <cite id="dsq-cite-2011">
+                <span id="dsq-author-user-2011">raku</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2011" class="dsq-comment-body">
+            <div id="dsq-comment-message-2011" class="dsq-comment-message"><p>只能得到计划时间  如何在计划的时间执行function呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2012">
+        <div id="dsq-comment-header-2012" class="dsq-comment-header">
+            <cite id="dsq-cite-2012">
+                <a id="dsq-author-user-2012" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2012" class="dsq-comment-body">
+            <div id="dsq-comment-message-2012" class="dsq-comment-message"><p>“10. Later Executing &#8211; 启动运行”，这个标题不就是怎么运行吗，好好读文章。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-3754">
+        <div id="dsq-comment-header-3754" class="dsq-comment-header">
+            <cite id="dsq-cite-3754">
+                <a id="dsq-author-user-3754" href="http://frankfan.me" target="_blank" rel="nofollow">fan frank</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3754" class="dsq-comment-body">
+            <div id="dsq-comment-message-3754" class="dsq-comment-message"><p>你的意思是这个吧：<br />
+var basic = {h: [12], m: [30]};</p>
+<p>var composite = [<br />
+    basic<br />
+];</p>
+<p>var exception = [<br />
+    {dw: [6,7]}<br />
+];</p>
+<p>var schedule = {<br />
+    schedules:composite,<br />
+    exceptions:exception<br />
+};</p>
+<p>later.date.localTime();</p>
+<p>var t = later.setInterval(function(){<br />
+    console.log(&#8216;shit&#8217;);<br />
+}, schedule);<br />
+文章最后确实没有给出在计划时间执行的例子。。。不过确实很强大！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2402">
+        <div id="dsq-comment-header-2402" class="dsq-comment-header">
+            <cite id="dsq-cite-2402">
+                <span id="dsq-author-user-2402">the1sky</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2402" class="dsq-comment-body">
+            <div id="dsq-comment-message-2402" class="dsq-comment-message"><p>只能运行在linux?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2403">
+        <div id="dsq-comment-header-2403" class="dsq-comment-header">
+            <cite id="dsq-cite-2403">
+                <a id="dsq-author-user-2403" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2403" class="dsq-comment-body">
+            <div id="dsq-comment-message-2403" class="dsq-comment-message"><p>Linux, Mac, Unix<br />
+我没有在Win下用过定时任务。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2554">
+        <div id="dsq-comment-header-2554" class="dsq-comment-header">
+            <cite id="dsq-cite-2554">
+                <span id="dsq-author-user-2554">lucio</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2554" class="dsq-comment-body">
+            <div id="dsq-comment-message-2554" class="dsq-comment-message"><p>win下不行呢，比如settimeout设置为5，但执行却是3秒2秒经常变</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2557">
+        <div id="dsq-comment-header-2557" class="dsq-comment-header">
+            <cite id="dsq-cite-2557">
+                <a id="dsq-author-user-2557" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2557" class="dsq-comment-body">
+            <div id="dsq-comment-message-2557" class="dsq-comment-message"><p>Win系统情况，我确实不熟悉。不好意思。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2567">
+        <div id="dsq-comment-header-2567" class="dsq-comment-header">
+            <cite id="dsq-cite-2567">
+                <a id="dsq-author-user-2567" href="http://chen.yanping.me/" target="_blank" rel="nofollow">ypchen</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2567" class="dsq-comment-body">
+            <div id="dsq-comment-message-2567" class="dsq-comment-message"><p>用cron的话 就可以定时运行java程序了吧  每次都执行jar包？ 如果jar包 所用到的一些资源  比如数据库、xml文件 发生变化了 程序执行会受什么影响呢？会引用最新的资源吗</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2568">
+        <div id="dsq-comment-header-2568" class="dsq-comment-header">
+            <cite id="dsq-cite-2568">
+                <a id="dsq-author-user-2568" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2568" class="dsq-comment-body">
+            <div id="dsq-comment-message-2568" class="dsq-comment-message"><p>1. CRON可以启动JAVA程序。<br />
+2. 资源发生变化了，也没什么问题，不会受影响。<br />
+3. 会引用最新的资源吗？？看你自己的程序实现，自己控制。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3378">
+        <div id="dsq-comment-header-3378" class="dsq-comment-header">
+            <cite id="dsq-cite-3378">
+                <span id="dsq-author-user-3378">曾浩</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3378" class="dsq-comment-body">
+            <div id="dsq-comment-message-3378" class="dsq-comment-message"><p>请问我放在服务器上时间不正确该怎么调整？ 我试着设置 later.date.localTime(); UTC等，但是并没有效果。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3381">
+        <div id="dsq-comment-header-3381" class="dsq-comment-header">
+            <cite id="dsq-cite-3381">
+                <a id="dsq-author-user-3381" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3381" class="dsq-comment-body">
+            <div id="dsq-comment-message-3381" class="dsq-comment-message"><p>时间用moment库来取。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4857">
+        <div id="dsq-comment-header-4857" class="dsq-comment-header">
+            <cite id="dsq-cite-4857">
+                <a id="dsq-author-user-4857" href="http://blog.kazaff.me" target="_blank" rel="nofollow">kazaff</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4857" class="dsq-comment-body">
+            <div id="dsq-comment-message-4857" class="dsq-comment-message"><p>Later Modifiers &#8211; 行为修饰符那一章的例子应该是写错了，之前之后反了</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-4888">
+        <div id="dsq-comment-header-4888" class="dsq-comment-header">
+            <cite id="dsq-cite-4888">
+                <a id="dsq-author-user-4888" href="http://cdog.me" target="_blank" rel="nofollow">CDog</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4888" class="dsq-comment-body">
+            <div id="dsq-comment-message-4888" class="dsq-comment-message"><p>有做过性能测试嘛~<br />
+大任务量场景下表现怎么样</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4896">
+        <div id="dsq-comment-header-4896" class="dsq-comment-header">
+            <cite id="dsq-cite-4896">
+                <a id="dsq-author-user-4896" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4896" class="dsq-comment-body">
+            <div id="dsq-comment-message-4896" class="dsq-comment-message"><p>没做，性能测试。<br />
+异步IO，只是调用，应该没有什么问题。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-cron-later/';
+var disqus_identifier = '4431 http://blog.fens.me/?p=4431';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "让Nodejs来管理定时任务later";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=4431';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

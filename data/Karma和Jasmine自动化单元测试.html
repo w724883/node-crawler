@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Karma和Jasmine自动化单元测试 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Karma和Jasmine自动化单元测试 Comments Feed" href="http://blog.fens.me/nodejs-karma-jasmine/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='jasmine行为驱动,测试先行' href='http://blog.fens.me/nodejs-jasmine-bdd/' />
+<link rel='next' title='UnderscoreJS精巧而强大工具包' href='http://blog.fens.me/nodejs-underscore/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-karma-jasmine/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=2018' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-karma-jasmine%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-karma-jasmine%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="karma,jasmine,istanbul,nodejs,javascript,自动化测试" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-2018 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Karma和Jasmine自动化单元测试</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-2018 post type-post status-publish format-standard hentry category-javascript tag-istanbul tag-jasmine tag-javascript tag-karma tag-nodejs tag-259">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-karma-jasmine/" title="Karma和Jasmine自动化单元测试" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Aug 27, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/istanbul/" rel="tag">istanbul</a><a href="http://blog.fens.me/tag/jasmine/" rel="tag">jasmine</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/karma/" rel="tag">karma</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/%e8%87%aa%e5%8a%a8%e5%8c%96%e6%b5%8b%e8%af%95/" rel="tag">自动化测试</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-karma-jasmine/#comments"><span class="dsq-postid" data-dsqidentifier="2018 http://blog.fens.me/?p=2018">51 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Karma和Jasmine自动化单元测试</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Karma和Jasmine自动化单元测试" href="http://blog.fens.me/nodejs-karma-jasmine/" target="_blank">http://blog.fens.me/nodejs-karma-jasmine/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/karma.png"><img class="alignnone size-full wp-image-2033" alt="karma" src="http://blog.fens.me/wp-content/uploads/2013/08/karma.png" width="600" height="400" /></a></p>
+<p><strong>前言</strong></p>
+<p>在Java领域，Apache, Spring, JBoss 三大社区的开源库，包罗万象，但每个库都在其领域中都鹤立鸡群。而Nodejs中各种各样的开源库，却让人眼花缭乱，不知从何下手。</p>
+<p>Nodejs领域: <a title="jasmine行为驱动,测试先行" href="http://blog.fens.me/nodejs-jasmine-bdd/" target="_blank">Jasmine做单元测试</a>，<a title="Karma和Jasmine自动化单元测试" href="http://blog.fens.me/nodejs-karma-jasmine/" target="_blank">Karma自动化完成单元测试</a>，<a title="grunt让Nodejs规范起来" href="http://blog.fens.me/nodejs-grunt-intro/" target="_blank">Grunt启动Karma统一项目管理</a>，<a title="Yeoman自动构建js项目" href="http://blog.fens.me/nodejs-yeoman-intro/" target="_blank">Yeoman最后封装成一个项目原型模板</a>，npm做nodejs的包依赖管理，<a title="bower解决js的依赖管理" href="http://blog.fens.me/nodejs-bower-intro/" target="_blank">bower做javascript的包依赖管理</a>。Java领域：JUnit做单元测试, Maven自动化单元测试，统一项目管理，构建项目原型模板，包依赖管理。</p>
+<p>Nodejs让组合变得更丰富，却又在加重我们的学习门槛。我还说不清楚，也看不透！</p>
+<p>上面写的有点远了，回到文章的主题，Jasmine+Karma自动化单元测试。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Karma的介绍</li>
+<li>Karma的安装</li>
+<li>Karma + Jasmine配置</li>
+<li>自动化单元测试</li>
+<li>Karma和istanbul代码覆盖率</li>
+<li>Karma第一次启动时出现的问题</li>
+</ol>
+<h2>1. Karma的介绍</h2>
+<p>Karma是Testacular的新名字，在2012年google开源了Testacular，2013年Testacular改名为Karma。Karma是一个让人感到非常神秘的名字，表示佛教中的缘分，因果报应，比Cassandra这种名字更让人猜不透！</p>
+<p>Karma是一个基于Node.js的JavaScript测试执行过程管理工具（Test Runner）。该工具可用于测试所有主流Web浏览器，也可集成到CI（Continuous integration）工具，也可和其他代码编辑器一起使用。这个测试工具的一个强大特性就是，它可以监控(Watch)文件的变化，然后自行执行，通过console.log显示测试结果。</p>
+<p>Jasmine是单元测试框架，本单将介绍用Karma让Jasmine测试自动化完成。Jasmine的介绍，请参考文章：<a title="jasmine行为驱动,测试先行" href="http://blog.fens.me/nodejs-jasmine-bdd" target="_blank">jasmine行为驱动,测试先行</a></p>
+<p>istanbul是一个单元测试代码覆盖率检查工具，可以很直观地告诉我们，单元测试对代码的控制程度。</p>
+<h2>2. Karma的安装</h2>
+<p>系统环境:</p>
+<pre><code>win7 64bit, node v0.10.5, npm 1.2.19</code></pre>
+<p><strong>安装Karma</strong></p>
+<pre><code>
+~ D:\workspace\javascript&gt;mkdir karma
+~ D:\workspace\javascript&gt;cd karma
+~ D:\workspace\javascript\karma&gt;npm install -g karma
+
+# 测试是否安装成功
+~ D:\workspace\javascript\karma&gt;karma start
+INFO [karma]: Karma v0.10.2 server started at http://localhost:9876/
+INFO [Chrome 28.0.1500 (Windows 7)]: Connected on socket nIlM1yUy6ELMp5ZTN9Ek
+</code></pre>
+<p>从浏览器看到karam界面。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/karma1.png"><img class="alignnone size-full wp-image-2021" alt="karma1" src="http://blog.fens.me/wp-content/uploads/2013/08/karma1.png" width="596" height="146" /></a></p>
+<p>下面我们要开始配置karam。</p>
+<h2>3. Karma + Jasmine配置</h2>
+<p>初始化karma配置文件karma.conf.js</p>
+<pre><code>
+~ D:\workspace\javascript\karma&gt;karma init
+
+Which testing framework do you want to use ?
+Press tab to list possible options. Enter to move to the next question.
+&gt; jasmine
+
+Do you want to use Require.js ?
+This will add Require.js plugin.
+Press tab to list possible options. Enter to move to the next question.
+&gt; no
+
+Do you want to capture a browser automatically ?
+Press tab to list possible options. Enter empty string to move to the next question.
+&gt; Chrome
+&gt;
+
+What is the location of your source and test files ?
+You can use glob patterns, eg. "js/*.js" or "test/**/*Spec.js".
+Enter empty string to move to the next question.
+&gt;
+
+Should any of the files included by the previous patterns be excluded ?
+You can use glob patterns, eg. "**/*.swp".
+Enter empty string to move to the next question.
+&gt;
+
+Do you want Karma to watch all the files and run the tests on change ?
+Press tab to list possible options.
+&gt; yes
+
+Config file generated at "D:\workspace\javascript\karma\karma.conf.js".
+</code></pre>
+<p>安装集成包karma-jasmine</p>
+<pre><code>
+~ D:\workspace\javascript\karma&gt;npm install karma-jasmine
+</code></pre>
+<h2>4. 自动化单元测试</h2>
+<p><strong>3步准备工作：</strong></p>
+<ul>
+<li>1. 创建源文件：用于实现某种业务逻辑的文件，就是我们平时写的js脚本</li>
+<li>2. 创建测试文件：符合jasmineAPI的测试js脚本</li>
+<li>3. 修改karma.conf.js配置文件</li>
+</ul>
+<p><strong>1). 创建源文件：用于实现某种业务逻辑的文件，就是我们平时写的js脚本</strong><br />
+有一个需求，要实现单词倒写的功能。如：”ABCD” ==&gt; “DCBA”</p>
+<pre><code>
+~ vi src.js
+
+function reverse(name){
+    return name.split("").reverse().join("");
+}
+</code></pre>
+<p><strong>2). 创建测试文件：符合jasmineAPI的测试js脚本</strong></p>
+<pre><code>
+describe("A suite of basic functions", function() {
+    it("reverse word",function(){
+        expect("DCBA").toEqual(reverse("ABCD"));
+    });
+});
+</code></pre>
+<p><strong>3). 修改karma.conf.js配置文件</strong><br />
+我们这里需要修改：files和exclude变量</p>
+<pre><code>
+module.exports = function (config) {
+    config.set({
+        basePath: '',
+        frameworks: ['jasmine'],
+        files: ['*.js'],
+        exclude: ['karma.conf.js'],
+        reporters: ['progress'],
+        port: 9876,
+        colors: true,
+        logLevel: config.LOG_INFO,
+        autoWatch: true,
+        browsers: ['Chrome'],
+        captureTimeout: 60000,
+        singleRun: false
+    });
+};
+</code></pre>
+<p><strong>启动karma</strong><br />
+单元测试全自动执行</p>
+<pre><code>
+~ D:\workspace\javascript\karma&gt;karma start karma.conf.js
+INFO [karma]: Karma v0.10.2 server started at http://localhost:9876/
+INFO [launcher]: Starting browser Chrome
+WARN [launcher]: The path should not be quoted.
+  Normalized the path to C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+INFO [Chrome 28.0.1500 (Windows 7)]: Connected on socket bVGffDWpc1c7QNdYye_6
+INFO [Chrome 28.0.1500 (Windows 7)]: Connected on socket DtTdVbd4ZsgnMQrgye_7
+Chrome 28.0.1500 (Windows 7): Executed 1 of 1 SUCCESS (3.473 secs / 0.431 secs)
+Chrome 28.0.1500 (Windows 7): Executed 1 of 1 SUCCESS (0.068 secs / 0.021 secs)
+TOTAL: 2 SUCCESS
+</code></pre>
+<p>浏览器会自动打开<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/karma2.png"><img class="alignnone size-full wp-image-2026" alt="karma2" src="http://blog.fens.me/wp-content/uploads/2013/08/karma2.png" width="527" height="195" /></a></p>
+<p>我们修改test.js</p>
+<pre><code>
+~ vi test.js
+
+describe("A suite of basic functions", function() {
+    it("reverse word",function(){
+        expect("DCBA").toEqual(reverse("ABCD"));
+        expect("Conan").toEqual(reverse("nano"));
+    });
+});
+</code></pre>
+<p>由于karma.conf.js配置文件中autoWatch: true, 所以test.js文件保存后，会自动执行单元测试。</p>
+<p>执行日志如下：提示我们单元测试出错了。</p>
+<pre><code>
+INFO [watcher]: Changed file "D:/workspace/javascript/karma/test.js".
+Chrome 28.0.1500 (Windows 7) A suite of basic functions reverse word FAILED
+        Expected 'Conan' to equal 'onan'.
+        Error: Expected 'Conan' to equal 'onan'.
+            at null. (D:/workspace/javascript/karma/test.js:4:25)
+Chrome 28.0.1500 (Windows 7): Executed 1 of 1 (1 FAILED) ERROR (0.3 secs / 0.006 secs)
+</code></pre>
+<h2>5. Karma和istanbul代码覆盖率</h2>
+<p>增加代码覆盖率检查和报告，增加istanbul依赖</p>
+<pre><code>
+~ D:\workspace\javascript\karma&gt;npm install karma-coverage
+</code></pre>
+<p>修改karma.conf.js配置文件</p>
+<pre><code>
+~ vi karma.conf.js
+
+reporters: ['progress','coverage'],
+preprocessors : {'src.js': 'coverage'},
+coverageReporter: {
+    type : 'html',
+    dir : 'coverage/'
+}
+</code></pre>
+<p>启动karma start，在工程目录下面找到index.html文件，coverage/chrome/index.html</p>
+<p>打开后，我们看到代码测试覆盖绿报告<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/karma3.png"><img class="alignnone size-full wp-image-2029" alt="karma3" src="http://blog.fens.me/wp-content/uploads/2013/08/karma3.png" width="938" height="330" /></a></p>
+<p>覆盖率是100%，说明我们完整了测试了src.js的功能。</p>
+<p>接下来，我们修改src.js，增加一个if分支</p>
+<pre><code>
+function reverse(name){
+    if(name=='AAA') return "BBB";
+    return name.split("").reverse().join("");
+}
+</code></pre>
+<p>再看覆盖率报告，<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/karma4.png"><img class="alignnone size-full wp-image-2030" alt="karma4" src="http://blog.fens.me/wp-content/uploads/2013/08/karma4.png" width="935" height="329" /></a></p>
+<p>Statements：75%覆盖，Branches：50%覆盖。</p>
+<p>为了产品的质量我们要尽量达到更多的覆盖率，一般对于JAVA项目来说，能达到80%就是相当高的标准了。对于Javascript的代码测试及覆盖率研究，我还要做更多的验证。</p>
+<h2>6. Karma第一次启动时出现的问题</h2>
+<p>CHROME_BIN的环境变量问题</p>
+<pre><code>
+~ D:\workspace\javascript\karma&gt;karma start karma.conf.js
+INFO [karma]: Karma v0.10.2 server started at http://localhost:9876/
+INFO [launcher]: Starting browser Chrome
+ERROR [launcher]: Cannot start Chrome
+        Can not find the binary C:\Users\Administrator\AppData\Local\Google\Chrome\Application\chrome.exe
+        Please set env variable CHROME_BIN
+</code></pre>
+<p>设置方法：找到系统中chrome的安装位置，找到chrome.exe文件</p>
+<pre><code>
+~ D:\workspace\javascript\karma&gt;set CHROME_BIN="C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+</code></pre>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Karma和Jasmine自动化单元测试" href="http://blog.fens.me/nodejs-karma-jasmine/" target="_blank">http://blog.fens.me/nodejs-karma-jasmine/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-1424">
+        <div id="dsq-comment-header-1424" class="dsq-comment-header">
+            <cite id="dsq-cite-1424">
+                <span id="dsq-author-user-1424">ss</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1424" class="dsq-comment-body">
+            <div id="dsq-comment-message-1424" class="dsq-comment-message"><p>配置文件中需要引入一个外部的js      &#8216;http://apis.mapabc.com/webapi/auth.json?t=javascriptmap&amp;v=3.1.1&amp;key=ef3bd020f702312e591e771627c57b807ba4c04085c0159d67d8fdcc0f61bb129f3d2a973dfae9a6&#8217;, 这种样子的 怎么写呢 发现karma压根没找到</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1655">
+        <div id="dsq-comment-header-1655" class="dsq-comment-header">
+            <cite id="dsq-cite-1655">
+                <a id="dsq-author-user-1655" href="http://www.webfing.com" target="_blank" rel="nofollow">king</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1655" class="dsq-comment-body">
+            <div id="dsq-comment-message-1655" class="dsq-comment-message"><p>好文！Conan有没有配过karma+jasmine+phantomJs的测试？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1656">
+        <div id="dsq-comment-header-1656" class="dsq-comment-header">
+            <cite id="dsq-cite-1656">
+                <a id="dsq-author-user-1656" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1656" class="dsq-comment-body">
+            <div id="dsq-comment-message-1656" class="dsq-comment-message"><p>没用过phantomJs</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1878">
+        <div id="dsq-comment-header-1878" class="dsq-comment-header">
+            <cite id="dsq-cite-1878">
+                <span id="dsq-author-user-1878">yangchao</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1878" class="dsq-comment-body">
+            <div id="dsq-comment-message-1878" class="dsq-comment-message"><p>为什么我在win7下npm install -g karma，但是使用karma命令时 ，即使我使用全路径D:fekarma&gt;D:nodejsnode_moduleskarmabinkarma start  都不行，报不是内部或外部命令，也不是可运行的程序或批处理文件，请指导一下</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1886">
+        <div id="dsq-comment-header-1886" class="dsq-comment-header">
+            <cite id="dsq-cite-1886">
+                <a id="dsq-author-user-1886" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1886" class="dsq-comment-body">
+            <div id="dsq-comment-message-1886" class="dsq-comment-message"><p>karma包已经升级了，这篇文章有些地方已经不能运行，查官方网站解决吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-2209">
+        <div id="dsq-comment-header-2209" class="dsq-comment-header">
+            <cite id="dsq-cite-2209">
+                <span id="dsq-author-user-2209">coocon</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2209" class="dsq-comment-body">
+            <div id="dsq-comment-message-2209" class="dsq-comment-message"><p>sudo npm install -g karma-cli， 需要安装它的命令行包</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2594">
+        <div id="dsq-comment-header-2594" class="dsq-comment-header">
+            <cite id="dsq-cite-2594">
+                <span id="dsq-author-user-2594">Zimo Zeng</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2594" class="dsq-comment-body">
+            <div id="dsq-comment-message-2594" class="dsq-comment-message"><p>Hello </p>
+<p>为什么 在karma start karma.conf.js  提示 错误 </p>
+<p>ERROR [launcher]: No binary for Chrome browser on your platform.</p>
+<p>  Please, set &#8220;CHROME_BIN&#8221; env variable.</p>
+<p>后  设置了 CHROME_BIN  再重启  依旧报那个错误<br />
+WIN7 系统</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2595">
+        <div id="dsq-comment-header-2595" class="dsq-comment-header">
+            <cite id="dsq-cite-2595">
+                <a id="dsq-author-user-2595" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2595" class="dsq-comment-body">
+            <div id="dsq-comment-message-2595" class="dsq-comment-message"><p>我不清楚是不是karma新版本所造成的问题，去查一下官方文档吧。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2598">
+        <div id="dsq-comment-header-2598" class="dsq-comment-header">
+            <cite id="dsq-cite-2598">
+                <span id="dsq-author-user-2598">Zimo Zeng</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2598" class="dsq-comment-body">
+            <div id="dsq-comment-message-2598" class="dsq-comment-message"><p>谢谢  搞定了   配置后 需要 再次重启一下 CMD</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-2603">
+        <div id="dsq-comment-header-2603" class="dsq-comment-header">
+            <cite id="dsq-cite-2603">
+                <a id="dsq-author-user-2603" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2603" class="dsq-comment-body">
+            <div id="dsq-comment-message-2603" class="dsq-comment-message"><p>解决就好！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2660">
+        <div id="dsq-comment-header-2660" class="dsq-comment-header">
+            <cite id="dsq-cite-2660">
+                <span id="dsq-author-user-2660">jsers</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2660" class="dsq-comment-body">
+            <div id="dsq-comment-message-2660" class="dsq-comment-message"><p>karma可以测试浏览器的多版本吗</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2661">
+        <div id="dsq-comment-header-2661" class="dsq-comment-header">
+            <cite id="dsq-cite-2661">
+                <a id="dsq-author-user-2661" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2661" class="dsq-comment-body">
+            <div id="dsq-comment-message-2661" class="dsq-comment-message"><p>浏览器的多版，用js就可以测试，Karma只是一个自动化测试的框架。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2771">
+        <div id="dsq-comment-header-2771" class="dsq-comment-header">
+            <cite id="dsq-cite-2771">
+                <span id="dsq-author-user-2771">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2771" class="dsq-comment-body">
+            <div id="dsq-comment-message-2771" class="dsq-comment-message"><p>安装karma的时候为什么老报这个错：npm WARN optional dep failed, continuing fsevents@0.3.0？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2772">
+        <div id="dsq-comment-header-2772" class="dsq-comment-header">
+            <cite id="dsq-cite-2772">
+                <span id="dsq-author-user-2772">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2772" class="dsq-comment-body">
+            <div id="dsq-comment-message-2772" class="dsq-comment-message"><p>如果要用requireJS 的话 在karma的配置文件里面frameworks: [&#8216;jasmine&#8217;, &#8216;requirejs&#8217;],，但是UT 会报这个错误&#8221;mismatched anonymous define() module&#8221;为什么呢？？？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2777">
+        <div id="dsq-comment-header-2777" class="dsq-comment-header">
+            <cite id="dsq-cite-2777">
+                <a id="dsq-author-user-2777" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2777" class="dsq-comment-body">
+            <div id="dsq-comment-message-2777" class="dsq-comment-message"><p>文章中Karma和jasmine都是基于node的npm进行模块管理的，不需要requirejs。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2779">
+        <div id="dsq-comment-header-2779" class="dsq-comment-header">
+            <cite id="dsq-cite-2779">
+                <span id="dsq-author-user-2779">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2779" class="dsq-comment-body">
+            <div id="dsq-comment-message-2779" class="dsq-comment-message"><p><a href="http://icodeit.org/" rel="nofollow">http://icodeit.org/</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2780">
+        <div id="dsq-comment-header-2780" class="dsq-comment-header">
+            <cite id="dsq-cite-2780">
+                <a id="dsq-author-user-2780" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2780" class="dsq-comment-body">
+            <div id="dsq-comment-message-2780" class="dsq-comment-message"><p>是你的个人网站l吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-2783">
+        <div id="dsq-comment-header-2783" class="dsq-comment-header">
+            <cite id="dsq-cite-2783">
+                <span id="dsq-author-user-2783">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2783" class="dsq-comment-body">
+            <div id="dsq-comment-message-2783" class="dsq-comment-message"><p>以前的一个同事的</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2787">
+        <div id="dsq-comment-header-2787" class="dsq-comment-header">
+            <cite id="dsq-cite-2787">
+                <a id="dsq-author-user-2787" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2787" class="dsq-comment-body">
+            <div id="dsq-comment-message-2787" class="dsq-comment-message"><p>博客作者出了本JS的书，还是挺牛的！！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2797">
+        <div id="dsq-comment-header-2797" class="dsq-comment-header">
+            <cite id="dsq-cite-2797">
+                <span id="dsq-author-user-2797">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2797" class="dsq-comment-body">
+            <div id="dsq-comment-message-2797" class="dsq-comment-message"><p>嗯嗯，请问下 我现在想写jquery代码的UT，用karma+jasmine+require ，不知道karma-jquery这个东西你有没有了解，可否给点建议。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2798">
+        <div id="dsq-comment-header-2798" class="dsq-comment-header">
+            <cite id="dsq-cite-2798">
+                <span id="dsq-author-user-2798">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2798" class="dsq-comment-body">
+            <div id="dsq-comment-message-2798" class="dsq-comment-message"><p>我用require是想在写UT的时候，处理文件之间的依赖关系。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2801">
+        <div id="dsq-comment-header-2801" class="dsq-comment-header">
+            <cite id="dsq-cite-2801">
+                <span id="dsq-author-user-2801">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2801" class="dsq-comment-body">
+            <div id="dsq-comment-message-2801" class="dsq-comment-message"><p>$(function(){}) 这种方式的UT 不管我如何将jquery引入进去，都会报错：$ is not defined，我该怎么办？？？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2803">
+        <div id="dsq-comment-header-2803" class="dsq-comment-header">
+            <cite id="dsq-cite-2803">
+                <a id="dsq-author-user-2803" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2803" class="dsq-comment-body">
+            <div id="dsq-comment-message-2803" class="dsq-comment-message"><p>先用传统的方式，整个加载js文件，第二步再使用require重新实现加载器。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2831">
+        <div id="dsq-comment-header-2831" class="dsq-comment-header">
+            <cite id="dsq-cite-2831">
+                <span id="dsq-author-user-2831">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2831" class="dsq-comment-body">
+            <div id="dsq-comment-message-2831" class="dsq-comment-message"><p>我想再问下<br />
+1.在karma的配置文件中 file 这个参数 pattern 的方式引用文件和字符串直接引用有什么不同？<br />
+例如：{pattern: &#8216;tested/libs/jquery.js&#8217;, included: false, served: true},<br />
+和&#8217;tested/libs/jquery.js&#8217;,<br />
+我还发现这个里面的文件加载还必须按照依赖关系来加载.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2833">
+        <div id="dsq-comment-header-2833" class="dsq-comment-header">
+            <cite id="dsq-cite-2833">
+                <a id="dsq-author-user-2833" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2833" class="dsq-comment-body">
+            <div id="dsq-comment-message-2833" class="dsq-comment-message"><p>1. pattern是通过正则表达式进行匹配，支持?*,|,[]等语法，这样就不用列出所有的文件了。<br />
+2. js在html中加载是有顺序的，如果你用了加载器，它会自动按顺序加载的。<br />
+3. 我没有用过karma-coverage，估计应该差不多。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2834">
+        <div id="dsq-comment-header-2834" class="dsq-comment-header">
+            <cite id="dsq-cite-2834">
+                <span id="dsq-author-user-2834">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2834" class="dsq-comment-body">
+            <div id="dsq-comment-message-2834" class="dsq-comment-message"><p>1.karma配置文件中：<br />
+ preprocessors: {<br />
+            &#8216;tested/modules/**/script/*.js&#8217;: [&#8216;coverage&#8217;]<br />
+        },<br />
+不用pattern我这种写法也可以啊，<br />
+2.我这块说的加载是kama配置文件里面files：[]的文件加载<br />
+3.看你本文 5. Karma和istanbul代码覆盖率    汗～～～</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2835">
+        <div id="dsq-comment-header-2835" class="dsq-comment-header">
+            <cite id="dsq-cite-2835">
+                <a id="dsq-author-user-2835" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2835" class="dsq-comment-body">
+            <div id="dsq-comment-message-2835" class="dsq-comment-message"><p>1. 你的方式是可以，pattern为了不同人的需求，如果需要排除目录里面的a.js和b.js你怎么写？</p>
+<p>2. 我不确定是否有严格的顺序，如果有依赖关系，按顺序加载是很正常的要求。</p>
+<p>3. 不知道你的“汗”，是好还是不好。文章只是一个用例，不代表项目中就是100%或者50%。越真实的环境，代码往往也会越复杂，而复杂的JS闭包写法，覆盖就会越低。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2836">
+        <div id="dsq-comment-header-2836" class="dsq-comment-header">
+            <cite id="dsq-cite-2836">
+                <span id="dsq-author-user-2836">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2836" class="dsq-comment-body">
+            <div id="dsq-comment-message-2836" class="dsq-comment-message"><p>1.排除不是可以写在 exclude: [],这个参数底下<br />
+3.我的意思是 在本文5  你用了karma-coverage 你却说你没用过，可能是因为时间过去太久了，我&#8217;汗&#8217;  只是表示惊讶，并无它意，如有冒犯，I&#8217;m so sorry</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2837">
+        <div id="dsq-comment-header-2837" class="dsq-comment-header">
+            <cite id="dsq-cite-2837">
+                <a id="dsq-author-user-2837" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2837" class="dsq-comment-body">
+            <div id="dsq-comment-message-2837" class="dsq-comment-message"><p>15个月之前的文章了，确实是太久了。当时网上还没有几个写node程序的做自动化测试或持续集成的。</p>
+<p>不好意思，我也忘的差不多了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2838">
+        <div id="dsq-comment-header-2838" class="dsq-comment-header">
+            <cite id="dsq-cite-2838">
+                <span id="dsq-author-user-2838">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2838" class="dsq-comment-body">
+            <div id="dsq-comment-message-2838" class="dsq-comment-message"><p>没事，从接触nodeJs开始，您的很多文章对我很有帮助，希望你早日出本书，我一定会买本正版的&gt;.&lt;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2839">
+        <div id="dsq-comment-header-2839" class="dsq-comment-header">
+            <cite id="dsq-cite-2839">
+                <a id="dsq-author-user-2839" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2839" class="dsq-comment-body">
+            <div id="dsq-comment-message-2839" class="dsq-comment-message"><p>多谢支持，Nodejs的书已经提到日程了，希望明年4-5月时可以出版。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2842">
+        <div id="dsq-comment-header-2842" class="dsq-comment-header">
+            <cite id="dsq-cite-2842">
+                <span id="dsq-author-user-2842">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2842" class="dsq-comment-body">
+            <div id="dsq-comment-message-2842" class="dsq-comment-message"><p>上面您提到了闭包对UT的影响，我现在也遇到了这个问题，不知道对于这种问题有什么好的解决方式？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2847">
+        <div id="dsq-comment-header-2847" class="dsq-comment-header">
+            <cite id="dsq-cite-2847">
+                <a id="dsq-author-user-2847" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2847" class="dsq-comment-body">
+            <div id="dsq-comment-message-2847" class="dsq-comment-message"><p>1. 匿名闭包，无法测试。<br />
+2. 闭包运行时scope不确定，写测试有难度。<br />
+3. 通过架构或框架，标准化代码结构，禁止在功能代码中用闭包。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2850">
+        <div id="dsq-comment-header-2850" class="dsq-comment-header">
+            <cite id="dsq-cite-2850">
+                <span id="dsq-author-user-2850">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2850" class="dsq-comment-body">
+            <div id="dsq-comment-message-2850" class="dsq-comment-message"><p>收到，谢谢您的建议，希望和你有更多的交流，谢谢。<br />
+预祝你的nodeJs能顺利上市，大获成功</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2854">
+        <div id="dsq-comment-header-2854" class="dsq-comment-header">
+            <cite id="dsq-cite-2854">
+                <a id="dsq-author-user-2854" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2854" class="dsq-comment-body">
+            <div id="dsq-comment-message-2854" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2857">
+        <div id="dsq-comment-header-2857" class="dsq-comment-header">
+            <cite id="dsq-cite-2857">
+                <span id="dsq-author-user-2857">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2857" class="dsq-comment-body">
+            <div id="dsq-comment-message-2857" class="dsq-comment-message"><p>丹哥，我还有个问题想请教下，既然nodeJS是javascript的执行环境，为什么karma执行jasmine的测试用例和监控网文件变化的时候借助浏览器，直接在node的环境下不行吗？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2858">
+        <div id="dsq-comment-header-2858" class="dsq-comment-header">
+            <cite id="dsq-cite-2858">
+                <a id="dsq-author-user-2858" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2858" class="dsq-comment-body">
+            <div id="dsq-comment-message-2858" class="dsq-comment-message"><p>1. nodejs和浏览器是两个不同的运行环境</p>
+<p>2. Nodejs代码的自动测试在nodejs环境中，浏览器中js代码的自动测试在浏览器环境中。</p>
+<p>3. 如果你的代码，需要同时支持两种环境，需要分别在两个环境中都进行测试。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2861">
+        <div id="dsq-comment-header-2861" class="dsq-comment-header">
+            <cite id="dsq-cite-2861">
+                <span id="dsq-author-user-2861">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2861" class="dsq-comment-body">
+            <div id="dsq-comment-message-2861" class="dsq-comment-message"><p>那karma+jasmine的测试代码为什么不直接跑在nodeJS中，而要拉上浏览器。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2863">
+        <div id="dsq-comment-header-2863" class="dsq-comment-header">
+            <cite id="dsq-cite-2863">
+                <a id="dsq-author-user-2863" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2863" class="dsq-comment-body">
+            <div id="dsq-comment-message-2863" class="dsq-comment-message"><p>本文给的例子是基于浏览器的，你同样可以在nodejs中运行，看你自己的需求是什么了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2880">
+        <div id="dsq-comment-header-2880" class="dsq-comment-header">
+            <cite id="dsq-cite-2880">
+                <span id="dsq-author-user-2880">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2880" class="dsq-comment-body">
+            <div id="dsq-comment-message-2880" class="dsq-comment-message"><p>grunt-contrib-jasmine+ phantomJS</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2802">
+        <div id="dsq-comment-header-2802" class="dsq-comment-header">
+            <cite id="dsq-cite-2802">
+                <a id="dsq-author-user-2802" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2802" class="dsq-comment-body">
+            <div id="dsq-comment-message-2802" class="dsq-comment-message"><p>不清楚karma-jquery，我已经放弃jquery转向angularjs了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3559">
+        <div id="dsq-comment-header-3559" class="dsq-comment-header">
+            <cite id="dsq-cite-3559">
+                <span id="dsq-author-user-3559">ice cream</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3559" class="dsq-comment-body">
+            <div id="dsq-comment-message-3559" class="dsq-comment-message"><p>请问，测试结果能够保存吗？保存成文档或者HTML方式。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3566">
+        <div id="dsq-comment-header-3566" class="dsq-comment-header">
+            <cite id="dsq-cite-3566">
+                <a id="dsq-author-user-3566" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3566" class="dsq-comment-body">
+            <div id="dsq-comment-message-3566" class="dsq-comment-message"><p>可以</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3711">
+        <div id="dsq-comment-header-3711" class="dsq-comment-header">
+            <cite id="dsq-cite-3711">
+                <span id="dsq-author-user-3711">damon</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3711" class="dsq-comment-body">
+            <div id="dsq-comment-message-3711" class="dsq-comment-message"><p>安照你说的步骤：在第2部 （2. Karma的安装）<br />
+这是打开 <a href="http://localhost:9876/" rel="nofollow">http://localhost:9876/</a><br />
+会报错：<br />
+You need to include some adapter that implements __karma__.start method。</p>
+<p>如果将第3步（3. Karma + Jasmine配置）提前到<br />
+# 测试是否安装成功<br />
+~ D:workspacejavascriptkarma&gt;karma start<br />
+INFO [karma]: Karma v0.10.2 server started at <a href="http://localhost:9876/" rel="nofollow">http://localhost:9876/</a><br />
+INFO [Chrome 28.0.1500 (Windows 7)]: Connected on socket nIlM1yUy6ELMp5ZTN9Ek</p>
+<p>之前就不会报错了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3712">
+        <div id="dsq-comment-header-3712" class="dsq-comment-header">
+            <cite id="dsq-cite-3712">
+                <span id="dsq-author-user-3712">damon</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3712" class="dsq-comment-body">
+            <div id="dsq-comment-message-3712" class="dsq-comment-message"><p>在第4步：<br />
+4. 自动化单元测试<br />
+3). 修改karma.conf.js配置文件</p>
+<p>应加上<br />
+plugins: [<br />
+&#8216;karma-chrome-launcher&#8217;,<br />
+ &#8216;karma-jasmine&#8217;<br />
+],<br />
+否则会出现这样的 warn<br />
+WARN [launcher]: Can not load &#8220;Chrome&#8221;, it is not registered!<br />
+Perhaps you are missing some plugin?<br />
+而且 chrome浏览器也不会自动打开</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3718">
+        <div id="dsq-comment-header-3718" class="dsq-comment-header">
+            <cite id="dsq-cite-3718">
+                <a id="dsq-author-user-3718" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3718" class="dsq-comment-body">
+            <div id="dsq-comment-message-3718" class="dsq-comment-message"><p>估计是karma升级的原因吧，文章是1年半之前写的了，需要对应查看官方文档。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-4747">
+        <div id="dsq-comment-header-4747" class="dsq-comment-header">
+            <cite id="dsq-cite-4747">
+                <span id="dsq-author-user-4747">lioff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4747" class="dsq-comment-body">
+            <div id="dsq-comment-message-4747" class="dsq-comment-message"><p>karma 启动的浏览器窗口 只是用来运行 浏览器端 js &#8230; 其实可以像jasmine 那样直接把测试结果输出在同一运行窗口里面这样 又直观又避免另外安装html report 插件</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4776">
+        <div id="dsq-comment-header-4776" class="dsq-comment-header">
+            <cite id="dsq-cite-4776">
+                <a id="dsq-author-user-4776" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4776" class="dsq-comment-body">
+            <div id="dsq-comment-message-4776" class="dsq-comment-message"><p>是的，只是有些情况要在浏览器里运行。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-4841">
+        <div id="dsq-comment-header-4841" class="dsq-comment-header">
+            <cite id="dsq-cite-4841">
+                <span id="dsq-author-user-4841">joker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4841" class="dsq-comment-body">
+            <div id="dsq-comment-message-4841" class="dsq-comment-message"><p>你好，想请教一下，当我用jasmine测试我的前端代码的时候是否真正生成了这个界面？举例解释一下：如果我的方法的结果是弹出了一个弹出框，那我的测试案例中可以通过 document.getElementById(&#8220;xxx&#8221;) 这种方法来获取节点并断言吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4858">
+        <div id="dsq-comment-header-4858" class="dsq-comment-header">
+            <cite id="dsq-cite-4858">
+                <a id="dsq-author-user-4858" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4858" class="dsq-comment-body">
+            <div id="dsq-comment-message-4858" class="dsq-comment-message"><p>jasmine只是测试框架，你自己定义好input,output就可以使用。dom节点，只有在浏览器中才有。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-karma-jasmine/';
+var disqus_identifier = '2018 http://blog.fens.me/?p=2018';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Karma和Jasmine自动化单元测试";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=2018';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

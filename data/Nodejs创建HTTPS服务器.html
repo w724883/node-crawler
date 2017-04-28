@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Nodejs创建HTTPS服务器 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Nodejs创建HTTPS服务器 Comments Feed" href="http://blog.fens.me/nodejs-https-server/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='R语言构建websocket服务器' href='http://blog.fens.me/r-websocket-websockets/' />
+<link rel='next' title='Retry优雅的失败重试策略' href='http://blog.fens.me/nodejs-retry/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-https-server/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=4307' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-https-server%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-https-server%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,javascript,http,https,加密,openssl,pem" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-4307 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Nodejs创建HTTPS服务器</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-4307 post type-post status-publish format-standard hentry category-javascript category-117 tag-http tag-https tag-javascript tag-nodejs tag-openssl tag-pem tag-431">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-https-server/" title="Nodejs创建HTTPS服务器" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Dec 14, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/http/" rel="tag">http</a><a href="http://blog.fens.me/tag/https/" rel="tag">https</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/openssl/" rel="tag">openssl</a><a href="http://blog.fens.me/tag/pem/" rel="tag">pem</a><a href="http://blog.fens.me/tag/%e5%8a%a0%e5%af%86/" rel="tag">加密</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-https-server/#comments"><span class="dsq-postid" data-dsqidentifier="4307 http://blog.fens.me/?p=4307">15 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Nodejs创建HTTPS服务器</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs创建HTTPS服务器" href="http://blog.fens.me/nodejs-https-server/" target="_blank">http://blog.fens.me/nodejs-https-server/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-https.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-https.png" alt="nodejs-https" width="600" height="400" class="alignnone size-full wp-image-4334" /></a></p>
+<p><strong>前言</strong></p>
+<p>互联网应用越来越多，网络安全问题应该值得大家注意起来，特别是对于有在线支付业务的网站！为保证用户的账户安全，应该使用HTTPS协议代替HTTP协议，在数据传输层保持加密。</p>
+<p>大部分的美国网站，当涉及到个人信息时，如果不提供HTTPS的服务，多数用户都会拒绝使用的。中国的网民什么时候，才会有这种意识呢？</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>HTTP和HTTPS介绍</li>
+<li>用Nodejs创建HTTPS服务器(Win7)</li>
+<li>用Nodejs创建HTTPS服务器(Linux)</li>
+<li>抓取请求，验证加密</li>
+</ol>
+<h2>1. HTTP和HTTPS介绍</h2>
+<p>HTTP: 超文本传输协议 (HTTP-Hypertext transfer protocol) 是一种详细规定了���览器和万维网服务器之间互相通信的规则，通过因特网传送万维网文档的数据传送协议。</p>
+<p>HTTPS:（全称：Hypertext Transfer Protocol over Secure Socket Layer），是以安全为目标的HTTP通道，简单讲是HTTP的安全版。即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。 它是一个URI scheme（抽象标识符体系），句法类同http:体系。用于安全的HTTP数据传输。https:URL表明它使用了HTTP，但HTTPS存在不同于HTTP的默认端口及一个加密/身份验证层（在HTTP与TCP之间）。这个系统的最初研发由网景公司进行，提供了身份验证与加密通讯方法，现在它被广泛用于万维网上安全敏感的通讯，例如交易支付方面。</p>
+<p><strong>HTTPS和HTTP的区别</strong></p>
+<ul>
+<li>https协议需要到ca申请证书，一般免费证书很少，需要交费。</li>
+<li>http是超文本传输协议，信息是明文传输，https 则是具有安全性的ssl加密传输协议。</li>
+<li>http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。</li>
+<li>http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。</li>
+</ul>
+<p>HTTP和HTTPS的介绍，摘自<a href="http://baike.baidu.com/view/14121.htm" ref="nofollow" target="_blank">http://baike.baidu.com/view/14121.htm</a></p>
+<p>在Nodejs中，我们可以通过内置的https库，来实现HTTPS服务器。</p>
+<p>Nodejs的HTTPS使用文档：<a target="_blank" ref="nofollow" ref="http://nodejs.org/api/https.html">http://nodejs.org/api/https.html</a></p>
+<h2>2. 用Nodejs创建HTTPS服务器(Win7)</h2>
+<p>系统环境</p>
+<ul>
+<li>win7 64bit</li>
+<li>IP: 192.168.1.13</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<p>创建express的开发环境</p>
+<pre><code>
+~ D:\workspace\javascript>express -e  nodejs-https
+~ D:\workspace\javascript>cd nodejs-https && npm install
+
+ejs@0.8.5 node_modules\ejs
+express@3.2.6 node_modules\express
+├── methods@0.0.1
+├── fresh@0.1.0
+├── cookie-signature@1.0.1
+├── range-parser@0.0.4
+├── debug@0.7.4
+├── buffer-crc32@0.2.1
+├── cookie@0.1.0
+├── commander@0.6.1
+├── mkdirp@0.3.4
+├── send@0.1.0 (mime@1.2.6)
+└── connect@2.7.11 (pause@0.0.1, qs@0.6.5, bytes@0.2.0, cookie@0.0.5, formidable@1.0.14, send@0.1.1)
+</code></pre>
+<p>我本地已经安装了<a href="http://msysgit.github.io/" target="_blank" ref="nofollow">git客户端msysgit</a>，其中包括了openssl程序。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-https>git --version
+git version 1.8.1.msysgit.1
+
+~ D:\workspace\javascript\nodejs-https>openssl version -a
+OpenSSL 0.9.8e 23 Feb 2007
+built on: Sat Sep 15 20:34:58 EDT 2007
+platform: MSys
+options:  bn(64,32) md2(int) rc4(idx,int) des(ptr,risc1,16,long) blowfish(idx)
+compiler: gcc -D_WINDLL -DOPENSSL_PIC -DOPENSSL_THREADS  -DDSO_DLFCN -DHAVE_DLFCN_H -DTERMIOS -DL_ENDIAN -D__CYGWIN__ -f
+omit-frame-pointer -fnative-struct -O3 -mcpu=pentium -march=i486 -Wall -DOPENSSL_BN_ASM_PART_WORDS -DOPENSSL_IA32_SSE2 -
+DSHA1_ASM -DMD5_ASM -DRMD160_ASM -DAES_ASM
+OPENSSLDIR: "/usr/ssl"
+</code></pre>
+<p>openssl生成证书文件</p>
+<pre><code>
+#生成私钥key文件：
+~ D:\workspace\javascript\nodejs-https>openssl genrsa -out privatekey.pem 1024
+Generating RSA private key, 1024 bit long modulus
+...........................++++++
+........++++++
+e is 65537 (0x10001)
+
+#通过私钥生成CSR证书签名
+~ D:\workspace\javascript\nodejs-https>openssl req -new -key privatekey.pem -out certrequest.csr
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:CN
+State or Province Name (full name) [Some-State]:Beijing
+Locality Name (eg, city) []:Beijing
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:fens.me
+Organizational Unit Name (eg, section) []:fens.me
+Common Name (eg, YOUR name) []:Conan Zhang
+Email Address []:bsspirit@gmail.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+
+# 通过私钥和证书签名生成证书文件
+~ D:\workspace\javascript\nodejs-https>openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+Signature ok
+subject=/C=CN/ST=Beijing/L=Beijing/O=fens.me/OU=fens.me/CN=Conan Zhang/emailAddress=bsspirit@gmail.com
+Getting Private key
+</code></pre>
+<p>新生成了3个文件：certificate.pem, certrequest.csr, privatekey.pem</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-https>ls -l
+total 17
+-rwx------  1 4294967295 mkpasswd 877 Dec 14 10:53 app.js
+-rwx------  1 4294967295 mkpasswd 956 Dec 14 11:22 certificate.pem
+-rwx------  1 4294967295 mkpasswd 704 Dec 14 11:21 certrequest.csr
+drwx------+ 1 4294967295 mkpasswd   0 Dec 14 11:10 node_modules
+-rwx------  1 4294967295 mkpasswd 216 Dec 14 11:03 package.json
+-rwx------  1 4294967295 mkpasswd 887 Dec 14 11:20 privatekey.pem
+drwx------+ 1 4294967295 mkpasswd   0 Dec 14 10:53 public
+drwx------+ 1 4294967295 mkpasswd   0 Dec 14 10:53 routes
+drwx------+ 1 4294967295 mkpasswd   0 Dec 14 10:53 views
+</code></pre>
+<ul>
+<li>privatekey.pem: 私钥</li>
+<li>certrequest.csr: CSR证书签名</li>
+<li>certificate.pem: 证书文件</li>
+</ul>
+<p>修改启动文件：app.js</p>
+<pre><code>
+~ vi app.js
+
+//最下面
+var https = require('https')
+    ,fs = require("fs");
+
+var options = {
+    key: fs.readFileSync('./privatekey.pem'),
+    cert: fs.readFileSync('./certificate.pem')
+};
+
+https.createServer(options, app).listen(3011, function () {
+    console.log('Https server listening on port ' + 3011);
+});
+</code></pre>
+<p>启动服务器：</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-https>node app.js
+
+Express server listening on port 3000
+Https server listening on port 3011
+</code></pre>
+<p>打开浏览器：HTTP访问<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/12/https-http.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/https-http.png" alt="https-http" width="645" height="279" class="alignnone size-full wp-image-4319" /></a></p>
+<p>HTTPS访问<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/12/https-https.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/https-https.png" alt="https-https" width="529" height="636" class="alignnone size-full wp-image-4321" /></a></p>
+<p>查看证书<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/12/https-https-cert.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/https-https-cert.png" alt="https-https-cert" width="711" height="597" class="alignnone size-full wp-image-4320" /></a></p>
+<p>由于我们证书是自己创建的，没有经过第三方机构的验证，因此会出现警告的提示。大家可以去有资质的网络运营商，去申请自己的证书。比如：<a href="http://www.godaddy.com/ssl/ssl-certificates.aspx" target="_blank" ref="nofollow">godaddy SSL Certificates</a>，优惠码：<strong>WOWfensme</strong></p>
+<p>这样我们就在win7完整的HTTPS服务器创建。</p>
+<h2>3. 用Nodejs创建HTTPS服务器(Linux)</h2>
+<p>创建过程与win7类似</p>
+<p>系统环境</p>
+<ul>
+<li>Linux: Ubuntu 12.04.2 LTS 64bit deskop</li>
+<li>IP: 192.168.1.20</li>
+<li>Nodejs: npm 1.2.21</li>
+<li>node v0.11.2</li>
+</ul>
+<p>创建express项目</p>
+<pre><code>
+~ cd /home/conan/nodejs
+~ express -e  nodejs-https
+~ cd nodejs-https
+~ sudo npm install
+</code></pre>
+<p>用openssl生成证书文件</p>
+<pre><code>
+~ openssl version -a
+OpenSSL 1.0.1 14 Mar 2012
+built on: Tue Jun  4 07:26:06 UTC 2013
+platform: debian-amd64
+options:  bn(64,64) rc4(16x,int) des(idx,cisc,16,int) blowfish(idx)
+compiler: cc -fPIC -DOPENSSL_PIC -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -m64 -DL_ENDIAN -DTERMIO -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security -Werror=format-security -D_FORTIFY_SOURCE=2 -Wl,-Bsymbolic-functions -Wl,-z,relro -Wa,--noexecstack -Wall -DOPENSSL_NO_TLS1_2_CLIENT -DOPENSSL_MAX_TLS1_2_CIPHER_LENGTH=50 -DMD32_REG_T=int -DOPENSSL_IA32_SSE2 -DOPENSSL_BN_ASM_MONT -DOPENSSL_BN_ASM_MONT5 -DOPENSSL_BN_ASM_GF2m -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DMD5_ASM -DAES_ASM -DVPAES_ASM -DBSAES_ASM -DWHIRLPOOL_ASM -DGHASH_ASM
+OPENSSLDIR: "/usr/lib/ssl"
+
+~ openssl genrsa -out privatekey.pem 1024
+~ openssl req -new -key privatekey.pem -out certrequest.csr 
+~ openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+</code></pre>
+<p>修改文件app.js</p>
+<pre><code>
+~ vi app.js
+
+//在最下面
+var https = require('https')
+    ,fs = require("fs");
+
+var options = {
+    key: fs.readFileSync('./privatekey.pem'),
+    cert: fs.readFileSync('./certificate.pem')
+};
+
+https.createServer(options, app).listen(3011, function () {
+    console.log('Https server listening on port ' + 3011);
+});
+</code></pre>
+<p>启动服务器</p>
+<pre><code>
+~ node app.js
+
+Express server listening on port 3000
+Https server listening on port 3011
+</code></pre>
+<p>打开浏览器：<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/12/https-https-linux.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/https-https-linux.png" alt="https-https-linux" width="372" height="242" class="alignnone size-full wp-image-4327" /></a></p>
+<h2>4. 抓取请求，验证加密</h2>
+<p>为了验证数据在传输过程中是加密的，我们用wireshark抓取网络包。</p>
+<p><strong>HTTP请求：http://192.168.1.20:3000/users?a=111</strong><br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/12/http-request.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/http-request.png" alt="http-request" width="977" height="713" class="alignnone size-full wp-image-4330" /></a></p>
+<p><strong>HTTPS请求：https://192.168.1.20:3011/users?a=112</strong><br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/12/https-request.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/https-request.png" alt="https-request" width="969" height="623" class="alignnone size-full wp-image-4329" /></a></p>
+<p>在HTTP下面，URL请求的参数是被暴露的。在HTTPS下面，URL的请求参数是被加密的。因此，希望需要填写个人信息，及在线支付的网站，都把HTTPS服务器搭建起来。防止私密数据，在网络传输过程中被获取。</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs创建HTTPS服务器" href="http://blog.fens.me/nodejs-https-server/" target="_blank">http://blog.fens.me/nodejs-https-server/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a>, <a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" rel="category tag">网络技术</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2466">
+        <div id="dsq-comment-header-2466" class="dsq-comment-header">
+            <cite id="dsq-cite-2466">
+                <a id="dsq-author-user-2466" href="http://willin.wang/" target="_blank" rel="nofollow">Willin Wang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2466" class="dsq-comment-body">
+            <div id="dsq-comment-message-2466" class="dsq-comment-message"><p>mark</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2587">
+        <div id="dsq-comment-header-2587" class="dsq-comment-header">
+            <cite id="dsq-cite-2587">
+                <span id="dsq-author-user-2587">Min</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2587" class="dsq-comment-body">
+            <div id="dsq-comment-message-2587" class="dsq-comment-message"><p>mark！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3255">
+        <div id="dsq-comment-header-3255" class="dsq-comment-header">
+            <cite id="dsq-cite-3255">
+                <span id="dsq-author-user-3255">wretchy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3255" class="dsq-comment-body">
+            <div id="dsq-comment-message-3255" class="dsq-comment-message"><p>mark</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3304">
+        <div id="dsq-comment-header-3304" class="dsq-comment-header">
+            <cite id="dsq-cite-3304">
+                <span id="dsq-author-user-3304">lenchs</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3304" class="dsq-comment-body">
+            <div id="dsq-comment-message-3304" class="dsq-comment-message"><p>mark</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3504">
+        <div id="dsq-comment-header-3504" class="dsq-comment-header">
+            <cite id="dsq-cite-3504">
+                <span id="dsq-author-user-3504">HelloQiu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3504" class="dsq-comment-body">
+            <div id="dsq-comment-message-3504" class="dsq-comment-message"><p>你好，我有一个使用express创建的https，但不知道总是不明的不能访问，进程和端口都正常，就是网页打不开，以下为代码：<br />
+var app = express();<br />
+app.get(&#8216;/a&#8217;, function(req, res) {&#8230;.});<br />
+app.get(&#8216;/b&#8217;, function(req, res) {&#8230;.});<br />
+var credentials = {<br />
+    key: fs.readFileSync(&#8216;k.key&#8217;, &#8216;utf8&#8217;),<br />
+    cert: fs.readFileSync(&#8216;c.crt&#8217;, &#8216;utf8&#8217;),<br />
+    passphrase: &#8216;****************&#8217;<br />
+}<br />
+https.createServer(credentials, app).listen(1234);</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3508">
+        <div id="dsq-comment-header-3508" class="dsq-comment-header">
+            <cite id="dsq-cite-3508">
+                <a id="dsq-author-user-3508" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3508" class="dsq-comment-body">
+            <div id="dsq-comment-message-3508" class="dsq-comment-message"><p>先按文章中配置试一下吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3862">
+        <div id="dsq-comment-header-3862" class="dsq-comment-header">
+            <cite id="dsq-cite-3862">
+                <span id="dsq-author-user-3862">fuchao2012</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3862" class="dsq-comment-body">
+            <div id="dsq-comment-message-3862" class="dsq-comment-message"><p>working with the crawls in https. helps alot.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3887">
+        <div id="dsq-comment-header-3887" class="dsq-comment-header">
+            <cite id="dsq-cite-3887">
+                <a id="dsq-author-user-3887" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3887" class="dsq-comment-body">
+            <div id="dsq-comment-message-3887" class="dsq-comment-message"><p>🙂 , hey!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-4856">
+        <div id="dsq-comment-header-4856" class="dsq-comment-header">
+            <cite id="dsq-cite-4856">
+                <span id="dsq-author-user-4856">skytouchzyt</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4856" class="dsq-comment-body">
+            <div id="dsq-comment-message-4856" class="dsq-comment-message"><p>为什么我在本地创建https可以访问,上传到服务器创建,就提示ssl连接错误?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4865">
+        <div id="dsq-comment-header-4865" class="dsq-comment-header">
+            <cite id="dsq-cite-4865">
+                <a id="dsq-author-user-4865" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4865" class="dsq-comment-body">
+            <div id="dsq-comment-message-4865" class="dsq-comment-message"><p>证书没配置对吧？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-5132">
+        <div id="dsq-comment-header-5132" class="dsq-comment-header">
+            <cite id="dsq-cite-5132">
+                <span id="dsq-author-user-5132">叶忠</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5132" class="dsq-comment-body">
+            <div id="dsq-comment-message-5132" class="dsq-comment-message"><p>您好，我在github上下了一个SkyRTC的demo，https://github.com/LingyuCoder/SkyRTC-demo<br />
+准备加ssl的时候怎么都不行，我已经试了好多版本的方法了，看了不少YouTube的视频，还是不行，请问您可以你帮帮我吗？<br />
+这个是demo的代码</p>
+<p>var express = require(&#8216;express&#8217;);<br />
+var app = express();<br />
+var server = require(&#8216;http&#8217;).createServer(app);<br />
+var SkyRTC = require(&#8216;skyrtc&#8217;).listen(server);<br />
+var path = require(&#8220;path&#8221;);<br />
+var port = process.env.PORT || 3000;<br />
+server.listen(port);</p>
+<p>下面的是我测试的</p>
+<p>/*</p>
+<p>var express = require(&#8216;express&#8217;);</p>
+<p>var app = express();</p>
+<p>const https = require(&#8216;https&#8217;);//.createServer(app);</p>
+<p>const fs = require(&#8216;fs&#8217;);</p>
+<p>var path = require(&#8220;path&#8221;);</p>
+<p>var options = {</p>
+<p>    key: fs.readFileSync(&#8216;./privatekey.pem&#8217;),</p>
+<p>    cert: fs.readFileSync(&#8216;.server.pem&#8217;)</p>
+<p>};</p>
+<p>const server = https.createServer(options, app);</p>
+<p>var SkyRTC = require(&#8216;skyrtc&#8217;).listen(server);</p>
+<p>var port = process.env.PORT || 80;</p>
+<p>server.listen(port);</p>
+<p>*/</p>
+<p>/*</p>
+<p>var express = require(&#8216;express&#8217;);</p>
+<p>var app = express();</p>
+<p>var path = require(&#8220;path&#8221;);</p>
+<p>const fs = require(&#8216;fs&#8217;);</p>
+<p>var options = {</p>
+<p>    key: fs.readFileSync(&#8216;./privatekey.pem&#8217;),</p>
+<p>    cert: fs.readFileSync(&#8216;.server.pem&#8217;)</p>
+<p>};</p>
+<p>var server = require(&#8216;https&#8217;).createServer(options, app);</p>
+<p>var SkyRTC = require(&#8216;skyrtc&#8217;).listen(server);</p>
+<p>var port = process.env.PORT || 80;</p>
+<p>server.listen(port);</p>
+<p>*/</p>
+<p>/*44444</p>
+<p>var express = require(&#8216;express&#8217;);</p>
+<p>var path = require(&#8220;path&#8221;);</p>
+<p>const https = require(&#8216;https&#8217;)</p>
+<p>    ,fs = require(&#8216;fs&#8217;);</p>
+<p>const options = {</p>
+<p>    key: fs.readFileSync(&#8216;./privatekey.pem&#8217;),</p>
+<p>    cert: fs.readFileSync(&#8216;.server.pem&#8217;)</p>
+<p>};</p>
+<p>const server = https.createServer(options,(req, res) =&gt; {</p>
+<p>	res.sendfile(__dirname + &#8216;/index.html&#8217;);</p>
+<p>}).listen(80);</p>
+<p>var app = express();</p>
+<p>server.on(&#8216;request&#8217;,app);</p>
+<p>server.listen(80)</p>
+<p>var SkyRTC = require(&#8216;skyrtc&#8217;).listen(server);</p>
+<p>*/</p>
+<p>加了ssl之后全部都是网页打不开，没有任何报错。<br />
+麻烦您抽空帮我看看，谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-5135">
+        <div id="dsq-comment-header-5135" class="dsq-comment-header">
+            <cite id="dsq-cite-5135">
+                <a id="dsq-author-user-5135" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5135" class="dsq-comment-body">
+            <div id="dsq-comment-message-5135" class="dsq-comment-message"><p>抱歉我不熟悉SkyRTC 。<br />
+如果你这种配置有问题，你也可以尝试在前前架个nginx处理https请求，nginx和node用http连接。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-5136">
+        <div id="dsq-comment-header-5136" class="dsq-comment-header">
+            <cite id="dsq-cite-5136">
+                <span id="dsq-author-user-5136">叶忠</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5136" class="dsq-comment-body">
+            <div id="dsq-comment-message-5136" class="dsq-comment-message"><p>我这边已经解决了，不过非常感谢您能抽出时间来回复。谢谢！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-5138">
+        <div id="dsq-comment-header-5138" class="dsq-comment-header">
+            <cite id="dsq-cite-5138">
+                <a id="dsq-author-user-5138" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5138" class="dsq-comment-body">
+            <div id="dsq-comment-message-5138" class="dsq-comment-message"><p>哈哈，太好了，解决就好。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-https-server/';
+var disqus_identifier = '4307 http://blog.fens.me/?p=4307';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Nodejs创建HTTPS服务器";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=4307';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

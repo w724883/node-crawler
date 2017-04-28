@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>nodejs分页设计配合bootstrap-paginator | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; nodejs分页设计配合bootstrap-paginator Comments Feed" href="http://blog.fens.me/nodejs-bootstrap-paginator/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Ubuntu通过PPTP协议使用VPN' href='http://blog.fens.me/vpn-pptp-client-ubuntu/' />
+<link rel='next' title='多硬盘分区管理fdisk' href='http://blog.fens.me/linux-fdisk/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-bootstrap-paginator/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=991' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-bootstrap-paginator%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-bootstrap-paginator%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,分页,bootstrap-paginator,javascript" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-991 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>nodejs分页设计配合bootstrap-paginator</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-991 post type-post status-publish format-standard hentry category-javascript tag-bootstrap-paginator tag-javascript tag-nodejs tag-141">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-bootstrap-paginator/" title="nodejs分页设计配合bootstrap-paginator" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Jul 4, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/bootstrap-paginator/" rel="tag">bootstrap-paginator</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/%e5%88%86%e9%a1%b5/" rel="tag">分页</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-bootstrap-paginator/#comments"><span class="dsq-postid" data-dsqidentifier="991 http://blog.fens.me/?p=991">16 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>nodejs分页设计配合bootstrap-paginator</h2>
+            <div class="entry">
+                            <h2><strong style="font-size: 13px; line-height: 19px;">从零开始nodejs系列文章</strong></h2>
+<p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong><br />
+张丹(Conan), 程序员Java,R,PHP,Javascript<br />
+weibo：@Conan_Z<br />
+blog: http://blog.fens.me<br />
+email: bsspirit@gmail.com</p>
+<p><strong>转载请注明出处：</strong><br />
+<a href="http://blog.fens.me/nodejs-bootstrap-paginator/">http://blog.fens.me/nodejs-bootstrap-paginator/</a></p>
+<p><strong>前言</strong></p>
+<p>分页功能是查询的必备功能，比如我要查询一个多于1000条记录的结果集。如果一次全部展示，不仅浪费带宽，增长等待时间，用户看到这么多的数据也会觉得的头疼。但是有了分页功能，可以根据用户的习惯，一页一页的处理少量的数据，展示少量的数据，就像是在看书一样的。</p>
+<p>分页功能非常实用，但是实现起来也稍有复杂。不仅要考虑到前端的展示和传值问题，还要考虑后端面向数据的查询语句。不过我也发现了前端和后端对应的解决的方案。前端程序可以通过<a href="http://bootstrappaginator.org/" target="_blank">bootstrap-paginator</a>项目来封装，而后端我是自己实现的。本来是准备使用<a href="https://github.com/edwardhotchkiss/mongoose-paginate" target="_blank">mongoose-paginate</a>项目，但他的设计过于简单，而且与bootstrap-paginator的一些传参习惯不符，自已实现其实更好控制。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/07/page.png"><img class="alignnone size-full wp-image-1005" alt="page" src="http://blog.fens.me/wp-content/uploads/2013/07/page.png" width="600" height="400" /></a></p>
+<p><strong>目录</strong></p>
+<ol>
+<li><span style="font-size: 13px; line-height: 19px;">分页前端雏形bootstrap-paginator</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">分页后端查询mongoose</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">分页结果返回页面(后端-&gt;前端)</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">分页查询参数传递(前端-&gt;后端)</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">分页完整展现</span></li>
+</ol>
+<p>&nbsp;</p>
+<h2>1. 分页前端雏形bootstrap-paginator</h2>
+<p>下载bootstrap-paginator：<a href="https://github.com/lyonlai/bootstrap-paginator/archive/master.zip" target="_blank">下载地址</a><br />
+解压后，把bootstrap-paginator.min.js文件复制到public/js的目录</p>
+<p>如果你的项目，已经配置了bootstrap, jquery。 那么你只需要在用到分页的网页上增加一行js包的引用就可以了。</p>
+<pre><code>~ vi view/admin/moive.html
+&lt;html&gt;
+&lt;head&gt;
+&lt;link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" /&gt;
+&lt;script type="text/javascript" src="/js/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/js/bootstrap-paginator.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!-- 代码片断 查询表单 --&gt;
+&lt;form method="GET"&gt;
+...
+&lt;/form&gt;
+
+&lt;!-- 代码片段 分页控件 --&gt;
+&lt;div class="span12"&gt;
+&lt;div id="page1"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 代码片段 查询结果 --&gt;
+&lt;div class="span12"&gt;
+&lt;table class="table table-hover table-striped"&gt;
+...
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;!-- 代码片段 --&gt;
+&lt;script type="text/javascript"&gt;
+$(function(){
+
+//分页功能
+var options = {
+currentPage:2,
+totalPages:5,
+numberOfPages:5
+}
+$('#page1').bootstrapPaginator(options);
+
+})
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>显示效果：</strong></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/07/p2.png"><img class="alignnone size-full wp-image-1000" alt="p2" src="http://blog.fens.me/wp-content/uploads/2013/07/p2.png" width="427" height="68" /></a></p>
+<h2>2. 分页后端查询mongoose</h2>
+<p>使用mongoose访问mongodb，在 <a title="Mongoose使用案例–让JSON数据直接入库MongoDB" href="http://blog.fens.me/nodejs-mongoose-json/" target="_blank">Mongoose使用案例–让JSON数据直接入库MongoDB</a> 一文中已经讲过。</p>
+<p><strong>我们构建分布查询的DAO。</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">这里Movie是model类型，没有用到entity。直接通过model做的分页查询。</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">分页查询是二步查询，第一步查询结果集数据，第二步查询总记录</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">通过skip,limit进行分页。（关于skip的效率问题，10W以下的记录，skip性能是可以接受的，10w以上的记录需要根据排序的字段，通过索引定位查询，这个概念以后再讲。）</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">排序功能默认用插入时间倒叙：sort(&#8216;-create_date&#8217;)</span></li>
+</ul>
+<p><strong>查询参数：</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">q，查询条件</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">col，数据返回字段</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">pageNumber，当前是第几页，如果不存在默认为第1页</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">resultsPerPage，每页多少条记录</span></li>
+</ul>
+<p><strong>分页的返回值</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">null：空错误，因为错误已经通过if处理了</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">pageCount：一共有多少页</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">results：数据结果集</span></li>
+</ul>
+<pre><code>
+~ vi model/Movie.js
+
+var Movie = mongodb.mongoose.model("Movie", MovieSchema);
+var MovieDAO = function(){};
+
+//代码片段
+
+MovieDAO.prototype.findPagination = function(obj,callback) {
+  var q=obj.search||{}
+  var col=obj.columns;
+
+  var pageNumber=obj.page.num||1;
+  var resultsPerPage=obj.page.limit||10;
+
+  var skipFrom = (pageNumber * resultsPerPage) - resultsPerPage;
+  var query = Movie.find(q,col).sort('-create_date').skip(skipFrom).limit(resultsPerPage);
+
+  query.exec(function(error, results) {
+    if (error) {
+      callback(error, null, null);
+    } else {
+      Movie.count(q, function(error, count) {
+        if (error) {
+          callback(error, null, null);
+        } else {
+          var pageCount = Math.ceil(count / resultsPerPage);
+          callback(null, pageCount, results);
+        }
+      });
+    }
+  });
+}
+</code></pre>
+<p>&nbsp;</p>
+<h2>3. 分页结果返回页面(后端-&gt;前端)</h2>
+<p><strong>传参数到页面：page对象</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">limit:5，每页限制5条记录</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">num:1，查询的页面</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">pageCount，一共有多少页</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">size，当前页面有多少条记录</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">numberOf，分页用几个标签显示</span></li>
+</ul>
+<pre><code>
+~ vi routes/moive.js
+
+//代码片段
+exports.movie = function(req, res) {
+var search={};
+var page={limit:5,num:1};
+
+//查看哪页
+if(req.query.p){
+page['num']=req.query.p&lt;1?1:req.query.p;
+}
+
+var model = {
+search:search,
+columns:'name alias director publish images.coverSmall create_date type deploy',
+page:page
+};
+
+Movie.findPagination(model,function(err, pageCount, list){
+page['pageCount']=pageCount;
+page['size']=list.length;
+page['numberOf']=pageCount&gt;5?5:pageCount;
+
+return res.render('admin/movie', {
+title:'电影|管理|moive.me',
+page:'admin',nav:'admin.movie',
+movieList:list,
+page:page
+});
+});
+}
+</code></pre>
+<h2>4. 分页查询参数传递(前端-&gt;后端)</h2>
+<p><strong>前端向后端：参数传递过程</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">通过javascript，从页面向控制器传参数p.</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">通过composeUrlParams函数，封装原表单的查询参数</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">通过pageUrl函数，拼接带分布的url请求</span></li>
+</ul>
+<p><strong>后端向前端：参数传递过程</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">如果page1的div增加自定义属性</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">在页面渲染时，通过js解析div增加自定义属性，赋值给bootstrap-paginator控件</span></li>
+</ul>
+<pre><code>~ vi view/admin/moive.html
+
+//修改分页的div，增加自定义的属性
+&lt;div class="span12"&gt;
+&lt;div id="page1" pageCount="&lt;%=page.pageCount%&gt;" pageNum="&lt;%=page.num %&gt;" pageSize="&lt;%=page.size%&gt;" pageLimit="&lt;%=page.limit%&gt;" numberOfPages="&lt;%=page.numberOf%&gt;"&gt;&lt;/div&gt;
+
+&lt;!-- 代码片段 --&gt;
+&lt;script type="text/javascript"&gt;
+$(function(){
+
+//获得浏览器参数
+$.extend({
+getUrlVars: function(){
+var vars = [], hash;
+var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&amp;');
+for(var i = 0; i &lt; hashes.length; i++){
+hash = hashes[i].split('=');
+vars.push(hash[0]);
+vars[hash[0]] = hash[1];
+}
+return vars;
+},
+getUrlVar: function(name){
+return $.getUrlVars()[name];
+}
+});
+
+//封装浏览器参数
+var composeUrlParams=function(){
+var param='';
+$.each($.getUrlVars(), function(i, item) {
+if(item!='p'){
+var val=$.getUrlVar(item);
+if(val) param += "&amp;" + item+"="+val;
+}
+});
+return param;
+}
+
+//分页功能
+var page=$('#page1');
+var options = {
+currentPage:page.attr('pageNum'),
+totalPages:page.attr('pageCount'),
+numberOfPages:page.attr('numberOfPages'),
+pageUrl: function(type, page, current){
+return "/admin/movie?"+composeUrlParams()+"&amp;p="+page;
+}
+}
+$('#page1').bootstrapPaginator(options);
+})
+&lt;/script&gt;</code></pre>
+<h2>5. 分页完整展现</h2>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/07/p1.png"><img class="alignnone size-full wp-image-994" alt="p1" src="http://blog.fens.me/wp-content/uploads/2013/07/p1.png" width="1015" height="641" /></a></p>
+<p>&nbsp;</p>
+<p>分页功能可能实现起来稍有复杂，如果可以完整地封装成一个控件，就会变得非常简单了。不知道是否已经有人做好了这个控件。</p>
+<p>如果有时间，我可能也会写一下。希望能帮助到对分页还陌生的朋友。</p>
+<p>&nbsp;</p>
+<p><strong>转载请注明出处：</strong><br />
+<a href="http://blog.fens.me/nodejs-bootstrap-paginator/">http://blog.fens.me/nodejs-bootstrap-paginator/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-418">
+        <div id="dsq-comment-header-418" class="dsq-comment-header">
+            <cite id="dsq-cite-418">
+                <span id="dsq-author-user-418">she1990111</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-418" class="dsq-comment-body">
+            <div id="dsq-comment-message-418" class="dsq-comment-message"><p>如果是只有一页呢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-419">
+        <div id="dsq-comment-header-419" class="dsq-comment-header">
+            <cite id="dsq-cite-419">
+                <a id="dsq-author-user-419" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-419" class="dsq-comment-body">
+            <div id="dsq-comment-message-419" class="dsq-comment-message"><p>一页，你也可以控制怎么显示。也可以隐藏分页的标签。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-421">
+        <div id="dsq-comment-header-421" class="dsq-comment-header">
+            <cite id="dsq-cite-421">
+                <span id="dsq-author-user-421">she1990111</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-421" class="dsq-comment-body">
+            <div id="dsq-comment-message-421" class="dsq-comment-message"><p>我不太懂怎么控制，我控制出来以后就只有一个[1]，但是我想显示&lt;&lt;  &gt;&gt;这个样子，你可以帮我吗？谢谢！给我说下思路</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-423">
+        <div id="dsq-comment-header-423" class="dsq-comment-header">
+            <cite id="dsq-cite-423">
+                <a id="dsq-author-user-423" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-423" class="dsq-comment-body">
+            <div id="dsq-comment-message-423" class="dsq-comment-message"><p>你说的这个样子，如果不符合控件的定义，需要修改代码来处理。当你自己有能力的再改，不然就用默认的样式。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-760">
+        <div id="dsq-comment-header-760" class="dsq-comment-header">
+            <cite id="dsq-cite-760">
+                <span id="dsq-author-user-760">eric</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-760" class="dsq-comment-body">
+            <div id="dsq-comment-message-760" class="dsq-comment-message"><p>var options = {<br />
+currentPage:page.attr(&#8216;pageNum&#8217;),<br />
+totalPages:page.attr(&#8216;pageCount&#8217;),<br />
+numberOfPages:page.attr(&#8216;numberOfPages&#8217;)<br />
+}<br />
+这里的属性能通过session赋值吗？ currentPage : req.session.page.currentPage,</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-762">
+        <div id="dsq-comment-header-762" class="dsq-comment-header">
+            <cite id="dsq-cite-762">
+                <a id="dsq-author-user-762" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-762" class="dsq-comment-body">
+            <div id="dsq-comment-message-762" class="dsq-comment-message"><p>不能通过session赋值。<br />
+1. req.session的作用域是express渲染的ejs模板<br />
+2. options是页面上面的js</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-867">
+        <div id="dsq-comment-header-867" class="dsq-comment-header">
+            <cite id="dsq-cite-867">
+                <span id="dsq-author-user-867">CccccYj</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-867" class="dsq-comment-body">
+            <div id="dsq-comment-message-867" class="dsq-comment-message"><p>前几篇不想下载程序代码的都有附上程序代码下载，这篇想下载程序代码看看，竟找不到下载的&#8230;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1330">
+        <div id="dsq-comment-header-1330" class="dsq-comment-header">
+            <cite id="dsq-cite-1330">
+                <span id="dsq-author-user-1330">liuwu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1330" class="dsq-comment-body">
+            <div id="dsq-comment-message-1330" class="dsq-comment-message"><p>这个项目能否上传一下</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1331">
+        <div id="dsq-comment-header-1331" class="dsq-comment-header">
+            <cite id="dsq-cite-1331">
+                <span id="dsq-author-user-1331">liuwu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1331" class="dsq-comment-body">
+            <div id="dsq-comment-message-1331" class="dsq-comment-message"><p>不知道怎么回事，导进相应js文件后生成的效果不一样。不知道是不是官网的插件bootstrap-paginator.min.js版本问题。希望能看一下你这个项目的源代码。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1527">
+        <div id="dsq-comment-header-1527" class="dsq-comment-header">
+            <cite id="dsq-cite-1527">
+                <span id="dsq-author-user-1527">blueandhack</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1527" class="dsq-comment-body">
+            <div id="dsq-comment-message-1527" class="dsq-comment-message"><p>已查阅文档 需要在option加入bootstrapMajorVersion:3<br />
+表示使用的bootstrap为3+就可以正常显示了主要是2和3的区别在于<br />
+前者将pagination的样式加到div，而后者加入到ul了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1529">
+        <div id="dsq-comment-header-1529" class="dsq-comment-header">
+            <cite id="dsq-cite-1529">
+                <a id="dsq-author-user-1529" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1529" class="dsq-comment-body">
+            <div id="dsq-comment-message-1529" class="dsq-comment-message"><p>谢谢提醒，稍后我升级一下文章中的软件版本。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1332">
+        <div id="dsq-comment-header-1332" class="dsq-comment-header">
+            <cite id="dsq-cite-1332">
+                <span id="dsq-author-user-1332">liuwu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1332" class="dsq-comment-body">
+            <div id="dsq-comment-message-1332" class="dsq-comment-message"><p>我导进来效果是这样的</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1334">
+        <div id="dsq-comment-header-1334" class="dsq-comment-header">
+            <cite id="dsq-cite-1334">
+                <a id="dsq-author-user-1334" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1334" class="dsq-comment-body">
+            <div id="dsq-comment-message-1334" class="dsq-comment-message"><p>只是显示有问题吧？我之前是基于bootstrap2做的，你动手调一下css呢？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-2986">
+        <div id="dsq-comment-header-2986" class="dsq-comment-header">
+            <cite id="dsq-cite-2986">
+                <span id="dsq-author-user-2986">zhu91aizhu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2986" class="dsq-comment-body">
+            <div id="dsq-comment-message-2986" class="dsq-comment-message"><p>你的bootstrap如果是3.x的跟元素应该是。<br />
+而且变量options应该增加一个字段bootstrapMajorVersion:3</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3772">
+        <div id="dsq-comment-header-3772" class="dsq-comment-header">
+            <cite id="dsq-cite-3772">
+                <span id="dsq-author-user-3772">feiyang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3772" class="dsq-comment-body">
+            <div id="dsq-comment-message-3772" class="dsq-comment-message"><p>请教，谢谢，如果查询结果记录数是0，会出现Uncaught Page out of range 错误，不知道有没有好办法解决，我正在想办法&#8230;.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3782">
+        <div id="dsq-comment-header-3782" class="dsq-comment-header">
+            <cite id="dsq-cite-3782">
+                <a id="dsq-author-user-3782" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3782" class="dsq-comment-body">
+            <div id="dsq-comment-message-3782" class="dsq-comment-message"><p>在后台里，提前判断一个 结果集数，传到前台的数据不要包含错误的数据。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-bootstrap-paginator/';
+var disqus_identifier = '991 http://blog.fens.me/?p=991';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "nodejs分页设计配合bootstrap-paginator";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=991';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

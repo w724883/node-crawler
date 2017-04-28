@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Nginx反向代理Nodejs &#8211; log4js日志IP显示错误 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Nginx反向代理Nodejs &#8211; log4js日志IP显示错误 Comments Feed" href="http://blog.fens.me/nodejs-nginx-log4js/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='玩转Nodejs日志管理log4js' href='http://blog.fens.me/nodejs-log4js/' />
+<link rel='next' title='upstart把应用封装成系统服务' href='http://blog.fens.me/linux-upstart/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-nginx-log4js/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=580' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-nginx-log4js%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-nginx-log4js%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,nginx,log4js,express3,反向代理" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-580 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Nginx反向代理Nodejs &#8211; log4js日志IP显示错误</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-580 post type-post status-publish format-standard hentry category-javascript tag-express3 tag-log4js tag-nginx tag-nodejs tag-107">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-nginx-log4js/" title="Nginx反向代理Nodejs &#8211; log4js日志IP显示错误" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Jun 20, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/express3/" rel="tag">express3</a><a href="http://blog.fens.me/tag/log4js/" rel="tag">log4js</a><a href="http://blog.fens.me/tag/nginx/" rel="tag">nginx</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/%e5%8f%8d%e5%90%91%e4%bb%a3%e7%90%86/" rel="tag">反向代理</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-nginx-log4js/#comments"><span class="dsq-postid" data-dsqidentifier="580 http://blog.fens.me/?p=580">17 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Nginx反向代理Nodejs &#8211; log4js日志IP显示错误</h2>
+            <div class="entry">
+                            <p><strong>从零开始nodejs系列文章</strong></p>
+<p>从零开始nodejs系列文章，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<p>张丹(Conan), 程序员Java,R,PHP,Javascript<br />
+weibo：@Conan_Z<br />
+blog: http://blog.fens.me<br />
+email: bsspirit@gmail.com</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="http://blog.fens.me/nodejs-nginx-log4js/" href="http://blog.fens.me/nodejs-nginx-log4js/">http://blog.fens.me/nodejs-nginx-log4js/</a></p>
+<p><strong>前言</strong></p>
+<p>为提高web应用的吞吐量，我们一般都用nginx做负载均衡器，再反向代理到真正的web服务器。像JAVA服务可以做成Nginx+Tomcat, PHP用Nginx+Spawn-fcgi, 当然nodejs服务，我们也可以做相同的架构Ngnix+Node。</p>
+<p>我使用nginx+nodejs+log4js时，<strong>发现log4js日志的remote_addr项，总是显示127.0.0.1</strong>。本文将重点解释如何通过修改log4js的代码，解决这个问题。</p>
+<p>我已经提交这个问题到log4js-node的issue<br />
+<a href="https://github.com/nomiddlename/log4js-node/issues/139">https://github.com/nomiddlename/log4js-node/issues/139</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/06/log4js-bug.png"><img class="alignnone size-full wp-image-601" alt="log4js-bug" src="http://blog.fens.me/wp-content/uploads/2013/06/log4js-bug.png" width="600" height="400" /></a></p>
+<p><strong>文章目录：</strong></p>
+<ol>
+<li><span style="font-size: 13px; line-height: 19px;">配置nginx反向代理</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">log4js做为web日志输出</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">log4js日志ip显示错误及修复</span></li>
+</ol>
+<h2>1. 配置nginx反向代理</h2>
+<p>本地启动nodejs : node app.js ，默认3000端口。</p>
+<p>安装nginx</p>
+<pre><code>~ sudo apt-get install nginx
+</code></pre>
+<p>进入nginx配置目录</p>
+<pre><code>~ cd /etc/nginx/sites-enabled
+/etc/nginx/sites-enabled
+</code></pre>
+<p>新建一个配置文件moive</p>
+<pre><code>~ vi moive
+
+#moive.me
+upstream nodejs__upstream {
+        server 127.0.0.1:3000;
+        #server 127.0.0.1:3001;
+        keepalive 64;
+}
+server {
+        listen 80;
+        server_name www.moive.me moive.me;
+        access_log /var/log/nginx/moiveme.log;
+        location / {
+                proxy_set_header   X-Real-IP            $remote_addr;
+                proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+                proxy_set_header   Host                   $http_host;
+                proxy_set_header   X-NginX-Proxy    true;
+                proxy_set_header   Connection "";
+                proxy_http_version 1.1;
+                proxy_pass         http://nodejs__upstream;
+        }
+}
+</code></pre>
+<p><strong>对配置项的解释：</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">listen，监听端口80</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">server_name , 监听域名 www.moive.me moive.me</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">access_log ，nginx日志输出 /var/log/nginx/moiveme.log</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">proxy_pass ，反向代理转发 http://nodejs__upstream;</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">通过upstream nodejs__upstream 可以配置多台nodejs节点，做负载均衡。</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">keepalive ，设置存活时间。如果不设置可能会产生大量的timewait。</span></li>
+</ul>
+<p>重新启动nginx</p>
+<pre><code>~ sudo /etc/init.d/nginx restart
+</code></pre>
+<p>通过浏览器访问web站点<br />
+http://moive.me</p>
+<h2>2. log4js做为web日志输出</h2>
+<p>log4js的配置与使用，请查看 <a href="http://blog.fens.me/nodejs-log4js/" target="_blank">玩转Nodejs日志管理log4js</a></p>
+<p><strong>查看控制台日志，发现一个问题，客户端IP记录值都是127.0.0.1。这个是我们不期待的。</strong></p>
+<pre><code>GET / 304 24ms
+[2013-06-20 06:55:39.405] [WARN] [default] - 127.0.0.1 - - "GET / HTTP/1.1" 304 - "" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/my.css 304 5ms
+[2013-06-20 06:55:39.646] [WARN] [default] - 127.0.0.1 - - "GET /css/my.css HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/bootstrap.min.css 304 4ms
+[2013-06-20 06:55:39.651] [WARN] [default] - 127.0.0.1 - - "GET /css/bootstrap.min.css HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /js/holder.js 304 3ms
+[2013-06-20 06:55:39.652] [WARN] [default] - 127.0.0.1 - - "GET /js/holder.js HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /js/jquery-1.9.1.min.js 304 4ms
+[2013-06-20 06:55:39.653] [WARN] [default] - 127.0.0.1 - - "GET /js/jquery-1.9.1.min.js HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+</code></pre>
+<p><strong>在浏览器通过IP直接访问，http://50.116.27.194:3000/， 所有的客户端IP显示正常。</strong></p>
+<pre><code>GET / 304 12ms
+[2013-06-20 06:57:49.492] [WARN] [default] - 114.252.83.33 - - "GET / HTTP/1.1" 304 - "" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /js/holder.js 304 2ms
+[2013-06-20 06:57:49.720] [WARN] [default] - 114.252.83.33 - - "GET /js/holder.js HTTP/1.1" 304 - "http://50.116.27.194:3000/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/bootstrap.min.css 304 2ms
+[2013-06-20 06:57:49.723] [WARN] [default] - 114.252.83.33 - - "GET /css/bootstrap.min.css HTTP/1.1" 304 - "http://50.116.27.194:3000/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/my.css 304 2ms
+[2013-06-20 06:57:49.724] [WARN] [default] - 114.252.83.33 - - "GET /css/my.css HTTP/1.1" 304 - "http://50.116.27.194:3000/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+</code></pre>
+<p><strong>我们把问题定位在nginx转发出现的。</strong></p>
+<p>在程序中打印客户端IP。</p>
+<pre><code>~ vi routes/index.js
+
+        console.log("ip=&gt;"+req.ip);
+	console.log("REMOTE_ADDR=&gt;"+req.get['REMOTE_ADDR']);
+	console.log("HTTP_X_REAL_IP=&gt;"+req.get['HTTP_X_REAL_IP']);
+	console.log("x-real-ip=&gt;"+req.get['x-real-ip']);
+	console.log("x-forwarded-for=&gt;"+req.get['x-forwarded-for']);
+
+	var headers = req.headers;
+	console.log("headers=&gt;"+ (headers['x-real-ip'] || headers['x-forwarded-for']));
+	console.log("headers x-real-ip=&gt;"+headers['x-real-ip']);
+	console.log("headers x-forwarded-for=&gt;"+headers['x-forwarded-for']);
+
+	console.log("====================================================");
+
+	var proxy_ip=headers['x-real-ip'] || headers['x-forwarded-for']
+	if(proxy_ip) return console.log("proxy"+proxy_ip);
+	if(req.ip) return console.log(req.ip);
+
+	console.log("====================================================");
+</code></pre>
+<p><strong>http://moive.me, 通过nginx转发的输出结果：</strong></p>
+<pre><code>[2013-06-20 07:01:48.731] [INFO] console - ip=&gt;127.0.0.1
+[2013-06-20 07:01:48.732] [INFO] console - REMOTE_ADDR=&gt;undefined
+[2013-06-20 07:01:48.732] [INFO] console - HTTP_X_REAL_IP=&gt;undefined
+[2013-06-20 07:01:48.732] [INFO] console - x-real-ip=&gt;undefined
+[2013-06-20 07:01:48.732] [INFO] console - x-forwarded-for=&gt;undefined
+[2013-06-20 07:01:48.732] [INFO] console - headers=&gt;114.252.83.33
+[2013-06-20 07:01:48.732] [INFO] console - headers x-real-ip=&gt;114.252.83.33
+[2013-06-20 07:01:48.732] [INFO] console - headers x-forwarded-for=&gt;114.252.83.33
+[2013-06-20 07:01:48.732] [INFO] console - ====================================================
+[2013-06-20 07:01:48.733] [INFO] console - proxy114.252.83.33
+[2013-06-20 07:01:48.733] [INFO] console - req.ip127.0.0.1
+</code></pre>
+<p><strong>http://50.116.27.194:3000, 直接通过IP访问的输出结果</strong></p>
+<pre><code>[2013-06-20 06:57:49.480] [INFO] console - ip=&gt;114.252.83.33
+[2013-06-20 06:57:49.480] [INFO] console - REMOTE_ADDR=&gt;undefined
+[2013-06-20 06:57:49.480] [INFO] console - HTTP_X_REAL_IP=&gt;undefined
+[2013-06-20 06:57:49.481] [INFO] console - x-real-ip=&gt;undefined
+[2013-06-20 06:57:49.481] [INFO] console - x-forwarded-for=&gt;undefined
+[2013-06-20 06:57:49.481] [INFO] console - headers=&gt;undefined
+[2013-06-20 06:57:49.481] [INFO] console - headers x-real-ip=&gt;undefined
+[2013-06-20 06:57:49.481] [INFO] console - headers x-forwarded-for=&gt;undefined
+[2013-06-20 06:57:49.481] [INFO] console - ====================================================
+[2013-06-20 06:57:49.482] [INFO] console - req.ip114.252.83.33
+</code></pre>
+<p>我们已经发现，通过nginx转发的客户端IP是不能直接使用express3框架中req.ip获得的，而是需要通过req.headers[&#8216;x-real-ip&#8217;]和req.headers[&#8216;x-forwarded-for&#8217;]才能得到。</p>
+<h2>3. log4js日志ip显示错误及修复</h2>
+<p>下面我们要再查一下log4js代码，看看他是怎么实现的，为什么会出现IP的错误。</p>
+<p>打开 log4js/lib/connect-logger.js 118行</p>
+<pre><code>~ vi connect-logger.js
+ function format(str, req, res) {
+        return str
+        .replace(':url', req.originalUrl)
+        .replace(':method', req.method)
+        .replace(':status', res.__statusCode || res.statusCode)
+        .replace(':response-time', res.responseTime)
+        .replace(':date', new Date().toUTCString())
+        .replace(':referrer', req.headers['referer'] || req.headers['referrer'] || '')
+        .replace(':http-version', req.httpVersionMajor + '.' + req.httpVersionMinor)
+        .replace(':remote-addr',req.socket &amp;&amp; (req.socket.remoteAddress || (req.socket.socket &amp;&amp; req.socket.socket.remoteAddress)))
+        .replace(':user-agent', req.headers['user-agent'] || '')
+        .replace(':content-length', (res._headers &amp;&amp; res._headers['content-length']) || (res.__headers &amp;&amp; res.__headers['Content-Length']) || '-')
+        .replace(/:req\[([^\]]+)\]/g, function(_, field){ return req.headers[field.toLowerCase()]; })
+        .replace(/:res\[([^\]]+)\]/g, function(_, field){
+                return res._headers
+                ? (res._headers[field.toLowerCase()] || res.__headers[field])
+                : (res.__headers &amp;&amp; res.__headers[field]);
+        });
+ }
+</code></pre>
+<p>我们发现他的代码和express3的req.ip实现的代码是类似的，这样是不识别通过代理程序转发的客户端IP。</p>
+<pre><code>.replace(':remote-addr',req.socket &amp;&amp; (req.socket.remoteAddress || (req.socket.socket &amp;&amp; req.socket.socket.remoteAddress)))
+</code></pre>
+<p><strong>下面对这行代码进行修改。</strong></p>
+<pre><code>.replace(':remote-addr', req.headers['x-forwarded-for'] || req.connection.remoteAddress)
+</code></pre>
+<p>先检查不是转发的IP，再取默认IP。</p>
+<p>重起nodejs服务器</p>
+<p><strong>浏览器访问测试。</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">http://moive.me</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">http://50.116.27.194:3000</span></li>
+</ul>
+<pre><code>[2013-06-20 07:12:58.706] [WARN] [default] - 114.252.83.33 - - "GET / HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/bootstrap.min.css 304 5ms
+[2013-06-20 07:12:58.949] [WARN] [default] - 114.252.83.33 - - "GET /css/bootstrap.min.css HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/my.css 304 3ms
+[2013-06-20 07:12:59.153] [WARN] [default] - 114.252.83.33 - - "GET /css/my.css HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /js/jquery-1.9.1.min.js 304 2ms
+[2013-06-20 07:12:59.156] [WARN] [default] - 114.252.83.33 - - "GET /js/jquery-1.9.1.min.js HTTP/1.1" 304 - "http://moive.me/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+</code></pre>
+<p>两种访问测试都正常，解决了log4js通过nginx反向代理，日志IP显示错误的问题。</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="http://blog.fens.me/nodejs-nginx-log4js/" href="http://blog.fens.me/nodejs-nginx-log4js/">http://blog.fens.me/nodejs-nginx-log4js/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-452">
+        <div id="dsq-comment-header-452" class="dsq-comment-header">
+            <cite id="dsq-cite-452">
+                <span id="dsq-author-user-452">jabez128</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-452" class="dsq-comment-body">
+            <div id="dsq-comment-message-452" class="dsq-comment-message"><p>博主太牛了！！！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-454">
+        <div id="dsq-comment-header-454" class="dsq-comment-header">
+            <cite id="dsq-cite-454">
+                <a id="dsq-author-user-454" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-454" class="dsq-comment-body">
+            <div id="dsq-comment-message-454" class="dsq-comment-message"><p>过奖了，谢谢支持！！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-521">
+        <div id="dsq-comment-header-521" class="dsq-comment-header">
+            <cite id="dsq-cite-521">
+                <span id="dsq-author-user-521">laoshe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-521" class="dsq-comment-body">
+            <div id="dsq-comment-message-521" class="dsq-comment-message"><p>Speed=306596 pages/min, 2227931 bytes/sec.</p>
+<p>这是不用代理是的性能</p>
+<p>使用ngnix反向代理后</p>
+<p>Speed=7298 pages/min, 47969 bytes/sec.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-522">
+        <div id="dsq-comment-header-522" class="dsq-comment-header">
+            <cite id="dsq-cite-522">
+                <a id="dsq-author-user-522" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-522" class="dsq-comment-body">
+            <div id="dsq-comment-message-522" class="dsq-comment-message"><p>差距真大啊！不知道你是实验环境是什么样的？<br />
+Nginx不会消耗这么多性能的。生产环境如果有这么大的差距就没法玩了！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-523">
+        <div id="dsq-comment-header-523" class="dsq-comment-header">
+            <cite id="dsq-cite-523">
+                <span id="dsq-author-user-523">laoshe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-523" class="dsq-comment-body">
+            <div id="dsq-comment-message-523" class="dsq-comment-message"><p>CPU：2 CPUs内存：512 M硬盘：30 G端口：6 M的vps</p>
+<p>跑的是 go服务</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-525">
+        <div id="dsq-comment-header-525" class="dsq-comment-header">
+            <cite id="dsq-cite-525">
+                <a id="dsq-author-user-525" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-525" class="dsq-comment-body">
+            <div id="dsq-comment-message-525" class="dsq-comment-message"><p>你最好能写一下：<br />
+1. 你做压力测试的软件和脚本。<br />
+2. nginx反向代理的配置。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-527">
+        <div id="dsq-comment-header-527" class="dsq-comment-header">
+            <cite id="dsq-cite-527">
+                <span id="dsq-author-user-527">laoshe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-527" class="dsq-comment-body">
+            <div id="dsq-comment-message-527" class="dsq-comment-message"><p>详细信息写在http://segmentfault.com/q/1010000000323827</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-528">
+        <div id="dsq-comment-header-528" class="dsq-comment-header">
+            <cite id="dsq-cite-528">
+                <span id="dsq-author-user-528">laoshe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-528" class="dsq-comment-body">
+            <div id="dsq-comment-message-528" class="dsq-comment-message"><p>问题不在nginx  我把go web服务端口改成80 关闭nginx 直接运行访问</p>
+<p>oo-o.cn</p>
+<p>性能和运行nginx反向代理差不多</p>
+<p>Speed=6560 pages/min, 44762 bytes/sec.</p>
+<p>但是如果直接访问ip地址204.77.6.51性能就特别好</p>
+<p>Speed=301272 pages/min, 2189243 bytes/sec.</p>
+<p>我是用 webbench 做的压力测试</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-530">
+        <div id="dsq-comment-header-530" class="dsq-comment-header">
+            <cite id="dsq-cite-530">
+                <a id="dsq-author-user-530" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-530" class="dsq-comment-body">
+            <div id="dsq-comment-message-530" class="dsq-comment-message"><p>IP快域名慢，就是DNS的问题了，tracert跟踪一下吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-531">
+        <div id="dsq-comment-header-531" class="dsq-comment-header">
+            <cite id="dsq-cite-531">
+                <span id="dsq-author-user-531">laoshe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-531" class="dsq-comment-body">
+            <div id="dsq-comment-message-531" class="dsq-comment-message"><p>thanks   打扰了</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-529">
+        <div id="dsq-comment-header-529" class="dsq-comment-header">
+            <cite id="dsq-cite-529">
+                <a id="dsq-author-user-529" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-529" class="dsq-comment-body">
+            <div id="dsq-comment-message-529" class="dsq-comment-message"><p>页面打不开了！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-526">
+        <div id="dsq-comment-header-526" class="dsq-comment-header">
+            <cite id="dsq-cite-526">
+                <a id="dsq-author-user-526" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-526" class="dsq-comment-body">
+            <div id="dsq-comment-message-526" class="dsq-comment-message"><p>我可能会找个时间，写一下关于性能测试的文章。<br />
+目前，我没有做过这个案例的测试。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-524">
+        <div id="dsq-comment-header-524" class="dsq-comment-header">
+            <cite id="dsq-cite-524">
+                <span id="dsq-author-user-524">laoshe</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-524" class="dsq-comment-body">
+            <div id="dsq-comment-message-524" class="dsq-comment-message"><p>我是门外汉 真不知该怎么调整<br />
+你的测试如何</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-490">
+        <div id="dsq-comment-header-490" class="dsq-comment-header">
+            <cite id="dsq-cite-490">
+                <span id="dsq-author-user-490">Xl C</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-490" class="dsq-comment-body">
+            <div id="dsq-comment-message-490" class="dsq-comment-message"><p>用nginx做反向代理出现502 bad gateway</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-492">
+        <div id="dsq-comment-header-492" class="dsq-comment-header">
+            <cite id="dsq-cite-492">
+                <a id="dsq-author-user-492" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-492" class="dsq-comment-body">
+            <div id="dsq-comment-message-492" class="dsq-comment-message"><p>你的node服务器挂了，就是502。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3989">
+        <div id="dsq-comment-header-3989" class="dsq-comment-header">
+            <cite id="dsq-cite-3989">
+                <span id="dsq-author-user-3989">zhlhuang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3989" class="dsq-comment-body">
+            <div id="dsq-comment-message-3989" class="dsq-comment-message"><p>为什么我一些静态文件还是访问的nginx 目录了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4033">
+        <div id="dsq-comment-header-4033" class="dsq-comment-header">
+            <cite id="dsq-cite-4033">
+                <a id="dsq-author-user-4033" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4033" class="dsq-comment-body">
+            <div id="dsq-comment-message-4033" class="dsq-comment-message"><p>把配置贴一下吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-nginx-log4js/';
+var disqus_identifier = '580 http://blog.fens.me/?p=580';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Nginx反向代理Nodejs &#8211; log4js日志IP显示错误";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=580';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

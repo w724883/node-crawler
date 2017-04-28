@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Marked高效的Markdown解析器 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Marked高效的Markdown解析器 Comments Feed" href="http://blog.fens.me/nodejs-markdown-marked/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Node.js开发框架Express4.x' href='http://blog.fens.me/nodejs-express4/' />
+<link rel='next' title='Node.js加密算法库Crypto' href='http://blog.fens.me/nodejs-crypto/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-markdown-marked/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=7767' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-markdown-marked%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-markdown-marked%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,markdown,marked,javascript" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-7767 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Marked高效的Markdown解析器</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-7767 post type-post status-publish format-standard hentry category-javascript tag-javascript tag-markdown tag-marked tag-nodejs">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-markdown-marked/" title="Marked高效的Markdown解析器" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Feb 28, 2015</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/markdown/" rel="tag">markdown</a><a href="http://blog.fens.me/tag/marked/" rel="tag">marked</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-markdown-marked/#comments"><span class="dsq-postid" data-dsqidentifier="7767 http://blog.fens.me/?p=7767">2 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Marked高效的Markdown解析器</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 创业者，程序员(Java,R,Javascript)</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Marked高效的Markdown解析器" href="http://blog.fens.me/nodejs-markdown-marked/" target="_blank">http://blog.fens.me/nodejs-markdown-marked/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2015/02/marked.png"><img src="http://blog.fens.me/wp-content/uploads/2015/02/marked.png" alt="marked" width="600" height="400" class="alignnone size-full wp-image-7786" /></a></p>
+<p><strong>前言</strong></p>
+<p>Markdown以一种轻巧简明的设计理念，赋予了Web文档新的活力，从而代替传统以Word为主导的电子文档。Markdown大量简化了HTML标签，被广大的互联网应用所使用。程序员所熟知的Github就完全基于Markdown语法，真的可以不再需要Word了。</p>
+<p>Markdown不是HTML，目前还不能被浏览器解析，所以我们需要Markdown的解析器，把Markdown翻译成浏览器认识的HTML文档展示出来。Marked就是一个基于Nodejs的Markdown解析引擎！</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>markdown介绍</li>
+<li>marked安装</li>
+<li>marked命令行使用</li>
+<li>marked的API使用</li>
+<li>marked的个性化渲染</li>
+</ol>
+<h2>1. markdown介绍</h2>
+<p>Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文���”。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。</p>
+<p>Markdown 的目标是实现「易读易写」。</p>
+<p>可读性，无论如何，都是最重要的。一份使用 Markdown 格式撰写的文件应该可以直接以纯文本发布，并且看起来不会像是由许多标签或是格式指令所构成。Markdown 语法受到一些既有 text-to-HTML 格式的影响，包括 Setext、atx、Textile、reStructuredText、Grutatext 和 EtText，而最大灵感来源其实是纯文本电子邮件的格式。</p>
+<p>Markdown的语法简洁明了、学习容易，而且功能比纯文本更强，因此有很多人用它写博客。世界上最流行的博客平台WordPress和大型CMS如joomla、drupal都能很好的支持Markdown，Github也是支持markdown的，在个性化语法上也做了不少的改进。Markdown的中文语法介绍：<a href="http://wowubuntu.com/markdown/" target="_blank" ref="nofollow">http://wowubuntu.com/markdown/</a></p>
+<p>2款不错的markdown的在线编辑器：</p>
+<ul>
+<li><a href="https://www.zybuluo.com/mdeditor" target="_blank" ref="nofollow">https://www.zybuluo.com/mdeditor</a></li>
+<li><a href="http://maxiang.info/" target="_blank" ref="nofollow">http://maxiang.info/</a></li>
+</ul>
+<p>如果你还没有开始用Markdown来写文档，那你一定OUT了。</p>
+<h2>2. marked安装</h2>
+<p>系统环境</p>
+<ul>
+<li>Win7 64bit</li>
+<li>Nodejs:v0.10.31</li>
+<li>Npm:1.4.23</li>
+</ul>
+<p>创建项目</p>
+<pre><code>
+~ cd D:\workspace\javascript>
+~ D:\workspace\javascript>mkdir nodejs-marked && cd nodejs-marked
+</code></pre>
+<p>新建项目文件package.json</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>notepad package.json
+{
+  "name": "marked-demo",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+  }
+}
+</code></pre>
+<p>安装marked库，全局安装，同时在本地项目安装。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>npm install marked --save -g
+C:\Users\Administrator\AppData\Roaming\npm\marked -> C:\Users\Administrator\AppData\Roaming\npm\node_modules\marked\bin\
+marked
+marked@0.3.3 C:\Users\Administrator\AppData\Roaming\npm\node_modules\marked
+</code></pre>
+<p>通过-save参数，package.json文件中会自动增加marked库的依赖。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>cat package.json
+{
+  "name": "marked-demo",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "marked": "^0.3.3"
+  }
+}
+</code></pre>
+<p>通过-g参数，完成了marked库的全局安装，这时我们就可以直接在命令，使用marked的命令了。</p>
+<p>查看命令行帮助，直接就报错误了，真是出师不利啊。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>marked -h
+child_process: customFds option is deprecated, use stdio instead.
+events.js:85
+      throw er; // Unhandled 'error' event
+            ^
+Error: spawn man ENOENT
+    at exports._errnoException (util.js:746:11)
+    at Process.ChildProcess._handle.onexit (child_process.js:1046:32)
+    at child_process.js:1137:20
+    at process._tickCallback (node.js:355:11)
+    at Function.Module.runMain (module.js:503:11)
+    at startup (node.js:129:16)
+    at node.js:814:3
+</code></pre>
+<p>定位错误，找到./node_modules/marked/bin/marked文件中help()函数，如下代码所示，这种写法不适用于Window系统，所以才出现-h报错的情况。庆幸的是，其他的功能命令参数都是正确的。</p>
+<pre><code>
+function help() {
+  var spawn = require('child_process').spawn;
+
+  var options = {
+    cwd: process.cwd(),
+    env: process.env,
+    setsid: false,
+    customFds: [0, 1, 2]
+  };
+
+  spawn('man',
+    [__dirname + '/../man/marked.1'],
+    options);
+}
+</code></pre>
+<p>在Linux环境，我们看一下帮助命令。</p>
+<pre><code>
+~ marked -h
+
+marked(1)                               marked.js                               marked(1)
+
+NAME
+       marked - a javascript markdown parser
+
+SYNOPSIS
+       marked  [-o  <output>]  [-i  &lt;input&gt;]  [--help]  [--tokens]  [--pedantic]  [--gfm]
+       [--breaks]  [--tables]  [--sanitize]  [--smart-lists]   [--lang-prefix   &lt;prefix&gt;]
+       [--no-etc...] [--silent] [filename]
+
+DESCRIPTION
+       marked  is  a  full-featured  javascript markdown parser, built for speed. It also
+       includes multiple GFM features.
+
+EXAMPLES
+       cat in.md | marked &gt; out.html
+       echo "hello *world*" | marked
+       marked -o out.html in.md --gfm
+       marked --output="hello world.html" -i in.md --no-breaks
+
+OPTIONS
+       -o, --output [output]
+              Specify file output. If none is specified, write to stdout.
+       -i, --input [input]
+              Specify file input, otherwise use last argument as input file. If no  input
+              file is specified, read from stdin.
+       -t, --tokens
+              Output a token stream instead of html.
+       --pedantic
+              Conform  to  obscure  parts  of  markdown.pl as much as possible. Don't fix
+              original markdown bugs.
+       --gfm  Enable github flavored markdown.
+       --breaks
+              Enable GFM line breaks. Only works with the gfm option.
+       --tables
+              Enable GFM tables. Only works with the gfm option.
+       --sanitize
+              Sanitize output. Ignore any HTML input.
+       --smart-lists
+              Use smarter list behavior than the original markdown.
+       --lang-prefix [prefix]
+              Set the prefix for code block classes.
+       --no-sanitize, -no-etc...
+              The inverse of any of the marked options above.
+       --silent
+              Silence error output.
+       -h, --help
+              Display help information.
+
+CONFIGURATION
+       For configuring and running programmatically.
+       Example
+           require('marked')('*foo*', { gfm: true });
+BUGS
+       Please report any bugs to https://github.com/chjj/marked.
+LICENSE
+       Copyright (c) 2011-2014, Christopher Jeffrey (MIT License).
+SEE ALSO
+       markdown(1), node.js(1)
+
+</code></pre>
+<h2>3. marked命令行使用</h2>
+<p>参数说明：</p>
+<ul>
+<li>-o, &#8211;output [output]: 指定输出文件，默认为当前控制台</li>
+<li>-i, &#8211;input [input]: 指定输入文件或最后一个参数，默认为当前控制台输入</li>
+<li>-t, &#8211;tokens: 输出token流代替HTML</li>
+<li>&#8211;pedantic: 只解析符合markdown.pl定义的，不修正markdown的错误</li>
+<li>&#8211;gfm: 启动Github样式的Markdown，请参考 <a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank">https://help.github.com/articles/github-flavored-markdown/</a></li>
+<li>&#8211;breaks: 支持Github换行符，必须打开gfm选项</li>
+<li>&#8211;tables: 支持Github表格，必须打开gfm选项</li>
+<li>&#8211;sanitize: 原始输出，忽略HTML标签</li>
+<li>&#8211;smart-lists: 优化列表输出</li>
+<li>&#8211;lang-prefix [prefix]: 设置前置样式</li>
+<li>&#8211;no-etc: 选择的反正标识</li>
+<li>&#8211;silent: 不输出错误信息</li>
+<li>-h, &#8211;help: 帮助信息</li>
+</ul>
+<p>下面我们就直接使用命令行来处理markdown的文件。</p>
+<p>新建一个Markdown文件m1.md，其中包括了文字，代码，段落，列表，格式。</p>
+<pre><code>
+Marked Demo
+======================
+
+这是一个Marked库使用的例子。 http://blog.fens.me/nodejs-markdown-marked/
+
+> A full-featured markdown parser and compiler, written in JavaScript. Built
+> for speed.
+
+[![NPM version](https://badge.fury.io/js/marked.png)][badge]
+
+## Install
+
+``` bash
+npm install marked --save
+```
+
+## 列表测试
+
++ 列表测试，行1
++ 列表测试，行2
++ 列表测试，行3
++ 列表测试，行4
+
+## 表格测试
+
+A | B | C
+--|--|--
+A1 | B1 | C1
+A2 | B2 | C2
+A3 | B3 | C3
+</code></pre>
+<p>使用命令行生成HTML。</p>
+<pre><code>
+D:\workspace\javascript\nodejs-marked>marked -i m1.md
+&lt;h1 id="marked-demo"&gt;Marked Demo&lt;/h1&gt;
+&lt;p&gt;这是一个Marked库使用的例子。 &lt;a href="http://blog.fens.me/nodejs-markdown-marked/"&gt;http://blog.fens.me/nodejs-man-marked/&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A full-featured markdown parser and compiler, written in JavaScript. Built
+for speed.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;[&lt;img src="https://badge.fury.io/js/marked.png" alt="NPM version"&gt;][badge]&lt;/p&lt;
+&lt;h2 id="install"&gt;Install&lt;/h2&gt;
+&lt;pre&gt;&lt;code class="lang-bash"&gt;npm install marked --save
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="-"&gt;列表测试&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;列表测试，行1&lt;/li&gt;
+&lt;li&gt;列表测试，行2&lt;/li&gt;
+&lt;li&gt;列表测试，行3&lt;/li&gt;
+&lt;li&gt;列表测试，行4&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-"&gt;表格测试&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;A&lt;/th&gt;
+&lt;th&gt;B&lt;/th&gt;
+&lt;th&gt;C&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;A1&lt;/td&gt;
+&lt;td&gt;B1&lt;/td&gt;
+&lt;td&gt;C1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;A2&lt;/td&gt;
+&lt;td&gt;B2&lt;/td&gt;
+&lt;td&gt;C2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;A3&lt;/td&gt;
+&lt;td&gt;B3&lt;/td&gt;
+&lt;td&gt;C3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p>从代码上面看，所有的标签都被正确解析了。再把命令行的各种参数组合一下，看看是不是会有不一样的效果。</p>
+<p>增加-o的参数，输出到指定文件中。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>marked -i m1.md -o m1_out.html
+
+~ D:\workspace\javascript\nodejs-marked>ls m1*
+m1.md  m1_out.html
+</code></pre>
+<p>增加-t的参数，以token形式输出。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>marked -t -i m1.md
+[
+  {
+    "type": "heading",
+    "depth": 1,
+    "text": "Marked Demo"
+  },
+  {
+    "type": "paragraph",
+    "text": "这是一个Marked库使用的例子。"
+  },
+  {
+    "type": "blockquote_start"
+  },
+  {
+    "type": "paragraph",
+    "text": "A full-featured markdown parser and compiler, written in JavaScript. Built\nfor speed."
+  },
+
+//省略输出
+]
+</code></pre>
+<h2>4. marked的API使用</h2>
+<p>接下来，我通过API来调用marked解析markdown文本。</p>
+<p>新建一个脚本文件mark1.js</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>notepad mark1.js
+
+var marked = require('marked');
+console.log(marked('I am using __markdown__.'));
+</code></pre>
+<p>运行脚本mark1.js。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>node mark1.js
+&lt;p&gt;I am using &lt;strong&gt;markdown&lt;/strong&gt;.&lt;/p&gt;
+</code></pre>
+<p>下面再用API读取md1.md的文本，进行解析，然后输出为HTML，新建mark2.js文件。</p>
+<pre><code>
+var marked = require('marked')
+    ,fs = require("fs")
+    ,http = require('http');
+
+marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+});
+
+fs.readFile('m1.md', 'utf-8', function (err, data) {
+    if (err) throw err;
+    server(marked(data));
+});
+
+function server(html){
+    http.createServer(function (req, res) {
+        res.writeHead(200, {'Content-Type': 'text/html;charset=utf-8'});
+        res.end(html);
+    }).listen(1337, '127.0.0.1');
+    console.log('Server running at http://127.0.0.1:1337/');
+}
+</code></pre>
+<p>启动服务</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-marked>node mark2.js
+Server running at http://127.0.0.1:1337/
+</code></pre>
+<p>打开浏览器，http://localhost:1337/，m1.md的markdown文本被正确解析为了HTML的网页，链接，文本，段落，表格，列表都被正确显示，我们只需要自定义好样式表就行了。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2015/02/marked_1.png"><img src="http://blog.fens.me/wp-content/uploads/2015/02/marked_1.png" alt="marked_1" width="670" height="611" class="alignnone size-full wp-image-7777" /></a></p>
+<h2>5. marked的个性化渲染使用</h2>
+<p>接下来，我们引入bootstrap的样式，修饰一下页面。</p>
+<p>修改mark2.js文件的代码。</p>
+<pre><code>
+fs.readFile('m1.md', 'utf-8', function (err, data) {
+
+    //增加HTML的页头
+    var header = '&lt;!DOCTYPE html&gt;'+
+        '&lt;html lang="zh-CN"&gt;'+
+        '&lt;head&gt;'+
+        '&lt;title&gt;Marked Demo&lt;/title&gt;'+
+        '&lt;link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css"&gt;'+
+        '&lt;/head&gt;&lt;body&gt;';
+
+    //增加HTML的页底
+    var footer = '&lt;script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"&gt;&lt;/script&gt;'+
+        '&lt;script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"&gt;&lt;/script&gt;'+
+        '&lt;/body&gt;&lt;/html&gt;';
+
+    if (err) throw err;
+    server(header+marked(data)+footer);
+});
+</code></pre>
+<p>渲染页面后，已经好看多了。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2015/02/marked_2.png"><img src="http://blog.fens.me/wp-content/uploads/2015/02/marked_2.png" alt="marked_2" width="655" height="700" class="alignnone size-full wp-image-7779" /></a></p>
+<p>但是，美中不足的是表格table，没有样式化。检查bootstrap的表格样式，需要在table的class属性增加table table-striped的样式。</p>
+<pre><code>
+&lt;table class="table table-striped"&gt;
+  ...
+&lt;/table&gt;
+</code></pre>
+<p>我们在试用marked渲染markdown的过程是自动完成的，现在我们要增加css就需要个性化的渲染，通过API改变渲染的过程。</p>
+<p>在代码中增加table的处理，完整的代码如下所示。</p>
+<pre><code>
+var marked = require('marked')
+    , fs = require("fs")
+    ,http = require('http');
+
+marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+});
+
+//增加的代码，用于个性化输出table
+var renderer = new marked.Renderer();
+renderer.table = function (header, body) {
+    return '&lt;table class="table table-striped"&gt;'+header+body+'&lt;/table&gt;'
+}
+
+fs.readFile('m1.md', 'utf-8', function (err, data) {
+    var header = '&lt;!DOCTYPE html&gt;'+
+        '&lt;html lang="zh-CN"&gt;'+
+        '&lt;head&gt;'+
+        '&lt;title&gt;Marked Demo&lt;/title&gt;'+
+        '&lt;link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css"&gt;'+
+        '&lt;/head&gt;&lt;body&gt;';
+
+    var footer = '&lt;script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"&gt;&lt;/script&gt;'+
+        '&lt;script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"&gt;&lt;/script&gt;'+
+        '&lt;/body&gt;&lt;/html&gt;';
+
+    if (err) throw err;
+    var body = marked(data,{renderer: renderer});
+    server(header+body+footer);
+});
+
+function server(html){
+    http.createServer(function (req, res) {
+        res.writeHead(200, {'Content-Type': 'text/html;charset=utf-8'});
+        res.end(html);
+    }).listen(1337, '127.0.0.1');
+    console.log('Server running at http://127.0.0.1:1337/');
+}
+</code></pre>
+<p>再次刷新网页，表格也被友好的显示了。<br />
+<a href="http://blog.fens.me/wp-content/uploads/2015/02/marked_3.png"><img src="http://blog.fens.me/wp-content/uploads/2015/02/marked_3.png" alt="marked_3" width="744" height="738" class="alignnone size-full wp-image-7780" /></a></p>
+<p>这样，我们就完成了对markdown的文档的解析，也可以个性化地设计我们需要的处理样式了。最后，就是把marked库集成到应用中就可以了，其实真的很简单。</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Marked高效的Markdown解析器" href="http://blog.fens.me/nodejs-markdown-marked/" target="_blank">http://blog.fens.me/nodejs-markdown-marked/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-3701">
+        <div id="dsq-comment-header-3701" class="dsq-comment-header">
+            <cite id="dsq-cite-3701">
+                <span id="dsq-author-user-3701">aaa</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3701" class="dsq-comment-body">
+            <div id="dsq-comment-message-3701" class="dsq-comment-message"><p>你好，存入数据库的吧md转成html，但是是以字符串的形式存的，这样读的话页面显示的都是html标签，怎么从数据库将存入的html形式的字符串转成html显示在页面上</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3702">
+        <div id="dsq-comment-header-3702" class="dsq-comment-header">
+            <cite id="dsq-cite-3702">
+                <a id="dsq-author-user-3702" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3702" class="dsq-comment-body">
+            <div id="dsq-comment-message-3702" class="dsq-comment-message"><p>文本不涉及数据库存储，如果存也是md，不存html。每次在浏览器 或 Node中进行渲染。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-markdown-marked/';
+var disqus_identifier = '7767 http://blog.fens.me/?p=7767';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Marked高效的Markdown解析器";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=7767';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文���</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

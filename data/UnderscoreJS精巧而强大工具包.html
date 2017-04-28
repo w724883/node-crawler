@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>UnderscoreJS精巧而强大工具包 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; UnderscoreJS精巧而强大工具包 Comments Feed" href="http://blog.fens.me/nodejs-underscore/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Karma和Jasmine自动化单元测试' href='http://blog.fens.me/nodejs-karma-jasmine/' />
+<link rel='next' title='AngularJS从构建项目开始' href='http://blog.fens.me/angularjs-yeoman-project/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-underscore/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=2040' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-underscore%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-underscore%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="underscore,underscorejs,underscore.string,nodejs,javascript" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-2040 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>UnderscoreJS精巧而强大工具包</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-2040 post type-post status-publish format-standard hentry category-javascript tag-javascript tag-nodejs tag-underscore tag-underscore-js tag-underscore-string tag-underscorejs">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-underscore/" title="UnderscoreJS精巧而强大工具包" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Aug 28, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/underscore/" rel="tag">underscore</a><a href="http://blog.fens.me/tag/underscore-js/" rel="tag">Underscore.js</a><a href="http://blog.fens.me/tag/underscore-string/" rel="tag">underscore.string</a><a href="http://blog.fens.me/tag/underscorejs/" rel="tag">underscorejs</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-underscore/#respond"><span class="dsq-postid" data-dsqidentifier="2040 http://blog.fens.me/?p=2040">0 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>UnderscoreJS精巧而强大工具包</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Underscore实用工具包" href="http://blog.fens.me/nodejs-underscore/" target="_blank">http://blog.fens.me/nodejs-underscore/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/underscore.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/underscore.png" alt="underscore" width="600" height="400" class="alignnone size-full wp-image-2077" /></a></p>
+<p><strong>前言</strong></p>
+<p>从其他语言转向Javascript时，通常都会遇到一些困惑性问题。比如，Java中的HashMap在Javascript中如何实现？Javascript面向对象式编程如何实现继承？如何实现通用的iterator对集合对象做遍历？如何对Array实现快速排序？&#8230;.</p>
+<p>如果你真的可以自己实现这些功能，那么你的Javascript基础很扎实的！我很佩服你！但对于大部分人来说，这些基础功能应该是由底层API支持的，就像JDK一样。Underscore为我们提供了这样的一个实用工具包，而且它真的很实用！</p>
+<p>只有你动手做了，你才能有收获。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Underscore介绍</li>
+<li>Underscore安装</li>
+<li>集合部分:数组或对象</li>
+<li>数组部分</li>
+<li>函数部分</li>
+<li>对象部分</li>
+<li>实用功能</li>
+<li>链式语法</li>
+<li>字符串处理Underscore.String</li>
+</ol>
+<h2>1. Underscore介绍</h2>
+<p>Underscore 是一个JavaScript实用库,提供了类似Prototype.js的一些功能,但是没有继承任何JavaScript内置对象。它弥补了部分jQuery没有实现的功能,同时又是Backbone.js必不可少的部分。</p>
+<p>Underscore提供了80多个函数,包括常用的: map, select, invoke — 当然还有更多专业的辅助函数,如:函数绑定, JavaScript模板功能, 强类型相等测试, 等等. 在新的浏览器中, 有许多函数如果浏览器本身直接支持,将会采用原生的,如 forEach, map, reduce, filter, every, some 和 indexOf.</p>
+<p>Underscore介绍，摘自 <a title="Underscore" href="http://learning.github.io/underscore/" target="_blank">http://learning.github.io/underscore/</a></p>
+<h2>2. Underscore安装</h2>
+<p>Underscore.js是一个Javascript功能类库，不依赖于环境，可以加载到HTML中在浏览器运行，也可以直接在nodejs的环境中使用。</p>
+<p>为了方便介绍函数功能，我这里选择在nodejs的环境中运行。</p>
+<p><strong>我的系统环境</strong></p>
+<pre><code>win7 64bit, node v0.10.5, npm 1.2.19</code></pre>
+<p><strong>安装Underscore</strong></p>
+<pre><code>
+~ D:\workspace\javascript&gt;mkdir nodejs-underscore
+~ D:\workspace\javascript&gt;cd nodejs-underscore
+
+~ D:\workspace\javascript\nodejs-underscore&gt;npm install underscore
+npm http GET https://registry.npmjs.org/underscore
+npm http 304 https://registry.npmjs.org/underscore
+npm http GET https://registry.npmjs.org/underscore/-/underscore-1.5.1.tgz
+npm http 200 https://registry.npmjs.org/underscore/-/underscore-1.5.1.tgz
+underscore@1.5.1 node_modules\underscore
+</code></pre>
+<p>underscore有80多的函数，下面我只介绍一些，我比较感兴趣的，实用的。</p>
+<h2>3. 集合部分: 数组或对象</h2>
+<p>新建一个collection.js文件，测试underscore对集合的支持。</p>
+<pre><code>~ vi collection.js
+
+//加载underscore库
+var _ = require("underscore")._;
+</code></pre>
+<p><strong>each: 对集合循环操作</strong></p>
+<pre><code>_.each([1, 2, 3], function (ele, idx) {
+    console.log(idx + ":" + ele);
+});
+=&gt; 0:1
+1:2
+2:3
+</code></pre>
+<p><strong>map: 对集合以map方式遍历，产生一个新数组</strong></p>
+<pre><code>console.log(
+    _.map([1, 2, 3], function(num){
+        return num * 3;
+    })
+);
+=&gt; [3, 6, 9]
+</code></pre>
+<p><strong>reduce: 集合元素合并集的到memo</strong></p>
+<pre><code>console.log(
+    _.reduce([1, 2, 3], function (memo, num) {
+        return memo + num;
+    }, 0)
+);
+=&gt; 6
+</code></pre>
+<p><strong>filter: 过滤集合中符合条件的元素。注：find:只返回第一个</strong></p>
+<pre><code>console.log(
+    _.filter([1, 2, 3, 4, 5, 6], function(num){
+        return num % 2 == 0;
+    })
+);
+=&gt; [ 2, 4, 6 ]
+</code></pre>
+<p><strong>reject: 过滤集合中不符合条件的元素</strong></p>
+<pre><code>console.log(
+    _.reject([1, 2, 3, 4, 5, 6], function(num){
+        return num % 2 == 0;
+    })
+);
+=&gt; [ 1, 3, 5 ]
+</code></pre>
+<p><strong>where: 遍历list, 返回新的对象数组</strong></p>
+<pre><code>var list = [
+    {title:"AAA",year: 1982},
+    {title:"BBB",year: 1900},
+    {title:"CCC",year: 1982}
+];
+console.log(
+    _.where(list,{year: 1982})
+);
+=&gt; [ { title: 'AAA', year: 1982 }, { title: 'CCC', year: 1982 } ]
+</code></pre>
+<p><strong>contains:判断元素是否在list中</strong></p>
+<pre><code>console.log(
+    _.contains([1, 2, 3], 3)
+);
+</code></pre>
+<p><strong>invoke:通过函数名调用函数运行</strong></p>
+<pre><code>console.log(
+    _.invoke([[5, 1, 7]], 'sort')
+);
+=&gt; [ [ 1, 5, 7 ] ]
+</code></pre>
+<p><strong>pluck: 提取一个集合里指定的属性值</strong></p>
+<pre><code>var users = [
+    {name: 'moe', age: 40},
+    {name: 'larry', age: 50}
+];
+console.log(
+    _.pluck(users, 'name')
+);
+=&gt; [ 'moe', 'larry' ]
+</code></pre>
+<p><strong>max,min,sortBy: 取list中的最大,最小元素，自定义比较器</strong></p>
+<pre><code>console.log(
+    _.max(users, function (stooge) {
+        return stooge.age;
+    })
+);
+=&gt; { name: 'larry', age: 50 }
+
+var numbers = [10, 5, 100, 2, 1000];
+console.log(
+    _.min(numbers)
+);
+=&gt; 2
+
+console.log(
+    _.sortBy([3, 4, 2, 1 , 6], function (num) {
+        return Math.max(num);
+    })
+);
+=&gt; [ 1, 2, 3, 4, 6 ]
+</code></pre>
+<p><strong>groupBy: 把一个集合分组成多个集合</strong></p>
+<pre><code>console.log(
+    _.groupBy(['one', 'two', 'three'], 'length')
+);
+=&gt; { '3': [ 'one', 'two' ], '5': [ 'three' ] }
+</code></pre>
+<p><strong>countBy: 把一个数据分组后计数</strong></p>
+<pre><code>onsole.log(
+    _.countBy([1, 2, 3, 4, 5], function (num) {
+        return num % 2 == 0 ? 'even' : 'odd';
+    })
+);
+=&gt; { odd: 3, even: 2 }
+</code></pre>
+<p><strong>shuffle: 随机打乱一个数据</strong></p>
+<pre><code>console.log(
+    _.shuffle([1, 2, 3, 4, 5, 6])
+);
+=&gt; [ 1, 5, 2, 3, 6, 4 ]
+</code></pre>
+<p><strong>toArray: 将list转换成一个数组</strong></p>
+<pre><code>console.log(
+    (function () {
+        return _.toArray(arguments).slice(1);
+    })(1, 2, 3, 4)
+);
+=&gt; [ 2, 3, 4 ]
+</code></pre>
+<p><strong>size: 得到list中元素个数</strong></p>
+<pre><code>console.log(
+    _.size({one: 1, two: 2, three: 3})
+);
+</code></pre>
+<h2>4. 数组部分</h2>
+<p><strong>新建一个array.js</strong></p>
+<pre><code>
+~ vi array.js
+
+var _ = require("underscore")._;
+</code></pre>
+<p><strong>first,last,initial,rest: 数组的元素操作。</strong></p>
+<pre><code>
+var nums = [5, 4, 3, 2, 1];
+console.log(_.first(nums));
+console.log(_.last(nums));
+console.log(_.initial(nums,1));
+console.log(_.rest(nums,1));
+=&gt; 5
+1
+[ 5, 4, 3, 2 ]
+[ 4, 3, 2, 1 ]
+</code></pre>
+<p><strong>indexOf,lastIndexOf,sortedIndex：取索引位置</strong></p>
+<pre><code>
+console.log(_.indexOf([4, 2, 3, 4, 2], 4));
+console.log(_.lastIndexOf([4, 2, 3, 4, 2], 4));
+console.log(_.sortedIndex([10, 20, 30, 40, 50], 35));
+=&gt; 0
+3
+3
+</code></pre>
+<p><strong>range: 创建一个范围整数数组</strong></p>
+<pre><code>
+console.log(_.range(1,10));
+console.log(_.range(0, -10, -1));
+=&gt; [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+[ 0, -1, -2, -3, -4, -5, -6, -7, -8, -9 ]
+</code></pre>
+<p><strong>compact:数组去除空值</strong></p>
+<pre><code>
+console.log(
+    _.compact([0, 1, false, 2, '', 3])
+);
+=&gt; [ 1, 2, 3 ]
+</code></pre>
+<p><strong>flatten:将一个嵌套多层的数组(嵌套可以是任何层数)转换为只有一层的数组</strong></p>
+<pre><code>
+console.log(
+    _.flatten([1, [2], [3, [[4]]]])
+);
+=&gt; [ 1, 2, 3, 4 ]
+</code></pre>
+<p><strong>without: 去掉元素</strong></p>
+<pre><code>
+console.log(
+    _.without([1, 2, 1, 0, 3, 1, 4], 0,1 )
+);
+=&gt; [ 2, 3, 4 ]
+</code></pre>
+<p><strong>union,intersection,difference,uniq: 并集，交集，差集，取唯一</strong></p>
+<pre><code>
+console.log(_.union([1, 2, 3], [101, 2, 1, 10], [2, 1]));
+console.log(_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]));
+console.log(_.difference([1, 2, 3, 4, 5], [5, 2, 10]));
+console.log(_.uniq([1, 2, 1, 3, 1, 2]));
+=&gt; [ 1, 2, 3, 101, 10 ]
+[ 1, 2 ]
+[ 1, 3, 4 ]
+[ 1, 2, 3 ]
+</code></pre>
+<p><strong>zip: 合并多个数组中的元素，是group的反向操作</strong></p>
+<pre><code>
+console.log(
+    _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false])
+);
+=&gt; [ [ 'moe', 30, true ],
+  [ 'larry', 40, false ],
+  [ 'curly', 50, false ] ]
+</code></pre>
+<p><strong>object: 把数组转换成对象</strong></p>
+<pre><code>
+console.log(
+    _.object(['moe', 'larry', 'curly'], [30, 40, 50])
+);
+=&gt; { moe: 30, larry: 40, curly: 50 }
+</code></pre>
+<h2>5. 函数部分</h2>
+<p><strong>新建一个function.js</strong></p>
+<pre><code>
+~ vi function.js
+var _ = require("underscore")._;
+</code></pre>
+<p><strong>bind: 绑定函数到对象上, ���论何时函数被调用, 函数里的this都指向对象.</strong></p>
+<pre><code>
+var func = function(greeting){ return greeting + ': ' + this.name };
+func = _.bind(func, {name : 'moe'}, 'hi');
+console.log(func());
+=> hi: moe
+</code></pre>
+<p><strong>bindAll: 绑定方法名到对象上, 当这些方法被执行时将在对象的上下文执行. 绑定函数用作事件处理时非常方便, 否则函数调用时 this 关键字根本没什么用.</strong></p>
+<pre><code>
+var buttonView = {
+    label   : 'underscore',
+    onClick : function(){ console.log('clicked: ' + this.label); },
+    onHover : function(){ console.log('hovering: ' + this.label); }
+};
+var func  = _.bindAll(buttonView, 'onClick', 'onHover');
+func.onClick();
+=> clicked: underscore
+</code></pre>
+<p><strong>partial:在不改变this的情况下，通过参数填充数据</strong></p>
+<pre><code>
+var add = function(a, b) { return a + b; };
+add5 = _.partial(add, 5);
+console.log(add5(10));
+=> 15
+</code></pre>
+<p><strong>memoize: 通过缓存计算结果使函数具有记忆功能。</strong></p>
+<pre><code>
+var fibonacci = _.memoize(function(n) {
+    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+});
+console.log(fibonacci(10));
+=> 55
+</code></pre>
+<p><strong>delay: 在等待xx毫秒之后调用函数，类似于setTimeout</strong></p>
+<pre><code>
+var log = _.bind(console.log, console);
+_.delay(log, 1000, 'sleep 1s');
+=> sleep 1s
+</code></pre>
+<p><strong>defer: 延迟调用函数, 直到当前调用栈被清空为止, 跟使用 setTimeout 赋予0毫秒的延时很像. 对执行高消耗算法或大型HTML呈现而不阻碍UI更新线程很有用.</strong></p>
+<pre><code>
+_.defer(function(){ console.log('deferred'); });
+=> deferred
+</code></pre>
+<p><strong>throttle:返回一个类似于节流阀一样的函数, 当高频率的调用函数, 实际上会每隔 wait 毫秒才会调用一次. 对于高到您感觉不到的高频率执行的函数时非常有用.</strong></p>
+<pre><code>
+var throttled = _.throttle(function(){
+    _(5).times(function(n){ console.log(n+":"+new Date()); });
+}, 100);
+throttled();
+=> 0:Wed Aug 28 2013 14:20:48 GMT+0800
+1:Wed Aug 28 2013 14:20:48 GMT+0800
+2:Wed Aug 28 2013 14:20:48 GMT+0800
+3:Wed Aug 28 2013 14:20:48 GMT+0800
+4:Wed Aug 28 2013 14:20:48 GMT+0800
+</code></pre>
+<p><strong>debounce: 返回函数的防反跳版本, 将延迟函数的执行(真正的执行)在函数最后一次调用时刻的等待xx毫秒之后，可以实现延迟加载。</strong></p>
+<pre><code>
+var lazyLoad = _.debounce(function(){
+    console.log("lazy load 3s");
+}, 3000);
+lazyLoad();
+=> lazy load 3s
+</code></pre>
+<p><strong>once: 创建一个只能运行一次的函数. 重复调用此修改过的函数会没有效果, 只会返回第一次执行时返回的结果。单例模式。</strong></p>
+<pre><code>
+var initialize = _.once(function(){console.log('initialize');});
+initialize();
+initialize();
+=> initialize
+</code></pre>
+<p><strong>after: 对循环计数，只有超过计数，才会调用指定的函数</strong></p>
+<pre><code>
+var nums = [1,2,3,4];
+var renderNums = _.after(nums.length, function(){
+    console.log('render nums');
+});
+_.each(nums, function(num) {
+    console.log('each:'+num);
+    renderNums();
+});
+=> each:1
+each:2
+each:3
+each:4
+render nums
+</code></pre>
+<p><strong>wrap: 以函数作为函数传递，可以增加函数调用前后的控制。有点类似于 “模板方法模式”</strong></p>
+<pre><code>
+var hello = function(name) { return "hello: " + name; };
+hello = _.wrap(hello, function(func) {
+    return "before, " + func("moe") + ", after";
+});
+console.log(hello());
+=> before, hello: moe, after
+</code></pre>
+<p><strong>compose: 组合函数调用关系，把单独的f(),g(),h()组合成f(g(h()))</strong></p>
+<pre><code>
+var greet    = function(name){ return "A: " + name; };
+var exclaim  = function(statement){ return "B: "+statement + "!"; };
+var welcome = _.compose(exclaim, greet);
+console.log(welcome('moe'));
+=> B: A: moe!
+</code></pre>
+<h2>6. 对象部分</h2>
+<p><strong>新建一个object.js</strong></p>
+<pre><code>
+~ vi object.js
+var _ = require("underscore")._;
+</code></pre>
+<p><strong>keys,values,paris,invert: 取属性名，取属性值，把对象转换成[key,value]数组，对调键值</strong></p>
+<pre><code>
+var obj = {one: 1, two: 2, three: 3}
+console.log(_.keys(obj));
+console.log(_.values(obj));
+console.log(_.pairs(obj));
+console.log(_.invert(obj));
+=&gt; [ 'one', 'two', 'three' ]
+[ 1, 2, 3 ]
+[ [ 'one', 1 ], [ 'two', 2 ], [ 'three', 3 ] ]
+{ '1': 'one', '2': 'two', '3': 'three' }
+</code></pre>
+<p><strong>functions：返回对象的所有方法名</strong></p>
+<pre><code>
+var fun = {
+    fun1:function(){},
+    fun2:function(){}
+}
+console.log(_.functions(fun));
+=&gt; [ 'fun1', 'fun2' ]
+</code></pre>
+<p><strong>extend: 复制对象的所有属性到目标对象上，覆盖已有属性</strong></p>
+<pre><code>
+console.log(
+    _.extend({name : 'moe'}, {age : 50})
+);
+=&gt; { name: 'moe', age: 50 }
+</code></pre>
+<p><strong>defaults: 复制对象的所有属性到目标对象上，跳过已有属性</strong></p>
+<pre><code>
+var iceCream = {flavor : "chocolate"};
+console.log(
+    _.defaults(iceCream, {flavor : "vanilla", sprinkles : "lots"})
+);
+=&gt; { flavor: 'chocolate', sprinkles: 'lots' }
+</code></pre>
+<p><strong>pick,omit: 返回一个对象的副本，保留指定的属性或去掉指定的属性</strong></p>
+<pre><code>
+console.log(
+    _.pick({name : 'moe', age: 50, userid : 'moe1'}, 'name', 'age')
+);
+=&gt; { name: 'moe', age: 50 }
+console.log(
+    _.omit({name : 'moe', age : 50, userid : 'moe1'}, 'userid')
+);
+=&gt; { name: 'moe', age: 50 }
+</code></pre>
+<p><strong>clone: 引入方式克隆对象，不进行复制</strong></p>
+<pre><code>
+console.log(
+   _.clone({name : 'moe'});
+);
+=&gt; {name : 'moe'};
+</code></pre>
+<p><strong>tag: 用对象作为参数来调用函数，作为函数链式调用的一环</strong></p>
+<pre><code>
+console.log(
+    _.chain([1,2,3,200])
+        .filter(function(num) { return num % 2 == 0; })
+        .tap(console.log)
+        .map(function(num) { return num * num })
+        .value()
+);
+=&gt; [ 2, 200 ]
+[ 4, 40000 ]
+</code></pre>
+<p><strong>has: 判断对象是否包含指定的属性名</strong></p>
+<pre><code>
+console.log(_.has({a: 1, b: 2, c: 3}, "b"));
+</code></pre>
+<p><strong>isEqual: 判断两个对象是值相等</strong></p>
+<pre><code>
+var moe   = {name : 'moe', luckyNumbers : [13, 27, 34]};
+var clone = {name : 'moe', luckyNumbers : [13, 27, 34]};
+console.log(moe == clone);
+=&gt; false
+console.log(_.isEqual(moe, clone));
+=&gt; true
+</code></pre>
+<p><strong>判断对象类型的方法，下面反回值都是true</strong></p>
+<pre><code>
+console.log(_.isEmpty({}));
+console.log(_.isArray([1,2,3]));
+console.log(_.isObject({}));
+console.log((function(){ return _.isArguments(arguments); })(1, 2, 3));
+console.log(_.isFunction(console.log));
+console.log(_.isString("moe"));
+console.log(_.isNumber(8.4 * 5));
+console.log(_.isFinite(-101));
+console.log(_.isBoolean(true)); 
+console.log(_.isDate(new Date()));
+console.log(_.isNaN(NaN));
+console.log(_.isNull(null));
+console.log(_.isUndefined(undefined));
+=&gt; true
+</code></pre>
+<h2>7. 实用功能</h2>
+<p><strong>新建一个util.js</strong></p>
+<pre><code>
+~ vi util.js
+var _ = require("underscore")._;
+</code></pre>
+<p><strong>noConflict: 把 &#8220;_&#8221; 变量的控制权预留给它原有的所有者. 返回一个引用给 Underscore 对象.</strong></p>
+<pre><code>
+var underscore = _.noConflict();
+</code></pre>
+<p><strong>identity: 返回与传入参数相等的值. 相当于数学里的: f(x) = x</strong></p>
+<pre><code>
+var moe = {name : 'moe'};
+console.log(moe === _.identity(moe));
+=&gt; true
+</code></pre>
+<p><strong>times: 设计调用次数</strong></p>
+<pre><code>
+_(3).times(function(n){ console.log(n); });
+=&gt; 0
+1
+2
+</code></pre>
+<p><strong>random: 返回范围内的随机数</strong></p>
+<pre><code>
+console.log(_.random(0, 100));
+=&gt; 30
+</code></pre>
+<p><strong>mixin: 封装自己的函数到Underscore对象中，后面Underscore.string就是这种方式的集成</strong></p>
+<pre><code>
+_.mixin({
+    capitalize : function(string) {
+        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
+    }
+});
+console.log(_("fabio").capitalize());
+=&gt; Fabio
+</code></pre>
+<p><strong>uniqueId:产生一个全局的唯一id，以参数作为前缀</strong></p>
+<pre><code>
+console.log(_.uniqueId('contact_'));
+=&gt; contact_1
+console.log(_.uniqueId('contact_'));
+=&gt; contact_2
+</code></pre>
+<p><strong>escape,unescape:转义HTML字符串，反转到HTML字符串</strong></p>
+<pre><code>console.log(_.escape('Curly, Larry &amp; Moe'));
+=&gt; Curly, Larry &amp;amp; Moe
+console.log(_.unescape('Curly, Larry &amp;amp; Moe'));
+=&gt; Curly, Larry &amp; Moe
+</code></pre>
+<p><strong>result: 通过字符串调用对象的函数，或返回属性值</strong></p>
+<pre><code>var obj = {cheese: 'crumpets', stuff: function(){ return 'nonsense'; }};
+console.log(_.result(obj, 'cheese'));
+=&gt; crumpets
+console.log(_.result(obj, 'stuff'));
+=&gt; nonsense
+</code></pre>
+<p><strong>template: 将 JavaScript 模板编译为可以用于页面呈现的函数, 对于通过JSON数据源生成复杂的HTML并呈现出来的操作非常有用. 模板函数可以通过以下两种方式插入到页面中, 使用<tt>&lt;%= … %&gt;</tt>, 也可以用<tt>&lt;% … %&gt;</tt>执行任意的 JavaScript 代码. 如果您希望插入一个值, 并让其进行HTML转义, 当您使用创建一个模板时使用 <tt>&lt;%- … %&gt;</tt> , 传入一个含有与模板对应属性的对象 <b>data</b>. 如果您要写一个一次性的, 您可以传对象 <b>data</b> 作为第二个参数给模板<b>template</b> 来直接呈现, 这样页面会立即呈现而不是返回一个模板函数. 参数 <b>settings</b> 是一个哈希表包含任何可以覆盖的设置 <tt>_.templateSettings</tt>.</strong></p>
+<pre><code>var compiled = _.template("hello: &lt;%= name %&gt;");
+console.log(compiled({name : 'moe'}));
+=&gt;hello: moe
+
+var list = "&lt;% _.each(people, function(name) { %&gt; &lt;li&gt;&lt;%= name %&gt;&lt;/li&gt; &lt;% }); %&gt;";
+console.log(_.template(list, {people : ['moe', 'curly', 'larry']}));
+=&gt; &lt;li&gt;moe&lt;/li&gt; &lt;li&gt;curly&lt;/li&gt; &lt;li&gt;larry&lt;/li&gt;
+
+var template = _.template("&lt;b&gt;&lt;%- value %&gt;&lt;/b&gt;");
+console.log(template({value : '&lt;script&gt;'}));
+=&gt; &lt;b&gt;&amp;lt;script&amp;gt;&lt;/b&gt;
+
+var compiled = _.template("&lt;% print('Hello ' + epithet); %&gt;");
+console.log(compiled({epithet: "stooge"}));
+=&gt;Hello stooge
+
+console.log(_.template("Using 'with': &lt;%= data.answer %&gt;", {answer: 'no'}, {variable: 'data'}));
+=&gt;Using 'with': no
+
+_.templateSettings = {
+interpolate : /\{\{(.+?)\}\}/g
+};
+var template = _.template("Hello {{ name }}!");
+console.log(template({name : "Mustache"}));
+=&gt;Hello Mustache!
+</code></pre>
+<h2>8. 链式语法</h2>
+<p><strong>新建一个chaining.js</strong></p>
+<pre><code>~ vi chaining.js
+var _ = require("underscore")._;
+</code></pre>
+<p><strong>chain: 返回一个封装的对象. 在封装的对象上调用方法会返回封装的对象本身, 直到value() 方法调用为止.</strong></p>
+<pre><code>var stooges = [{name : 'curly', age : 25}, {name : 'moe', age : 21}, {name : 'larry', age : 23}];
+var youngest = _.chain(stooges)
+    .sortBy(function(stooge){ return stooge.age; })
+    .map(function(stooge){ return stooge.name + ' is ' + stooge.age; })
+    .first()
+    .value();
+console.log(youngest);
+=&gt; moe is 21
+</code></pre>
+<p>对一个对象使用 chain 方法, 会把这个对象封装并 让以后每次方法的调用结束后都返回这个封装的对象, 当您完成了计算, 可以使用 value 函数来取得最终的值. 以下是一个同时使用了 map/flatten/reduce 的链式语法例子, 目的是计算一首歌的歌词里每一个单词出现的次数.</p>
+<pre><code>var lyrics = [
+    {line : 1, words : "I'm a lumberjack and I'm okay"},
+    {line : 2, words : "I sleep all night and I work all day"},
+    {line : 3, words : "He's a lumberjack and he's okay"},
+    {line : 4, words : "He sleeps all night and he works all day"}
+];
+console.log(
+    _.chain(lyrics)
+        .map(function(line) { return line.words.split(' '); })
+        .flatten()
+        .reduce(function(counts, word) {
+            counts[word] = (counts[word] || 0) + 1;
+            return counts;
+        }, {})
+        .value()
+);
+=&gt; { 'I\'m': 2,
+  a: 2,
+  lumberjack: 2,
+  and: 4,
+  okay: 2,
+  I: 2,
+  sleep: 1,
+  all: 4,
+  night: 2,
+  work: 1,
+  day: 2,
+  'He\'s': 1,
+  'he\'s': 1,
+  He: 1,
+  sleeps: 1,
+  he: 1,
+  works: 1 }
+</code></pre>
+<p><strong>value: 提取封装对象的最终值，作为chain()结束标志。</strong></p>
+<pre><code>
+console.log(_([1, 2, 3]).value());
+</code></pre>
+<h2>9. 字符串处理Underscore.String</h2>
+<p>安装underscore.string</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-underscore&gt;npm install underscore.string
+npm http GET https://registry.npmjs.org/underscore.string
+npm http 304 https://registry.npmjs.org/underscore.string
+underscore.string@2.3.3 node_modules\underscore.string
+</code></pre>
+<p><strong>新建一个string.js，通过mixin()函数,让underscore.string和underscore集成统计实现_.fun()语法。</strong></p>
+<pre><code>
+~ vi string.js
+
+var _  = require('underscore');
+_.str = require('underscore.string');
+_.mixin(_.str.exports());
+</code></pre>
+<p><strong>字符串的数字格式化</strong></p>
+<pre><code>
+console.log(_.numberFormat(1000, 2));
+=&gt; 1,000.00
+console.log(_.numberFormat(123456789.123, 5, '.', ','));
+=&gt; 123,456,789.12300
+console.log(_('2.556').toNumber());
+=&gt; 3
+console.log(_('2.556').toNumber(2));
+=&gt; 2.56
+console.log(_.sprintf("%.1f", 1.17));
+=&gt; 1.2
+</code></pre>
+<p><strong>字符串基础操作</strong></p>
+<pre><code>
+console.log(_.levenshtein('kitten', 'kittah'));
+=&gt; 2
+console.log(_.capitalize('epeli'));
+=&gt; Epeli
+console.log(_.chop('whitespace', 3));
+=&gt; [ 'whi', 'tes', 'pac', 'e' ]
+console.log(_.clean(" foo    bar   "));
+=&gt; foo bar
+console.log(_.chars('Hello'));
+=&gt; [ 'H', 'e', 'l', 'l', 'o' ]
+console.log(_.swapCase('hELLO'));
+=&gt; Hello
+console.log(_.str.include("foobar", "ob")); //不兼容API，需要用_.str.fun()
+=&gt; true
+console.log(_.str.reverse("foobar"));//不兼容API，需要用_.str.fun()
+=&gt; raboof
+console.log(_('Hello world').count('l'));
+=&gt; 3
+console.log(_('Hello ').insert(6, 'world'));
+=&gt; Hello world
+console.log(_('').isBlank() &amp;&amp; _('\n').isBlank() &amp;&amp; _(' ').isBlank());
+=&gt; true
+console.log(_.join(",", "foo", "bar"));
+=&gt; foo,bar
+console.log(_.lines("Hello\nWorld"));
+=&gt; [ 'Hello', 'World' ]
+console.log(_("image.gif").startsWith("image"));
+=&gt; true
+console.log(_("image.gif").endsWith("gif"));
+=&gt; true
+console.log(_('a').succ());//指下编码的下一个
+=&gt; b
+</code></pre>
+<p><strong>字符串变换</strong></p>
+<pre><code>
+console.log(_.repeat("foo", 3));
+=&gt; foofoofoo
+console.log(_.repeat("foo", 3, "bar"));
+=&gt; foobarfoobarfoo
+console.log(_.surround("foo", "ab"));
+=&gt; abfooab
+console.log(_.quote('foo', "#"));
+=&gt; #foo#
+console.log(_.unquote('"foo"'));
+=&gt; foo
+console.log(_.unquote("'foo'", "'"));
+=&gt; foo
+console.log(_.slugify("Un éléphant à l'orée du bois"));
+=&gt; un-elephant-a-loree-du-bois
+console.log(['foo20', 'foo5'].sort(_.naturalCmp));
+=&gt; [ 'foo5', 'foo20' ]
+console.log(_.toBoolean("true"));
+=&gt; true
+console.log(_.toBoolean("truthy", ["truthy"], ["falsy"]));
+=&gt; true
+console.log(_.toBoolean("true only at start", [/^true/]));
+=&gt; true
+</code></pre>
+<p><strong>字符串替换,截断</strong></p>
+<pre><code>
+console.log(_('https://edtsech@bitbucket.org/edtsech/underscore.strings').splice(30, 7, 'epeli'));
+=&gt; https://edtsech@bitbucket.org/epeli/underscore.strings
+console.log(_.trim("  foobar   "));
+=&gt; foobar
+console.log(_.trim("_-foobar-_", "_-"));
+=&gt; foobar
+console.log(_('Hello world').truncate(5));
+=&gt; Hello...
+console.log(_('Hello, world').prune(5));
+=&gt; Hello...
+console.log(_('Hello, world').prune(5, ' (read a lot more)'));
+=&gt; Hello, world
+console.log(_.words("   I   love   you   "));
+=&gt; [ 'I', 'love', 'you' ]
+console.log(_.words("I-love-you", /-/));
+=&gt; [ 'I', 'love', 'you' ]
+console.log(_('This_is_a_test_string').strRight('_'));
+=&gt; is_a_test_string
+console.log(_('This_is_a_test_string').strRightBack('_'));
+=&gt; string
+console.log(_('This_is_a_test_string').strLeft('_'));
+=&gt; This
+console.log(_('This_is_a_test_string').strLeftBack('_'));
+=&gt; This_is_a_test
+</code></pre>
+<p><strong>字符串占位</strong></p>
+<pre><code>
+console.log(_.pad("1", 8));
+=&gt;        1
+console.log(_.pad("1", 8, '0'));
+=&gt; 00000001
+console.log(_.pad("1", 8, '0', 'right'));
+=&gt; 10000000
+console.log(_.pad("1", 8, 'bleepblorp', 'both'));
+=&gt; bbbb1bbb
+console.log(_.lpad("1", 8, '0'));
+=&gt; 00000001
+console.log(_.rpad("1", 8, '0'));
+=&gt; 10000000
+console.log(_.lrpad("1", 8, '0'));
+=&gt; 00001000
+</code></pre>
+<p><strong>字符串语义处理</strong></p>
+<pre><code>console.log(_.toSentence(['jQuery', 'Mootools', 'Prototype']));
+=&gt; jQuery, Mootools and Prototype
+console.log(_.toSentence(['jQuery', 'Mootools', 'Prototype'], ', ', ' unt '));
+=&gt; jQuery, Mootools unt Prototype
+console.log(_.toSentenceSerial(['jQuery', 'Mootools']));
+=&gt; jQuery and Mootools
+console.log(_.toSentenceSerial(['jQuery', 'Mootools', 'Prototype']));
+=&gt; jQuery, Mootools, and Prototype
+console.log(_('my name is epeli').titleize());
+=&gt; My Name Is Epeli
+console.log(_('-moz-transform').camelize());
+=&gt; MozTransform
+console.log(_('some_class_name').classify());
+=&gt; SomeClassName
+console.log(_('MozTransform').underscored());
+=&gt; moz_transform
+console.log(_('MozTransform').dasherize());
+=&gt; -moz-transform
+console.log(_('  capitalize dash-CamelCase_underscore trim  ').humanize());
+=&gt; Capitalize dash camel case underscore trim
+</code></pre>
+<p><strong>HTML相关操作</strong></p>
+<pre><code>
+console.log(_('&lt;div&gt;Blah blah blah&lt;/div&gt;').escapeHTML());
+=&gt; &amp;lt;div&amp;gt;Blah blah blah&amp;lt;/div&amp;gt;
+console.log(_('&amp;lt;div&amp;gt;Blah blah blah&amp;lt;/div&amp;gt;').unescapeHTML());
+=&gt;&lt;div&gt;Blah blah blah&lt;/div&gt;
+console.log(_('a &lt;a href="#"&gt;link&lt;/a&gt;').stripTags());
+=&gt;a link
+console.log(_('a &lt;a href="#"&gt;link&lt;/a&gt;&lt;script&gt;alert("hello world!")&lt;/script&gt;').stripTags());
+=&gt;a linkalert("hello world!")
+</code></pre>
+<h2>10. 写在最后的话</h2>
+<p>写在最后的话，本来只是想列举一些函数的，做了3遍真是无从取舍，把API就直接搬过来了。Javascript有如此精巧而强大的类库，顿时让我感到Java的大而臃肿。每种语言的发展历程，确实让我看到了从底到顶的不一样，同时也造就了从顶到底也不一样。不管是代码风格，设计模式，思维模式，架构设计等等，所以掌握多门语言是非常重要的，各取其精华相互借鉴，最后才能让我们树立自己的想法，做出开山立派之大事。</p>
+<p>文中实例大部分来自官方：我只做了一些小调整。</p>
+<p>underscore 1.5.1: <a title="underscorejs" href="http://underscorejs.org/" target="_blank">http://underscorejs.org/</a></p>
+<p>underscore中文 1.4.2: <a title="underscore中文" href="http://learning.github.io/underscore" target="_blank">http://learning.github.io/underscore</a></p>
+<p>underscore.string: <a title="underscore.string" href="https://github.com/epeli/underscore.string" target="_blank">https://github.com/epeli/underscore.string</a></p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Underscore实用工具包" href="http://blog.fens.me/nodejs-underscore/" target="_blank">http://blog.fens.me/nodejs-underscore/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-underscore/';
+var disqus_identifier = '2040 http://blog.fens.me/?p=2040';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "UnderscoreJS精巧而强大工具包";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=2040';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

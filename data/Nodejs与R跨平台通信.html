@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Nodejs与R跨平台通信 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Nodejs与R跨平台通信 Comments Feed" href="http://blog.fens.me/r-rserve-nodejs/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='ZooKeeper实现分布式FIFO队列' href='http://blog.fens.me/zookeeper-queue-fifo/' />
+<link rel='next' title='grunt让Nodejs规范起来' href='http://blog.fens.me/nodejs-grunt-intro/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/r-rserve-nodejs/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=1769' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fr-rserve-nodejs%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fr-rserve-nodejs%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,rio,rserve,r" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-1769 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Nodejs与R跨平台通信</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-1769 post type-post status-publish format-standard hentry category-javascript category-r-lang tag-nodejs tag-r tag-rio tag-rserve">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/r-rserve-nodejs/" title="Nodejs与R跨平台通信" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Aug 15, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/r/" rel="tag">R</a><a href="http://blog.fens.me/tag/rio/" rel="tag">rio</a><a href="http://blog.fens.me/tag/rserve/" rel="tag">Rserve</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/r-rserve-nodejs/#comments"><span class="dsq-postid" data-dsqidentifier="1769 http://blog.fens.me/?p=1769">27 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Nodejs与R跨平台通信</h2>
+            <div class="entry">
+                            <p><a title="R的极客理想系列文章" href="http://blog.fens.me/series-r/" target="_blank">R的极客理想系列文章</a>，涵盖了R的思想，使用，工具，创新等的一系列要点，以我个人的学习和体验去诠释R的强大。</p>
+<p>R语言作为统计学一门语言，一直在小众领域闪耀着光芒。直到大数据的爆发，R语言变成了一门炙手可热的数据分析的利器。随着越来越多的工程背景的人的加入，R语言的社区在迅速扩大成长。现在已不仅仅是统计领域，教育，银行，电商，互联网….都在使用R语言。</p>
+<p>要成为有理想的极客，我们不能停留在语法上，要掌握牢固的数学，概率，统计知识，同时还要有创新精神，把R语言发挥到各个领域。让我们一起动起来吧，开始R的极客理想。</p>
+<p><strong>关于作者：</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs与R跨平台通信" href="http://blog.fens.me/r-rserve-nodejs/" target="_blank">http://blog.fens.me/r-rserve-nodejs/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/rserve-nodejs.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/rserve-nodejs.png" alt="rserve-nodejs" width="600" height="400" class="alignnone size-full wp-image-1777" /></a></p>
+<p><strong>前言</strong></p>
+<p>做web开发还没有用过Nodejs的同学，你们已经落后了。Nodejs是基于Javascript实现的一款后台程序开发平台，以我个人的体验开发效率比PHP还要高一些，完全异步加载性能一点也不落后，假以时日还有赶超趋势。</p>
+<p>HTML5做为web前端大量使用Javascript，各种炫效果层出不穷。如果能把R语言的效果图，都用HTML5重新做渲染，并增加时时通信和用户交互，两种语言各取优势，必然产生惊为天人的效果。</p>
+<p>长话短说，今天介绍 Nodejs与R跨平台通信</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Nodejs简单介绍</li>
+<li>R语言配置环境</li>
+<li>Nodejs配置环境</li>
+<li>Nodejs与R跨平台通信</li>
+</ol>
+<h2>1. Nodejs简单介绍</h2>
+<p>Node.js是一个可���快速构建网络服务及应用的平台，基于Chrome&#8217;s JavaScript runtime，也就是说，实际上它是对GoogleV8引擎（应用于Google Chrome浏览器)进行了封装。V8引擎执行Javascript的速度非常快，性能非常好。Node对一些特殊用例进行了优化，提供了替代的API，使得V8在非浏览器环境下运行得更好。</p>
+<h2>2. R语言配置环境</h2>
+<p>本文中介绍的 Nodejs与R的跨平台通信，对于R语言的支持库是Rserve，通过Rserve提供一个R的TCP/IP的通信协议，实现Nodejs和R的通信。关于如何配置Rserve，请参考文章：<a title="Rserve与Java的跨平台通信" href="http://blog.fens.me/r-rserve-java/" target="_blank">Rserve与Java的跨平台通信</a></p>
+<p>我已经在Linux配置好的Rserve环境，进程号9736，端口6311</p>
+<pre><code>
+~ ps -aux|grep Rserve
+conan     9736  0.0  1.2 116288 25440 ?        Ss   13:11   0:01 /usr/lib/R/bin/Rserve --RS-enable-remote
+
+~ netstat -nltp|grep Rserve
+tcp        0      0 0.0.0.0:6311            0.0.0.0:*               LISTEN      9736/Rserve
+</code></pre>
+<h2>3. Nodejs配置环境</h2>
+<p>对于Nodejs环境，也比较简单，以express3库作为基础web框架，rio是让Nodejs与Rserve通信的依赖库。如果是Nodejs的新手从头学习，请参考系列文章：<a href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，如果仅仅搭建一个Nodejs测试环境，请参考文章：<a href="http://blog.fens.me/nodejs-enviroment" target="_blank">准备Nodejs开发环境Ubuntu</a></p>
+<p>现在我们已创建好了Express3的项目(开发环境Win7)</p>
+<p>项目目录：D:\workspace\project\investment\webui</p>
+<pre><code>
+~ D:\workspace\project\investment\webui&gt;ls
+README.md  app.js  models  node-rio-dump.bin  node_modules  package.json  public  routes  views
+</code></pre>
+<p><strong>安装rio库</strong></p>
+<pre><code>
+~ D:\workspace\project\investment\webui&gt;npm install rio
+npm http GET https://registry.npmjs.org/rio
+npm http 200 https://registry.npmjs.org/rio
+npm http GET https://registry.npmjs.org/rio/-/rio-0.9.0.tgz
+npm http 200 https://registry.npmjs.org/rio/-/rio-0.9.0.tgz
+npm http GET https://registry.npmjs.org/hexy
+npm http GET https://registry.npmjs.org/binary
+npm http 200 https://registry.npmjs.org/binary
+npm http 200 https://registry.npmjs.org/hexy
+npm http GET https://registry.npmjs.org/binary/-/binary-0.3.0.tgz
+npm http GET https://registry.npmjs.org/hexy/-/hexy-0.2.5.tgz
+npm http 200 https://registry.npmjs.org/hexy/-/hexy-0.2.5.tgz
+npm http 200 https://registry.npmjs.org/binary/-/binary-0.3.0.tgz
+npm http GET https://registry.npmjs.org/chainsaw
+npm http GET https://registry.npmjs.org/buffers
+npm http 200 https://registry.npmjs.org/buffers
+npm http 200 https://registry.npmjs.org/chainsaw
+npm http GET https://registry.npmjs.org/buffers/-/buffers-0.1.1.tgz
+npm http GET https://registry.npmjs.org/chainsaw/-/chainsaw-0.1.0.tgz
+npm http 200 https://registry.npmjs.org/buffers/-/buffers-0.1.1.tgz
+npm http 200 https://registry.npmjs.org/chainsaw/-/chainsaw-0.1.0.tgz
+npm http GET https://registry.npmjs.org/traverse
+npm http 200 https://registry.npmjs.org/traverse
+npm http GET https://registry.npmjs.org/traverse/-/traverse-0.3.9.tgz
+npm http 200 https://registry.npmjs.org/traverse/-/traverse-0.3.9.tgz
+rio@0.9.0 node_modules\rio
+├── hexy@0.2.5
+└── binary@0.3.0 (buffers@0.1.1, chainsaw@0.1.0)
+</code></pre>
+<h2>4. Nodejs与R跨平台通信</h2>
+<p>下面我们开始写程序，来实现跨平台的通信。</p>
+<p>在app.js配置文件中，增加一个路由路径</p>
+<pre><code>
+~ vi app.js
+//代码有省略
+var vis = require('./routes/vis')
+app.get('/vis/rio',vis.rio);
+</code></pre>
+<p>在路由目录/routes增加一个路由文件vis.js</p>
+<pre><code>
+~ vi /routes/vis.js
+
+var rio = require("rio");
+exports.rio = function(req, res){
+	options = {
+		host : "192.168.1.201",
+		port : 6311,
+        callback: function (err, val) {
+            if (!err) {
+            	console.log("RETURN:"+val);
+            	return res.send({'success':true,'res':val});
+            } else {
+            	console.log("ERROR:Rserve call failed")
+            	return res.send({'success':false});
+            }
+        },
+    }
+    rio.enableDebug(true);//开启调试模式
+    rio.evaluate("pi / 2 * 2 * 2",options);//运行R代码
+};
+</code></pre>
+<p>在上面代码中，我们实现了rio与rserve的远程连接。以R的命令(pi / 2 * 2 * 2)作为参数，传给Rserve。通过callback的方法，获得R的返回值。</p>
+<p><strong>在浏览器中测试：</strong><br />
+http://localhost:3000/vis/rio<br />
+在浏览器中返回：是一个json格式的对象</p>
+<pre><code>{
+  "success": true,
+  "res": 6.283185307179586
+}</code></pre>
+<p><strong>命令行日志</strong></p>
+<pre><code>
+Connected to Rserve
+Supported capabilities --------------
+
+Sending command to Rserve
+00000000: 0300 0000 1400 0000 0000 0000 0000 0000  ................
+00000010: 0410 0000 7069 202f 2032 202a 2032 202a  ....pi./.2.*.2.*
+00000020: 2032 0001                                .2..
+
+Data packet
+00000000: 2108 0000 182d 4454 fb21 1940            !....-DT{!.@
+
+Type SEXP 33
+Response value: 6.283185307179586
+RETURN:6.283185307179586
+GET /vis/rio 200 33ms - 49b
+Disconnected from Rserve
+Closed from Rserve
+</code></pre>
+<p>我可以看到nodejs与Rserve的通信情况，Response value: 6.283185307179586，与页面上面是一致的。</p>
+<p><strong>接下来，我们改一下R的运行命令：</strong><br />
+rnorm(10)，取10个符合N(0,1)正态分布的随机数</p>
+<pre><code>
+rio.evaluate("rnorm(10)",options);//运行R代码
+</code></pre>
+<p><strong>浏览器返回结果</strong></p>
+<pre><code>
+{
+  "success": true,
+  "res": [
+    -0.011531884725262991,
+    0.5106443501593562,
+    -0.05216533321965309,
+    1.9221980152236238,
+    0.5205238122633465,
+    -0.3275367539102907,
+    -0.06588102930129405,
+    1.5410418730008988,
+    1.308169913050071,
+    0.005044179478212583
+  ]
+}
+</code></pre>
+<p><strong>命令行日志</strong></p>
+<pre><code>
+Connected to Rserve
+Supported capabilities --------------
+
+Sending command to Rserve
+00000000: 0300 0000 1000 0000 0000 0000 0000 0000  ................
+00000010: 040c 0000 726e 6f72 6d28 3130 2900 0101  ....rnorm(10)...
+
+Data packet
+00000000: 2150 0000 f6ca 0c5e 079e 87bf 9b4a fad1  !P..vJ.^...?.JzQ
+00000010: 3257 e03f eda2 5320 6ab5 aabf 2b25 bdb4  2W`?m"S.j5*?+%=4
+00000020: 52c1 fe3f ebba ce8d 21a8 e03f bc17 92b7  RA~?k:N.!(`?<..7
+00000030: 5cf6 d4bf ca9f 4642 94dd b0bf 1be3 e485  \vT?J.FB.]0?.cd.
+00000040: 1ba8 f83f 5a94 2293 43ee f43f 1724 4e9e  .(x?Z.".Cnt?.$N.
+00000050: 34a9 743f                                4)t?
+
+Type SEXP 33
+Response value: -0.011531884725262991,0.5106443501593562,-0.05216533321965309,1.9221980152236238,0.5205238122633465,-0.3
+275367539102907,-0.06588102930129405,1.5410418730008988,1.308169913050071,0.005044179478212583
+RETURN:-0.011531884725262991,0.5106443501593562,-0.05216533321965309,1.9221980152236238,0.5205238122633465,-0.3275367539
+102907,-0.06588102930129405,1.5410418730008988,1.308169913050071,0.005044179478212583
+GET /vis/rio 200 30ms - 285b
+Disconnected from Rserve
+Closed from Rserve
+</code></pre>
+<p>我们实现了Nodejs与R跨平台通信，有点感觉像打通了中国功夫的“任督二脉”，从此以后，成为一代高手。</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs与R跨平台通信" href="http://blog.fens.me/r-rserve-nodejs/" target="_blank">http://blog.fens.me/r-rserve-nodejs/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a>, <a href="http://blog.fens.me/category/r-lang/" rel="category tag">R语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-267">
+        <div id="dsq-comment-header-267" class="dsq-comment-header">
+            <cite id="dsq-cite-267">
+                <a id="dsq-author-user-267" href="http://blog.cloud-mes.com/" target="_blank" rel="nofollow">Eric Guo</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-267" class="dsq-comment-body">
+            <div id="dsq-comment-message-267" class="dsq-comment-message"><p>好文章！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-269">
+        <div id="dsq-comment-header-269" class="dsq-comment-header">
+            <cite id="dsq-cite-269">
+                <a id="dsq-author-user-269" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-269" class="dsq-comment-body">
+            <div id="dsq-comment-message-269" class="dsq-comment-message"><p>谢谢！:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-275">
+        <div id="dsq-comment-header-275" class="dsq-comment-header">
+            <cite id="dsq-cite-275">
+                <span id="dsq-author-user-275">Hankewins</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-275" class="dsq-comment-body">
+            <div id="dsq-comment-message-275" class="dsq-comment-message"><p>很不错！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1047">
+        <div id="dsq-comment-header-1047" class="dsq-comment-header">
+            <cite id="dsq-cite-1047">
+                <span id="dsq-author-user-1047">酷酷虫</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1047" class="dsq-comment-body">
+            <div id="dsq-comment-message-1047" class="dsq-comment-message"><p>楼主，这是大数据的节奏么，越来越跟不上你的节奏了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1050">
+        <div id="dsq-comment-header-1050" class="dsq-comment-header">
+            <cite id="dsq-cite-1050">
+                <a id="dsq-author-user-1050" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1050" class="dsq-comment-body">
+            <div id="dsq-comment-message-1050" class="dsq-comment-message"><p>大数据只是其中一部分</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1906">
+        <div id="dsq-comment-header-1906" class="dsq-comment-header">
+            <cite id="dsq-cite-1906">
+                <a id="dsq-author-user-1906" href="http://www.lingyong.me/" target="_blank" rel="nofollow">lingyong</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1906" class="dsq-comment-body">
+            <div id="dsq-comment-message-1906" class="dsq-comment-message"><p>我想问问node.js如何通过rpc与java通信？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1907">
+        <div id="dsq-comment-header-1907" class="dsq-comment-header">
+            <cite id="dsq-cite-1907">
+                <a id="dsq-author-user-1907" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1907" class="dsq-comment-body">
+            <div id="dsq-comment-message-1907" class="dsq-comment-message"><p>找个rpc的网络包，应该就行了。我还没有试过。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2100">
+        <div id="dsq-comment-header-2100" class="dsq-comment-header">
+            <cite id="dsq-cite-2100">
+                <span id="dsq-author-user-2100">Daniel Teng</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2100" class="dsq-comment-body">
+            <div id="dsq-comment-message-2100" class="dsq-comment-message"><p>請問要如何透過RServe傳指令讓R畫圖，然後取得該張圖形？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2104">
+        <div id="dsq-comment-header-2104" class="dsq-comment-header">
+            <cite id="dsq-cite-2104">
+                <a id="dsq-author-user-2104" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2104" class="dsq-comment-body">
+            <div id="dsq-comment-message-2104" class="dsq-comment-message"><p>你可以参考这篇文章实现：<br />
+<a href="http://blog.fens.me/r-fastrweb-rserve/" rel="nofollow">http://blog.fens.me/r-fastrweb-rserve/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2157">
+        <div id="dsq-comment-header-2157" class="dsq-comment-header">
+            <cite id="dsq-cite-2157">
+                <span id="dsq-author-user-2157">暗夜行路</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2157" class="dsq-comment-body">
+            <div id="dsq-comment-message-2157" class="dsq-comment-message"><p>楼主您好，我希望我的网站能从后台数据库里读取数据，并做主成分分析，因为node.js没有“主成分分析”的功能吧，那能不能在R里面编写“主成分分析”的代码，然后通过什么接口移植到node.js里？如果R没有沟通node.js的接口，那matlab，Excel，spass，eviews或者sas可以吗？因为网站底部建模急需做主成分分析，谢谢哈！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2163">
+        <div id="dsq-comment-header-2163" class="dsq-comment-header">
+            <cite id="dsq-cite-2163">
+                <a id="dsq-author-user-2163" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2163" class="dsq-comment-body">
+            <div id="dsq-comment-message-2163" class="dsq-comment-message"><p>1. Node好像没有现成的包 作主成分析。<br />
+2. R可以很方便的现实主成，这篇文章就是Node调用R。<br />
+3. 我不熟悉你说的其他软件。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4159">
+        <div id="dsq-comment-header-4159" class="dsq-comment-header">
+            <cite id="dsq-cite-4159">
+                <span id="dsq-author-user-4159">康富城</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4159" class="dsq-comment-body">
+            <div id="dsq-comment-message-4159" class="dsq-comment-message"><p>樓主您好,我還是個nodejs新手,想請教幾個問題：<br />
+1. 這篇是否可用在express4？<br />
+2.因為我是在ubuntu開發的,想請問項目目錄是否就在/usr/share/javascript/nodejs-demo中？<br />
+3.在���4步驟中,那個host的192.168.1.201是在哪裡看出來的？<br />
+（我測試在express4的都是false&#8230;）</p>
+<p>還請多多指教,謝謝您！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4161">
+        <div id="dsq-comment-header-4161" class="dsq-comment-header">
+            <cite id="dsq-cite-4161">
+                <a id="dsq-author-user-4161" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4161" class="dsq-comment-body">
+            <div id="dsq-comment-message-4161" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4932">
+        <div id="dsq-comment-header-4932" class="dsq-comment-header">
+            <cite id="dsq-cite-4932">
+                <a id="dsq-author-user-4932" href="https://snakecy.github.io" target="_blank" rel="nofollow">Andy Chow</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4932" class="dsq-comment-body">
+            <div id="dsq-comment-message-4932" class="dsq-comment-message"><p>灰常感谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4936">
+        <div id="dsq-comment-header-4936" class="dsq-comment-header">
+            <cite id="dsq-cite-4936">
+                <a id="dsq-author-user-4936" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4936" class="dsq-comment-body">
+            <div id="dsq-comment-message-4936" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-5040">
+        <div id="dsq-comment-header-5040" class="dsq-comment-header">
+            <cite id="dsq-cite-5040">
+                <span id="dsq-author-user-5040">zjh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5040" class="dsq-comment-body">
+            <div id="dsq-comment-message-5040" class="dsq-comment-message"><p>hi 你好 我出现了这样的错误command or filename or entrypoint need to be filled.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-admin bypostauthor even depth-2" id="dsq-comment-5041">
+        <div id="dsq-comment-header-5041" class="dsq-comment-header">
+            <cite id="dsq-cite-5041">
+                <a id="dsq-author-user-5041" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5041" class="dsq-comment-body">
+            <div id="dsq-comment-message-5041" class="dsq-comment-message"><p>错误信息太少，看不出来问题。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-5042">
+        <div id="dsq-comment-header-5042" class="dsq-comment-header">
+            <cite id="dsq-cite-5042">
+                <span id="dsq-author-user-5042">zjh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5042" class="dsq-comment-body">
+            <div id="dsq-comment-message-5042" class="dsq-comment-message"><p>您好  请问 这个案例 我总是出现这个问题</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-5043">
+        <div id="dsq-comment-header-5043" class="dsq-comment-header">
+            <cite id="dsq-cite-5043">
+                <a id="dsq-author-user-5043" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5043" class="dsq-comment-body">
+            <div id="dsq-comment-message-5043" class="dsq-comment-message"><p>这里有一个约束解释<br />
+<a href="https://github.com/albertosantini/node-rio/issues/22" rel="nofollow">https://github.com/albertosantini/node-rio/issues/22</a></p>
+<p>Constraints</p>
+<p>command OR filename OR entrypoint need to be filled.<br />
+Otherwise it is missing the evaluation object.</p>
+<p>if command AND filename AND entrypoint are empty then error.<br />
+As above, said in different way.</p>
+<p>command AND filename are exclusive: if both are not empty then error.<br />
+Otherwise what does rio evaluate, command or filename?</p>
+<p>if command AND filename are empty then entrypoint is mandatory.<br />
+This is the case when rio evaluates a function defined on R side.</p>
+<p>host AND path are exclusive.<br />
+rio needs to choose beetween net socket or unix socket.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-5044">
+        <div id="dsq-comment-header-5044" class="dsq-comment-header">
+            <cite id="dsq-cite-5044">
+                <a id="dsq-author-user-5044" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5044" class="dsq-comment-body">
+            <div id="dsq-comment-message-5044" class="dsq-comment-message"><p>你的R的执行代码写错了吧。。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-5045">
+        <div id="dsq-comment-header-5045" class="dsq-comment-header">
+            <cite id="dsq-cite-5045">
+                <span id="dsq-author-user-5045">zjh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5045" class="dsq-comment-body">
+            <div id="dsq-comment-message-5045" class="dsq-comment-message"><p>我发现了 您用的rio 库 是 0.9.0 版  ，和最新的2.4.1 版 中 的evaluate 函数 有很大不同。<br />
+0.9.0里的 ： function evaluate(cmd, options) {</p>
+<p>    sendAction(cmd, CMD_TYPE.EVAL, &#8220;Sending command to Rserve&#8221;, options);</p>
+<p>}</p>
+<p>&#8212;&#8212;<br />
+2.4.1里的   ： </p>
+<p>&#8220;use strict&#8221;;</p>
+<p>var fs = require(&#8220;fs&#8221;),</p>
+<p>    main = require(&#8220;./main&#8221;),</p>
+<p>    config = require(&#8220;./config&#8221;);</p>
+<p>function evaluate(params) {</p>
+<p>    var cmd = params.command || &#8220;&#8221;,</p>
+<p>        filename = params.filename || &#8220;&#8221;,</p>
+<p>        entrypoint = params.entrypoint || &#8220;&#8221;,</p>
+<p>        options = params;</p>
+<p>    if (!cmd &amp;&amp; !filename &amp;&amp; !entrypoint) {</p>
+<p>        throw new Error(&#8220;command or filename or entrypoint need to be filled.&#8221;);</p>
+<p>    }</p>
+<p>    if (cmd &amp;&amp; filename) {</p>
+<p>        throw new Error(&#8220;command and filename are exclusive.&#8221;);</p>
+<p>    }</p>
+<p>    if (params.host &amp;&amp; params.path) {</p>
+<p>        throw new Error(&#8220;host and path are exclusive.&#8221;);</p>
+<p>    }</p>
+<p>    if (filename) {</p>
+<p>        cmd = fs.readFileSync(filename, &#8220;utf8&#8221;);</p>
+<p>        cmd = cmd.replace(/(rn)/g, &#8220;n&#8221;);</p>
+<p>    }</p>
+<p>    if (entrypoint) {</p>
+<p>        cmd += &#8220;n&#8221; + entrypoint + &#8220;(&#8220;;</p>
+<p>        if (params.data) {</p>
+<p>            cmd += &#8220;&#8216;&#8221; + JSON.stringify(params.data) + &#8220;&#8216;)&#8221;;</p>
+<p>        } else {</p>
+<p>            cmd += &#8220;)&#8221;;</p>
+<p>        }</p>
+<p>    }</p>
+<p>    main.sendAction(cmd, config.CMD_TYPE.EVAL,</p>
+<p>        &#8220;Sending command to Rserve&#8221;, options);</p>
+<p>    return this;</p>
+<p>}</p>
+<p>exports.evaluate = evaluate;</p>
+<p>&#8212;<br />
+我是小白 ，还不知道怎么改 ，所以继续叨扰您了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-5047">
+        <div id="dsq-comment-header-5047" class="dsq-comment-header">
+            <cite id="dsq-cite-5047">
+                <a id="dsq-author-user-5047" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5047" class="dsq-comment-body">
+            <div id="dsq-comment-message-5047" class="dsq-comment-message"><p>参考他提供的例子写。</p>
+<p>rio.E({command: &#8220;2+2&#8221;});</p>
+<p>rio.E({<br />
+filename: path.join(__dirname, &#8220;ex2.R&#8221;)<br />
+entrypoint: &#8220;getOptimalPortfolio&#8221;,<br />
+data: myData,<br />
+callback: displayResponse<br />
+});</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-5048">
+        <div id="dsq-comment-header-5048" class="dsq-comment-header">
+            <cite id="dsq-cite-5048">
+                <span id="dsq-author-user-5048">zjh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5048" class="dsq-comment-body">
+            <div id="dsq-comment-message-5048" class="dsq-comment-message"><p>张老师您好，再请教一下，怎样把req.query得到的参数，传递给R计算 ？比如说var a=req；rio.evaluate(&#8220;a+2&#8221;,options) ，怎么让R 可以读取a 的值呢？ 谢谢。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-5058">
+        <div id="dsq-comment-header-5058" class="dsq-comment-header">
+            <cite id="dsq-cite-5058">
+                <a id="dsq-author-user-5058" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5058" class="dsq-comment-body">
+            <div id="dsq-comment-message-5058" class="dsq-comment-message"><p>a在js里面是变量，传到R就是对应的值，不能是变量了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-5067">
+        <div id="dsq-comment-header-5067" class="dsq-comment-header">
+            <cite id="dsq-cite-5067">
+                <span id="dsq-author-user-5067">zjh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5067" class="dsq-comment-body">
+            <div id="dsq-comment-message-5067" class="dsq-comment-message"><p>您好 ，如果不以res 返回的话 ，返回值undefined 是否是因为异步的问题，该如何解决？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-5070">
+        <div id="dsq-comment-header-5070" class="dsq-comment-header">
+            <cite id="dsq-cite-5070">
+                <a id="dsq-author-user-5070" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5070" class="dsq-comment-body">
+            <div id="dsq-comment-message-5070" class="dsq-comment-message"><p>返回值在callback里定义，</p>
+<p>callback(err, val)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/r-rserve-nodejs/';
+var disqus_identifier = '1769 http://blog.fens.me/?p=1769';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Nodejs与R跨平台通信";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=1769';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

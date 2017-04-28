@@ -1,0 +1,3717 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Nodejs开发框架Express3.0开发手记–从零开始 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Nodejs开发框架Express3.0开发手记–从零开始 Comments Feed" href="http://blog.fens.me/nodejs-express3/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='在Ubuntu上安装PPTP VPN服务' href='http://blog.fens.me/ubuntu-vpn-pptp/' />
+<link rel='next' title='Mongoose使用案例–让JSON数据直接入库MongoDB' href='http://blog.fens.me/nodejs-mongoose-json/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-express3/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=146' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-express3%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-express3%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="javascript,nodejs,express3,ejs,Mongoose,bootstrap" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-146 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Nodejs开发框架Express3.0开发手记–从零开始</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-146 post type-post status-publish format-standard hentry category-javascript tag-bootstrap tag-ejs tag-express tag-javascript tag-mongodb tag-mongoose tag-nodejs tag-session">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-express3/" title="Nodejs开发框架Express3.0开发手记–从零开始" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">May 14, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/bootstrap/" rel="tag">bootstrap</a><a href="http://blog.fens.me/tag/ejs/" rel="tag">ejs</a><a href="http://blog.fens.me/tag/express/" rel="tag">express</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/mongodb/" rel="tag">Mongodb</a><a href="http://blog.fens.me/tag/mongoose/" rel="tag">Mongoose</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/session/" rel="tag">session</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-express3/#comments"><span class="dsq-postid" data-dsqidentifier="146 http://blog.fens.me/?p=146">200 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Nodejs开发框架Express3.0开发手记–从零开始</h2>
+            <div class="entry">
+                            <h2>前言</h2>
+<p>Nodejs给Javascript赋予了服务端应用的生命，Jquery让Javascript成为浏览中开发的利器。 最近学习了Nodejs的Express3.0的开发框架，本来是按照“node.js开发指南”书中介绍，但“node.js开发指南”讲的是Express2.x的，从Express2.x到Express3.0自己模索中还是走了不少弯路的。写篇文章总结一下。</p>
+<h2>关于作者</h2>
+<p>张丹(Conan), 程序员Java,R,PHP,Javacript<br />
+weibo：@Conan_Z<br />
+blog: http://blog.fens.me<br />
+email: bsspirit@gmail.com</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs开发框架Express3.0开发手记--从零开始" href="http://blog.fens.me/nodejs-express3/" target="_blank">http://blog.fens.me/nodejs-express3/</a></p>
+<p><strong>程序代码已经上传到github有需要的同学，自行下载。</strong><br />
+<a title="github工程" href="https://github.com/bsspirit/nodejs-demo" target="_blank">https://github.com/bsspirit/nodejs-demo</a></p>
+<p><a title="Nodejs开发框架Express3.0开发手记--从零开始" href="http://blog.fens.me/wp-content/uploads/2013/05/nodejs-1.png"><img class="alignnone size-full wp-image-171" alt="nodejs intro" src="http://blog.fens.me/wp-content/uploads/2013/05/nodejs-1.png" width="600" height="400" /></a></p>
+<p><strong>从零开始nodejs系列文章</strong></p>
+<p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站���个性化网站，我们自己的Geek网站！！</p>
+<h2>目录</h2>
+<p>此文重点介绍Express3.0的开发框架，其中还会涉及到Mongoose,Ejs,Bootstrap等相关内容。<br />
+<strong>Express已经升级到4.x，请同时参考文章，<a href="http://blog.fens.me/nodejs-express4/" target="_blank">Node.js开发框架Express4.x</a></strong></p>
+<ol>
+<li>建立工程</li>
+<li>目录结构</li>
+<li>Express3.0配置文件</li>
+<li>Ejs模板使用</li>
+<li>Bootstrap界面框架</li>
+<li>路由功能</li>
+<li>Session使用</li>
+<li>页面提示</li>
+<li>页面访问控制</li>
+</ol>
+<h2>开发环境：</h2>
+<p><strong>Win7旗舰版 64bit</strong></p>
+<p><strong>MonogoDB: v2.4.3</strong></p>
+<pre><code>
+Tue May 14 09:24:50.118 [initandlisten] MongoDB starting : pid=1716 port=27017 dbpath=./data 64-bit host=PC201304202140
+Tue May 14 09:24:50.119 [initandlisten] db version v2.4.3
+Tue May 14 09:24:50.119 [initandlisten] git version: fe1743177a5ea03e91e0052fb5e2cb2945f6d95f
+Tue May 14 09:24:50.119 [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+Tue May 14 09:24:50.119 [initandlisten] allocator: system
+Tue May 14 09:24:50.119 [initandlisten] options: { dbpath: "./data" }
+Tue May 14 09:24:50.188 [initandlisten] journal dir=./data\journal
+Tue May 14 09:24:50.189 [initandlisten] recover : no journal files present, no recovery needed
+Tue May 14 09:24:50.441 [initandlisten] preallocateIsFaster=true 3.26
+Tue May 14 09:24:50.778 [initandlisten] preallocateIsFaster=true 5.88
+Tue May 14 09:24:51.827 [initandlisten] waiting for connections on port 27017
+Tue May 14 09:24:51.827 [websvr] admin web console waiting for connections on port 28017
+</code></pre>
+<p><strong>nodejs: v0.10.5, npm 1.2.19</strong></p>
+<pre><code>node -v
+v0.10.5
+npm -v
+1.2.19
+</code></pre>
+<h2>1. 建立工程</h2>
+<p><strong>进入工程目录</strong></p>
+<pre><code>
+cd D:\workspace\project
+</code></pre>
+<p><strong>全局安装express，express作为命令被安装到了系统中</strong></p>
+<pre><code>
+npm install -g express
+</code></pre>
+<p><strong>查看express版本</strong></p>
+<pre><code>
+express -V
+3.2.2
+</code></pre>
+<p><strong>使用express命令创建工程，并支持ejs</strong></p>
+<pre><code>
+D:\workspace\project&gt;express -e nodejs-demo
+
+create : nodejs-demo
+create : nodejs-demo/package.json
+create : nodejs-demo/app.js
+create : nodejs-demo/public
+create : nodejs-demo/public/javascripts
+create : nodejs-demo/public/images
+create : nodejs-demo/public/stylesheets
+create : nodejs-demo/public/stylesheets/style.css
+create : nodejs-demo/routes
+create : nodejs-demo/routes/index.js
+create : nodejs-demo/routes/user.js
+create : nodejs-demo/views
+create : nodejs-demo/views/index.ejs
+
+install dependencies:
+$ cd nodejs-demo &amp;&amp; npm install
+run the app:
+$ node app
+</code></pre>
+<p><strong>根据提示，下载依赖包</strong></p>
+<pre><code>
+cd nodejs-demo &amp;&amp; npm install
+
+express@3.2.2 node_modules\express
+├── methods@0.0.1
+├── fresh@0.1.0
+├── buffer-crc32@0.2.1
+├── range-parser@0.0.4
+├── cookie-signature@1.0.1
+├── cookie@0.0.5
+├── qs@0.6.3
+├── commander@0.6.1
+├── debug@0.7.2
+├── mkdirp@0.3.4
+├── send@0.1.0 (mime@1.2.6)
+└── connect@2.7.8 (pause@0.0.1, bytes@0.2.0, formidable@1.0.13)
+</code></pre>
+<p><strong>模板项目建立成功，启动模板项目。</strong></p>
+<pre><code>
+D:\workspace\project\nodejs-demo&gt;node app.js
+Express server listening on port 3000
+</code></pre>
+<p>本地的3000端口被打开，通过浏览器访问: localhost:3000</p>
+<p>通过node启动程序，每次代码修改都需要重新启动。 有一个工具supervisor，每次修改代码后会自动重启，会我们开发省很多的时间。</p>
+<pre><code>
+npm install supervisor
+</code></pre>
+<p><strong>再启动服务</strong></p>
+<pre><code>
+D:\workspace\project\nodejs-demo&gt;supervisor app.js
+
+DEBUG: Running node-supervisor with
+DEBUG: program 'app.js'
+DEBUG: --watch '.'
+DEBUG: --ignore 'undefined'
+DEBUG: --extensions 'node|js'
+DEBUG: --exec 'node'
+
+DEBUG: Starting child process with 'node app.js'
+DEBUG: Watching directory 'D:\workspace\project\nodejs-demo' for changes.
+Express server listening on port 3000
+</code></pre>
+<p>&nbsp;</p>
+<h2>2. 目录结构</h2>
+<p>D:\workspace\project\nodejs-demo&gt;dir</p>
+<p>2013/05/14 09:42 877 app.js<br />
+2013/05/14 09:48 &lt;DIR&gt; node_modules<br />
+2013/05/14 09:42 184 package.json<br />
+2013/05/14 09:42 &lt;DIR&gt; public<br />
+2013/05/14 09:42 &lt;DIR&gt; routes<br />
+2013/05/14 09:42 &lt;DIR&gt; views</p>
+<p><strong>目录介绍：</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">node_modules, 存放所有的项目依赖库。(每个项目管理自己的依赖，与Maven,Gradle等不同)</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">package.json，项目依赖配置及开发者信息</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">app.js，程序启动文件</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">public，静态文件(css,js,img)</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">routes，路由文件(MVC中的C,controller)</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">Views，页面文件(Ejs模板)</span></li>
+</ul>
+<h2>3. Express3.0配置文件</h2>
+<p><strong>打开app.js文件</strong></p>
+<pre><code>
+/**
+* 模块依赖
+*/
+var express = require('express')
+, routes = require('./routes')
+, user = require('./routes/user')
+, http = require('http')
+, path = require('path');
+
+var app = express();
+
+//环境变量
+app.set('port', process.env.PORT || 3000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 开发模式
+if ('development' == app.get('env')) {
+app.use(express.errorHandler());
+}
+
+// 路径解析
+app.get('/', routes.index);
+app.get('/users', user.list);
+
+// 启动及端口
+http.createServer(app).listen(app.get('port'), function(){
+console.log('Express server listening on port ' + app.get('port'));
+});
+</code></pre>
+<p>&nbsp;</p>
+<h2>4. Ejs模板使用</h2>
+<p>让ejs模板文件，使用扩展名为html的文件。</p>
+<p><strong>修改：app.js</strong></p>
+<pre><code>
+app.engine('.html', ejs.__express);
+app.set('view engine', 'html');// app.set('view engine', 'ejs');
+</code></pre>
+<p><strong>修改后，ejs变量没有定义，supervisor的程序会一直报错</strong></p>
+<pre><code>
+ReferenceError: ejs is not defined
+at Object. (D:\workspace\project\nodejs-demo\app.js:17:21)
+at Module._compile (module.js:456:26)
+at Object.Module._extensions..js (module.js:474:10)
+at Module.load (module.js:356:32)
+at Function.Module._load (module.js:312:12)
+at Function.Module.runMain (module.js:497:10)
+at startup (node.js:119:16)
+at node.js:901:3
+DEBUG: Program node app.js exited with code 8
+</code></pre>
+<p><strong>在app.js中增加ejs变量</strong></p>
+<pre><code>
+var express = require('express')
+, routes = require('./routes')
+, user = require('./routes/user')
+, http = require('http')
+, path = require('path')
+, ejs = require('ejs');
+</code></pre>
+<p><strong>访问localhost:3000，程序报错</strong></p>
+<pre><code>
+Error: Failed to lookup view "index"
+at Function.app.render (D:\workspace\project\nodejs-demo\node_modules\express\lib\application.js:495:17)
+at ServerResponse.res.render (D:\workspace\project\nodejs-demo\node_modules\express\lib\response.js:756:7)
+at exports.index (D:\workspace\project\nodejs-demo\routes\index.js:7:7)
+at callbacks (D:\workspace\project\nodejs-demo\node_modules\express\lib\router\index.js:161:37)
+at param (D:\workspace\project\nodejs-demo\node_modules\express\lib\router\index.js:135:11)
+at pass (D:\workspace\project\nodejs-demo\node_modules\express\lib\router\index.js:142:5)
+at Router._dispatch (D:\workspace\project\nodejs-demo\node_modules\express\lib\router\index.js:170:5)
+at Object.router (D:\workspace\project\nodejs-demo\node_modules\express\lib\router\index.js:33:10)
+at next (D:\workspace\project\nodejs-demo\node_modules\express\node_modules\connect\lib\proto.js:190:15)
+at Object.methodOverride [as handle] (D:\workspace\project\nodejs-demo\node_modules\express\node_modules\connect\lib\middleware\methodOverride.js:37:5)
+GET / 500 26ms
+</code></pre>
+<p><strong>重命名：views/indes.ejs 为 views/index.html</strong></p>
+<p>访问localhost:3000正确</p>
+<p>&nbsp;</p>
+<h2>5. 增加Bootstrap界面框架</h2>
+<p>其实就是把js,css文件复制到项目中对应该的目录里。 包括4个文件：</p>
+<p>复制到public/stylesheets目录</p>
+<pre><code>
+bootstrap.min.css
+bootstrap-responsive.min.css
+</code></pre>
+<p>复制到public/javascripts目录</p>
+<pre><code>
+bootstrap.min.js
+jquery-1.9.1.min.js
+</code></pre>
+<p>接下来，我们把index.html页面切分成3个部分：header.html, index.html, footer.html</p>
+<p>header.html, 为html页面的头部区域<br />
+index.html, 为内容显示区域<br />
+footer.html，为页面底部区域</p>
+<p><strong>header.html</strong></p>
+<pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;title&gt;&lt;%=: title %&gt;&lt;/title&gt;
+&lt;!-- Bootstrap --&gt;
+&lt;link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen"&gt;
+&lt;!-- &lt;link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen"&gt; --&gt;
+&lt;/head&gt;
+&lt;body screen_capture_injected="true"&gt;
+</code></pre>
+<p><strong>index.html</strong></p>
+<pre><code>
+&lt;% include header.html %&gt;
+&lt;h1&gt;&lt;%= title %&gt;&lt;/h1&gt;
+&lt;p&gt;Welcome to &lt;%= title %&gt;&lt;/p&gt;
+&lt;% include footer.html %&gt;
+</code></pre>
+<p>注：express3.0时，ejs嵌入其他页面时使用include，express2.x用法不一样。</p>
+<p><strong>footer.html</strong></p>
+<pre><code>
+&lt;script src="/javascripts/jquery-1.9.1.min.js"&gt;&lt;/script&gt;
+&lt;script src="/javascripts/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>访问localhost:3000正确。</p>
+<p>我们已经成功的使用了EJS模板的功能，把公共的头部和底部从页面中分离出来了。</p>
+<p>并已经引入了bootstrap界面框架，后面讲到“登陆界面”的时候，就会看到bootstrap界面效果了。</p>
+<p>&nbsp;</p>
+<h2>6. 路由功能</h2>
+<p>我们设计一下用户登陆业务需求。</p>
+<p>访问路径：/，页面：index.html，不需要登陆，可以直接访问。<br />
+访问路径：/home，页面：home.html，必须用户登陆后，才可以访问。<br />
+访问路径：/login，页面：login.html，登陆页面，用户名密码输入正确，自动跳转到home.html<br />
+访问路径：/logout，页面：无，退出登陆后，自动回到index.html页面<br />
+打开app.js文件，在增加路由配置</p>
+<pre><code>
+app.get('/', routes.index);
+app.get('/login', routes.login);
+app.post('/login', routes.doLogin);
+app.get('/logout', routes.logout);
+app.get('/home', routes.home);
+</code></pre>
+<p>注：get为get请求，post为post请求，all为所有针对这个路径的请求</p>
+<p>我们打开routes/index.js文件，增加对应的方法。</p>
+<pre><code>
+exports.index = function(req, res){
+res.render('index', { title: 'Index' });
+};
+exports.login = function(req, res){
+res.render('login', { title: '用户登陆'});
+};
+exports.doLogin = function(req, res){
+var user={
+username:'admin',
+password:'admin'
+}
+if(req.body.username===user.username &amp;&amp; req.body.password===user.password){
+res.redirect('/home');
+}
+res.redirect('/login');
+};
+exports.logout = function(req, res){
+res.redirect('/');
+};
+exports.home = function(req, res){
+var user={
+username:'admin',
+password:'admin'
+}
+res.render('home', { title: 'Home',user: user});
+};
+</code></pre>
+<p>创建views/login.html和views/home.html两个文件</p>
+<p><strong>login.html</strong></p>
+<pre><code>
+&lt;% include header.html %&gt;
+&lt;div class="container-fluid"&gt;
+&lt;form class="form-horizontal" method="post"&gt;
+&lt;fieldset&gt;
+&lt;legend&gt;用户登陆&lt;/legend&gt;
+&lt;div class="control-group"&gt;
+&lt;label class="control-label" for="username"&gt;用户名&lt;/label&gt;
+&lt;div class="controls"&gt;
+&lt;input type="text" class="input-xlarge" id="username" name="username"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="control-group"&gt;
+&lt;label class="control-label" for="password"&gt;密码&lt;/label&gt;
+&lt;div class="controls"&gt;
+&lt;input type="password" class="input-xlarge" id="password" name="password"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="form-actions"&gt;
+&lt;button type="submit" class="btn btn-primary"&gt;登陆&lt;/button&gt;
+&lt;/div&gt;
+&lt;/fieldset&gt;
+&lt;/form&gt;
+&lt;/div&gt;
+&lt;% include footer.html %&gt;
+</code></pre>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/05/login.png"><img class="alignnone size-full wp-image-167" alt="login" src="http://blog.fens.me/wp-content/uploads/2013/05/login.png" width="771" height="260" /></a><br />
+<strong>注：使用了bootstrap界面框架，效果还不错吧.</strong></p>
+<p><strong>home.html</strong></p>
+<pre><code>
+&lt;% include header.html %&gt;
+&lt;h1&gt;Welcome &lt;%= user.username %&gt;, 欢迎登陆！！&lt;/h1&gt;
+&lt;a claa="btn" href="/logout"&gt;退出&lt;/a&gt;
+&lt;% include footer.html %&gt;
+</code></pre>
+<p>修改index.html，增加登陆链接<br />
+<strong>index.html</strong></p>
+<pre><code>
+&lt;% include header.html %&gt;
+&lt;h1&gt;Welcome to &lt;%= title %&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;a href="/login"&gt;登陆&lt;/a&gt;&lt;/p&gt;
+&lt;% include footer.html %&gt;
+</code></pre>
+<p>路由及页面我们都写好了，快去网站上试试吧。</p>
+<p>&nbsp;</p>
+<h2>7. Session使用</h2>
+<p>从刚来的例子上面看，执行exports.doLogin时，如果用户名和密码正确，我们使用redirect方法跳转到的home</p>
+<pre><code>res.redirect('/home');</code></pre>
+<p>执行exports.home时，我们又用render渲染页面，并把user对象传给home.html页面</p>
+<pre><code>res.render('home', { title: 'Home',user: user});</code></pre>
+<p>为什么不能在doLogin时，就把user对象赋值给session，每个页面就不再传值了。</p>
+<p>session这个问题，其实是涉及到服务器的底层处理方式。</p>
+<p>像Java的web服务器，是多线程调用模型。每用户请求会打开一个线程，每个线程在内容中维护着用户的状态。</p>
+<p>像PHP的web服务器，是交行CGI的程序处理，CGI是无状态的，所以一般用cookie在客户的浏览器是维护用户的状态。但cookie在客户端维护的信息是不够的，所以CGI应用要模仿用户session，就需要在服务器端生成一个session文件存储起来，让原本无状态的CGI应用，通过中间文件的方式，达到session的效果。</p>
+<p>Nodejs的web服务器，也是CGI的程序无状态的，与PHP不同的地方在于，单线程应用，所有请求都是异步响应，通过callback方式返回数据。如果我们想保存session数据，也是需要找到一个存储，通过文件存储,redis,Mongdb都可以。</p>
+<p>接下来，我将演示如何通过mongodb来保存session，并实现登陆后用户对象传递。</p>
+<p>app.js文件</p>
+<pre><code>
+var express = require('express')
+, routes = require('./routes')
+, user = require('./routes/user')
+, http = require('http')
+, path = require('path')
+, ejs = require('ejs')
+, SessionStore = require("session-mongoose")(express);
+var store = new SessionStore({
+url: "mongodb://localhost/session",
+interval: 120000
+});
+....
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(express.cookieSession({secret : 'fens.me'}));
+app.use(express.session({
+secret : 'fens.me',
+store: store,
+cookie: { maxAge: 900000 }
+}));
+app.use(function(req, res, next){
+res.locals.user = req.session.user;
+next();
+});
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+</code></pre>
+<p><strong>注：app.js文件有顺序要求，一定要注意！！！</strong></p>
+<p>安装session-mongoose依赖库</p>
+<pre><code>
+D:\workspace\project\nodejs-demo&gt;npm install session-mongoose
+D:\workspace\project\nodejs-demo\node_modules\session-mongoose\node_modules\mongoose\node_modules\mongodb\node_modules\bson&gt;node "D:\toolkit\nodejs\node_modules\npm\bin\node-gyp-bin\\..\..\node_modules\node-gyp\bin\node-gyp.js" rebuild
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.Cpp.InvalidPlatform.Targets(23,7): error MSB8007: 项目“kerberos.vcxproj”的平台无效。平台为“x64”。您会看到此消息的可能原因是，您尝试在没有解决方案文件的情况下生成项目，并且为
+oose\node_modules\mongoose\node_modules\mongodb\node_modules\bson\build\bson.vcxproj]
+session-mongoose@0.2.2 node_modules\session-mongoose
+└── mongoose@3.6.10 (mpath@0.1.1, ms@0.1.0, hooks@0.2.1, sliced@0.0.3, muri@0.3.1, mpromise@0.2.1, mongodb@1.3.3)
+</code></pre>
+<p>安装有错误但是没关系。</p>
+<p>访问：http://localhost:3000/login，正常</p>
+<p>修改routes/index.js文件</p>
+<p><strong>exports.doLogin方法</strong></p>
+<pre><code>
+exports.doLogin = function(req, res){
+var user={
+username:'admin',
+password:'admin'
+}
+if(req.body.username===user.username &amp;&amp; req.body.password===user.password){
+req.session.user=user;
+return res.redirect('/home');
+} else {
+return res.redirect('/login');
+}
+};
+</code></pre>
+<p><strong>exports.logout方法</strong></p>
+<pre><code>
+exports.logout = function(req, res){
+req.session.user=null;
+res.redirect('/');
+};
+</code></pre>
+<p><strong>exports.home方法</strong></p>
+<pre><code>
+exports.home = function(req, res){
+res.render('home', { title: 'Home'});
+};
+</code></pre>
+<p>这个时候session已经起作用了，exports.home的user显示传值已经被去掉了。 是通过app.js中app.use的res.locals变量，通过框架进行的赋值。</p>
+<pre><code>
+app.use(function(req, res, next){
+res.locals.user = req.session.user;
+next();
+});
+</code></pre>
+<p>注：这个session是express3.0的写法，与express2.x是不一样的。原理是在框架内每次赋值，把我们刚才手动传值的过程，让框架去完成了。</p>
+<p>&nbsp;</p>
+<h2>8. 页面提示</h2>
+<p>登陆的大体我们都已经讲完了，最后看一下登陆失败的情况。</p>
+<p>我们希望如果用户登陆时，用户名或者密码出错了，会给用户提示，应该如何去实现。</p>
+<p><strong>打开app.js的，增加res.locals.message</strong></p>
+<pre><code>
+app.use(function(req, res, next){
+res.locals.user = req.session.user;
+var err = req.session.error;
+delete req.session.error;
+res.locals.message = '';
+if (err) res.locals.message = '&lt;div class="alert alert-error"&gt;' + err + '&lt;/div&gt;';
+next();
+});
+</code></pre>
+<p><strong>修改login.html页面，&lt;%- message %&gt;</strong></p>
+<pre><code>
+&lt;% include header.html %&gt;
+&lt;div class="container-fluid"&gt;
+&lt;form class="form-horizontal" method="post"&gt;
+&lt;fieldset&gt;
+&lt;legend&gt;用户登陆&lt;/legend&gt;
+&lt;%- message %&gt;
+&lt;div class="control-group"&gt;
+&lt;label class="control-label" for="username"&gt;用户名&lt;/label&gt;
+&lt;div class="controls"&gt;
+&lt;input type="text" class="input-xlarge" id="username" name="username" value="admin"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="control-group"&gt;
+&lt;label class="control-label" for="password"&gt;密码&lt;/label&gt;
+&lt;div class="controls"&gt;
+&lt;input type="password" class="input-xlarge" id="password" name="password" value="admin"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="form-actions"&gt;
+&lt;button type="submit" class="btn btn-primary"&gt;登陆&lt;/button&gt;
+&lt;/div&gt;
+&lt;/fieldset&gt;
+&lt;/form&gt;
+&lt;/div&gt;
+&lt;% include footer.html %&gt;
+</code></pre>
+<p><strong>修改routes/index.js，增加req.session.error</strong></p>
+<pre><code>
+exports.doLogin = function(req, res){
+var user={
+username:'admin',
+password:'admin'
+}
+if(req.body.username===user.username &amp;&amp; req.body.password===user.password){
+req.session.user=user;
+return res.redirect('/home');
+} else {
+req.session.error='用户名或密码不正确';
+return res.redirect('/login');
+}
+};
+</code></pre>
+<p>让我们来看看效果： http://localhost:3000/login 输入错误的和密码， 用户名：adminfe，密码：12121</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/05/loginErr.png"><img class="alignnone size-full wp-image-168" alt="loginErr" src="http://blog.fens.me/wp-content/uploads/2013/05/loginErr.png" width="760" height="290" /></a></p>
+<p>&nbsp;</p>
+<h2>9. 页面访问控制</h2>
+<p>网站登陆部分按照我们的求已经完成了，但网站并不安全。</p>
+<p>localhost:3000/home，页面本来是登陆以后才访问的，现在我们不要登陆，直接在浏览器输入也可访问。</p>
+<p><strong>页面报错了，提示&lt;%= user.username %&gt; 变量出错。</strong></p>
+<pre><code>
+GET /home?user==a 500 15ms
+TypeError: D:\workspace\project\nodejs-demo\views\home.html:2
+1| &lt;% include header.html %&gt;
+&gt;&gt; 2| &lt;h1&gt;Welcome &lt;%= user.username %&gt;, 欢迎登陆！！&lt;/h1&gt;
+3| &lt;a claa="btn" href="/logout"&gt;退出&lt;/a&gt;
+4| &lt;% include header.html %&gt;
+Cannot read property 'username' of null
+at eval (eval at &lt;anonymous&gt; (D:\workspace\project\nodejs-demo\node_modules\ejs\lib\ejs.js:
+at eval (eval at &lt;anonymous&gt; (D:\workspace\project\nodejs-demo\node_modules\ejs\lib\ejs.js:
+at D:\workspace\project\nodejs-demo\node_modules\ejs\lib\ejs.js:249:15
+at Object.exports.render (D:\workspace\project\nodejs-demo\node_modules\ejs\lib\ejs.js:287:
+at View.exports.renderFile [as engine] (D:\workspace\project\nodejs-demo\node_modules\ejs\l
+at View.render (D:\workspace\project\nodejs-demo\node_modules\express\lib\view.js:75:8)
+at Function.app.render (D:\workspace\project\nodejs-demo\node_modules\express\lib\applicati
+at ServerResponse.res.render (D:\workspace\project\nodejs-demo\node_modules\express\lib\res
+at exports.home (D:\workspace\project\nodejs-demo\routes\index.js:36:8)
+at callbacks (D:\workspace\project\nodejs-demo\node_modules\express\lib\router\index.js:161
+</code></pre>
+<p>这个页面被打开发，因为没有user.username参数。我们避免这样的错误发生。</p>
+<p>还记录路由部分里说的get,post,all的作用吗？我现在要回到路由配置中，再做点事情。</p>
+<p><strong>修改app.js文件</strong></p>
+<pre><code>
+app.all('/login', notAuthentication);
+app.get('/login', routes.login);
+app.post('/login', routes.doLogin);
+app.get('/logout', authentication);
+app.get('/logout', routes.logout);
+app.get('/home', authentication);
+app.get('/home', routes.home);
+</code></pre>
+<p><strong>访问控制：</strong></p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">/ ，谁访问都行，没有任何控制</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">/login，用all拦截所有访问/login的请求，先调用authentication，用户登陆检查</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">/logout，用get拦截访问/login的请求，先调用notAuthentication，用户不登陆检查</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">/home，用get拦截访问/home的请求，先调用Authentication，用户登陆检查</span></li>
+</ul>
+<p><strong>修改app.js文件，增加authentication，notAuthentication两个方法</strong></p>
+<pre><code>
+function authentication(req, res, next) {
+if (!req.session.user) {
+req.session.error='请先登陆';
+return res.redirect('/login');
+}
+next();
+}
+function notAuthentication(req, res, next) {
+if (req.session.user) {
+req.session.error='已登陆';
+return res.redirect('/');
+}
+next();
+}
+</code></pre>
+<p>配置好后，我们未登陆，直接访问localhost:3000/home时，就会跳到/login页面</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/05/loginHome.png"><img class="alignnone size-full wp-image-169" alt="loginHome" src="http://blog.fens.me/wp-content/uploads/2013/05/loginHome.png" width="768" height="295" /></a></p>
+<p>如果你也出现图片显示的内容，那么恭喜你了。</p>
+<p>Nodejs使用Express3.0框架的第一步你已经完成了，并且还使用了ejs,bootstrap,mongoose库的使用。</p>
+<p>希望此文对大家有所帮助。</p>
+<p><strong>Express已经升级到4.x，请同时参考文章，<a href="http://blog.fens.me/nodejs-express4/" target="_blank">Node.js开发框架Express4.x</a></strong></p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs开发框架Express3.0开发手记--从零开始" href="http://blog.fens.me/nodejs-express3/" target="_blank">http://blog.fens.me/nodejs-express3/</a></p>
+<p><strong>程序代码已经上传到github有需要的同学，自行下载。</strong><br />
+<a title="github工程" href="https://github.com/bsspirit/nodejs-demo" target="_blank">https://github.com/bsspirit/nodejs-demo</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='http://nimei.info/?p=65' rel='external nofollow' class='url'>Nodejs开发框架Express3.0开发手记–从零开始（转） | 你妹</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-mongoose-json/' rel='external nofollow' class='url'>Mongoose使用案例–让JSON数据直接入库MongoDB | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-17">
+        <div id="dsq-comment-header-17" class="dsq-comment-header">
+            <cite id="dsq-cite-17">
+                <a id="dsq-author-user-17" href="http://xevan.net" target="_blank" rel="nofollow">Evan</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17" class="dsq-comment-body">
+            <div id="dsq-comment-message-17" class="dsq-comment-message"><p>很尊敬认真写教程的人。。。今天回去就学习一下。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="dsq-comment-18">
+        <div id="dsq-comment-header-18" class="dsq-comment-header">
+            <cite id="dsq-cite-18">
+                <a id="dsq-author-user-18" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18" class="dsq-comment-body">
+            <div id="dsq-comment-message-18" class="dsq-comment-message"><p>谢谢，:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-24">
+        <div id="dsq-comment-header-24" class="dsq-comment-header">
+            <cite id="dsq-cite-24">
+                <span id="dsq-author-user-24">esteem</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-24" class="dsq-comment-body">
+            <div id="dsq-comment-message-24" class="dsq-comment-message"><p>权限验证的事情 每个请求都配置2个拦截  很累啊 没有通配的吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="dsq-comment-25">
+        <div id="dsq-comment-header-25" class="dsq-comment-header">
+            <cite id="dsq-cite-25">
+                <a id="dsq-author-user-25" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-25" class="dsq-comment-body">
+            <div id="dsq-comment-message-25" class="dsq-comment-message"><p>可以啊，用all拦截所有请求, xxxx用正则匹配。</p>
+<p>app.all(&#8216;xxxxx&#8217;, notAuthentication);</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-admin bypostauthor even depth-2" id="dsq-comment-26">
+        <div id="dsq-comment-header-26" class="dsq-comment-header">
+            <cite id="dsq-cite-26">
+                <a id="dsq-author-user-26" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-26" class="dsq-comment-body">
+            <div id="dsq-comment-message-26" class="dsq-comment-message"><p>demo中没有复杂的场景，业务系统中路径就配置复杂多了，用正则会更有效。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-32">
+        <div id="dsq-comment-header-32" class="dsq-comment-header">
+            <cite id="dsq-cite-32">
+                <a id="dsq-author-user-32" href="http://blog.gfdsa.net/" target="_blank" rel="nofollow">youxiachai</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-32" class="dsq-comment-body">
+            <div id="dsq-comment-message-32" class="dsq-comment-message"><p>如何自定义非路由路径的页面？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-admin bypostauthor even depth-2" id="dsq-comment-35">
+        <div id="dsq-comment-header-35" class="dsq-comment-header">
+            <cite id="dsq-cite-35">
+                <a id="dsq-author-user-35" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-35" class="dsq-comment-body">
+            <div id="dsq-comment-message-35" class="dsq-comment-message"><p>什么叫“非路由路径的页面”？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://www.w3c.com.cn/%e6%9b%b4%e6%96%b0%e4%b9%8b%e5%89%8d%e7%9a%84%e6%80%9d%e8%b7%af%e6%98%af%e9%94%99%e7%9a%84%e9%97%ae%e9%a2%98%e5%84%bf%e7%ab%a5%e5%8f%88%e6%9d%a5%e4%ba%86%ef%bc%8c%e8%af%b7%e6%95%' rel='external nofollow' class='url'>(更新,之前的思路是错的)问题儿童又来了，请教一下Node的整个HTTP机制，以便可以整理编程思维 - Node.js - 开发者问答</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://www.w3c.com.cn/%e6%9b%b4%e6%96%b0%e4%b9%8b%e5%89%8d%e7%9a%84%e6%80%9d%e8%b7%af%e6%98%af%e9%94%99%e7%9a%84%e9%97%ae%e9%a2%98%e5%84%bf%e7%ab%a5%e5%8f%88%e6%9d%a5%e4%ba%86%ef%bc%8c%e8%af%b7%e6%95%' rel='external nofollow' class='url'>(更新,之前的思路是错的)问题儿童又来了，请教一下Node的整个HTTP机制，以便可以整理编程思维 - Node.js - 开发者问答</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-51">
+        <div id="dsq-comment-header-51" class="dsq-comment-header">
+            <cite id="dsq-cite-51">
+                <span id="dsq-author-user-51">十七亮</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-51" class="dsq-comment-body">
+            <div id="dsq-comment-message-51" class="dsq-comment-message"><p>app.get(&#8216;/logout&#8217;, authentication);<br />
+app.get(&#8216;/logout&#8217;, routes.logout);<br />
+我用这种配置两个路由的为什么不能加载呢，是不是express3.X不支持了？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-admin bypostauthor even depth-2" id="dsq-comment-52">
+        <div id="dsq-comment-header-52" class="dsq-comment-header">
+            <cite id="dsq-cite-52">
+                <a id="dsq-author-user-52" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-52" class="dsq-comment-body">
+            <div id="dsq-comment-message-52" class="dsq-comment-message"><p>是不是在authentication中，没写next();</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-54">
+        <div id="dsq-comment-header-54" class="dsq-comment-header">
+            <cite id="dsq-cite-54">
+                <span id="dsq-author-user-54">十七亮</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-54" class="dsq-comment-body">
+            <div id="dsq-comment-message-54" class="dsq-comment-message"><p>嗯，加上next()就可以了，多谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-53">
+        <div id="dsq-comment-header-53" class="dsq-comment-header">
+            <cite id="dsq-cite-53">
+                <span id="dsq-author-user-53">十七亮</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-53" class="dsq-comment-body">
+            <div id="dsq-comment-message-53" class="dsq-comment-message"><p>post路由无法修改session的值是哪里有问题,但是get路由就可以<br />
+用的 session-mongoose</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-56">
+        <div id="dsq-comment-header-56" class="dsq-comment-header">
+            <cite id="dsq-cite-56">
+                <span id="dsq-author-user-56">十七亮</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-56" class="dsq-comment-body">
+            <div id="dsq-comment-message-56" class="dsq-comment-message"><p>我用connect-mongo是可以的 用session-mongoose不行</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-113">
+        <div id="dsq-comment-header-113" class="dsq-comment-header">
+            <cite id="dsq-cite-113">
+                <span id="dsq-author-user-113">Centre2</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-113" class="dsq-comment-body">
+            <div id="dsq-comment-message-113" class="dsq-comment-message"><p>更正个错误：<br />
+==========<br />
+重命名：views/indes.ejs 为 views/indes.html   （index &lt;&#8211;）</p>
+<p>访问localhost:3000正确</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-114">
+        <div id="dsq-comment-header-114" class="dsq-comment-header">
+            <cite id="dsq-cite-114">
+                <span id="dsq-author-user-114">Centre2</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-114" class="dsq-comment-body">
+            <div id="dsq-comment-message-114" class="dsq-comment-message"><p>Welcome to<br />
+  （footer.html &lt;&#8211;）</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-116">
+        <div id="dsq-comment-header-116" class="dsq-comment-header">
+            <cite id="dsq-cite-116">
+                <a id="dsq-author-user-116" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-116" class="dsq-comment-body">
+            <div id="dsq-comment-message-116" class="dsq-comment-message"><p>多谢提醒，已经修改了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="dsq-comment-115">
+        <div id="dsq-comment-header-115" class="dsq-comment-header">
+            <cite id="dsq-cite-115">
+                <a id="dsq-author-user-115" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-115" class="dsq-comment-body">
+            <div id="dsq-comment-message-115" class="dsq-comment-message"><p>多谢提醒，已经修改了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-119">
+        <div id="dsq-comment-header-119" class="dsq-comment-header">
+            <cite id="dsq-cite-119">
+                <span id="dsq-author-user-119">dym</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-119" class="dsq-comment-body">
+            <div id="dsq-comment-message-119" class="dsq-comment-message"><p>博主，请教一个问题，我跟着第7步做的时候，安装session-mongoose时，运行app.js之后，出现下面的问题，求解</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-120">
+        <div id="dsq-comment-header-120" class="dsq-comment-header">
+            <cite id="dsq-cite-120">
+                <a id="dsq-author-user-120" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-120" class="dsq-comment-body">
+            <div id="dsq-comment-message-120" class="dsq-comment-message"><p>你不是本机没有安装 mongodb?<br />
+localhost:27017，是mongodb的默认使用端口，无法访问。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-121">
+        <div id="dsq-comment-header-121" class="dsq-comment-header">
+            <cite id="dsq-cite-121">
+                <span id="dsq-author-user-121">dym</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-121" class="dsq-comment-body">
+            <div id="dsq-comment-message-121" class="dsq-comment-message"><p>嗯，是没装mongodb,我太白痴了。谢谢博主的提醒。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-122">
+        <div id="dsq-comment-header-122" class="dsq-comment-header">
+            <cite id="dsq-cite-122">
+                <a id="dsq-author-user-122" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-122" class="dsq-comment-body">
+            <div id="dsq-comment-message-122" class="dsq-comment-message"><p>多用用就好了！：）</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-123">
+        <div id="dsq-comment-header-123" class="dsq-comment-header">
+            <cite id="dsq-cite-123">
+                <span id="dsq-author-user-123">dym</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-123" class="dsq-comment-body">
+            <div id="dsq-comment-message-123" class="dsq-comment-message"><p>mongodb已经装好了，能访问了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-bootstrap-select/' rel='external nofollow' class='url'>Nodejs配合bootstrap-select下拉列表 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-166">
+        <div id="dsq-comment-header-166" class="dsq-comment-header">
+            <cite id="dsq-cite-166">
+                <span id="dsq-author-user-166">jpyee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-166" class="dsq-comment-body">
+            <div id="dsq-comment-message-166" class="dsq-comment-message"><p>请教博主，增加bootstrap界面的时候，我的文件夹里面怎么没有bootstrap.min.css、bootstrap-responsive.min.css、bootstrap.min.js和jquery-1.9.1.min.js文件的？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-167">
+        <div id="dsq-comment-header-167" class="dsq-comment-header">
+            <cite id="dsq-cite-167">
+                <a id="dsq-author-user-167" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-167" class="dsq-comment-body">
+            <div id="dsq-comment-message-167" class="dsq-comment-message"><p>这几个文件要自己去下载的。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-170">
+        <div id="dsq-comment-header-170" class="dsq-comment-header">
+            <cite id="dsq-cite-170">
+                <span id="dsq-author-user-170">jpyee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-170" class="dsq-comment-body">
+            <div id="dsq-comment-message-170" class="dsq-comment-message"><p>是通过npm install 文件名  这样的方式下载吧？但为什么我下载时会出现以下错误？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-173">
+        <div id="dsq-comment-header-173" class="dsq-comment-header">
+            <cite id="dsq-cite-173">
+                <a id="dsq-author-user-173" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-173" class="dsq-comment-body">
+            <div id="dsq-comment-message-173" class="dsq-comment-message"><p>我的意思是说自己去下载。<br />
+<a href="http://twitter.github.io/bootstrap/index.html" rel="nofollow">http://twitter.github.io/bootstrap/index.html</a><br />
+不是用npm install</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-177">
+        <div id="dsq-comment-header-177" class="dsq-comment-header">
+            <cite id="dsq-cite-177">
+                <span id="dsq-author-user-177">jpyee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-177" class="dsq-comment-body">
+            <div id="dsq-comment-message-177" class="dsq-comment-message"><p>为什么会出现以下乱码？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-178">
+        <div id="dsq-comment-header-178" class="dsq-comment-header">
+            <cite id="dsq-cite-178">
+                <a id="dsq-author-user-178" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-178" class="dsq-comment-body">
+            <div id="dsq-comment-message-178" class="dsq-comment-message"><p>HTML网页上面是不是没加</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-182">
+        <div id="dsq-comment-header-182" class="dsq-comment-header">
+            <cite id="dsq-cite-182">
+                <span id="dsq-author-user-182">jpyee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-182" class="dsq-comment-body">
+            <div id="dsq-comment-message-182" class="dsq-comment-message"><p>加了，是如图下面这样子吗</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-184">
+        <div id="dsq-comment-header-184" class="dsq-comment-header">
+            <cite id="dsq-cite-184">
+                <a id="dsq-author-user-184" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-184" class="dsq-comment-body">
+            <div id="dsq-comment-message-184" class="dsq-comment-message"><p>1. 你查一下你的页面，是不是统一utf8编码的？<br />
+2. 在里加一行中文，看看不是乱码。<br />
+3. 这个乱码，是你的传的参数吧？通过console.log在控制台打印一下。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-237">
+        <div id="dsq-comment-header-237" class="dsq-comment-header">
+            <cite id="dsq-cite-237">
+                <span id="dsq-author-user-237">loved_sunshine</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-237" class="dsq-comment-body">
+            <div id="dsq-comment-message-237" class="dsq-comment-message"><p>res.redirect()为什么要return呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-238">
+        <div id="dsq-comment-header-238" class="dsq-comment-header">
+            <cite id="dsq-cite-238">
+                <a id="dsq-author-user-238" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-238" class="dsq-comment-body">
+            <div id="dsq-comment-message-238" class="dsq-comment-message"><p>通过return，告诉程序要转向。如果不加return，这个方法中的程序会继续运行，可能造成多重response。会有错误。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-244">
+        <div id="dsq-comment-header-244" class="dsq-comment-header">
+            <cite id="dsq-cite-244">
+                <span id="dsq-author-user-244">khowarizmi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-244" class="dsq-comment-body">
+            <div id="dsq-comment-message-244" class="dsq-comment-message"><p>对于7.session的使用，doLogin确实能够将session的状态传给下一个home，但是我此时返回login时session并没有传递到这个位置。也就是说，想要在登录状态下去往login页面时自动跳转到home应该怎么办？PS：在home页面中，添加如果没有登录，则返回login为佳</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-246">
+        <div id="dsq-comment-header-246" class="dsq-comment-header">
+            <cite id="dsq-cite-246">
+                <a id="dsq-author-user-246" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-246" class="dsq-comment-body">
+            <div id="dsq-comment-message-246" class="dsq-comment-message"><p>登陆状态下，不应该访问login。看“9. 页面访问控制”</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-yeoman-intro/' rel='external nofollow' class='url'>Yeoman自动构建js项目 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-stylus-css/' rel='external nofollow' class='url'>Stylus让CSS也能编程 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-442">
+        <div id="dsq-comment-header-442" class="dsq-comment-header">
+            <cite id="dsq-cite-442">
+                <span id="dsq-author-user-442">angusw</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-442" class="dsq-comment-body">
+            <div id="dsq-comment-message-442" class="dsq-comment-message"><p>請問一下 我想要透過 app,use() 去處理所有錯誤 但是我在程式碼中  throw err 整個express 就停止 有什麼地方我沒有設定好嗎 謝謝</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-443">
+        <div id="dsq-comment-header-443" class="dsq-comment-header">
+            <cite id="dsq-cite-443">
+                <a id="dsq-author-user-443" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-443" class="dsq-comment-body">
+            <div id="dsq-comment-message-443" class="dsq-comment-message"><p>1. throw err，会抛出异常，程序肯定会就会挂了。<br />
+2. 要用try..catch..finally，抓住这个异常。<br />
+3. node编程，要避免throw的设计，通过if去处理所有情况。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-469">
+        <div id="dsq-comment-header-469" class="dsq-comment-header">
+            <cite id="dsq-cite-469">
+                <span id="dsq-author-user-469">dagger</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-469" class="dsq-comment-body">
+            <div id="dsq-comment-message-469" class="dsq-comment-message"><p>在session一节中遇到问题：<br />
+TypeError: Cannot read property &#8216;connect.sid&#8217; of undefined</p>
+<p>请教一下。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-470">
+        <div id="dsq-comment-header-470" class="dsq-comment-header">
+            <cite id="dsq-cite-470">
+                <a id="dsq-author-user-470" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-470" class="dsq-comment-body">
+            <div id="dsq-comment-message-470" class="dsq-comment-message"><p>connect.sid依赖于connect的session.<br />
+<a href="http://blog.fens.me/nodejs-connect/" rel="nofollow">http://blog.fens.me/nodejs-connect/</a></p>
+<p>试试下面的写法<br />
+use(connect.cookieParser())<br />
+use(connect.session({secret: &#8216;123&#8217;, cookie: { maxAge: 60000 }}))</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-482">
+        <div id="dsq-comment-header-482" class="dsq-comment-header">
+            <cite id="dsq-cite-482">
+                <span id="dsq-author-user-482">志强 张</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-482" class="dsq-comment-body">
+            <div id="dsq-comment-message-482" class="dsq-comment-message"><p>您好丹哥，我很久之前就关注你的网站，第一次是看你的RHadoop系列，在这里学习到了很多很多东西，十分感谢您。《从零开始nodejs》使用了很多方面的技术，我希望您在每次先保证思路清晰的情况下写完一次之后，能够回过头来大致说一下语法，或者给出这些代码的注释，那博文的可读性能提高一些，以适合我这种菜鸟。:-P 谢谢。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-483">
+        <div id="dsq-comment-header-483" class="dsq-comment-header">
+            <cite id="dsq-cite-483">
+                <a id="dsq-author-user-483" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-483" class="dsq-comment-body">
+            <div id="dsq-comment-message-483" class="dsq-comment-message"><p>你好，很高兴文章能帮助你学习。<br />
+关于语法的问题，基础学知识是需要自己学习的，而且我是写博客不是写书，所以不可能面面俱到。多花点时间补充自己的基础才是学习之根本！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-488">
+        <div id="dsq-comment-header-488" class="dsq-comment-header">
+            <cite id="dsq-cite-488">
+                <span id="dsq-author-user-488">志强 张</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-488" class="dsq-comment-body">
+            <div id="dsq-comment-message-488" class="dsq-comment-message"><p>恩恩，我明白了。这篇博文我都实践了一次，我发现最后function notAuthentication(req, res, next)中 若登录了的话就return res.redirect(&#8216;/&#8217;);跳转到/下，这样设计的逻辑容易造成疑惑。因为在/下也就index下可以按登录键，可是因为已经登录了所以一直按登录键都没好像没反应一样一直回跳到index也就是本页面。以我愚见还是改成/home比较好一些。不过不改也没关系啦，个人意见而已。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-559">
+        <div id="dsq-comment-header-559" class="dsq-comment-header">
+            <cite id="dsq-cite-559">
+                <span id="dsq-author-user-559">itfan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-559" class="dsq-comment-body">
+            <div id="dsq-comment-message-559" class="dsq-comment-message"><p>nodejs 没有MVC中的model？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-560">
+        <div id="dsq-comment-header-560" class="dsq-comment-header">
+            <cite id="dsq-cite-560">
+                <a id="dsq-author-user-560" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-560" class="dsq-comment-body">
+            <div id="dsq-comment-message-560" class="dsq-comment-message"><p>你的问题，有点让人误解? 我试着理解性回答。</p>
+<p>1. nodejs一个开发平台<br />
+2. express是一个基于nodejs的web开发框架，没有持久层<br />
+3. express是一个MVC的框架，数据格式是JSON的，不知道是不是你所有理解的model</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-939">
+        <div id="dsq-comment-header-939" class="dsq-comment-header">
+            <cite id="dsq-cite-939">
+                <span id="dsq-author-user-939">itfan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-939" class="dsq-comment-body">
+            <div id="dsq-comment-message-939" class="dsq-comment-message"><p>我现在明白nodejs了  谢谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-568">
+        <div id="dsq-comment-header-568" class="dsq-comment-header">
+            <cite id="dsq-cite-568">
+                <span id="dsq-author-user-568">yunnysunny</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-568" class="dsq-comment-body">
+            <div id="dsq-comment-message-568" class="dsq-comment-message"><p>node.js是编程语言，类似于java、php</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-937">
+        <div id="dsq-comment-header-937" class="dsq-comment-header">
+            <cite id="dsq-cite-937">
+                <span id="dsq-author-user-937">moodpo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-937" class="dsq-comment-body">
+            <div id="dsq-comment-message-937" class="dsq-comment-message"><p>晕啊你</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-938">
+        <div id="dsq-comment-header-938" class="dsq-comment-header">
+            <cite id="dsq-cite-938">
+                <span id="dsq-author-user-938">itfan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-938" class="dsq-comment-body">
+            <div id="dsq-comment-message-938" class="dsq-comment-message"><p>nodejs 是编程语言？搞笑</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-1333">
+        <div id="dsq-comment-header-1333" class="dsq-comment-header">
+            <cite id="dsq-cite-1333">
+                <span id="dsq-author-user-1333">itfan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1333" class="dsq-comment-body">
+            <div id="dsq-comment-message-1333" class="dsq-comment-message"><p>看了一段时间  终于明白了  nodejs不是编程语言。。。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-603">
+        <div id="dsq-comment-header-603" class="dsq-comment-header">
+            <cite id="dsq-cite-603">
+                <span id="dsq-author-user-603">多蒙</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-603" class="dsq-comment-body">
+            <div id="dsq-comment-message-603" class="dsq-comment-message"><p>这个时候session已经起作用了，exports.home的user显示传值已经被去掉了。 是通过app.js中app.use的res.locals变量，通过框架进行的赋值。</p>
+<p>到这里就迷失了。。。咋也调不通</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-604">
+        <div id="dsq-comment-header-604" class="dsq-comment-header">
+            <cite id="dsq-cite-604">
+                <a id="dsq-author-user-604" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-604" class="dsq-comment-body">
+            <div id="dsq-comment-message-604" class="dsq-comment-message"><p>显示传值，是指的 </p>
+<p>exports.home = function(req, res){<br />
+var user={<br />
+username:&#8217;admin&#8217;,<br />
+password:&#8217;admin&#8217;<br />
+}<br />
+res.render(&#8216;home&#8217;, { title: &#8216;Home&#8217;,user: user});<br />
+};</p>
+<p>配置好locals以后，可以简化写法了。</p>
+<p>exports.home = function(req, res){<br />
+res.render(&#8216;home&#8217;, { title: &#8216;Home&#8217;});<br />
+};</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-669">
+        <div id="dsq-comment-header-669" class="dsq-comment-header">
+            <cite id="dsq-cite-669">
+                <span id="dsq-author-user-669">ig</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-669" class="dsq-comment-body">
+            <div id="dsq-comment-message-669" class="dsq-comment-message"><p>博主: &#8220;显示&#8221;传值 应该是指  &#8220;显式&#8221;传值吧? 显示会有歧义的</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-671">
+        <div id="dsq-comment-header-671" class="dsq-comment-header">
+            <cite id="dsq-cite-671">
+                <a id="dsq-author-user-671" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-671" class="dsq-comment-body">
+            <div id="dsq-comment-message-671" class="dsq-comment-message"><p>谢谢提醒，已改！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-1355">
+        <div id="dsq-comment-header-1355" class="dsq-comment-header">
+            <cite id="dsq-cite-1355">
+                <span id="dsq-author-user-1355">denny</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1355" class="dsq-comment-body">
+            <div id="dsq-comment-message-1355" class="dsq-comment-message"><p>看了你的文章，一路顺利通过，学到了很多知识，非常感谢博主的文章。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1358">
+        <div id="dsq-comment-header-1358" class="dsq-comment-header">
+            <cite id="dsq-cite-1358">
+                <a id="dsq-author-user-1358" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1358" class="dsq-comment-body">
+            <div id="dsq-comment-message-1358" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-618">
+        <div id="dsq-comment-header-618" class="dsq-comment-header">
+            <cite id="dsq-cite-618">
+                <span id="dsq-author-user-618">Leslie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-618" class="dsq-comment-body">
+            <div id="dsq-comment-message-618" class="dsq-comment-message"><p>博主，您好! 为什么我在运行到localhost:3000/home的时候，网页显示cannot GET/home呢？ 我的代码按照上面一步一步来的..</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-619">
+        <div id="dsq-comment-header-619" class="dsq-comment-header">
+            <cite id="dsq-cite-619">
+                <span id="dsq-author-user-619">Leslie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-619" class="dsq-comment-body">
+            <div id="dsq-comment-message-619" class="dsq-comment-message"><p>您好。问题已经解决!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-621">
+        <div id="dsq-comment-header-621" class="dsq-comment-header">
+            <cite id="dsq-cite-621">
+                <a id="dsq-author-user-621" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-621" class="dsq-comment-body">
+            <div id="dsq-comment-message-621" class="dsq-comment-message"><p>：）</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-1269">
+        <div id="dsq-comment-header-1269" class="dsq-comment-header">
+            <cite id="dsq-cite-1269">
+                <span id="dsq-author-user-1269">环</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1269" class="dsq-comment-body">
+            <div id="dsq-comment-message-1269" class="dsq-comment-message"><p>请问你怎么解决的？我也是出现这个问题</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-704">
+        <div id="dsq-comment-header-704" class="dsq-comment-header">
+            <cite id="dsq-cite-704">
+                <span id="dsq-author-user-704">lmiky</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-704" class="dsq-comment-body">
+            <div id="dsq-comment-message-704" class="dsq-comment-message"><p>既然下载了博主代码，那就要留个言，好人一生平安</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-705">
+        <div id="dsq-comment-header-705" class="dsq-comment-header">
+            <cite id="dsq-cite-705">
+                <a id="dsq-author-user-705" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-705" class="dsq-comment-body">
+            <div id="dsq-comment-message-705" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-831">
+        <div id="dsq-comment-header-831" class="dsq-comment-header">
+            <cite id="dsq-cite-831">
+                <span id="dsq-author-user-831">paul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-831" class="dsq-comment-body">
+            <div id="dsq-comment-message-831" class="dsq-comment-message"><p>看了博主的文章, 写的真不错. 受教了, 以后会经常过来学习</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-832">
+        <div id="dsq-comment-header-832" class="dsq-comment-header">
+            <cite id="dsq-cite-832">
+                <a id="dsq-author-user-832" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-832" class="dsq-comment-body">
+            <div id="dsq-comment-message-832" class="dsq-comment-message"><p>过奖，:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-858">
+        <div id="dsq-comment-header-858" class="dsq-comment-header">
+            <cite id="dsq-cite-858">
+                <span id="dsq-author-user-858">zhyt1985</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-858" class="dsq-comment-body">
+            <div id="dsq-comment-message-858" class="dsq-comment-message"><p>npm install supervisor 应该为 npm install supervisor -g</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-859">
+        <div id="dsq-comment-header-859" class="dsq-comment-header">
+            <cite id="dsq-cite-859">
+                <a id="dsq-author-user-859" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-859" class="dsq-comment-body">
+            <div id="dsq-comment-message-859" class="dsq-comment-message"><p>这到不是什么大问题</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-864">
+        <div id="dsq-comment-header-864" class="dsq-comment-header">
+            <cite id="dsq-cite-864">
+                <span id="dsq-author-user-864">zhyt1985</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-864" class="dsq-comment-body">
+            <div id="dsq-comment-message-864" class="dsq-comment-message"><p>请问我安装了mongodb，也安装了session-mongoose，可是启动nodejs后还是提示“Error: Cannot find module &#8216;session-mongoose&#8217;，这是怎么回事呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-865">
+        <div id="dsq-comment-header-865" class="dsq-comment-header">
+            <cite id="dsq-cite-865">
+                <span id="dsq-author-user-865">zhyt1985</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-865" class="dsq-comment-body">
+            <div id="dsq-comment-message-865" class="dsq-comment-message"><p>解决了，原来是安装session-mongoose时画蛇添足多加了-g</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-866">
+        <div id="dsq-comment-header-866" class="dsq-comment-header">
+            <cite id="dsq-cite-866">
+                <a id="dsq-author-user-866" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-866" class="dsq-comment-body">
+            <div id="dsq-comment-message-866" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-907">
+        <div id="dsq-comment-header-907" class="dsq-comment-header">
+            <cite id="dsq-cite-907">
+                <span id="dsq-author-user-907">Zhang Danqing</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-907" class="dsq-comment-body">
+            <div id="dsq-comment-message-907" class="dsq-comment-message"><p>您好：“让ejs模板文件，使用扩展名为html的文件。”这步没有办法进行，已经按照步骤操作后还是只能找到ejs文件，html文件无法运行。。问题就是我在修改app.js和增加ejs这两步的时候都没有报错，但是把index.ejs改成index.html报错了。。现在为止想到的只有自己的express是3.48这个问题，不知道该如何解决，谢谢！！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-908">
+        <div id="dsq-comment-header-908" class="dsq-comment-header">
+            <cite id="dsq-cite-908">
+                <span id="dsq-author-user-908">Zhang Danqing</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-908" class="dsq-comment-body">
+            <div id="dsq-comment-message-908" class="dsq-comment-message"><p>因为是小白。。。问题好弱，捂脸，还有个问题就是下载了代码但是没有办法运行额额，如图</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-912">
+        <div id="dsq-comment-header-912" class="dsq-comment-header">
+            <cite id="dsq-cite-912">
+                <a id="dsq-author-user-912" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-912" class="dsq-comment-body">
+            <div id="dsq-comment-message-912" class="dsq-comment-message"><p>你的mongodb是不是没开？这个是数据库连接的错误。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1123">
+        <div id="dsq-comment-header-1123" class="dsq-comment-header">
+            <cite id="dsq-cite-1123">
+                <span id="dsq-author-user-1123">insCake</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1123" class="dsq-comment-body">
+            <div id="dsq-comment-message-1123" class="dsq-comment-message"><p>怎么开</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-1125">
+        <div id="dsq-comment-header-1125" class="dsq-comment-header">
+            <cite id="dsq-cite-1125">
+                <a id="dsq-author-user-1125" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1125" class="dsq-comment-body">
+            <div id="dsq-comment-message-1125" class="dsq-comment-message"><p>启动mongodb</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-909">
+        <div id="dsq-comment-header-909" class="dsq-comment-header">
+            <cite id="dsq-cite-909">
+                <span id="dsq-author-user-909">Zhang Danqing</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-909" class="dsq-comment-body">
+            <div id="dsq-comment-message-909" class="dsq-comment-message"><p>Hi，我做了些调整，照着你的代码改了一下app.js，可以读取html了。但是好像还是有问题。。只能显示下面的界面，cmd里显示bootstrap已经在读了。。不知道为什么&gt;&lt;谢谢了哇XD</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-911">
+        <div id="dsq-comment-header-911" class="dsq-comment-header">
+            <cite id="dsq-cite-911">
+                <a id="dsq-author-user-911" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-911" class="dsq-comment-body">
+            <div id="dsq-comment-message-911" class="dsq-comment-message"><p>页面中加载的bootstrap.js</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-913">
+        <div id="dsq-comment-header-913" class="dsq-comment-header">
+            <cite id="dsq-cite-913">
+                <span id="dsq-author-user-913">Zhang Danqing</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-913" class="dsq-comment-body">
+            <div id="dsq-comment-message-913" class="dsq-comment-message"><p>这个调整了下弄好了，刚才copy多了&gt;&lt;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-1135">
+        <div id="dsq-comment-header-1135" class="dsq-comment-header">
+            <cite id="dsq-cite-1135">
+                <span id="dsq-author-user-1135">Sirus</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1135" class="dsq-comment-body">
+            <div id="dsq-comment-message-1135" class="dsq-comment-message"><p>请问中的footer.html可不可以是动态的？能不能用个变量保存需要include的html地址，然后让include这个变量呢？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-917">
+        <div id="dsq-comment-header-917" class="dsq-comment-header">
+            <cite id="dsq-cite-917">
+                <span id="dsq-author-user-917">zhouyi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-917" class="dsq-comment-body">
+            <div id="dsq-comment-message-917" class="dsq-comment-message"><p>志丹哥你好，一开始学习nodejs就参考你的教程，真心不错。我现在遇到一个问题：session在mongodb中没存储成功。能够看到sessions这个集合但是没有数据。后来，我下载了你的源代码来试试，还是没有。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-927">
+        <div id="dsq-comment-header-927" class="dsq-comment-header">
+            <cite id="dsq-cite-927">
+                <a id="dsq-author-user-927" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-927" class="dsq-comment-body">
+            <div id="dsq-comment-message-927" class="dsq-comment-message"><p>找找有没有错误信息</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-928">
+        <div id="dsq-comment-header-928" class="dsq-comment-header">
+            <cite id="dsq-cite-928">
+                <span id="dsq-author-user-928">zhouyi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-928" class="dsq-comment-body">
+            <div id="dsq-comment-message-928" class="dsq-comment-message"><p>我试过，但是没有。所有的功能正常使用。mongodb客户端是用的mongoHub，运行代码的时候自动生成session和nodejs这两个数据库，可以保存示例的JSON数据到nodejs这个库，但是session这个库下集合（sessions） count的值始终为 0 。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-3022">
+        <div id="dsq-comment-header-3022" class="dsq-comment-header">
+            <cite id="dsq-cite-3022">
+                <span id="dsq-author-user-3022">xiaoying</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3022" class="dsq-comment-body">
+            <div id="dsq-comment-message-3022" class="dsq-comment-message"><p>你好，你是怎么把示例成功把保存到nodejs这个库里面的呢？我的问题是一直在mongodb中找不到nodejs这个库，求帮助啊</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-967">
+        <div id="dsq-comment-header-967" class="dsq-comment-header">
+            <cite id="dsq-cite-967">
+                <span id="dsq-author-user-967">伟 郑</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-967" class="dsq-comment-body">
+            <div id="dsq-comment-message-967" class="dsq-comment-message"><p>第四步骤需要反ejs目录改成html，对吧？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-969">
+        <div id="dsq-comment-header-969" class="dsq-comment-header">
+            <cite id="dsq-cite-969">
+                <a id="dsq-author-user-969" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-969" class="dsq-comment-body">
+            <div id="dsq-comment-message-969" class="dsq-comment-message"><p>ejs默认只能识别xxx.ejs的文件，但编辑器打开xxx.ejs没有语法高亮。第四步修改后，可以让ejs支持xxx.html的文件，方便我们编辑。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1062">
+        <div id="dsq-comment-header-1062" class="dsq-comment-header">
+            <cite id="dsq-cite-1062">
+                <span id="dsq-author-user-1062">Peng Jin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1062" class="dsq-comment-body">
+            <div id="dsq-comment-message-1062" class="dsq-comment-message"><p>您好，我在将显式传值改成session传值的时候出现了问题，</p>
+<p>500 TypeError: Cannot set property &#8216;user&#8217; of undefined，user对象没定义，请问是在哪步出错了？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1064">
+        <div id="dsq-comment-header-1064" class="dsq-comment-header">
+            <cite id="dsq-cite-1064">
+                <a id="dsq-author-user-1064" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1064" class="dsq-comment-body">
+            <div id="dsq-comment-message-1064" class="dsq-comment-message"><p>这个错误很普遍，哪都有可能发生。<br />
+session.user, req.user, locals.user，这几个变量，跟踪一下吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-1425">
+        <div id="dsq-comment-header-1425" class="dsq-comment-header">
+            <cite id="dsq-cite-1425">
+                <span id="dsq-author-user-1425">wenhq</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1425" class="dsq-comment-body">
+            <div id="dsq-comment-message-1425" class="dsq-comment-message"><p>我也出现这个问题了。原因是app.js里的顺序。app.js文件有顺序要求，一定要注意！！！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1430">
+        <div id="dsq-comment-header-1430" class="dsq-comment-header">
+            <cite id="dsq-cite-1430">
+                <a id="dsq-author-user-1430" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1430" class="dsq-comment-body">
+            <div id="dsq-comment-message-1430" class="dsq-comment-message"><p>似乎都遇到过这个问题。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1079">
+        <div id="dsq-comment-header-1079" class="dsq-comment-header">
+            <cite id="dsq-cite-1079">
+                <span id="dsq-author-user-1079">stepjacky</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1079" class="dsq-comment-body">
+            <div id="dsq-comment-message-1079" class="dsq-comment-message"><p>app.all(&#8216;/login&#8217;, notAuthentication);<br />
+app.get(&#8216;/login&#8217;, routes.login);<br />
+app.post(&#8216;/login&#8217;, routes.doLogin);<br />
+app.get(&#8216;/logout&#8217;, authentication);<br />
+app.get(&#8216;/logout&#8217;, routes.logout);<br />
+app.get(&#8216;/home&#8217;, authentication);<br />
+app.get(&#8216;/home&#8217;, routes.home);</p>
+<p>node.js<br />
+没有像java类似过滤器的功能吗,如果认证需要这么写的话,每个url需要写两次,太弱爆了吧!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1080">
+        <div id="dsq-comment-header-1080" class="dsq-comment-header">
+            <cite id="dsq-cite-1080">
+                <a id="dsq-author-user-1080" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1080" class="dsq-comment-body">
+            <div id="dsq-comment-message-1080" class="dsq-comment-message"><p>上面只是一种写法，不懂别乱喷。</p>
+<p>类似过滤器实现，如下：<br />
+app.get(&#8216;/xxx&#8217;, [fun1, fun2,fun3]);</p>
+<p>function fun1(a,next){<br />
+// code<br />
+next();<br />
+}</p>
+<p>function fun2(a,next){<br />
+// code<br />
+next();<br />
+}</p>
+<p>通过next()向后传递。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2300">
+        <div id="dsq-comment-header-2300" class="dsq-comment-header">
+            <cite id="dsq-cite-2300">
+                <span id="dsq-author-user-2300">bigdos</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2300" class="dsq-comment-body">
+            <div id="dsq-comment-message-2300" class="dsq-comment-message"><p>我运行遇到找不到session-mongoose 这个错误，全文如下：<br />
+Error: Most middleware (like session) is no longer bundled with Express and must be installed separa<br />
+tely. Please see <a href="https://github.com/senchalabs/connect#middleware" rel="nofollow">https://github.com/senchalabs/connect#middleware</a>.<br />
+    at Function.Object.defineProperty.get (G:htdocsmedemonode_modulesexpresslibexpress.js:89:1<br />
+3)<br />
+    at module.exports (G:htdocsmedemonode_modulessession-mongooseindex.js:266:15)<br />
+    at Object. (G:htdocsmedemoapp.js:10:47)<br />
+    at Module._compile (module.js:456:26)<br />
+    at Object.Module._extensions..js (module.js:474:10)<br />
+    at Module.load (module.js:356:32)<br />
+    at Function.Module._load (module.js:312:12)<br />
+    at Module.require (module.js:364:17)<br />
+    at require (module.js:380:17)<br />
+    at Object. (G:htdocsmedemobinwww:3:11)<br />
+Program node ./bin/www exited with code 8<br />
+依赖都安装了，如下：<br />
+&#8220;dependencies&#8221;: {<br />
+    &#8220;express&#8221;: &#8220;~4.2.0&#8221;,<br />
+    &#8220;static-favicon&#8221;: &#8220;~1.0.0&#8221;,<br />
+    &#8220;morgan&#8221;: &#8220;~1.0.0&#8221;,<br />
+    &#8220;cookie-parser&#8221;: &#8220;~1.0.1&#8221;,<br />
+    &#8220;body-parser&#8221;: &#8220;~1.0.0&#8221;,<br />
+    &#8220;debug&#8221;: &#8220;~0.7.4&#8221;,<br />
+    &#8220;ejs&#8221;: &#8220;~0.8.5&#8221;,<br />
+    &#8220;mongodb&#8221;: &#8220;&gt;=1.3.9&#8221;,<br />
+    &#8220;mongoose&#8221;: &#8220;&gt;=3.8.0&#8221;,<br />
+    &#8220;express-partials&#8221;: &#8220;*&#8221;,<br />
+    &#8220;session-mongoose&#8221;: &#8220;*&#8221;<br />
+  }。不知道什么原因，请帮忙</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2383">
+        <div id="dsq-comment-header-2383" class="dsq-comment-header">
+            <cite id="dsq-cite-2383">
+                <span id="dsq-author-user-2383">Mok</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2383" class="dsq-comment-body">
+            <div id="dsq-comment-message-2383" class="dsq-comment-message"><p>我也遇到这样的问题，不知如何处理</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-2386">
+        <div id="dsq-comment-header-2386" class="dsq-comment-header">
+            <cite id="dsq-cite-2386">
+                <a id="dsq-author-user-2386" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2386" class="dsq-comment-body">
+            <div id="dsq-comment-message-2386" class="dsq-comment-message"><p>两种办法，选其一：1. 使用express3.x，按照文章操作。<br />
+2. 使用express4.x，用支持的包替换session-mongoose包</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1133">
+        <div id="dsq-comment-header-1133" class="dsq-comment-header">
+            <cite id="dsq-cite-1133">
+                <span id="dsq-author-user-1133">haichen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1133" class="dsq-comment-body">
+            <div id="dsq-comment-message-1133" class="dsq-comment-message"><p>我这里的登录页面的为什么是乱码呢?请指教</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1446">
+        <div id="dsq-comment-header-1446" class="dsq-comment-header">
+            <cite id="dsq-cite-1446">
+                <span id="dsq-author-user-1446">Listen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1446" class="dsq-comment-body">
+            <div id="dsq-comment-message-1446" class="dsq-comment-message"><p>你把所有的js和html文件都用UTF-8编码保存，就可以了，不会有乱码，我也遇到了，我就这样解决了</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1136">
+        <div id="dsq-comment-header-1136" class="dsq-comment-header">
+            <cite id="dsq-cite-1136">
+                <span id="dsq-author-user-1136">Sirus</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1136" class="dsq-comment-body">
+            <div id="dsq-comment-message-1136" class="dsq-comment-message"><p>请问中的footer.html可不可以是动态的？能不能用个变量保存需要include的html地址，然后让include这个变量呢？刚才没看清，回复错位置了，不好意思哈。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1138">
+        <div id="dsq-comment-header-1138" class="dsq-comment-header">
+            <cite id="dsq-cite-1138">
+                <a id="dsq-author-user-1138" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1138" class="dsq-comment-body">
+            <div id="dsq-comment-message-1138" class="dsq-comment-message"><p>这种写法是ejs的写法，如果不用ejs当然可以做成动态的。从后端传一个变量过来，前端渲染出来。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1140">
+        <div id="dsq-comment-header-1140" class="dsq-comment-header">
+            <cite id="dsq-cite-1140">
+                <span id="dsq-author-user-1140">Sirius</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1140" class="dsq-comment-body">
+            <div id="dsq-comment-message-1140" class="dsq-comment-message"><p>就是说ejs不可以咯？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1144">
+        <div id="dsq-comment-header-1144" class="dsq-comment-header">
+            <cite id="dsq-cite-1144">
+                <a id="dsq-author-user-1144" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1144" class="dsq-comment-body">
+            <div id="dsq-comment-message-1144" class="dsq-comment-message"><p>include是EJS语法关键字，不能加载动态的变量。<br />
+你可以在footer.html这个文件里，传各种变量，改变内容。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1156">
+        <div id="dsq-comment-header-1156" class="dsq-comment-header">
+            <cite id="dsq-cite-1156">
+                <span id="dsq-author-user-1156">aaa</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1156" class="dsq-comment-body">
+            <div id="dsq-comment-message-1156" class="dsq-comment-message"><p>登陆之后， 重启后端， 登陆还是有效的，登陆信息存在cookie里了， 有没有问题？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1164">
+        <div id="dsq-comment-header-1164" class="dsq-comment-header">
+            <cite id="dsq-cite-1164">
+                <a id="dsq-author-user-1164" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1164" class="dsq-comment-body">
+            <div id="dsq-comment-message-1164" class="dsq-comment-message"><p>后端，cookie通过物理介质保存，就是这样的。<br />
+如果后端是在内存保存的状态，重启后，用户需要重新登陆。</p>
+<p>为了用户体验，都倾向于第一种。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1228">
+        <div id="dsq-comment-header-1228" class="dsq-comment-header">
+            <cite id="dsq-cite-1228">
+                <span id="dsq-author-user-1228">liuwu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1228" class="dsq-comment-body">
+            <div id="dsq-comment-message-1228" class="dsq-comment-message"><p>你好，实例中用户名和密码都是自定义的。如何将MYSQL数据库查询出来的用户名和密码传过来呢？谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1229">
+        <div id="dsq-comment-header-1229" class="dsq-comment-header">
+            <cite id="dsq-cite-1229">
+                <a id="dsq-author-user-1229" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1229" class="dsq-comment-body">
+            <div id="dsq-comment-message-1229" class="dsq-comment-message"><p>你可以参考：</p>
+<p>用Nodejs连接MySQL<br />
+<a href="http://blog.fens.me/nodejs-mysql-intro/" rel="nofollow">http://blog.fens.me/nodejs-mysql-intro/</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1230">
+        <div id="dsq-comment-header-1230" class="dsq-comment-header">
+            <cite id="dsq-cite-1230">
+                <span id="dsq-author-user-1230">liuwu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1230" class="dsq-comment-body">
+            <div id="dsq-comment-message-1230" class="dsq-comment-message"><p>你好！页面中为什么要include其它页面，把登录页面写成平时常见html文件时我发现  这个标签无效，访问的登录时候会报错。这有什么办法解决吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1231">
+        <div id="dsq-comment-header-1231" class="dsq-comment-header">
+            <cite id="dsq-cite-1231">
+                <a id="dsq-author-user-1231" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1231" class="dsq-comment-body">
+            <div id="dsq-comment-message-1231" class="dsq-comment-message"><p>是不是写错了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-1232">
+        <div id="dsq-comment-header-1232" class="dsq-comment-header">
+            <cite id="dsq-cite-1232">
+                <span id="dsq-author-user-1232">liuwu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1232" class="dsq-comment-body">
+            <div id="dsq-comment-message-1232" class="dsq-comment-message"><p>你没有写错，问题在我。是我用的mysql数据库，mongodb获取SessionStore = require(&#8220;session-mongoose&#8221;)(express);那么请问mysql数据库怎样获取session！非常感谢你的指导！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-1235">
+        <div id="dsq-comment-header-1235" class="dsq-comment-header">
+            <cite id="dsq-cite-1235">
+                <a id="dsq-author-user-1235" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1235" class="dsq-comment-body">
+            <div id="dsq-comment-message-1235" class="dsq-comment-message"><p>mysql操作，我没有试过，把存储定位到mysql就行了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1256">
+        <div id="dsq-comment-header-1256" class="dsq-comment-header">
+            <cite id="dsq-cite-1256">
+                <span id="dsq-author-user-1256">环</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1256" class="dsq-comment-body">
+            <div id="dsq-comment-message-1256" class="dsq-comment-message"><p>博主，安装session-mongoose依赖库，怎样启动它？在那个目录？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1257">
+        <div id="dsq-comment-header-1257" class="dsq-comment-header">
+            <cite id="dsq-cite-1257">
+                <span id="dsq-author-user-1257">环</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1257" class="dsq-comment-body">
+            <div id="dsq-comment-message-1257" class="dsq-comment-message"><p>没有连接上数据库了，不知道怎样启动它</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1258">
+        <div id="dsq-comment-header-1258" class="dsq-comment-header">
+            <cite id="dsq-cite-1258">
+                <a id="dsq-author-user-1258" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1258" class="dsq-comment-body">
+            <div id="dsq-comment-message-1258" class="dsq-comment-message"><p>mongodb，是一个nosql数据库软件，你需要单独下载安装。</p>
+<p>安装和使用，可以参考文章：<br />
+<a href="http://blog.fens.me/mongodb-master-slave/" rel="nofollow">http://blog.fens.me/mongodb-master-slave/</a></p>
+<p>MongoDB官方下载<br />
+<a href="https://www.mongodb.org/downloads" rel="nofollow">https://www.mongodb.org/downloads</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1265">
+        <div id="dsq-comment-header-1265" class="dsq-comment-header">
+            <cite id="dsq-cite-1265">
+                <span id="dsq-author-user-1265">环</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1265" class="dsq-comment-body">
+            <div id="dsq-comment-message-1265" class="dsq-comment-message"><p>mongoose是一个依赖库吗？mongodb和mongoose还有mongodb drive有点搞不清关系</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-1268">
+        <div id="dsq-comment-header-1268" class="dsq-comment-header">
+            <cite id="dsq-cite-1268">
+                <a id="dsq-author-user-1268" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1268" class="dsq-comment-body">
+            <div id="dsq-comment-message-1268" class="dsq-comment-message"><p>mongodb是数据库。<br />
+mongoose是nodejs访问mongodb的一种现实，是一个依赖包。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1490">
+        <div id="dsq-comment-header-1490" class="dsq-comment-header">
+            <cite id="dsq-cite-1490">
+                <span id="dsq-author-user-1490">环</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1490" class="dsq-comment-body">
+            <div id="dsq-comment-message-1490" class="dsq-comment-message"><p>不知道为啥出现这个：<br />
+TypeError: Cannot read property &#8216;connect.sess&#8217; of undefined<br />
+我直接下载你的源码不会出现这样的问题，我自己添加进去就会遇到这样的问题</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1493">
+        <div id="dsq-comment-header-1493" class="dsq-comment-header">
+            <cite id="dsq-cite-1493">
+                <a id="dsq-author-user-1493" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1493" class="dsq-comment-body">
+            <div id="dsq-comment-message-1493" class="dsq-comment-message"><p>你最好一行一行地比较一下 app.js 中的代码，找找有哪里写法是不一样的？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1535">
+        <div id="dsq-comment-header-1535" class="dsq-comment-header">
+            <cite id="dsq-cite-1535">
+                <span id="dsq-author-user-1535">栩栩如生</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1535" class="dsq-comment-body">
+            <div id="dsq-comment-message-1535" class="dsq-comment-message"><p>在安装express成功后，却发现express指令用不了，原来最新版本的express命令已经迁移到一个单独的模块express-generetor。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1537">
+        <div id="dsq-comment-header-1537" class="dsq-comment-header">
+            <cite id="dsq-cite-1537">
+                <a id="dsq-author-user-1537" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1537" class="dsq-comment-body">
+            <div id="dsq-comment-message-1537" class="dsq-comment-message"><p>express 4，我还没有时间看，等过段时间会更新文章的。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-1576">
+        <div id="dsq-comment-header-1576" class="dsq-comment-header">
+            <cite id="dsq-cite-1576">
+                <span id="dsq-author-user-1576">栩栩如生</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1576" class="dsq-comment-body">
+            <div id="dsq-comment-message-1576" class="dsq-comment-message"><p>是3.0的，而且官网现在的运行express项目的指令是：$ npm start，不是node app.js，我输入node app.js没有反应。不过看你的文章还真的是获益匪浅，谢谢了~~~~</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2325">
+        <div id="dsq-comment-header-2325" class="dsq-comment-header">
+            <cite id="dsq-cite-2325">
+                <span id="dsq-author-user-2325">bin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2325" class="dsq-comment-body">
+            <div id="dsq-comment-message-2325" class="dsq-comment-message"><p>npm start跟4.0之前的版本node app.js是一样的。你可以看看package.json里面有个scripts参数，其实就是用npm start代替了node app.js。4.0之后的版本把绑定服务器端口的操作移到bin/www下去了。你会发现scripts的参数就是启动这个node ./bin/www。原理就是这份文件作为入口，app.js最后有一句module.exports = app;意思是把app对象作为一个模块，别的文件require这份文件的时候，得到的就是这个app对象。所以www里面有这么一句var app = require(&#8216;../app&#8217;);</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-4" id="dsq-comment-2475">
+        <div id="dsq-comment-header-2475" class="dsq-comment-header">
+            <cite id="dsq-cite-2475">
+                <span id="dsq-author-user-2475">jalen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2475" class="dsq-comment-body">
+            <div id="dsq-comment-message-2475" class="dsq-comment-message"><p>真是多谢啊啊。在第一页的时候 我硬是没配出来 ，原来什么都变了&#8230;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-2342">
+        <div id="dsq-comment-header-2342" class="dsq-comment-header">
+            <cite id="dsq-cite-2342">
+                <span id="dsq-author-user-2342">coder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2342" class="dsq-comment-body">
+            <div id="dsq-comment-message-2342" class="dsq-comment-message"><p>这个问题是因为最新express4.0版本中将命令工具分家出���了,所以我们还需要安装一个命令工具,命令如下:<br />
+npm install -g express-generator</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2344">
+        <div id="dsq-comment-header-2344" class="dsq-comment-header">
+            <cite id="dsq-cite-2344">
+                <a id="dsq-author-user-2344" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2344" class="dsq-comment-body">
+            <div id="dsq-comment-message-2344" class="dsq-comment-message"><p>这个命令应该是 express 3.6 分出来的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1643">
+        <div id="dsq-comment-header-1643" class="dsq-comment-header">
+            <cite id="dsq-cite-1643">
+                <span id="dsq-author-user-1643">Servlet</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1643" class="dsq-comment-body">
+            <div id="dsq-comment-message-1643" class="dsq-comment-message"><p>使用cookieSession  ,  和 session .    我测试了很久，session数据根本就没有持久化到Mongodb数据库里。  全部都是放入到cookie里面了。   这样的话就没有达到数据使用Mongodb的目的</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1646">
+        <div id="dsq-comment-header-1646" class="dsq-comment-header">
+            <cite id="dsq-cite-1646">
+                <a id="dsq-author-user-1646" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1646" class="dsq-comment-body">
+            <div id="dsq-comment-message-1646" class="dsq-comment-message"><p>session-mongoose</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1661">
+        <div id="dsq-comment-header-1661" class="dsq-comment-header">
+            <cite id="dsq-cite-1661">
+                <span id="dsq-author-user-1661">Servlet</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1661" class="dsq-comment-body">
+            <div id="dsq-comment-message-1661" class="dsq-comment-message"><p>我已经测试过了。 如果cookieSession  与  session  同时使用的话，那么程序默认就使用了cookieSession了，  而session是无效的， 也不会持久化到Mongodb里。  只有屏蔽掉cookieSession， 才会持久化到Mongodb里</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1662">
+        <div id="dsq-comment-header-1662" class="dsq-comment-header">
+            <cite id="dsq-cite-1662">
+                <a id="dsq-author-user-1662" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1662" class="dsq-comment-body">
+            <div id="dsq-comment-message-1662" class="dsq-comment-message"><p>如果你想知道session和cookieSession的区别，看这篇文章：http://blog.fens.me/nodejs-connect/</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1657">
+        <div id="dsq-comment-header-1657" class="dsq-comment-header">
+            <cite id="dsq-cite-1657">
+                <span id="dsq-author-user-1657">学超 刘</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1657" class="dsq-comment-body">
+            <div id="dsq-comment-message-1657" class="dsq-comment-message"><p>您好，我是一个刚开始Node.js的新手，请问return res.redirect(&#8216;/login&#8217;); 这里的return的作用是什么啊  我试着删除return后程序也可以正常运行。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1660">
+        <div id="dsq-comment-header-1660" class="dsq-comment-header">
+            <cite id="dsq-cite-1660">
+                <a id="dsq-author-user-1660" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1660" class="dsq-comment-body">
+            <div id="dsq-comment-message-1660" class="dsq-comment-message"><p>return 表示退出函数，不执行后面的语句了。<br />
+如果return res.redirect(&#8216;/home&#8217;); 这里不加return，还会执行函数里后面的语句，会出错误的。编程习惯要加return</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1782">
+        <div id="dsq-comment-header-1782" class="dsq-comment-header">
+            <cite id="dsq-cite-1782">
+                <span id="dsq-author-user-1782">Dc Zhu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1782" class="dsq-comment-body">
+            <div id="dsq-comment-message-1782" class="dsq-comment-message"><p>express的session持久化 还是比较方便的，有中间件自动完成，session超时了，找到数据库的data重新恢复session_data，我想问一下，java中tomcat也有关于session store的配置，是如何恢复session_data的呢，有没有相关的中间件什么的去做这样的事？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1783">
+        <div id="dsq-comment-header-1783" class="dsq-comment-header">
+            <cite id="dsq-cite-1783">
+                <a id="dsq-author-user-1783" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1783" class="dsq-comment-body">
+            <div id="dsq-comment-message-1783" class="dsq-comment-message"><p>java的session是在内存中的，由容器进行管理，你也可以自己管理sesssion放到redis里。具体的实现要找tomcat的API。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2016">
+        <div id="dsq-comment-header-2016" class="dsq-comment-header">
+            <cite id="dsq-cite-2016">
+                <a id="dsq-author-user-2016" href="http://callmewhy.com" target="_blank" rel="nofollow">callmewhy</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2016" class="dsq-comment-body">
+            <div id="dsq-comment-message-2016" class="dsq-comment-message"><p>大哥你咋啥都会！太厉害了。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2017">
+        <div id="dsq-comment-header-2017" class="dsq-comment-header">
+            <cite id="dsq-cite-2017">
+                <a id="dsq-author-user-2017" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2017" class="dsq-comment-body">
+            <div id="dsq-comment-message-2017" class="dsq-comment-message"><p>多学点，没啥坏处。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2018">
+        <div id="dsq-comment-header-2018" class="dsq-comment-header">
+            <cite id="dsq-cite-2018">
+                <a id="dsq-author-user-2018" href="http://callmewhy.com" target="_blank" rel="nofollow">callmewhy</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2018" class="dsq-comment-body">
+            <div id="dsq-comment-message-2018" class="dsq-comment-message"><p>你现在在哪里工作，比较好奇你多大了哈哈</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-2019">
+        <div id="dsq-comment-header-2019" class="dsq-comment-header">
+            <cite id="dsq-cite-2019">
+                <a id="dsq-author-user-2019" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2019" class="dsq-comment-body">
+            <div id="dsq-comment-message-2019" class="dsq-comment-message"><p>我在创业中，已经工作很多年了。<br />
+看你的博客，你还很年轻，已经做了不少东西了！很好！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-2020">
+        <div id="dsq-comment-header-2020" class="dsq-comment-header">
+            <cite id="dsq-cite-2020">
+                <a id="dsq-author-user-2020" href="http://callmewhy.com" target="_blank" rel="nofollow">callmewhy</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2020" class="dsq-comment-body">
+            <div id="dsq-comment-message-2020" class="dsq-comment-message"><p>很高兴看到你的博客，可以感受的到对编程满满的热爱^_^</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2025">
+        <div id="dsq-comment-header-2025" class="dsq-comment-header">
+            <cite id="dsq-cite-2025">
+                <a id="dsq-author-user-2025" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2025" class="dsq-comment-body">
+            <div id="dsq-comment-message-2025" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2117">
+        <div id="dsq-comment-header-2117" class="dsq-comment-header">
+            <cite id="dsq-cite-2117">
+                <span id="dsq-author-user-2117">Feng Tianba</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2117" class="dsq-comment-body">
+            <div id="dsq-comment-message-2117" class="dsq-comment-message"><p>貌似这使用与express3. express4好像文章中说的很多东西都不行了。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2123">
+        <div id="dsq-comment-header-2123" class="dsq-comment-header">
+            <cite id="dsq-cite-2123">
+                <a id="dsq-author-user-2123" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2123" class="dsq-comment-body">
+            <div id="dsq-comment-message-2123" class="dsq-comment-message"><p>express3.6 版本以后，做了很多的向前不兼容的升级，文章还没有更新。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2134">
+        <div id="dsq-comment-header-2134" class="dsq-comment-header">
+            <cite id="dsq-cite-2134">
+                <a id="dsq-author-user-2134" href="http://fenghelong.com" target="_blank" rel="nofollow">Feng Tianba</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2134" class="dsq-comment-body">
+            <div id="dsq-comment-message-2134" class="dsq-comment-message"><p>是的，不过文章还是不错的~能分享很难得~</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2200">
+        <div id="dsq-comment-header-2200" class="dsq-comment-header">
+            <cite id="dsq-cite-2200">
+                <span id="dsq-author-user-2200">wise</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2200" class="dsq-comment-body">
+            <div id="dsq-comment-message-2200" class="dsq-comment-message"><p>對新手很有益處，感謝</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2202">
+        <div id="dsq-comment-header-2202" class="dsq-comment-header">
+            <cite id="dsq-cite-2202">
+                <a id="dsq-author-user-2202" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2202" class="dsq-comment-body">
+            <div id="dsq-comment-message-2202" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2284">
+        <div id="dsq-comment-header-2284" class="dsq-comment-header">
+            <cite id="dsq-cite-2284">
+                <span id="dsq-author-user-2284">rong_fan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2284" class="dsq-comment-body">
+            <div id="dsq-comment-message-2284" class="dsq-comment-message"><p>现在express的版本都是4.x，所以用4.x版本的express完成这个项目真是困难重重，因为3.x版本和4.x版本实在差距很大。于是我还是将版本下调才能顺利完成。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2286">
+        <div id="dsq-comment-header-2286" class="dsq-comment-header">
+            <cite id="dsq-cite-2286">
+                <a id="dsq-author-user-2286" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2286" class="dsq-comment-body">
+            <div id="dsq-comment-message-2286" class="dsq-comment-message"><p>确实，我也没有升级系统呢，从2.x到3就经历了各种折磨。<br />
+express4除了替换了connet，没有太多性能或者开发效率上的提升。</p>
+<p>再看看，再考虑升级的问题。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2324">
+        <div id="dsq-comment-header-2324" class="dsq-comment-header">
+            <cite id="dsq-cite-2324">
+                <span id="dsq-author-user-2324">Honwhy Wang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2324" class="dsq-comment-body">
+            <div id="dsq-comment-message-2324" class="dsq-comment-message"><p>希望作者稍作修改，现在安装express不指明版本的话，默认安装的新版4.x。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2330">
+        <div id="dsq-comment-header-2330" class="dsq-comment-header">
+            <cite id="dsq-cite-2330">
+                <a id="dsq-author-user-2330" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2330" class="dsq-comment-body">
+            <div id="dsq-comment-message-2330" class="dsq-comment-message"><p>等我有时间，会写一篇介绍express4的文章</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2335">
+        <div id="dsq-comment-header-2335" class="dsq-comment-header">
+            <cite id="dsq-cite-2335">
+                <span id="dsq-author-user-2335">萝卜先生</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2335" class="dsq-comment-body">
+            <div id="dsq-comment-message-2335" class="dsq-comment-message"><p>您好，看了您的博客 受益匪浅，但是依然存在一些疑问，目前接触到的项目大部分是MySQL，所以想将您的教程结合MySQL做一下，我也看了您关于MySQL的一些讲解，可是依然对在MySQL下如何使用session有很大的疑问，能否指点一下？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2339">
+        <div id="dsq-comment-header-2339" class="dsq-comment-header">
+            <cite id="dsq-cite-2339">
+                <a id="dsq-author-user-2339" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2339" class="dsq-comment-body">
+            <div id="dsq-comment-message-2339" class="dsq-comment-message"><p>MySQL和session没有什么关系，如果用mysql存session就自己写个实现方法，通常情况是没必要这么用的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2571">
+        <div id="dsq-comment-header-2571" class="dsq-comment-header">
+            <cite id="dsq-cite-2571">
+                <span id="dsq-author-user-2571">leeshan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2571" class="dsq-comment-body">
+            <div id="dsq-comment-message-2571" class="dsq-comment-message"><p>你好，有个问题想请教一下， 我装的是express4.9.0，在views里用提示 message is not defined。</p>
+<p>然后我用 ，虽然没有报错了，但这个message却是空的没有值。</p>
+<p>我用console.log查看了一下，在点完“登录”按钮后，程序好像不会运行到app.use那里，也就是说app.use里的</p>
+<p>res.locals.message = &#8221;;<br />
+ if (err)res.locals.message = &#8221; + err + &#8221;;</p>
+<p>这两行根本就没有运行。。</p>
+<p>不知道我这样理解对不对。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2572">
+        <div id="dsq-comment-header-2572" class="dsq-comment-header">
+            <cite id="dsq-cite-2572">
+                <a id="dsq-author-user-2572" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2572" class="dsq-comment-body">
+            <div id="dsq-comment-message-2572" class="dsq-comment-message"><p>你好，文章是express3的，express4.9会有运行问题。express4.有很多不兼容的升级，特别是对connect模块的移除。如果你继续用express4，那么需要自己先修改程序；或者使用文章中的express3的版本。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-3100">
+        <div id="dsq-comment-header-3100" class="dsq-comment-header">
+            <cite id="dsq-cite-3100">
+                <span id="dsq-author-user-3100">huojiaqi08</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3100" class="dsq-comment-body">
+            <div id="dsq-comment-message-3100" class="dsq-comment-message"><p>我用的也是express3也有这问题呢。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-4957">
+        <div id="dsq-comment-header-4957" class="dsq-comment-header">
+            <cite id="dsq-cite-4957">
+                <span id="dsq-author-user-4957">SHocker-Yu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4957" class="dsq-comment-body">
+            <div id="dsq-comment-message-4957" class="dsq-comment-message"><p>&#8211; -我花了一个多小时为这个问题。。解决了。。。原因是app.js中res.locals.message 这个地方的修改，我是因为没看仔细，直接把加了这一段代码，然后位置放在了加载路由那几句的下面了，简单说就是博主意思是在原有的句子中修改增加，而我没看到原有的句子（瞎！），然后自己把代码段放错了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-admin bypostauthor odd alt depth-3" id="dsq-comment-4959">
+        <div id="dsq-comment-header-4959" class="dsq-comment-header">
+            <cite id="dsq-cite-4959">
+                <a id="dsq-author-user-4959" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4959" class="dsq-comment-body">
+            <div id="dsq-comment-message-4959" class="dsq-comment-message"><p>解决就好！！:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-4961">
+        <div id="dsq-comment-header-4961" class="dsq-comment-header">
+            <cite id="dsq-cite-4961">
+                <a id="dsq-author-user-4961" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4961" class="dsq-comment-body">
+            <div id="dsq-comment-message-4961" class="dsq-comment-message"><p>解决就好！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2827">
+        <div id="dsq-comment-header-2827" class="dsq-comment-header">
+            <cite id="dsq-cite-2827">
+                <span id="dsq-author-user-2827">Maplechow</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2827" class="dsq-comment-body">
+            <div id="dsq-comment-message-2827" class="dsq-comment-message"><p>遇到一个问题，也没搜索到，就在这请教一下。用express建立好项目之后，进入工程执行npm install。最后运行node app.js 。但是没有启动express，也没有报错。好奇怪！！不知道是什么原因。请问你有什么高见么？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2829">
+        <div id="dsq-comment-header-2829" class="dsq-comment-header">
+            <cite id="dsq-cite-2829">
+                <a id="dsq-author-user-2829" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2829" class="dsq-comment-body">
+            <div id="dsq-comment-message-2829" class="dsq-comment-message"><p>本文是express3的教程，express4版本更新后，会有很多不一样的地方。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2830">
+        <div id="dsq-comment-header-2830" class="dsq-comment-header">
+            <cite id="dsq-cite-2830">
+                <span id="dsq-author-user-2830">Maplechow</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2830" class="dsq-comment-body">
+            <div id="dsq-comment-message-2830" class="dsq-comment-message"><p>问题已经解决了。express4.x使用npm start 方式启动的。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2832">
+        <div id="dsq-comment-header-2832" class="dsq-comment-header">
+            <cite id="dsq-cite-2832">
+                <a id="dsq-author-user-2832" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2832" class="dsq-comment-body">
+            <div id="dsq-comment-message-2832" class="dsq-comment-message"><p>好的 🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2851">
+        <div id="dsq-comment-header-2851" class="dsq-comment-header">
+            <cite id="dsq-cite-2851">
+                <span id="dsq-author-user-2851">Nightost</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2851" class="dsq-comment-body">
+            <div id="dsq-comment-message-2851" class="dsq-comment-message"><p>//express 版本4.9.0，使用如下改为html模板<br />
+app.engine(&#8220;.html&#8221;, require(&#8216;ejs&#8217;).renderFile);<br />
+//如下会报错<br />
+//app.set(&#8216;.html&#8217;, ejs.__express);</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2855">
+        <div id="dsq-comment-header-2855" class="dsq-comment-header">
+            <cite id="dsq-cite-2855">
+                <a id="dsq-author-user-2855" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2855" class="dsq-comment-body">
+            <div id="dsq-comment-message-2855" class="dsq-comment-message"><p>本文仅适用于express 3.x，不适用于express4</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2864">
+        <div id="dsq-comment-header-2864" class="dsq-comment-header">
+            <cite id="dsq-cite-2864">
+                <span id="dsq-author-user-2864">Nightost</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2864" class="dsq-comment-body">
+            <div id="dsq-comment-message-2864" class="dsq-comment-message"><p>哦，主要告诉后来看文档的人。<br />
+可能会有帮助~</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2865">
+        <div id="dsq-comment-header-2865" class="dsq-comment-header">
+            <cite id="dsq-cite-2865">
+                <a id="dsq-author-user-2865" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2865" class="dsq-comment-body">
+            <div id="dsq-comment-message-2865" class="dsq-comment-message"><p>呵呵，多谢！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2868">
+        <div id="dsq-comment-header-2868" class="dsq-comment-header">
+            <cite id="dsq-cite-2868">
+                <span id="dsq-author-user-2868">Jade Chen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2868" class="dsq-comment-body">
+            <div id="dsq-comment-message-2868" class="dsq-comment-message"><p>app.get(//assets/(.*?)??(.*)$/, require(&#8220;./routes/combo.js&#8221;))<br />
+/assets/??index.js<br />
+app.get(//assets/(.*?)$$(.*)$/, require(&#8220;./routes/combo.js&#8221;))<br />
+/assets/$$index.js<br />
+上面一个始终访问不了，求指导！难道express中的路由限制了？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2870">
+        <div id="dsq-comment-header-2870" class="dsq-comment-header">
+            <cite id="dsq-cite-2870">
+                <a id="dsq-author-user-2870" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2870" class="dsq-comment-body">
+            <div id="dsq-comment-message-2870" class="dsq-comment-message"><p>assets目录，应该是框架生成的，而不是自己写的，不要在自己的代码引用这个目录的文件。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2874">
+        <div id="dsq-comment-header-2874" class="dsq-comment-header">
+            <cite id="dsq-cite-2874">
+                <span id="dsq-author-user-2874">Jade Chen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2874" class="dsq-comment-body">
+            <div id="dsq-comment-message-2874" class="dsq-comment-message"><p>应该不是这个原因吧，我把上面的assets换成test，上面那种路由写法还是不行。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2882">
+        <div id="dsq-comment-header-2882" class="dsq-comment-header">
+            <cite id="dsq-cite-2882">
+                <a id="dsq-author-user-2882" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2882" class="dsq-comment-body">
+            <div id="dsq-comment-message-2882" class="dsq-comment-message"><p>我还是不能理解，你这样写的目的。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-2884">
+        <div id="dsq-comment-header-2884" class="dsq-comment-header">
+            <cite id="dsq-cite-2884">
+                <span id="dsq-author-user-2884">Jade Chen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2884" class="dsq-comment-body">
+            <div id="dsq-comment-message-2884" class="dsq-comment-message"><p>我的目的是把请求的文件打包返回回去</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2886">
+        <div id="dsq-comment-header-2886" class="dsq-comment-header">
+            <cite id="dsq-cite-2886">
+                <a id="dsq-author-user-2886" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2886" class="dsq-comment-body">
+            <div id="dsq-comment-message-2886" class="dsq-comment-message"><p>&#8220;把请求的文件打包返回回去&#8221;，你是想返回文件，让用户下载吗？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-2879">
+        <div id="dsq-comment-header-2879" class="dsq-comment-header">
+            <cite id="dsq-cite-2879">
+                <span id="dsq-author-user-2879">Jade Chen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2879" class="dsq-comment-body">
+            <div id="dsq-comment-message-2879" class="dsq-comment-message"><p>我换成其他目录还是一样有问题</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3021">
+        <div id="dsq-comment-header-3021" class="dsq-comment-header">
+            <cite id="dsq-cite-3021">
+                <span id="dsq-author-user-3021">xiaoying</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3021" class="dsq-comment-body">
+            <div id="dsq-comment-message-3021" class="dsq-comment-message"><p>谁学过博主的<br />
+Mongoose使用案例–让JSON数据直接入库MongoDB这篇文章呢？急！！！！！！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-grunt-intro/' rel='external nofollow' class='url'>grunt让Nodejs规范起来 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3138">
+        <div id="dsq-comment-header-3138" class="dsq-comment-header">
+            <cite id="dsq-cite-3138">
+                <span id="dsq-author-user-3138">CodeMan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3138" class="dsq-comment-body">
+            <div id="dsq-comment-message-3138" class="dsq-comment-message"><p>非常感谢博主的这篇文章，让我了解了Nodejs的开发过程，按着博主的讲解，并参考了《Nodejs开发指南》，实践了一下，用layout.ejs模板，，在访问页面时，显示最新消息，把html标签也显示出来了，不知是哪���出了问题，望博主请教。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3144">
+        <div id="dsq-comment-header-3144" class="dsq-comment-header">
+            <cite id="dsq-cite-3144">
+                <a id="dsq-author-user-3144" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3144" class="dsq-comment-body">
+            <div id="dsq-comment-message-3144" class="dsq-comment-message"><p>, 是有区分的，是不是这个原因？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-3145">
+        <div id="dsq-comment-header-3145" class="dsq-comment-header">
+            <cite id="dsq-cite-3145">
+                <a id="dsq-author-user-3145" href="http://yujiangshui.com/" target="_blank" rel="nofollow">Jiangshui Yu</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3145" class="dsq-comment-body">
+            <div id="dsq-comment-message-3145" class="dsq-comment-message"><p> 是直接输出原本的内容，将 HTML 代码转义过了。</p>
+<p> 是输出 HTML 代码，未转义，你应该使用 </p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3328">
+        <div id="dsq-comment-header-3328" class="dsq-comment-header">
+            <cite id="dsq-cite-3328">
+                <a id="dsq-author-user-3328" href="http://gongtao.me/" target="_blank" rel="nofollow">Kevin</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3328" class="dsq-comment-body">
+            <div id="dsq-comment-message-3328" class="dsq-comment-message"><p>跟着博主的步骤一步一步的学习</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3345">
+        <div id="dsq-comment-header-3345" class="dsq-comment-header">
+            <cite id="dsq-cite-3345">
+                <a id="dsq-author-user-3345" href="http://gongtao.me/" target="_blank" rel="nofollow">Kevin</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3345" class="dsq-comment-body">
+            <div id="dsq-comment-message-3345" class="dsq-comment-message"><p>在启动github clone过来的代码时，出现如下错误<br />
+Error: failed to connect to [localhost:27017]</p>
+<p>看你的app.js代码，默认是连接本地的mongodb，<br />
+如需要连接的是非本地mongodb，该如何修改？</p>
+<p>试图修改如下：</p>
+<p>url: &#8220;mongodb://192.168.56.101:27017/session&#8221;<br />
+也出现如上同样的错误。</p>
+<p>请问大家遇到同样的问题没？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3354">
+        <div id="dsq-comment-header-3354" class="dsq-comment-header">
+            <cite id="dsq-cite-3354">
+                <span id="dsq-author-user-3354">timepast</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3354" class="dsq-comment-body">
+            <div id="dsq-comment-message-3354" class="dsq-comment-message"><p>有没有用express 4.x的同学，session-mongoose已经不支持express 4.x了，就用了express-session<br />
+换了写法app.js =&gt; app.use(session({ secret: &#8216;keyboard cat&#8217;, cookie: { maxAge: 60000 }}))<br />
+但一直报错： throw new Error(&#8216;Can&#8217;t set headers after they are sent.&#8217;);</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3364">
+        <div id="dsq-comment-header-3364" class="dsq-comment-header">
+            <cite id="dsq-cite-3364">
+                <span id="dsq-author-user-3364">timepast</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3364" class="dsq-comment-body">
+            <div id="dsq-comment-message-3364" class="dsq-comment-message"><p>需要完整写法：app.use(session({ secret: &#8216;keyboard cat&#8217;, cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3365">
+        <div id="dsq-comment-header-3365" class="dsq-comment-header">
+            <cite id="dsq-cite-3365">
+                <span id="dsq-author-user-3365">timepast</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3365" class="dsq-comment-body">
+            <div id="dsq-comment-message-3365" class="dsq-comment-message"><p>if (req.body.username === user.username </p>
+<p>		&amp;&amp; req.body.password === user.password) {</p>
+<p>		req.session.user = user;</p>
+<p>res.redirect(&#8216;/home&#8217;);</p>
+<p>	} else {</p>
+<p>		req.session.error = &#8216;用户名或密码不正确！&#8217;;</p>
+<p>res.redirect(&#8216;/login&#8217;);</p>
+<p>	}</p>
+<p>原来是之前没有写else导致报错。不过没写else res.redirect(&#8216;/home&#8217;)应该页面发生跳转了 res.redirect(&#8216;/login&#8217;); 也就不会执行了才对呀，怎么会报错呢。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-3375">
+        <div id="dsq-comment-header-3375" class="dsq-comment-header">
+            <cite id="dsq-cite-3375">
+                <a id="dsq-author-user-3375" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3375" class="dsq-comment-body">
+            <div id="dsq-comment-message-3375" class="dsq-comment-message"><p>express4以后，就用express-session吧，session信息我现在更倾向保存到redis里面。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3554">
+        <div id="dsq-comment-header-3554" class="dsq-comment-header">
+            <cite id="dsq-cite-3554">
+                <span id="dsq-author-user-3554">初学者</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3554" class="dsq-comment-body">
+            <div id="dsq-comment-message-3554" class="dsq-comment-message"><p>文章中的header.html中，这里多了一个冒号</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-express4/' rel='external nofollow' class='url'>Node.js开发框架Express4.x | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4177">
+        <div id="dsq-comment-header-4177" class="dsq-comment-header">
+            <cite id="dsq-cite-4177">
+                <span id="dsq-author-user-4177">Gu Junmin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4177" class="dsq-comment-body">
+            <div id="dsq-comment-message-4177" class="dsq-comment-message"><p>教程写得太好了，感谢！！<br />
+自己写的此教程express4.x版本，https://github.com/SPxiaomin/NodeJs_Practice/tree/master/Express4_1<br />
+欢迎指点！！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4191">
+        <div id="dsq-comment-header-4191" class="dsq-comment-header">
+            <cite id="dsq-cite-4191">
+                <a id="dsq-author-user-4191" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4191" class="dsq-comment-body">
+            <div id="dsq-comment-message-4191" class="dsq-comment-message"><p>写的不错，加油！！</p>
+<p>Express4的文章<br />
+<a href="http://blog.fens.me/nodejs-express4" rel="nofollow">http://blog.fens.me/nodejs-express4</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4300">
+        <div id="dsq-comment-header-4300" class="dsq-comment-header">
+            <cite id="dsq-cite-4300">
+                <span id="dsq-author-user-4300">pi_dear</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4300" class="dsq-comment-body">
+            <div id="dsq-comment-message-4300" class="dsq-comment-message"><p>楼主  这一步<br />
+D:workspacejavascriptangular-basic&gt;rm -rf routes<br />
+这是删除了路由文件夹   那么 后台路由是由谁来控制啊  angular 是控制前台路由的 现在我弄不清 路由由谁来控制了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4307">
+        <div id="dsq-comment-header-4307" class="dsq-comment-header">
+            <cite id="dsq-cite-4307">
+                <a id="dsq-author-user-4307" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4307" class="dsq-comment-body">
+            <div id="dsq-comment-message-4307" class="dsq-comment-message"><p>后台路由，需要提供ajax接口。页面跳转都在angular中完成。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4389">
+        <div id="dsq-comment-header-4389" class="dsq-comment-header">
+            <cite id="dsq-cite-4389">
+                <span id="dsq-author-user-4389">wubo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4389" class="dsq-comment-body">
+            <div id="dsq-comment-message-4389" class="dsq-comment-message"><p>说几个这个程序错误的地方，登陆的表单提交用的post方法但是app.js配置的是get</p>
+<p>另外view中的error.ejs页面也要改为error.html 不然提示错误看不到</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4394">
+        <div id="dsq-comment-header-4394" class="dsq-comment-header">
+            <cite id="dsq-cite-4394">
+                <a id="dsq-author-user-4394" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4394" class="dsq-comment-body">
+            <div id="dsq-comment-message-4394" class="dsq-comment-message"><p>1. 登陆表单提交是POST的路由：app.post(&#8216;/login&#8217;, routes.doLogin);</p>
+<p>2. 文章中没有error.ejs</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4390">
+        <div id="dsq-comment-header-4390" class="dsq-comment-header">
+            <cite id="dsq-cite-4390">
+                <span id="dsq-author-user-4390">wubo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4390" class="dsq-comment-body">
+            <div id="dsq-comment-message-4390" class="dsq-comment-message"><p>有几个地方代码和文字说明不一致，还望有时间改下，虽然在合适3.0的，文章是非常不错的~~ 赞一个！！！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-4421">
+        <div id="dsq-comment-header-4421" class="dsq-comment-header">
+            <cite id="dsq-cite-4421">
+                <span id="dsq-author-user-4421">冻死乌鸦</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4421" class="dsq-comment-body">
+            <div id="dsq-comment-message-4421" class="dsq-comment-message"><p>真心感谢，目前为止这是我找到的最详细的安装方法，虽然中途出现没有安装express-generetor导致报错，但是综合http://my.oschina.net/xqx/blog/307743这个里面讲的方法  最终配置成功，现在在想怎样把arttemplate配置进去</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4429">
+        <div id="dsq-comment-header-4429" class="dsq-comment-header">
+            <cite id="dsq-cite-4429">
+                <a id="dsq-author-user-4429" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4429" class="dsq-comment-body">
+            <div id="dsq-comment-message-4429" class="dsq-comment-message"><p>多尝试，会找到办法的。现在express4，可以参考http://blog.fens.me/nodejs-express4/</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-4780">
+        <div id="dsq-comment-header-4780" class="dsq-comment-header">
+            <cite id="dsq-cite-4780">
+                <span id="dsq-author-user-4780">lien</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4780" class="dsq-comment-body">
+            <div id="dsq-comment-message-4780" class="dsq-comment-message"><p>可以运行，但是一直有报错，不知道是什么问题</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4838">
+        <div id="dsq-comment-header-4838" class="dsq-comment-header">
+            <cite id="dsq-cite-4838">
+                <a id="dsq-author-user-4838" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4838" class="dsq-comment-body">
+            <div id="dsq-comment-message-4838" class="dsq-comment-message"><p>express框架已经升级了，可以参考http://blog.fens.me/nodejs-express4/</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-4990">
+        <div id="dsq-comment-header-4990" class="dsq-comment-header">
+            <cite id="dsq-cite-4990">
+                <span id="dsq-author-user-4990">monkey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4990" class="dsq-comment-body">
+            <div id="dsq-comment-message-4990" class="dsq-comment-message"><p>session-mongoose写好报错究竟什么原因，出错终端显示：</p>
+<p>Starting child process with &#8216;node app.js&#8217;<br />
+connect deprecated methodOverride: use method-override npm module instead app.js:30:17<br />
+Express server listening on port 3000<br />
+/Users/haojinli/Desktop/work/nodeApp/nodeEpress/node_modules/session-mongoose/node_modules/mongoose/node_modules/mongodb/lib/server.js:242</p>
+<p>        process.nextTick(function() { throw err; })<br />
+                                              ^<br />
+Error: connect ECONNREFUSED 127.0.0.1:27017<br />
+at Object.exports._errnoException (util.js:870:11)<br />
+at exports._exceptionWithHostPort (util.js:893:20)<br />
+at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1063:14)<br />
+Program node app.js exited with code 1</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-5052">
+        <div id="dsq-comment-header-5052" class="dsq-comment-header">
+            <cite id="dsq-cite-5052">
+                <span id="dsq-author-user-5052">糊弄单方</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5052" class="dsq-comment-body">
+            <div id="dsq-comment-message-5052" class="dsq-comment-message"><p>第四部分 ejs模板，我按你说的添加两行代码</p>
+<p>app.engine(&#8216;.html&#8217;, ejs.__express);<br />
+app.set(&#8216;view engine&#8217;, &#8216;html&#8217;);// app.set(&#8216;view engine&#8217;, &#8216;ejs&#8217;);<br />
+view/index.ejs没报错 反而 改成html出现你上文说的报错 </p>
+<p>我用的express4.0</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-5061">
+        <div id="dsq-comment-header-5061" class="dsq-comment-header">
+            <cite id="dsq-cite-5061">
+                <a id="dsq-author-user-5061" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5061" class="dsq-comment-body">
+            <div id="dsq-comment-message-5061" class="dsq-comment-message"><p>express4.0 有很多的变化，看另一篇文章。<br />
+<a href="http://blog.fens.me/nodejs-express4/" rel="nofollow">http://blog.fens.me/nodejs-express4/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-5053">
+        <div id="dsq-comment-header-5053" class="dsq-comment-header">
+            <cite id="dsq-cite-5053">
+                <span id="dsq-author-user-5053">li305263</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5053" class="dsq-comment-body">
+            <div id="dsq-comment-message-5053" class="dsq-comment-message"><p>3.0的路由配置跟4.0一样吗? 为什么我会报错,说Error: Route.get() requires callback functions but got a [object Undefined]</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-express3/';
+var disqus_identifier = '146 http://blog.fens.me/?p=146';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Nodejs开发框架Express3.0开发手记–从零开始";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=146';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

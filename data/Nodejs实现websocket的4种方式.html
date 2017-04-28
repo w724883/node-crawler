@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Nodejs实现websocket的4种方式 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Nodejs实现websocket的4种方式 Comments Feed" href="http://blog.fens.me/nodejs-websocket/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Java现实WebSocket' href='http://blog.fens.me/java-websocket-intro/' />
+<link rel='next' title='Socket.io在线聊天室' href='http://blog.fens.me/nodejs-socketio-chat/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-websocket/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=1895' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-websocket%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-websocket%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="websocket,websocket-server,socket.io,faye-websocket-node,node-websocket,javascript,nodejs" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-1895 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Nodejs实现websocket的4种方式</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-1895 post type-post status-publish format-standard hentry category-javascript tag-faye-websocket-node tag-javascript tag-node-websocket tag-nodejs tag-socket-io tag-websocket tag-websocket-server">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-websocket/" title="Nodejs实现websocket的4种方式" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Aug 21, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/faye-websocket-node/" rel="tag">faye-websocket-node</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/node-websocket/" rel="tag">node-websocket</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/socket-io/" rel="tag">socket.io</a><a href="http://blog.fens.me/tag/websocket/" rel="tag">websocket</a><a href="http://blog.fens.me/tag/websocket-server/" rel="tag">websocket-server</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-websocket/#comments"><span class="dsq-postid" data-dsqidentifier="1895 http://blog.fens.me/?p=1895">32 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Nodejs实现websocket的4种方式</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs实现websocket的4种方式" href="http://blog.fens.me/nodejs-websocket/" target="_blank">http://blog.fens.me/nodejs-websocket/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/nodejs-websocket.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/nodejs-websocket.png" alt="nodejs-websocket" width="600" height="400" class="alignnone size-full wp-image-1923" /></a></p>
+<p><strong>前言</strong></p>
+<p>WebSocket是HTML5开始提供的一种浏览器与服务器间进行全双工通讯的网络技术。在WebSocket API中，浏览器和服务器只需要要做一个握手(handshaking)的动作，然后，浏览器和服务器之间就形成了一条快速通道。两者之间就直接可以数据互相传送。</p>
+<p>WebSocket是一个通信的协议，分为服务器和客户端。服务器放在后台，保持与客户端的长连接，完成双方通信的任务。客户端一般都是实现在支持HTML5浏览器核心中，通过提供JavascriptAPI使用网页可以建立websocket连接。Java实现的案例，请参考：<a title="java现实websocket" href="http://blog.fens.me/java-websocket-intro/" target="_blank">Java现实WebSocket</a></p>
+<p>今天让我们来看看在nodejs中，如何实现websocket的通信。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>为什么用Nodejs</li>
+<li>node-websocket-server:测试失败</li>
+<li>node-websocket:测试成功</li>
+<li>faye-websocket-node: 测试成功</li>
+<li>socket.io: 测试成功</li>
+<li>最后总结</li>
+</ol>
+<h2>1. 为什么用Nodejs？</h2>
+<p>1. 事件驱动，通过闭包很容易实现客户端的生命活期。<br />
+2. 不用担心多线程，锁，并行计算的问题<br />
+3. V8引擎速度非常快<br />
+4. 对于游戏来说，写一遍游戏逻辑代码，前端后端通用。</p>
+<p><strong>当然Nodejs也有一些缺点：</strong><br />
+1. nodejs更新很快，可能会出现版本联兼容<br />
+2. nodejs还不算成熟，还没有大制作。<br />
+3. nodejs不像其他的服务器，对于不同的连接，不支持进程和线程操作。</p>
+<p>在权衡Nodejs给我们带来无限畅快的开发的同时，要考虑到他的不成熟，特别是对于“长连接”的网络通信应用。下面我将分别，测试一下网上几种Nodejs实现websocket的框架。</p>
+<p><strong>我的系统环境</strong></p>
+<ul>
+<li>win7 64bit</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<pre><code>~ D:\workspace\javascript&gt;node -v
+v0.10.5
+
+~ D:\workspace\javascript&gt;npm -v
+1.2.19</code></pre>
+<h2>2. node-websocket-server: 测试失败</h2>
+<p>github: https://github.com/miksago/node-websocket-server<br />
+node-websocket-server：是基于nodejs底层API实现的，可能产生不兼容的机率是90-100%，现在已经不建议再使用了。我查了代码库，发现已经有两年没有更新了，所以还在准备用node-websocket-server框架的同学，要特别小心了。</p>
+<p>我也做了一个实验，一直会报错，贴一下实验代码。</p>
+<pre><code>
+~ D:\workspace\javascript&gt;mkdir nodejs-websocket-server
+~ D:\workspace\javascript&gt;cd nodejs-websocket-server
+~ D:\workspace\javascript\nodejs-websocket-server&gt;npm install websocket-server
+npm http GET https://registry.npmjs.org/websocket-server
+npm http 304 https://registry.npmjs.org/websocket-server
+npm http GET https://registry.npmjs.org/websocket-server/-/websocket-server-1.4.04.tgz
+npm http 200 https://registry.npmjs.org/websocket-server/-/websocket-server-1.4.04.tgz
+websocket-server@1.4.04 node_modules\websocket-server
+
+~ vi app.js
+var conns = new Array();
+
+var ws = require("websocket-server");
+var server = ws.createServer();
+
+server.addListener("connection", function(connection){
+  console.log("Connection request on Websocket-Server");
+  conns.push(connection);
+  connection.addListener('message',function(msg){
+        console.log(msg);
+        for(var i=0; i&lt;conns.length; i++){
+            if(conns[i]!=connection){
+                conns[i].send(msg);
+            }
+        }
+    });
+});
+server.listen(3001);
+</code></pre>
+<p><strong>客户端连接：</strong></p>
+<pre><code>
+&lt;html&gt;
+&lt;body&gt;
+&lt;div id="output"&gt;&lt;/div&gt;
+&lt;script&gt;
+function checkBrowser(){
+if (window.WebSocket){
+log("This browser supports WebSocket!");
+} else {
+log("This browser does not support WebSocket.");
+}
+}
+function setup(){
+var wsServer = 'ws://localhost:3001';
+var ws = new WebSocket(wsServer);
+
+ws.onopen = function (e) {
+log("Connected to WebSocket server.",e);
+sendMessage("Conan");
+} ;
+
+ws.onclose = function (e) {
+log("Disconnected",e);
+} ;
+
+ws.onmessage = function(e) {
+log("RECEIVED: " + e.data, e);
+ws.close();
+}
+
+ws.onerror = function (e) {
+log('Error occured: ' + e.data,e);
+} ;
+
+var sendMessage = function(msg){
+ws.send(msg);
+log("SEND : "+ msg);
+}
+}
+
+function log(s,e) {
+var output = document.getElementById("output");
+var p = document.createElement("p");
+p.style.wordWrap = "break-word";
+p.style.padding="10px";
+p.style.background="#eee";
+p.textContent = "LOG : "+s;
+output.appendChild(p);
+console.log("LOG : "+s, e);
+}
+
+checkBrowser();
+setup();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>错误提示：</strong><br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/ws-error.png"><img class="alignnone size-full wp-image-1903" alt="ws-error" src="http://blog.fens.me/wp-content/uploads/2013/08/ws-error.png" width="879" height="753" /></a></p>
+<p>查了一下原因，node-websocket-server，不支持websocket的draft-10，而chrome 14+浏览器，只支持draft-10的websocket，这样chrome基本都不能用了。我的chrome版本是28.0.1500.95。所以，大家就换个思路吧！</p>
+<h2>3. WebSocket-Node: 测试成功</h2>
+<p>github: https://github.com/Worlize/WebSocket-Node<br />
+WebSocket-Node，是一个简单的库，不仅支持draft-10，还有之前的各种版本。</p>
+<p>服务器端配置</p>
+<pre><code>
+~ D:\workspace\javascript&gt;mkdir nodejs-websocket
+~ D:\workspace\javascript&gt;cd nodejs-websocket
+D:\workspace\javascript\nodejs-websocket&gt;npm install websocket
+npm http GET https://registry.npmjs.org/websocket
+npm http 304 https://registry.npmjs.org/websocket
+
+&gt; websocket@1.0.8 install D:\workspace\javascript\nodejs-websocket\node_modules\websocket
+&gt; node install.js
+
+[websocket v1.0.8] Attempting to compile native extensions.
+[websocket v1.0.8]
+    Native code compile failed!!
+    Please note that this module DOES NOT REQUIRE the native components
+    and will still work without them, though not quite as efficiently.
+
+    On Windows, native extensions require Visual Studio and Python.
+    On Unix, native extensions require Python, make and a C++ compiler.
+    Start npm with --websocket:verbose to show compilation output (if any).
+websocket@1.0.8 node_modules\websocket
+</code></pre>
+<p>上面提示有错误，我本机已经装了Visual Studio和Python，看来有些模块本地编译不成功了。</p>
+<p>增加app.js</p>
+<pre><code>
+~ vi app.js
+
+// http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
+"use strict";
+
+// Optional. You will see this name in eg. 'ps' or 'top' command
+process.title = 'node-chat';
+
+// Port where we'll run the websocket server
+var webSocketsServerPort = 3001;
+
+// websocket and http servers
+var webSocketServer = require('websocket').server;
+var http = require('http');
+
+/**
+ * Global variables
+ */
+// latest 100 messages
+var history = [ ];
+// list of currently connected clients (users)
+var clients = [ ];
+
+/**
+ * Helper function for escaping input strings
+ */
+function htmlEntities(str) {
+    return String(str).replace(/&amp;/g, '&amp;').replace(/&gt;/g, '&gt;').replace(/"/g, '"');
+}
+
+// Array with some colors
+var colors = [ 'red', 'green', 'blue', 'magenta', 'purple', 'plum', 'orange' ];
+// ... in random order
+colors.sort(function(a,b) { return Math.random() &gt; 0.5; } );
+
+/**
+ * HTTP server
+ */
+var server = http.createServer(function(request, response) {
+    // Not important for us. We're writing WebSocket server, not HTTP server
+});
+server.listen(webSocketsServerPort, function() {
+    console.log((new Date()) + " Server is listening on port " + webSocketsServerPort);
+});
+
+/**
+ * WebSocket server
+ */
+var wsServer = new webSocketServer({
+    // WebSocket server is tied to a HTTP server. WebSocket request is just
+    // an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
+    httpServer: server
+});
+
+// This callback function is called every time someone
+// tries to connect to the WebSocket server
+wsServer.on('request', function(request) {
+    console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
+
+    // accept connection - you should check 'request.origin' to make sure that
+    // client is connecting from your website
+    // (http://en.wikipedia.org/wiki/Same_origin_policy)
+    var connection = request.accept(null, request.origin); 
+    // we need to know client index to remove them on 'close' event
+    var index = clients.push(connection) - 1;
+    var userName = false;
+    var userColor = false;
+
+    console.log((new Date()) + ' Connection accepted.');
+
+    // send back chat history
+    if (history.length &gt; 0) {
+        connection.sendUTF(JSON.stringify( { type: 'history', data: history} ));
+    }
+
+    // user sent some message
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') { // accept only text
+            if (userName === false) { // first message sent by user is their name
+                // remember user name
+                userName = htmlEntities(message.utf8Data);
+                // get random color and send it back to the user
+                userColor = colors.shift();
+                connection.sendUTF(JSON.stringify({ type:'color', data: userColor }));
+                console.log((new Date()) + ' User is known as: ' + userName
+                            + ' with ' + userColor + ' color.');
+
+            } else { // log and broadcast the message
+                console.log((new Date()) + ' Received Message from '
+                            + userName + ': ' + message.utf8Data);
+
+                // we want to keep history of all sent messages
+                var obj = {
+                    time: (new Date()).getTime(),
+                    text: htmlEntities(message.utf8Data),
+                    author: userName,
+                    color: userColor
+                };
+                history.push(obj);
+                history = history.slice(-100);
+
+                // broadcast message to all connected clients
+                var json = JSON.stringify({ type:'message', data: obj });
+                for (var i=0; i &lt; clients.length; i++) {
+                    clients[i].sendUTF(json);
+                }
+            }
+        }
+    });
+
+    // user disconnected
+    connection.on('close', function(connection) {
+        if (userName !== false &amp;&amp; userColor !== false) {
+            console.log((new Date()) + " Peer "
+                + connection.remoteAddress + " disconnected.");
+            // remove user from the list of connected clients
+            clients.splice(index, 1);
+            // push back user's color to be reused by another user
+            colors.push(userColor);
+        }
+    });
+
+});
+</code></pre>
+<p><strong>启动服务器</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-websocket&gt;node app.js
+Warning: Native modules not compiled.  XOR performance will be degraded.
+Warning: Native modules not compiled.  UTF-8 validation disabled.
+Wed Aug 21 2013 15:28:48 GMT+0800 (中国标准时间) Server is listening on port 3001
+Wed Aug 21 2013 15:28:53 GMT+0800 (中国标准时间) Connection from origin null.
+Wed Aug 21 2013 15:28:53 GMT+0800 (中国标准时间) Connection accepted.
+Wed Aug 21 2013 15:28:53 GMT+0800 (中国标准时间) User is known as: Conan with red color.
+Wed Aug 21 2013 15:28:53 GMT+0800 (中国标准时间) Peer undefined disconnected.
+</code></pre>
+<p>我们看到XOR 和UTF-8 validation 两个模块是被禁止的，不过不影响测试。</p>
+<p><strong>客户端，还是使用一样的。</strong></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/ws-client1.png"><img class="alignnone size-full wp-image-1906" alt="ws-client1" src="http://blog.fens.me/wp-content/uploads/2013/08/ws-client1.png" width="995" height="817" /></a></p>
+<p><strong>另外，WebSocket-Node还提供C/S模式的交互，可以不使用浏览器</strong></p>
+<p>服务端代码</p>
+<pre><code>
+~ vi app2.js
+
+#!/usr/bin/env node
+var WebSocketServer = require('websocket').server;
+var http = require('http');
+
+var server = http.createServer(function(request, response) {
+    console.log((new Date()) + ' Received request for ' + request.url);
+    response.writeHead(404);
+    response.end();
+});
+server.listen(3001, function() {
+    console.log((new Date()) + ' Server is listening on port 3001');
+});
+
+wsServer = new WebSocketServer({
+    httpServer: server,
+    // You should not use autoAcceptConnections for production
+    // applications, as it defeats all standard cross-origin protection
+    // facilities built into the protocol and the browser.  You should
+    // *always* verify the connection's origin and decide whether or not
+    // to accept it.
+    autoAcceptConnections: false
+});
+
+function originIsAllowed(origin) {
+  // put logic here to detect whether the specified origin is allowed.
+  return true;
+}
+
+wsServer.on('request', function(request) {
+    if (!originIsAllowed(request.origin)) {
+      // Make sure we only accept requests from an allowed origin
+      request.reject();
+      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+      return;
+    }
+
+    var connection = request.accept('echo-protocol', request.origin);
+    console.log((new Date()) + ' Connection accepted.');
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') {
+            console.log('Received Message: ' + message.utf8Data);
+            connection.sendUTF(message.utf8Data);
+        }
+        else if (message.type === 'binary') {
+            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+            connection.sendBytes(message.binaryData);
+        }
+    });
+    connection.on('close', function(reasonCode, description) {
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+    });
+});
+</code></pre>
+<p>客户端代码</p>
+<pre><code>
+~ vi client.js
+
+#!/usr/bin/env node
+var WebSocketClient = require('websocket').client;
+
+var client = new WebSocketClient();
+
+client.on('connectFailed', function(error) {
+    console.log('Connect Error: ' + error.toString());
+});
+
+client.on('connect', function(connection) {
+    console.log('WebSocket client connected');
+    connection.on('error', function(error) {
+        console.log("Connection Error: " + error.toString());
+    });
+    connection.on('close', function() {
+        console.log('echo-protocol Connection Closed');
+    });
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') {
+            console.log("Received: '" + message.utf8Data + "'");
+        }
+    });
+
+    function sendNumber() {
+        if (connection.connected) {
+            var number = Math.round(Math.random() * 0xFFFFFF);
+            connection.sendUTF(number.toString());
+            setTimeout(sendNumber, 1000);
+        }
+    }
+    sendNumber();
+});
+
+client.connect('ws://localhost:3001/', 'echo-protocol');
+</code></pre>
+<p>程序启动：</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-websocket&gt;node app2.js
+~ D:\workspace\javascript\nodejs-websocket&gt;node client.js
+</code></pre>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/ws-node.png"><img class="alignnone size-full wp-image-1910" alt="ws-node" src="http://blog.fens.me/wp-content/uploads/2013/08/ws-node.png" width="959" height="555" /></a></p>
+<p>测试成功！！</p>
+<h2>4. faye-websocket-node: 测试成功</h2>
+<p>github: https://github.com/faye/faye-websocket-node<br />
+faye-websocket-node，是扩展faye项目而开发的websocket的一个实现。</p>
+<p>服务器端配置</p>
+<pre><code>
+~ D:\workspace\javascript&gt;mkdir nodejs-faye-websocket
+~ D:\workspace\javascript&gt;cd nodejs-faye-websocket
+~ D:\workspace\javascript\nodejs-faye-websocket&gt;npm install faye-websocket
+npm http GET https://registry.npmjs.org/faye-websocket
+npm http 304 https://registry.npmjs.org/faye-websocket
+npm http GET https://registry.npmjs.org/faye-websocket/-/faye-websocket-0.6.1.tgz
+npm http 200 https://registry.npmjs.org/faye-websocket/-/faye-websocket-0.6.1.tgz
+npm http GET https://registry.npmjs.org/websocket-driver
+npm http 200 https://registry.npmjs.org/websocket-driver
+npm http GET https://registry.npmjs.org/websocket-driver/-/websocket-driver-0.2.2.tgz
+npm http 200 https://registry.npmjs.org/websocket-driver/-/websocket-driver-0.2.2.tgz
+faye-websocket@0.6.1 node_modules\faye-websocket
+└── websocket-driver@0.2.2
+
+~ vi app.js
+var WebSocket = require('faye-websocket'),
+    http      = require('http');
+
+var server = http.createServer();
+
+server.on('upgrade', function(request, socket, body) {
+  if (WebSocket.isWebSocket(request)) {
+    var ws = new WebSocket(request, socket, body);
+
+    ws.on('message', function(event) {
+      ws.send(event.data);
+    });
+
+    ws.on('close', function(event) {
+      console.log('close', event.code, event.reason);
+      ws = null;
+    });
+  }
+});
+
+server.listen(3001);
+
+~ D:\workspace\javascript\nodejs-faye-websocket&gt;node app.js
+</code></pre>
+<p>用网页客户端访问：</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/ws-faye.png"><img class="alignnone size-full wp-image-1916" alt="ws-faye" src="http://blog.fens.me/wp-content/uploads/2013/08/ws-faye.png" width="795" height="785" /></a></p>
+<p>测试成功，非常简单！！而且，没有依赖其他的库！！</p>
+<h2>5. socket.io: 测试成功</h2>
+<p>github: https://github.com/LearnBoost/socket.io</p>
+<p>环境配置</p>
+<pre><code>
+~ D:\workspace\javascript&gt;express -e nodejs-socketio
+~ D:\workspace\javascript&gt;cd nodejs-socketio &amp;&amp; npm install
+~ D:\workspace\javascript\nodejs-socketio&gt;npm install socket.io
+</code></pre>
+<p>修改app.js配置文件</p>
+<pre><code>
+~ vi app.js
+
+var app = require('express')()
+  , server = require('http').createServer(app)
+  , io = require('socket.io').listen(server);
+
+server.listen(80);
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/client/index.html');
+});
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+</code></pre>
+<p>增加客户端文件，注意这个的index.html要根据app.js指定的位置&#8221;res.sendfile(__dirname + &#8216;/client/index.html&#8217;);&#8221;</p>
+<pre><code>
+~ mkdir client
+~ vi /client/index.html
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;socket.io&lt;/title&gt;
+&lt;link rel='stylesheet' href='/stylesheets/style.css' /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;socket.io&lt;/h1&gt;
+&lt;p&gt;Welcome to socket.io&lt;/p&gt;
+
+&lt;script src="/socket.io/socket.io.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+var socket = io.connect('http://localhost');
+socket.on('news', function (data) {
+console.log(data);
+socket.emit('my other event', { my: 'data' });
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>启动服务器</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-socketio&gt;node app.js
+   info  - socket.io started
+</code></pre>
+<p>打开浏览器: http://localhost<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/ws-socketio.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/ws-socketio.png" alt="ws-socketio" width="375" height="191" class="alignnone size-full wp-image-1920" /></a></p>
+<p><strong>查看服务器日志：</strong></p>
+<pre><code>
+  debug - served static content /socket.io.js
+   debug - client authorized
+   info  - handshake authorized ZR-xQhsKCCqM03TRHW4b
+   debug - setting request GET /socket.io/1/websocket/ZR-xQhsKCCqM03TRHW4b
+   debug - set heartbeat interval for client ZR-xQhsKCCqM03TRHW4b
+   debug - client authorized for
+   debug - websocket writing 1::
+   debug - websocket writing 5:::{"name":"news","args":[{"hello":"world"}]}
+{ my: 'data' }
+   debug - emitting heartbeat for client ZR-xQhsKCCqM03TRHW4b
+   debug - websocket writing 2::
+   debug - set heartbeat timeout for client ZR-xQhsKCCqM03TRHW4b
+   debug - got heartbeat packet
+   debug - cleared heartbeat timeout for client ZR-xQhsKCCqM03TRHW4b
+   debug - set heartbeat interval for client ZR-xQhsKCCqM03TRHW4b
+</code></pre>
+<p>测试成功。</p>
+<h2>6. 最后总结</h2>
+<p>今天尝试了4种，基于nodejs的websocket的框架。</p>
+<ul>
+<li>node-websocket-server：是直接放弃的。</li>
+<li>node-websocket：需要依赖于底层的C++,Python的环境，支持���node做客户端的访问。</li>
+<li>faye-websocket-node：是faye软件框架体系的一部分，安装简单，不需要其他依赖库。</li>
+<li>socket.io：功能强大，支持集成websocket服务器端和Express3框架与一身。</li>
+</ul>
+<p>websocket我也是初次尝试，对于开发效率，代码结构，稳定性，服务器性能都需要做更多的测试。目前还无法定论，哪个框架是最好的，不过我比较看好socket.io和faye-websocket-node的未来前景。</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs实现websocket的4种方式" href="http://blog.fens.me/nodejs-websocket/" target="_blank">http://blog.fens.me/nodejs-websocket/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-544">
+        <div id="dsq-comment-header-544" class="dsq-comment-header">
+            <cite id="dsq-cite-544">
+                <span id="dsq-author-user-544">jiyinyiyong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-544" class="dsq-comment-body">
+            <div id="dsq-comment-message-544" class="dsq-comment-message"><p>Socket.IO 比较大, WebSocket 不被支持的情况下兼容方案也坐在里边了.<br />
+单纯跑 WebSocket 我会用 ws 模块, 我的 doodle 模块里就用了 ws.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-545">
+        <div id="dsq-comment-header-545" class="dsq-comment-header">
+            <cite id="dsq-cite-545">
+                <a id="dsq-author-user-545" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-545" class="dsq-comment-body">
+            <div id="dsq-comment-message-545" class="dsq-comment-message"><p>客户端直接用html5里js基本API就行了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-546">
+        <div id="dsq-comment-header-546" class="dsq-comment-header">
+            <cite id="dsq-cite-546">
+                <span id="dsq-author-user-546">jiyinyiyong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-546" class="dsq-comment-body">
+            <div id="dsq-comment-message-546" class="dsq-comment-message"><p>这两个都是服务端 Node 模块呀</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-548">
+        <div id="dsq-comment-header-548" class="dsq-comment-header">
+            <cite id="dsq-cite-548">
+                <a id="dsq-author-user-548" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-548" class="dsq-comment-body">
+            <div id="dsq-comment-message-548" class="dsq-comment-message"><p>你第一条描述的问题，是客户端还是服务器端？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-549">
+        <div id="dsq-comment-header-549" class="dsq-comment-header">
+            <cite id="dsq-cite-549">
+                <span id="dsq-author-user-549">jiyinyiyong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-549" class="dsq-comment-body">
+            <div id="dsq-comment-message-549" class="dsq-comment-message"><p>Socket.IO 是两端都做了呀, 所以就没区分</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-547">
+        <div id="dsq-comment-header-547" class="dsq-comment-header">
+            <cite id="dsq-cite-547">
+                <span id="dsq-author-user-547">jiyinyiyong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-547" class="dsq-comment-body">
+            <div id="dsq-comment-message-547" class="dsq-comment-message"><p><a href="http://einaros.github.io/ws/" rel="nofollow">http://einaros.github.io/ws/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-777">
+        <div id="dsq-comment-header-777" class="dsq-comment-header">
+            <cite id="dsq-cite-777">
+                <a id="dsq-author-user-777" href="http://barretlee.com/" target="_blank" rel="nofollow">Barret Lee</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-777" class="dsq-comment-body">
+            <div id="dsq-comment-message-777" class="dsq-comment-message"><p>嘿，我最近也写了一篇类似的博客~<br />
+<a href="http://barretlee.com/websocket-with-node" rel="nofollow">http://barretlee.com/websocket-with-node</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-778">
+        <div id="dsq-comment-header-778" class="dsq-comment-header">
+            <cite id="dsq-cite-778">
+                <a id="dsq-author-user-778" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-778" class="dsq-comment-body">
+            <div id="dsq-comment-message-778" class="dsq-comment-message"><p>看了你的文章是协议层的。可以针对某些场景，自定义开发一个WS库，解决实际应用的问题。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-779">
+        <div id="dsq-comment-header-779" class="dsq-comment-header">
+            <cite id="dsq-cite-779">
+                <a id="dsq-author-user-779" href="http://barretlee.com/" target="_blank" rel="nofollow">Barret Lee</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-779" class="dsq-comment-body">
+            <div id="dsq-comment-message-779" class="dsq-comment-message"><p>类似的库 github 上比较多，而且现在也没有这个需求~</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-780">
+        <div id="dsq-comment-header-780" class="dsq-comment-header">
+            <cite id="dsq-cite-780">
+                <a id="dsq-author-user-780" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-780" class="dsq-comment-body">
+            <div id="dsq-comment-message-780" class="dsq-comment-message"><p>我有一个需求，我现在完全基于Nodejs的WS实现的，用socket.io库。不过，socket.io并不能很好的满足我的需求，你没有打算开发一个类库？主要用于解决股票高频交易的数据通信。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-781">
+        <div id="dsq-comment-header-781" class="dsq-comment-header">
+            <cite id="dsq-cite-781">
+                <a id="dsq-author-user-781" href="http://barretlee.com/" target="_blank" rel="nofollow">Barret Lee</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-781" class="dsq-comment-body">
+            <div id="dsq-comment-message-781" class="dsq-comment-message"><p>socket.io怎么不能满足你的需求了，���频交易出现了什么瓶颈？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-782">
+        <div id="dsq-comment-header-782" class="dsq-comment-header">
+            <cite id="dsq-cite-782">
+                <a id="dsq-author-user-782" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-782" class="dsq-comment-body">
+            <div id="dsq-comment-message-782" class="dsq-comment-message"><p>几方面的问题<br />
+1. socket.io代码还是有点多，不够简洁。(其他的WS库，则更复杂)</p>
+<p>2. socket.io的API偏底层，很多普遍使用的功能都要自己写。如 创建几个人小房间，断线检查，防抖动等</p>
+<p>3. 我有很多的定时任务，有的是每1秒触发，有的是每3秒，5秒，10秒，1分钟，5分钟触发的，有一些是基于http请求或者socket请求触发的。。我需要写大量的代码，进行调度控制。</p>
+<p>4. 当触发一个socket请求，但他的取的数据来自一个不稳定的源时，如http.get(&#8230;)，由于单线程，这个任务就被挂起了。我解决这个问题，需要提前做一个定时器先获得数据，保存在内存中。</p>
+<p>5. socket.io与后端的R语言websocket server通信，由于我没有处理编解码，目前只能用JSON传输，效率不太高。</p>
+<p>6. socket.io与angluarjs配合的到是不错。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-783">
+        <div id="dsq-comment-header-783" class="dsq-comment-header">
+            <cite id="dsq-cite-783">
+                <a id="dsq-author-user-783" href="http://barretlee.com/" target="_blank" rel="nofollow">Barret Lee</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-783" class="dsq-comment-body">
+            <div id="dsq-comment-message-783" class="dsq-comment-message"><p>你上面说的问题，其实就是 socket.io 太底层，提供的上层服务太少，这本身也是 node 的优势。</p>
+<p>创建几个人的小房间，那就是十几行代码的事情，断线检测加一个心跳机制就行了&#8230;..每个功能模块放到一个文件里头，管理起来也不复杂。</p>
+<p>http.get并不会使任务挂起，它是请求完了之后执行的回调。你可以给他一个设置timeout，或者管理此类任务的优先级，断开延时后重连之类的。</p>
+<p>不知道你说的编解码是什么，如果要省带宽的话，应该是压缩吧？</p>
+<p>Angular 是一个 MVVM 框架，你操作的是他的 ViewModel 部分，股票数据没有直接和 DOM 打交道，所以会觉得 Angular 用起来比较爽，并不是他跟 node 配合比较好。前后端的交界口只有你那个 JSON 数据接口。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-788">
+        <div id="dsq-comment-header-788" class="dsq-comment-header">
+            <cite id="dsq-cite-788">
+                <a id="dsq-author-user-788" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-788" class="dsq-comment-body">
+            <div id="dsq-comment-message-788" class="dsq-comment-message"><p>正如我所遇到问题是socket.io太底层了，才有必要做一些上层的封装。</p>
+<p>创建几个小的房间，代码量虽然不大。这用通用的功能，每个项目都写一遍，也是很麻烦的。</p>
+<p>http.get，确实需要timeout，而且还要有一系列的动作和处理，判断返回错误，是否“自动重连”等。</p>
+<p>R语言有自己的数据类型，但是这种类型没有对应js解码，也是需要自己实现的。并不是压缩的问题。</p>
+<p>我所说的这些功能，其实是一些“通用性”的功能。当然，等我把代码稳定后，也会发布成开源类库的。</p>
+<p>再次感谢你的回复！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-1794">
+        <div id="dsq-comment-header-1794" class="dsq-comment-header">
+            <cite id="dsq-cite-1794">
+                <span id="dsq-author-user-1794">Dean</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1794" class="dsq-comment-body">
+            <div id="dsq-comment-message-1794" class="dsq-comment-message"><p>请问如何做定时任务？有相应的node组件？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-1795">
+        <div id="dsq-comment-header-1795" class="dsq-comment-header">
+            <cite id="dsq-cite-1795">
+                <a id="dsq-author-user-1795" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1795" class="dsq-comment-body">
+            <div id="dsq-comment-message-1795" class="dsq-comment-message"><p>让Nodejs来管理定时任务later<br />
+<a href="http://blog.fens.me/nodejs-cron-later/" rel="nofollow">http://blog.fens.me/nodejs-cron-later/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-1796">
+        <div id="dsq-comment-header-1796" class="dsq-comment-header">
+            <cite id="dsq-cite-1796">
+                <span id="dsq-author-user-1796">Dean</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1796" class="dsq-comment-body">
+            <div id="dsq-comment-message-1796" class="dsq-comment-message"><p>谢谢~</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3536">
+        <div id="dsq-comment-header-3536" class="dsq-comment-header">
+            <cite id="dsq-cite-3536">
+                <span id="dsq-author-user-3536">macsen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3536" class="dsq-comment-body">
+            <div id="dsq-comment-message-3536" class="dsq-comment-message"><p>nodejs http upgrade 主要的应用场景，比较迷惑,能解答下么,谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3539">
+        <div id="dsq-comment-header-3539" class="dsq-comment-header">
+            <cite id="dsq-cite-3539">
+                <a id="dsq-author-user-3539" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3539" class="dsq-comment-body">
+            <div id="dsq-comment-message-3539" class="dsq-comment-message"><p>“nodejs http upgrade”，我不明白，你指的是什么？是这篇文章中出现过的词吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-3540">
+        <div id="dsq-comment-header-3540" class="dsq-comment-header">
+            <cite id="dsq-cite-3540">
+                <span id="dsq-author-user-3540">macsen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3540" class="dsq-comment-body">
+            <div id="dsq-comment-message-3540" class="dsq-comment-message"><p>不是,应该是http模块的一个方法,应该是强制http协议升级的</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-3543">
+        <div id="dsq-comment-header-3543" class="dsq-comment-header">
+            <cite id="dsq-cite-3543">
+                <a id="dsq-author-user-3543" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3543" class="dsq-comment-body">
+            <div id="dsq-comment-message-3543" class="dsq-comment-message"><p>“强制http协议升级的”，是什么意思？<br />
+http 1.1&#8211;&gt;1.2?<br />
+还是http&#8211;&gt;https?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3988">
+        <div id="dsq-comment-header-3988" class="dsq-comment-header">
+            <cite id="dsq-cite-3988">
+                <span id="dsq-author-user-3988">yanguangpu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3988" class="dsq-comment-body">
+            <div id="dsq-comment-message-3988" class="dsq-comment-message"><p>return String(str).replace(/&amp;/g, &#8216;&amp;&#8217;).replace(//g, &#8216;&gt;&#8217;).replace(/&#8221;/g, &#8216;&#8221;&#8216;);<br />
+这行应该是这个吧？<br />
+return String(str).replace(/&amp;/g, &#8216;&amp;&#8217;).replace(/&gt;/g, &#8216;&gt;&#8217;).replace(/&#8221;/g, &#8216;&#8221;&#8216;);</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4031">
+        <div id="dsq-comment-header-4031" class="dsq-comment-header">
+            <cite id="dsq-cite-4031">
+                <a id="dsq-author-user-4031" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4031" class="dsq-comment-body">
+            <div id="dsq-comment-message-4031" class="dsq-comment-message"><p>真仔细，谢谢，已经修改！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4356">
+        <div id="dsq-comment-header-4356" class="dsq-comment-header">
+            <cite id="dsq-cite-4356">
+                <span id="dsq-author-user-4356">chensiji</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4356" class="dsq-comment-body">
+            <div id="dsq-comment-message-4356" class="dsq-comment-message"><p>faye-websocket-node可以写聊天室吗，为什么send函数没有可以指定发送对象的呢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4378">
+        <div id="dsq-comment-header-4378" class="dsq-comment-header">
+            <cite id="dsq-cite-4378">
+                <a id="dsq-author-user-4378" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4378" class="dsq-comment-body">
+            <div id="dsq-comment-message-4378" class="dsq-comment-message"><p>可以写，但是faye不太好用。现在一般都用socket.io</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4383">
+        <div id="dsq-comment-header-4383" class="dsq-comment-header">
+            <cite id="dsq-cite-4383">
+                <span id="dsq-author-user-4383">chensiji</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4383" class="dsq-comment-body">
+            <div id="dsq-comment-message-4383" class="dsq-comment-message"><p>只是简单实现socket功能 已经找到方法了 谢谢你总结的这几种方法</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4386">
+        <div id="dsq-comment-header-4386" class="dsq-comment-header">
+            <cite id="dsq-cite-4386">
+                <a id="dsq-author-user-4386" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4386" class="dsq-comment-body">
+            <div id="dsq-comment-message-4386" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4420">
+        <div id="dsq-comment-header-4420" class="dsq-comment-header">
+            <cite id="dsq-cite-4420">
+                <a id="dsq-author-user-4420" href="http://www.hubwiz.com" target="_blank" rel="nofollow">小智</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4420" class="dsq-comment-body">
+            <div id="dsq-comment-message-4420" class="dsq-comment-message"><p>张丹，有没有可能在我们汇智网上发表一些课程？<br />
+这是我们的早前写的node.js课程，<br />
+<a href="http://www.hubwiz.com/course/5359f6f6ec7452081a7873d8/" rel="nofollow">http://www.hubwiz.com/course/5359f6f6ec7452081a7873d8/</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4428">
+        <div id="dsq-comment-header-4428" class="dsq-comment-header">
+            <cite id="dsq-cite-4428">
+                <a id="dsq-author-user-4428" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4428" class="dsq-comment-body">
+            <div id="dsq-comment-message-4428" class="dsq-comment-message"><p>不好意思，最近没有时间。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4431">
+        <div id="dsq-comment-header-4431" class="dsq-comment-header">
+            <cite id="dsq-cite-4431">
+                <a id="dsq-author-user-4431" href="http://www.hubwiz.com" target="_blank" rel="nofollow">小智</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4431" class="dsq-comment-body">
+            <div id="dsq-comment-message-4431" class="dsq-comment-message"><p>那有机会再说。</p>
+<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212; 原始邮件 &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;<br />
+发件人: &#8220;Disqus&#8221;;<br />
+发送时间: 2015年10月20日(星期二) 上午10:14<br />
+收件人: &#8220;小智&#8221;;<br />
+主题: Re: Comment on Nodejs实现websocket的4种方式</p>
+<p>&#8220;不好意思，最近没有时间。&#8221;                                                   Settings </p>
+<p>A new comment was posted on bsspirit</p>
+<p>Conan Zhang</p>
+<p>不好意思，最近没有时间。</p>
+<p>10:14 p.m., Monday Oct. 19                                      |                                      Other comments by Conan Zhang<br />
+Reply                                                                                                                                                      to Conan Zhang </p>
+<p>Conan Zhang’s comment is in reply to                                                                      小智: </p>
+<p>张丹，有没有可能在我们汇智网上发表一些课程？<br />
+这是我们的早前写的node.js课程，<br />
+<a href="http://www.hubwiz.com/course/5" rel="nofollow">http://www.hubwiz.com/course/5</a>&#8230;</p>
+<p>Read more</p>
+<p>You&#8217;re receiving this message because you&#8217;re signed up to receive notifications about replies to disqus_nnBDidSma4.<br />
+You can unsubscribe         from emails about replies to disqus_nnBDidSma4         by replying to this email with &#8220;unsubscribe&#8221;         or reduce the rate with which these emails are sent by         adjusting your notification settings.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/r-websocket-websockets/' rel='external nofollow' class='url'>R语言构建websocket服务器 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-socketio-chat/' rel='external nofollow' class='url'>Socket.io在线聊天室 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-websocket/';
+var disqus_identifier = '1895 http://blog.fens.me/?p=1895';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Nodejs实现websocket的4种方式";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=1895';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

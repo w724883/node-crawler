@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>玩转Nodejs日志管理log4js | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; 玩转Nodejs日志管理log4js Comments Feed" href="http://blog.fens.me/nodejs-log4js/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Dataguru北京线下聚会圆满成功' href='http://blog.fens.me/dataguru-beijing-meeting-20130616/' />
+<link rel='next' title='Nginx反向代理Nodejs &#8211; log4js日志IP显示错误' href='http://blog.fens.me/nodejs-nginx-log4js/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-log4js/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=556' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-log4js%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-log4js%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,express,log4js,日志" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-556 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>玩转Nodejs日志管理log4js</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-556 post type-post status-publish format-standard hentry category-javascript tag-express tag-log4js tag-nodejs tag-104">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-log4js/" title="玩转Nodejs日志管理log4js" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Jun 19, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/express/" rel="tag">express</a><a href="http://blog.fens.me/tag/log4js/" rel="tag">log4js</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/%e6%97%a5%e5%bf%97/" rel="tag">日志</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-log4js/#comments"><span class="dsq-postid" data-dsqidentifier="556 http://blog.fens.me/?p=556">28 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>玩转Nodejs日志管理log4js</h2>
+            <div class="entry">
+                            <p><strong>从零开始nodejs系列文章</strong></p>
+<p>从零开始nodejs系列文章，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<p>张丹(Conan), 程序员Java,R,PHP,Javascript<br />
+weibo：@Conan_Z<br />
+blog: http://blog.fens.me<br />
+email: bsspirit@gmail.com</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs日志管理log4js" href="http://blog.fens.me/nodejs-log4js/">http://blog.fens.me/nodejs-log4js/</a></p>
+<p><strong>前言</strong></p>
+<p>日志对任何的应用来说都是至关重要的。在Nodejs中使用express框架并没有自带的日志模块，我们可以选择log4js来完成日志记录的功能。</p>
+<p>如果用过JAVA中log4j的同学，肯定对日志并不陌生，学习log4js会更得心应手的。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/06/log4js.png"><img class="alignnone size-full wp-image-576" alt="log4js" src="http://blog.fens.me/wp-content/uploads/2013/06/log4js.png" width="600" height="400" /></a></p>
+<p><strong>文章目录：</strong></p>
+<ol>
+<li><span style="font-size: 13px; line-height: 19px;">默认的控制台输出</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">通过log4js输出日志</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">配置log4js与express框架集成</span></li>
+<li>根据项目配置log4js</li>
+<li><span style="font-size: 13px; line-height: 19px;">优化log4js结构</span></li>
+</ol>
+<p>&nbsp;</p>
+<h2>1. 默认的控制台输出</h2>
+<p>我们使用express框架时，开发模式用node或者supervisor启动nodejs应用时，控制台都是显示如下的日志。</p>
+<pre><code>
+GET /css/bootstrap.min.css 304 1ms
+GET /css/my.css 304 0ms
+GET /js/bootstrap.min.js 304 4ms
+GET /js/jquery-1.9.1.min.js 304 6ms
+GET /js/holder.js 304 3ms
+GET /cat/json/latest 200 6ms
+GET /cat/json/master 200 4ms
+GET /cat/json/classic 200 2ms
+GET /about 200 6ms
+GET /css/bootstrap.min.css 304 2ms
+GET /css/my.css 304 2ms
+GET /js/bootstrap.min.js 304 2ms
+GET /js/jquery-1.9.1.min.js 304 1ms
+GET /js/holder.js 304 1ms
+GET /js/bootstrap.min.js 304 1ms
+GET / 304 6ms
+GET /js/jquery-1.9.1.min.js 304 2ms
+GET /css/my.css 304 1ms
+GET /css/bootstrap.min.css 304 1ms
+GET /js/bootstrap.min.js 304 2ms
+GET /js/holder.js 304 2ms
+GET /cat/json/latest 200 3ms
+GET /cat/json/master 200 2ms
+GET /cat/json/classic 200 2ms
+GET /admin/ 304 13ms
+GET /css/bootstrap.min.css 304 3ms
+GET /js/jquery-1.9.1.min.js 304 2ms
+GET /css/my.css 304 2ms
+GET /js/bootstrap.min.js 304 1ms
+GET /js/holder.js 304 2ms
+</code></pre>
+<p>我们也可以在代码中，用console.log()打印一些控制台日志。</p>
+<p>修改routes/index.js</p>
+<pre><code>
+exports.index = function(req, res){
+	console.log("This is an index page!");
+	res.render('index', {
+  		title:'首页|moive.me',
+  		page:'index'
+  	});
+};
+</code></pre>
+<p>访问页面，结果如下。</p>
+<pre><code>
+This is an index page!
+GET / 304 19ms
+GET /css/bootstrap.min.css 304 4ms
+GET /css/my.css 304 2ms
+GET /js/jquery-1.9.1.min.js 304 38ms
+GET /js/holder.js 304 29ms
+GET /js/bootstrap.min.js 304 28ms
+</code></pre>
+<p>这样的输出的结果，都是在控制台显示，一旦server重启日志就丢失了。对于程序开发来说，这样的输出已经够用了。但是在生产环境上，我们希望能把控制台的输出，保存到文件中，而且需要更多的信息，不仅仅是默认的简化的日志信息。</p>
+<p>由于express框架没有日志功能，我们需要引入log4js包来完成这个功能。</p>
+<h2>2. 通过log4js输出日志</h2>
+<p>我们先可看一下，通过log4js输出的日志是什么样子的，下一节再介绍具体的配置。</p>
+<pre><code>
+This is an index page!
+GET / 304 17ms
+[2013-06-19 17:45:55.981] [INFO] normal - 127.0.0.1 - - "GET / HTTP/1.1" 304 - "http://localhost:3000/admin/" "Mozilla/5
+.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/bootstrap.min.css 304 10ms
+[2013-06-19 17:45:56.015] [INFO] normal - 127.0.0.1 - - "GET /css/bootstrap.min.css HTTP/1.1" 304 - "http://localhost:30
+00/admin/crawler/youku" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110
+ Safari/537.36"
+GET /css/my.css 304 8ms
+[2013-06-19 17:45:56.017] [INFO] normal - 127.0.0.1 - - "GET /css/my.css HTTP/1.1" 304 - "http://localhost:3000/admin/cr
+awler/youku" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537
+.36"
+GET /js/jquery-1.9.1.min.js 304 19ms
+[2013-06-19 17:45:56.031] [INFO] normal - 127.0.0.1 - - "GET /js/jquery-1.9.1.min.js HTTP/1.1" 304 - "http://localhost:3
+000/admin/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.
+36"
+GET /js/bootstrap.min.js 304 13ms
+[2013-06-19 17:45:56.037] [INFO] normal - 127.0.0.1 - - "GET /js/bootstrap.min.js HTTP/1.1" 304 - "http://localhost:3000
+/admin/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+
+GET /js/holder.js 304 20ms
+[2013-06-19 17:45:56.040] [INFO] normal - 127.0.0.1 - - "GET /js/holder.js HTTP/1.1" 304 - "http://localhost:3000/admin/
+" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+</code></pre>
+<p>相同的请求，控制台输出的结果多了很多，完整的web服务器的日志格式。<br />
+这才是生产环境需要的！信息更丰富，并且与nginx和apache是一样的格式。</p>
+<h2>3. 配置log4js与express框架集成</h2>
+<p>下载log4js包</p>
+<pre><code>
+~ npm install log4js
+log4js@0.6.6 node_modules\log4js
+├── dequeue@1.0.3
+├── semver@1.1.4
+├── async@0.1.15
+└── readable-stream@1.0.2
+</code></pre>
+<p>修改app.js</p>
+<pre><code>
+~ vi app.js
+
+var log4js = require('log4js');
+log4js.configure({
+  appenders: [
+    { type: 'console' }, //控制台输出
+    {
+      type: 'file', //文件输出
+      filename: 'logs/access.log', 
+      maxLogSize: 1024,
+      backups:3,
+      category: 'normal' 
+    }
+  ]
+});
+var logger = log4js.getLogger('normal');
+logger.setLevel('INFO');
+...
+//app.use(...)
+//app.use(...)
+app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}));
+app.use(app.router);
+</code></pre>
+<p>我需要在app.js中进行log4js的配置。</p>
+<p>appenders中配置了两个输出，一个是控制台输出，一个是文件输出。</p>
+<p>appenders.type=file的对象,指定文件输出位置及文件大小，当超过maxLogSize大小时，会自动生成一个新文件。logs的文件目录要动手创建。<br />
+level:log4js.levels.INFO, 设置默认日志输出级别是INFO。</p>
+<p><strong>log4js的输出级别6个</strong>: trace, debug, info, warn, error, fatal</p>
+<ul>
+<li><span style="font-size: 13px; line-height: 19px;">logger.trace(&#8216;Entering cheese testing&#8217;);</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">logger.debug(&#8216;Got cheese.&#8217;);</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">logger.info(&#8216;Cheese is Gouda.&#8217;);</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">logger.warn(&#8216;Cheese is quite smelly.&#8217;);</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">logger.error(&#8216;Cheese is too ripe!&#8217;);</span></li>
+<li><span style="font-size: 13px; line-height: 19px;">logger.fatal(&#8216;Cheese was breeding ground for listeria.&#8217;);</span></li>
+</ul>
+<p>如果输出级别是INFO，则不会打印出低于info级别的日志trace,debug，只打印info,warn,error,fatal。这样做的好处在于，在生产环境中我们可能只关心异常和错误，并不关心调试信息。从而大大减少日志的输出，能减少磁盘写入。而在开发环境中，我们可以需要打印非常多的信息，帮助开发人员定位错误，调试代码。</p>
+<p>还有一个好处就是，代码中可以混有各种的日志打印代码。我们只要在一个配置文件中，修改输出级别，日志输出就会发生变化，不用修改所有的代码。如果所有地方都是console.log()，那么上线的时候，改动这个东西就要花很多时间。</p>
+<p>&nbsp;</p>
+<h2>4. 根据项目配置log4js</h2>
+<p>上一节中，介绍了log4js和express集成。但默认的配置可能并不合适我们的项目，还需要对log4js的参数进行一些调整。</p>
+<p><strong>1. 代替console.log()</strong><br />
+增加replaceConsole配置，让所有console输出到日志中，以[INFO] console代替console默认样式。</p>
+<pre><code>
+~ vi app.js
+var log4js = require('log4js');
+log4js.configure({
+  appenders: [
+    { type: 'console' },{
+      type: 'file', 
+      filename: 'logs/access.log', 
+      maxLogSize: 1024,
+      backups:4,
+      category: 'normal' 
+    }
+  ],
+  replaceConsole: true
+});
+</code></pre>
+<p>查看输出结果：</p>
+<pre><code>
+[2013-06-19 18:18:41.997] [INFO] console - This is an index page!
+GET / 304 15ms
+[2013-06-19 18:18:42.010] [INFO] normal - 127.0.0.1 - - "GET / HTTP/1.1" 304 - "http://localhost:3000/admin/" "Mozilla/5
+.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /css/bootstrap.min.css 304 5ms
+[2013-06-19 18:18:42.042] [INFO] normal - 127.0.0.1 - - "GET /css/bootstrap.min.css HTTP/1.1" 304 - "http://localhost:30
+00/admin/crawler/youku" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110
+ Safari/537.36"
+GET /css/my.css 304 11ms
+[2013-06-19 18:18:42.051] [INFO] normal - 127.0.0.1 - - "GET /css/my.css HTTP/1.1" 304 - "http://localhost:3000/admin/cr
+awler/youku" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537
+.36"
+GET /js/jquery-1.9.1.min.js 304 35ms
+[2013-06-19 18:18:42.089] [INFO] normal - 127.0.0.1 - - "GET /js/jquery-1.9.1.min.js HTTP/1.1" 304 - "http://localhost:3
+000/admin/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.
+36"
+GET /js/holder.js 304 42ms
+[2013-06-19 18:18:42.098] [INFO] normal - 127.0.0.1 - - "GET /js/holder.js HTTP/1.1" 304 - "http://localhost:3000/admin/
+" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+GET /js/bootstrap.min.js 304 11ms
+[2013-06-19 18:18:42.101] [INFO] normal - 127.0.0.1 - - "GET /js/bootstrap.min.js HTTP/1.1" 304 - "http://localhost:3000
+/admin/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
+</code></pre>
+<p><strong>2. 调整日志输出的格式</strong></p>
+<pre><code>
+ app.use(log4js.connectLogger(logger, {level: level:log4js.levels.INFO, format:':method :url'}));
+</code></pre>
+<p>输出结果：</p>
+<pre><code>[2013-06-19 18:23:25.230] [INFO] console - This is an index page!
+GET / 304 28ms
+[2013-06-19 18:23:25.251] [INFO] normal - GET /
+GET /css/bootstrap.min.css 304 5ms
+[2013-06-19 18:23:25.287] [INFO] normal - GET /css/bootstrap.min.css
+GET /css/my.css 304 3ms
+[2013-06-19 18:23:25.292] [INFO] normal - GET /css/my.css
+GET /js/jquery-1.9.1.min.js 304 15ms
+[2013-06-19 18:23:25.310] [INFO] normal - GET /js/jquery-1.9.1.min.js
+GET /js/holder.js 304 9ms
+[2013-06-19 18:23:25.321] [INFO] normal - GET /js/holder.js
+GET /js/bootstrap.min.js 304 17ms
+[2013-06-19 18:23:25.338] [INFO] normal - GET /js/bootstrap.min.js
+</code></pre>
+<p><strong>3. 自动调整日志输出级别</strong></p>
+<p>日志级别对应规则：<br />
+http responses 3xx, level = WARN<br />
+http responses 4xx &amp; 5xx, level = ERROR<br />
+else, level = INFO</p>
+<p>设置level为auto</p>
+<pre><code> app.use(log4js.connectLogger(logger, {level: 'auto', format:':method :url'}));
+</code></pre>
+<p>下面日志为了对比方便我多打出了几行。</p>
+<pre><code>[2013-06-19 18:24:56.040] [INFO] console - This is an index page!
+GET / 304 16ms
+[2013-06-19 18:24:56.053] [WARN] normal - GET /
+GET /css/bootstrap.min.css 304 9ms
+[2013-06-19 18:24:56.086] [WARN] normal - GET /css/bootstrap.min.css
+GET /css/my.css 304 9ms
+[2013-06-19 18:24:56.097] [WARN] normal - GET /css/my.css
+GET /js/jquery-1.9.1.min.js 304 26ms
+[2013-06-19 18:24:56.128] [WARN] normal - GET /js/jquery-1.9.1.min.js
+GET /js/holder.js 304 32ms
+[2013-06-19 18:24:56.164] [WARN] normal - GET /js/holder.js
+GET /js/bootstrap.min.js 304 1ms
+[2013-06-19 18:24:56.166] [WARN] normal - GET /js/bootstrap.min.js
+[2013-06-19 18:24:56.204] [INFO] normal - GET /cat/json/latest
+GET /cat/json/latest 200 10ms
+[2013-06-19 18:24:56.211] [INFO] normal - GET /cat/json/master
+GET /cat/json/master 200 4ms
+[2013-06-19 18:24:56.219] [INFO] normal - GET /cat/json/classic
+GET /cat/json/classic 200 9ms
+GET /img/movie/emptySmall.png 304 1ms
+[2013-06-19 18:24:56.263] [WARN] normal - GET /img/movie/emptySmall.png
+</code></pre>
+<h2>5. 优化log4js结构</h2>
+<p>应该有同学发现了，我们在配置log4js时会有一个问题。就是所有配置信息都是在app.js中做的，logger也是在这里直接定义的。如果在控制器(routes)想用log4js进行输出，我们现在拿不到logger的句柄。</p>
+<p>修改app.js，</p>
+<pre><code>~ vi app.js
+
+var log4js = require('log4js');
+log4js.configure({
+  appenders: [
+    { type: 'console' },{
+      type: 'file', 
+      filename: 'logs/access.log', 
+      maxLogSize: 1024,
+      backups:4,
+      category: 'normal' 
+    }
+  ],
+  replaceConsole: true
+});
+//var logger = log4js.getLogger(name);
+//logger.setLevel('INFO');
+....
+app.use(log4js.connectLogger(this.logger('normal'), {level:'auto', format:':method :url'}));
+....
+
+exports.logger=function(name){
+  var logger = log4js.getLogger(name);
+  logger.setLevel('INFO');
+  return logger;
+}
+</code></pre>
+<p>我们把logger单独定义出来，并且做为API暴露出来。</p>
+<p><strong>在index.js中使用logger输出</strong></p>
+<pre><code>~ vi routes/index.js
+var logger = require('../app').logger('index');
+exports.index = function(req, res){
+	console.log("This is an index page!");
+	logger.info("This is an index page! -- log4js");
+
+	res.render('index', {
+  		title:'首页|moive.me',
+  		page:'index'
+  	});
+};
+</code></pre>
+<p><strong>打印出来结果</strong></p>
+<pre><code>[2013-06-19 18:56:51.924] [INFO] console - This is an index page!
+[2013-06-19 18:56:51.925] [INFO] index - This is an index page! -- log4js
+GET / 304 17ms
+[2013-06-19 18:56:51.938] [WARN] [default] - GET /
+GET /css/bootstrap.min.css 304 5ms
+[2013-06-19 18:56:51.978] [WARN] [default] - GET /css/bootstrap.min.css
+GET /css/my.css 304 2ms
+[2013-06-19 18:56:51.981] [WARN] [default] - GET /css/my.css
+GET /js/jquery-1.9.1.min.js 304 2ms
+[2013-06-19 18:56:51.984] [WARN] [default] - GET /js/jquery-1.9.1.min.js
+GET /js/holder.js 304 3ms
+[2013-06-19 18:56:51.989] [WARN] [default] - GET /js/holder.js
+GET /js/bootstrap.min.js 304 9ms
+[2013-06-19 18:56:52.002] [WARN] [default] - GET /js/bootstrap.min.js
+</code></pre>
+<p>这样我们就已经玩转log4js了，为部署到生产环境，做好了日志的准备工作。</p>
+<p>&nbsp;</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Nodejs日志管理log4js" href="http://blog.fens.me/nodejs-log4js/">http://blog.fens.me/nodejs-log4js/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-nginx-log4js/' rel='external nofollow' class='url'>Nginx反向代理Nodejs &#8211; log4js日志IP显示错误 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-676">
+        <div id="dsq-comment-header-676" class="dsq-comment-header">
+            <cite id="dsq-cite-676">
+                <span id="dsq-author-user-676">taffy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-676" class="dsq-comment-body">
+            <div id="dsq-comment-message-676" class="dsq-comment-message"><p>按照上述操作，结果指示var logger = require(&#8216;../app&#8217;).logger(&#8216;index&#8217;);有错误，说是require(&#8216;../app&#8217;)没有logger方法。难道是exports.logger&#8230;.写错位置了？我写到了app.js的文件末尾。刚开始学习，如果错误很幼稚，希望不要见怪。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-679">
+        <div id="dsq-comment-header-679" class="dsq-comment-header">
+            <cite id="dsq-cite-679">
+                <a id="dsq-author-user-679" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-679" class="dsq-comment-body">
+            <div id="dsq-comment-message-679" class="dsq-comment-message"><p>app.js是有加载顺序的，不要随意改变代码顺序。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-687">
+        <div id="dsq-comment-header-687" class="dsq-comment-header">
+            <cite id="dsq-cite-687">
+                <span id="dsq-author-user-687">taffy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-687" class="dsq-comment-body">
+            <div id="dsq-comment-message-687" class="dsq-comment-message"><p>你的意思是我不应该把exports.logger&#8230;.写在app.js的最后？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-690">
+        <div id="dsq-comment-header-690" class="dsq-comment-header">
+            <cite id="dsq-cite-690">
+                <a id="dsq-author-user-690" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-690" class="dsq-comment-body">
+            <div id="dsq-comment-message-690" class="dsq-comment-message"><p>我是写在前面的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-999">
+        <div id="dsq-comment-header-999" class="dsq-comment-header">
+            <cite id="dsq-cite-999">
+                <span id="dsq-author-user-999">酷酷虫</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-999" class="dsq-comment-body">
+            <div id="dsq-comment-message-999" class="dsq-comment-message"><p>我也遇到了这个问题，不过我解决了。跟楼主说的顺序没关系，应该是你引用的问题，我改了代码就好了。在app.js 在最后exports.logger = logger;<br />
+在index.js页面，引用时候路径要注意，logger = require(&#8216;./../app.js&#8217;);</p>
+<p>然后再logger.info()或者logger.log(),都没有问题了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-988">
+        <div id="dsq-comment-header-988" class="dsq-comment-header">
+            <cite id="dsq-cite-988">
+                <span id="dsq-author-user-988">fgjun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-988" class="dsq-comment-body">
+            <div id="dsq-comment-message-988" class="dsq-comment-message"><p>没有提供代码下载？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-997">
+        <div id="dsq-comment-header-997" class="dsq-comment-header">
+            <cite id="dsq-cite-997">
+                <a id="dsq-author-user-997" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-997" class="dsq-comment-body">
+            <div id="dsq-comment-message-997" class="dsq-comment-message"><p>似乎没有上传这个项目。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1301">
+        <div id="dsq-comment-header-1301" class="dsq-comment-header">
+            <cite id="dsq-cite-1301">
+                <span id="dsq-author-user-1301">kazaff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1301" class="dsq-comment-body">
+            <div id="dsq-comment-message-1301" class="dsq-comment-message"><p>如何配置让log4js和Cluster协同？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1303">
+        <div id="dsq-comment-header-1303" class="dsq-comment-header">
+            <cite id="dsq-cite-1303">
+                <a id="dsq-author-user-1303" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1303" class="dsq-comment-body">
+            <div id="dsq-comment-message-1303" class="dsq-comment-message"><p>和单机有什么不同么？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-1306">
+        <div id="dsq-comment-header-1306" class="dsq-comment-header">
+            <cite id="dsq-cite-1306">
+                <span id="dsq-author-user-1306">kazaff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1306" class="dsq-comment-body">
+            <div id="dsq-comment-message-1306" class="dsq-comment-message"><p><a href="https://github.com/nomiddlename/log4js-node/wiki/Multiprocess" rel="nofollow">https://github.com/nomiddlename/log4js-node/wiki/Multiprocess</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-1307">
+        <div id="dsq-comment-header-1307" class="dsq-comment-header">
+            <cite id="dsq-cite-1307">
+                <a id="dsq-author-user-1307" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1307" class="dsq-comment-body">
+            <div id="dsq-comment-message-1307" class="dsq-comment-message"><p>你如果用pm2部署，就自带集群的功能，不需要这样自己配cluster。</p>
+<p>我没有尝试过，log4js+cluster，等时间试一下，再回复你。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1531">
+        <div id="dsq-comment-header-1531" class="dsq-comment-header">
+            <cite id="dsq-cite-1531">
+                <span id="dsq-author-user-1531">ijse</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1531" class="dsq-comment-body">
+            <div id="dsq-comment-message-1531" class="dsq-comment-message"><p>并没有支持按时间对日志文件分割</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1533">
+        <div id="dsq-comment-header-1533" class="dsq-comment-header">
+            <cite id="dsq-cite-1533">
+                <a id="dsq-author-user-1533" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1533" class="dsq-comment-body">
+            <div id="dsq-comment-message-1533" class="dsq-comment-message"><p>我记得当时测试的时候，是对日志进行分割的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-1740">
+        <div id="dsq-comment-header-1740" class="dsq-comment-header">
+            <cite id="dsq-cite-1740">
+                <span id="dsq-author-user-1740">Meteor</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1740" class="dsq-comment-body">
+            <div id="dsq-comment-message-1740" class="dsq-comment-message"><p>appender改成这个<br />
+{ &#8220;appenders&#8221;: [ {<br />
+    &#8220;type&#8221;: &#8220;dateFile&#8221;,<br />
+    &#8220;filename&#8221;: &#8220;blah.log&#8221;,<br />
+    &#8220;pattern&#8221;: &#8220;-yyyy-MM-dd&#8221;,<br />
+    &#8220;alwaysIncludePattern&#8221;: false<br />
+  } ]<br />
+}<br />
+<a href="https://github.com/nomiddlename/log4js-node/wiki/Date-rolling-file-appender" rel="nofollow">https://github.com/nomiddlename/log4js-node/wiki/Date-rolling-file-appender</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1779">
+        <div id="dsq-comment-header-1779" class="dsq-comment-header">
+            <cite id="dsq-cite-1779">
+                <span id="dsq-author-user-1779">ijse</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1779" class="dsq-comment-body">
+            <div id="dsq-comment-message-1779" class="dsq-comment-message"><p>嗯，谢谢。试过但没效果，后来还是改用winston了。。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2825">
+        <div id="dsq-comment-header-2825" class="dsq-comment-header">
+            <cite id="dsq-cite-2825">
+                <span id="dsq-author-user-2825">Jade Chen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2825" class="dsq-comment-body">
+            <div id="dsq-comment-message-2825" class="dsq-comment-message"><p>很好，不错。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2866">
+        <div id="dsq-comment-header-2866" class="dsq-comment-header">
+            <cite id="dsq-cite-2866">
+                <span id="dsq-author-user-2866">poppets</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2866" class="dsq-comment-body">
+            <div id="dsq-comment-message-2866" class="dsq-comment-message"><p>试了一下，因为我的app.js是有module.exports = app的，所以在app.js里没有试成功。可能是因为我经验太少。然后写了个logger.js，把log4js的部分放进去了，然后module.exports = log4js ,然后require(&#8216;logger.js&#8217;) 后便成功了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2872">
+        <div id="dsq-comment-header-2872" class="dsq-comment-header">
+            <cite id="dsq-cite-2872">
+                <a id="dsq-author-user-2872" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2872" class="dsq-comment-body">
+            <div id="dsq-comment-message-2872" class="dsq-comment-message"><p>先能用就行，有了时间再进行重构吧。<br />
+应用在部署时可以用forever或pm2管理，自带日志功能，对日志如果没有特别的要求，就可以不用日志模块了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2906">
+        <div id="dsq-comment-header-2906" class="dsq-comment-header">
+            <cite id="dsq-cite-2906">
+                <span id="dsq-author-user-2906">Carter</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2906" class="dsq-comment-body">
+            <div id="dsq-comment-message-2906" class="dsq-comment-message"><p>想问一问，node内置的web服务器日志可以放到某个文件里不？如果可以的话，怎么弄？或者还是她已经存储在哪个文件里了？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2914">
+        <div id="dsq-comment-header-2914" class="dsq-comment-header">
+            <cite id="dsq-cite-2914">
+                <a id="dsq-author-user-2914" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2914" class="dsq-comment-body">
+            <div id="dsq-comment-message-2914" class="dsq-comment-message"><p>node内置的日志，是指的控制台输出吗？<br />
+你可以启动的时候用nohup xxxx &amp;，会在当前目录生成一个nohup.txt文件，就是日志了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3472">
+        <div id="dsq-comment-header-3472" class="dsq-comment-header">
+            <cite id="dsq-cite-3472">
+                <span id="dsq-author-user-3472">zerin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3472" class="dsq-comment-body">
+            <div id="dsq-comment-message-3472" class="dsq-comment-message"><p>楼主厉害，请问一下如何使log4js的multiprocess输出方式，实现多log文件的输出，目前只能输出一个文件，不知道是否可以修改一下multiprocess.js源码？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3480">
+        <div id="dsq-comment-header-3480" class="dsq-comment-header">
+            <cite id="dsq-cite-3480">
+                <a id="dsq-author-user-3480" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3480" class="dsq-comment-body">
+            <div id="dsq-comment-message-3480" class="dsq-comment-message"><p>不好意思，我没有做后面的研究。现是express4.x，默认的日志是morgan。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3481">
+        <div id="dsq-comment-header-3481" class="dsq-comment-header">
+            <cite id="dsq-cite-3481">
+                <span id="dsq-author-user-3481">zerin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3481" class="dsq-comment-body">
+            <div id="dsq-comment-message-3481" class="dsq-comment-message"><p>谢谢，上面说的问题我已经解决了，但在win7下测试时成功了，而和win7下一样的Log4js配置时在linux上部署测试时，报log4js配置错误，</p>
+<p>配置如下：&#8221;appenders&#8221;:</p>
+<p>  [</p>
+<p>    {  </p>
+<p>       &#8220;type&#8221;: &#8220;multiprocess&#8221;,</p>
+<p>       &#8220;mode&#8221;: &#8220;master&#8221;,</p>
+<p>       &#8220;loggerPort&#8221;: 5001,</p>
+<p>       &#8220;loggerHost&#8221;: &#8220;192.168.1.250&#8221;,</p>
+<p>       &#8220;category&#8221;: &#8220;acesss&#8221;,</p>
+<p>       &#8220;appender&#8221;: {  </p>
+<p>         &#8220;type&#8221;: &#8220;datefile&#8221;, </p>
+<p>         &#8220;filename&#8221;:&#8221;access_log&#8221;,</p>
+<p>         &#8220;layout&#8221;: {&#8220;type&#8221;:&#8221;basic&#8221;},</p>
+<p>         &#8220;MaxLogSize&#8221;: 131072,</p>
+<p>         &#8220;backups&#8221;: 3, </p>
+<p>         &#8220;patterm&#8221;: &#8220;yyyy-MM-dd&#8221;,</p>
+<p>         &#8220;alwaysIncludePattern&#8221;: true </p>
+<p>       }</p>
+<p>    }</p>
+<p>  ]</p>
+<p>报错如下：</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-3495">
+        <div id="dsq-comment-header-3495" class="dsq-comment-header">
+            <cite id="dsq-cite-3495">
+                <a id="dsq-author-user-3495" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3495" class="dsq-comment-body">
+            <div id="dsq-comment-message-3495" class="dsq-comment-message"><p>我也不清楚具体的问题，要查源代码了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-5414">
+        <div id="dsq-comment-header-5414" class="dsq-comment-header">
+            <cite id="dsq-cite-5414">
+                <span id="dsq-author-user-5414">冯大立</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5414" class="dsq-comment-body">
+            <div id="dsq-comment-message-5414" class="dsq-comment-message"><p>请问下，为什么我打印的日志最后没有请求时间</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-5417">
+        <div id="dsq-comment-header-5417" class="dsq-comment-header">
+            <cite id="dsq-cite-5417">
+                <a id="dsq-author-user-5417" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5417" class="dsq-comment-body">
+            <div id="dsq-comment-message-5417" class="dsq-comment-message"><p>你是不是把输出格式化了，时间没有加上？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-log4js/';
+var disqus_identifier = '556 http://blog.fens.me/?p=556';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "玩转Nodejs日志管理log4js";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=556';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合���理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

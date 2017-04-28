@@ -1,0 +1,22 @@
+{
+  "name": "node-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/w724883/node-crawler.git"
+  },
+  "author": "ruizhe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/w724883/node-crawler/issues"
+  },
+  "homepage": "https://github.com/w724883/node-crawler#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0"
+  }
+}

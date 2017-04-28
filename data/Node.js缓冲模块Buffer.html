@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Node.js缓冲模块Buffer | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Node.js缓冲模块Buffer Comments Feed" href="http://blog.fens.me/nodejs-buffer/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Node.js加密算法库Crypto' href='http://blog.fens.me/nodejs-crypto/' />
+<link rel='next' title='Node.js进程通信模块child_process' href='http://blog.fens.me/nodejs-child-process/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-buffer/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=7813' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-buffer%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-buffer%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,javascript,buffer,string,8k,string,buf.write,buf.read,buf.fill" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-7813 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Node.js缓冲模块Buffer</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-7813 post type-post status-publish format-standard hentry category-javascript tag-buffer tag-javascript tag-nodejs tag-string">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-buffer/" title="Node.js缓冲模块Buffer" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Mar 4, 2015</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/buffer/" rel="tag">buffer</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/string/" rel="tag">string</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-buffer/#comments"><span class="dsq-postid" data-dsqidentifier="7813 http://blog.fens.me/?p=7813">3 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Node.js缓冲模块Buffer</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 创业者，程序员(Java,R,Javascript/Nodejs)</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Node.js缓冲模块Buffer" href="http://blog.fens.me/nodejs-buffer/" target="_blank">http://blog.fens.me/nodejs-buffer/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2015/03/buffer.png"><img src="http://blog.fens.me/wp-content/uploads/2015/03/buffer.png" alt="buffer" width="600" height="400" class="alignnone size-full wp-image-7844" /></a></p>
+<p><strong>前言</strong></p>
+<p>Javascript是为浏览器而设计的，能很好的处理unicode编码的字符串，但对于二进制或非unicode编码的数据就显得无能为力。Node.js继承Javascript的语言特性，同时又扩展了Javascript语言，为二进制的数据处理提供了Buffer类，让Node.js可以像其他程序语言一样，能处理各种类型的数据了。</p>
+<p>网上有很多讲Buffer的文章，大都讲的是原理，怎么使用几乎找不到，文章将重点介绍Buffer的使用。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Buffer介绍</li>
+<li>Buffer的基本使用</li>
+<li>Buffer的性能测试</li>
+</ol>
+<h2>1. Buffer介绍</h2>
+<p>在Node.js中，Buffer类是随Node内核一起发布的核心库。Buffer库为Node.js带来了一种存储原始数据的方法，可以让Nodejs处理二进制数据，每当需要在Nodejs中处理I/O操作中移动的数据时，就有可能使用Buffer库。原始数据存储在 Buffer 类的实例中。一个 Buffer 类似于一个整数数���，但它对应于 V8 堆内存之外的一块原始内存。</p>
+<p>Buffer 和 Javascript 字符串对象之间的转换需要显式地调用编码方法来完成。以下是几种不同的字符串编码：</p>
+<ul>
+<li>&#8216;ascii&#8217; &#8211; 仅用于 7 位 ASCII 字符。这种编码方法非常快，并且会丢弃高位数据。</li>
+<li>&#8216;utf8&#8217; &#8211; 多字节编码的 Unicode 字符。许多网页和其他文件格式使用 UTF-8。</li>
+<li>&#8216;ucs2&#8217; &#8211; 两个字节，以小尾字节序(little-endian)编码的 Unicode 字符。它只能对 BMP（基本多文种平面，U+0000 &#8211; U+FFFF） 范围内的字符编码。</li>
+<li>&#8216;base64&#8217; &#8211; Base64 字符串编码。</li>
+<li>&#8216;binary&#8217; &#8211; 一种将原始二进制数据转换成字符串的编码方式，仅使用每个字符的前 8 位。这种编码方法已经过时，应当尽可能地使用 Buffer 对象。Node 的后续版本将会删除这种编码。</li>
+</ul>
+<p>Buffer官方文档：<a href="http://nodejs.org/api/buffer.html" target="_blank" ref="nofollow">http://nodejs.org/api/buffer.html</a></p>
+<h2>2. Buffer的基本使用</h2>
+<p>Buffer的基本使用，主要就是API所提供的操作，主要包括3个部分 创建Buffer类、读Buffer、写Buffer。由于基本操作在官方文档中详细的使用介绍，我只是简单列举一下。</p>
+<p>系统环境</p>
+<ul>
+<li>Win7 64bit</li>
+<li>Nodejs:v0.10.31</li>
+<li>Npm:1.4.23</li>
+</ul>
+<p>创建项目</p>
+<pre><code>
+~ cd D:\workspace\javascript>
+~ D:\workspace\javascript>mkdir nodejs-buffer && cd nodejs-buffer
+</code></pre>
+<p><strong>2.1 创建Buffer类</strong></p>
+<p>要创建一个Buffer的实例，我们要通过new Buffer来创建。新建文件buffer_new.js。</p>
+<pre><code>
+~ vi buffer_new.js
+
+// 长度为0的Buffer实例
+var a = new Buffer(0);
+console.log(a);
+&gt; &lt;Buffer &gt;
+
+// 长度为0的Buffer实例相同，a1,a2是一个实例
+var a2 = new Buffer(0);
+console.log(a2);
+&gt; &lt;Buffer &gt;
+
+// 长度为10的Buffer实例
+var a10 = new Buffer(10);
+console.log(a10);
+&gt; &lt;Buffer 22 37 02 00 00 00 00 04 00 00&gt;
+
+// 数组
+var b = new Buffer(['a','b',12])
+console.log(b);
+&gt; &lt;Buffer 00 00 0c&gt;
+
+// 字符编码
+var b2 = new Buffer('你好','utf-8');
+console.log(b2);
+&gt; &lt;Buffer e4 bd a0 e5 a5 bd&gt;
+</code></pre>
+<p>Buffer类有5个类方法，用于Buffer类的辅助操作。</p>
+<p>1) 编码检查，上文中提到Buffer和Javascript字符串转换时，需要显式的设置编码，那么这几种编码类型是Buffer所支持的。像中文处理只能使用utf-8编码，对于几年前常用的gbk，gb2312等编码是无法解析的。</p>
+<pre><code>
+// 支持的编码
+console.log(Buffer.isEncoding('utf-8'))
+console.log(Buffer.isEncoding('binary'))
+console.log(Buffer.isEncoding('ascii'))
+console.log(Buffer.isEncoding('ucs2'))
+console.log(Buffer.isEncoding('base64'))
+console.log(Buffer.isEncoding('hex'))  # 16制进
+> true
+
+//不支持的编码
+console.log(Buffer.isEncoding('gbk'))
+console.log(Buffer.isEncoding('gb2312'))
+> false
+</code></pre>
+<p>2) Buffer检查，很多时候我们需要判断数据的类型，对应后续的操作。</p>
+<pre><code>
+// 是Buffer类
+console.log(Buffer.isBuffer(new Buffer('a')))
+> true
+
+// 不是Buffer
+console.log(Buffer.isBuffer('adfd'))
+console.log(Buffer.isBuffer('\u00bd\u00bd'))
+> false
+</code></pre>
+<p>3) 字符串的字节长度，由于字符串编码不同，所以字符串长度和字节长度有时是不一样的。比如，1个中文字符是3个字节，通过utf-8编码输出就是4个中文字符，占12个字节。</p>
+<pre><code>
+var str2 = '粉丝日志';
+console.log(str2 + ": " + str2.length + " characters, " + Buffer.byteLength(str2, 'utf8') + " bytes");
+> 粉丝日志: 4 characters, 12 bytes
+console.log(str2 + ": " + str2.length + " characters, " + Buffer.byteLength(str2, 'ascii') + " bytes");
+> 粉丝日志: 4 characters, 4 bytes
+</code></pre>
+<p>4) Buffer的连接，用于连接Buffer的数组。我们可以手动分配Buffer对象合并后的Buffer空间大小，如果Buffer空间不够了，则数据会被截断。</p>
+<pre><code>
+var b1 = new Buffer("abcd");
+var b2 = new Buffer("1234");
+var b3 = Buffer.concat([b1,b2],8);
+console.log(b3.toString());
+> abcd1234
+
+var b4 = Buffer.concat([b1,b2],32);
+console.log(b4.toString());
+console.log(b4.toString('hex'));//16进制输出
+> abcd1234 乱码....
+> 616263643132333404000000000000000000000000000000082a330200000000
+
+var b5 = Buffer.concat([b1,b2],4);
+console.log(b5.toString());
+> abcd
+</code></pre>
+<p>程序运行的截图<br />
+<a href="http://blog.fens.me/wp-content/uploads/2015/03/buffer_concat.png"><img src="http://blog.fens.me/wp-content/uploads/2015/03/buffer_concat.png" alt="buffer_concat" width="613" height="99" class="alignnone size-full wp-image-7823" /></a></p>
+<p>5) Buffer的比较，用于Buffer的内容排序，按字符串的顺序。</p>
+<pre><code>
+var a1 = new Buffer('10');
+var a2 = new Buffer('50');
+var a3 = new Buffer('123');
+
+// a1小于a2
+console.log(Buffer.compare(a1,a2));
+&gt; -1
+
+// a2小于a3
+console.log(Buffer.compare(a2,a3));
+&gt; 1
+
+// a1,a2,a3排序输出
+console.log([a1,a2,a3].sort(Buffer.compare));
+&gt; [ &lt;Buffer 31 30&gt;, &lt;Buffer 31 32 33&gt;, &lt;Buffer 35 30&gt; ]
+
+// a1,a2,a3排序输出，以utf-8的编码输出
+console.log([a1,a2,a3].sort(Buffer.compare).toString());
+&gt; 10,123,50
+</code></pre>
+<p><strong>2.2 写入Buffer</strong></p>
+<p>把���据写入到Buffer的操作，新建文件buffer_write.js。</p>
+<pre><code>
+~ vi buffer_write.js
+
+//////////////////////////////
+// Buffer写入
+//////////////////////////////
+
+// 创建空间大小为64字节的Buffer
+var buf = new Buffer(64);
+
+// 从开始写入Buffer，偏移0
+var len1 = buf.write('从开始写入');
+
+// 打印数据的长度，打印Buffer的0到len1位置的数据
+console.log(len1 + " bytes: " + buf.toString('utf8', 0, len1));
+
+// 重新写入Buffer，偏移0，将覆盖之前的Buffer内存
+len1 = buf.write('重新写入');
+console.log(len1 + " bytes: " + buf.toString('utf8', 0, len1));
+
+// 继续写入Buffer，偏移len1，写入unicode的字符串
+var len2 = buf.write('\u00bd + \u00bc = \u00be',len1);
+console.log(len2 + " bytes: " + buf.toString('utf8', 0, len1+len2));
+
+// 继续写入Buffer，偏移30
+var len3 = buf.write('从第30位写入', 30);
+console.log(len3 + " bytes: " + buf.toString('utf8', 0, 30+len3));
+
+// Buffer总长度和数据
+console.log(buf.length + " bytes: " + buf.toString('utf8', 0, buf.length));
+
+// 继续写入Buffer，偏移30+len3
+var len4 = buf.write('写入的数据长度超过Buffer的总长度！',30+len3);
+
+// 超过Buffer空间的数据，没有被写入到Buffer中
+console.log(buf.length + " bytes: " + buf.toString('utf8', 0, buf.length));
+</code></pre>
+<p><a href="http://blog.fens.me/wp-content/uploads/2015/03/buffer_write.png"><img src="http://blog.fens.me/wp-content/uploads/2015/03/buffer_write.png" alt="buffer_write" width="541" height="117" class="alignnone size-full wp-image-7828" /></a></p>
+<p>Node.js的节点的缓冲区，根据读写整数的范围，提供了不同宽度的支持，使从1到8个字节（8位、16位、32位）的整数、浮点数(float)、双精度浮点数(double)可以被访问，分别对应不同的writeXXX()函数，使用方法与buf.write()类似。</p>
+<pre><code>
+buf.write(string[, offset][, length][, encoding])
+buf.writeUIntLE(value, offset, byteLength[, noAssert])
+buf.writeUIntBE(value, offset, byteLength[, noAssert])
+buf.writeIntLE(value, offset, byteLength[, noAssert])
+buf.writeIntBE(value, offset, byteLength[, noAssert])
+buf.writeUInt8(value, offset[, noAssert])
+buf.writeUInt16LE(value, offset[, noAssert])
+buf.writeUInt16BE(value, offset[, noAssert])
+buf.writeUInt32LE(value, offset[, noAssert])
+buf.writeUInt32BE(value, offset[, noAssert])
+buf.writeInt8(value, offset[, noAssert])
+buf.writeInt16LE(value, offset[, noAssert])
+buf.writeInt16BE(value, offset[, noAssert])
+buf.writeInt32LE(value, offset[, noAssert])
+buf.writeInt32BE(value, offset[, noAssert])
+buf.writeFloatLE(value, offset[, noAssert])
+buf.writeFloatBE(value, offset[, noAssert])
+buf.writeDoubleLE(value, offset[, noAssert])
+buf.writeDoubleBE(value, offset[, noAssert])
+</code></pre>
+<p>另外，关于Buffer写入操作，还有一些Buffer类的原型函数可以操作。</p>
+<p>Buffer复制函数 buf.copy(targetBuffer[, targetStart][, sourceStart][, sourceEnd])。</p>
+<pre><code>
+// 新建两个Buffer实例
+var buf1 = new Buffer(26);
+var buf2 = new Buffer(26);
+
+// 分别向2个实例中写入数据
+for (var i = 0 ; i < 26 ; i++) {
+    buf1[i] = i + 97; // 97是ASCII的a
+    buf2[i] = 50; // 50是ASCII的2
+}
+
+// 把buf1的内存复制给buf2
+buf1.copy(buf2, 5, 0, 10); // 从buf2的第5个字节位置开始插入，复制buf1的从0-10字节的数据到buf2中
+console.log(buf2.toString('ascii', 0, 25)); // 输入buf2的0-25字节
+> 22222abcdefghij2222222222
+</code></pre>
+<p>Buffer填充函数 buf.fill(value[, offset][, end])。</p>
+<pre><code>
+// 新建Buffer实例，长度20节节
+var buf = new Buffer(20);
+
+// 向Buffer中填充数据
+buf.fill("h");
+console.log(buf)
+> &lt;Buffer 68 68 68 68 68 68 68 68 68 68 68 68 68 68 68 68 68 68 68 68&gt;
+console.log("buf:"+buf.toString())
+> buf:hhhhhhhhhhhhhhhhhhhh
+// 清空Buffer中的数据
+buf.fill();
+console.log("buf:"+buf.toString())
+> buf:
+</code></pre>
+<p>Buffer裁剪，buf.slice([start][, end])。返回一个新的缓冲区，它和旧缓冲区指向同一块内存，但是从索引 start 到 end 的位置剪裁。</p>
+<pre><code>
+var buf1 = new Buffer(26);
+for (var i = 0 ; i < 26 ; i++) {
+    buf1[i] = i + 97;
+}
+
+// 从剪切buf1中的0-3的位置的字节，新生成的buf2是buf1的一个切片。
+var buf2 = buf1.slice(0, 3);
+console.log(buf2.toString('ascii', 0, buf2.length));
+> abc
+
+// 当修改buf1时，buf2同时也会发生改变
+buf1[0] = 33;
+console.log(buf2.toString('ascii', 0, buf2.length));
+> !bc
+</code></pre>
+<p><strong>2.3 读取Buffer</strong></p>
+<p>我们把数据写入Buffer后，我们还需要把数据从Buffer中读出来，新建文件buffer_read.js。我们可以通过readXXX()函数获得对应该写入时编码的索引值，再转换原始值取出，有这种方法操作中文字符就会变得麻烦，最常用的读取Buffer的方法，其实就是toString()。</p>
+<pre><code>
+~ vi buffer_read.js
+
+//////////////////////////////
+// Buffer 读取
+//////////////////////////////
+
+var buf = new Buffer(10);
+for (var i = 0 ; i < 10 ; i++) {
+    buf[i] = i + 97;
+}
+console.log(buf.length + " bytes: " + buf.toString('utf-8'));
+> 10 bytes: abcdefghij
+
+// 读取数据
+for (ii = 0; ii < buf.length; ii++) {
+    var ch = buf.readUInt8(ii); // 获得ASCII索引
+    console.log(ch + ":"+ String.fromCharCode(ch));
+}
+> 97:a
+98:b
+99:c
+100:d
+101:e
+102:f
+103:g
+104:h
+105:i
+106:j
+</code></pre>
+<p>写入中文数据，以readXXX进行读取，会3个字节来表示一个中文字。</p>
+<pre><code>
+var buf = new Buffer(10);
+buf.write('abcd')
+buf.write('数据',4)
+for (var i = 0; i < buf.length; i++) {
+    console.log(buf.readUInt8(i));
+}
+
+>97
+98
+99
+100
+230  // 230,149,176 代表“数”
+149
+176
+230  // 230,141,174 代表“据”
+141
+174 
+</code></pre>
+<p>如果想输出正确的中文，那么我们可以用toString(&#8216;utf-8&#8217;)的函数来操作。</p>
+<pre><code>
+console.log("buffer :"+buf); // 默认调用了toString()的函数
+> buffer :abcd数据
+console.log("utf-8  :"+buf.toString('utf-8'));
+> utf-8  :abcd数据
+console.log("ascii  :"+buf.toString('ascii'));//有乱码，中文不能被正确解析
+> ascii  :abcdf0f
+.
+console.log("hex    :"+buf.toString('hex')); //16进制
+> hex    :61626364e695b0e68dae
+</code></pre>
+<p>对于Buffer的输出，我们用的最多的操作就是toString()，按照存入的编码进行读取。除了toString()函数，还可以用toJSON()直接Buffer解析成JSON对象。</p>
+<pre><code>
+var buf = new Buffer('test');
+console.log(buf.toJSON());
+> { type: 'Buffer', data: [ 116, 101, 115, 116 ] }
+</code></pre>
+<h2>3. Buffer的性能测试</h2>
+<p>通过上文中对Buffer的介绍，我们已经了解了Buffer的基本使用，接下来，我们要开始做Buffer做一些测试。</p>
+<p><strong>3.1 8K的创建测试</strong></p>
+<p>每次我们创建一个新的Buffer实例时，都会检查当前Buffer的内存池是否已经满，当前内存池对于新建的Buffer实例是共享的，内存池的大小为8K。</p>
+<p>如果新创建的Buffer实例大于8K时，就把Buffer交给SlowBuffer实例存储；如果新创建的Buffer实例小于8K，同时小于当前内存池的剩余空间，那么这个Buffer存入当前的内存池；如果Buffer实例不大0，则统一返回默认的zerobuffer实例。</p>
+<p>下面我们创建2个Buffer实例，第一个是以4k为空间，第二个以4.001k为空间，循环创建10万次。</p>
+<pre><code>
+var num = 100*1000;
+console.time("test1");
+for(var i=0;i&lt;num;i++){
+    new Buffer(1024*4);
+}
+console.timeEnd("test1");
+> test1: 132ms
+
+console.time("test2");
+for(var j=0;j&lt;num;j++){
+    new Buffer(1024*4+1);
+}
+console.timeEnd("test2");
+> test2: 163ms
+</code></pre>
+<p>第二个以4.001k为空间的耗时多23%，这就意味着第二个，每二次循环就要重新申请一次内存池的空间。这是需要我们非常注意的。</p>
+<p><strong>3.2 多Buffer还是单一Buffer</strong></p>
+<p>当我们需要对数据进行缓存时，创建多个小的Buffer实例好，还是创建一个大的Buffer实例好？比如我们要创建1万个长度在1-2048之间不等的字符串。</p>
+<pre><code>
+var max = 2048;     //最大长度
+var time = 10*1000; //循环1万次
+
+// 根据长度创建字符串
+function getString(size){
+    var ret = ""
+    for(var i=0;i&lt;size;i++) ret += "a";
+    return ret;
+}
+
+// 生成字符串数组，1万条记录
+var arr1=[];
+for(var i=0;i&lt;time;i++){
+    var size = Math.ceil(Math.random()*max)
+    arr1.push(getString(size));
+}
+//console.log(arr1);
+
+// 创建1万个小Buffer实例
+console.time('test3');
+var arr_3 = [];
+for(var i=0;i&lt;time;i++){
+    arr_3.push(new Buffer(arr1[i]));
+}
+console.timeEnd('test3');
+> test3: 217ms
+
+// 创建一个大实例，和一个offset数组用于读取数据。
+console.time('test4');
+var buf = new Buffer(time*max);
+var offset=0;
+var arr_4=[];
+for(var i=0;i&lt;time;i++){
+    arr_4[i]=offset;
+    buf.write(arr1[i],offset,arr1[i].length);
+    offset=offset+arr1[i].length;
+}
+console.timeEnd('test4');
+> test4: 12ms
+</code></pre>
+<p>读取索引为2的数据。</p>
+<pre><code>
+console.log("src:[2]="+arr1[2]);
+console.log("test3:[2]="+arr_3[2].toString());
+console.log("test4:[2]="+buf.toString('utf-8',arr_4[2],arr_4[3]));
+</code></pre>
+<p>运行结果如图所示。<br />
+<a href="http://blog.fens.me/wp-content/uploads/2015/03/buffer_test.png"><img src="http://blog.fens.me/wp-content/uploads/2015/03/buffer_test.png" alt="buffer_test" width="784" height="255" class="alignnone size-full wp-image-7837" /></a></p>
+<p>对于这类的需求来说，提前生成一个大的Buffer实例进行存储，要比每次生成小的Buffer实例高效的多，能提升一个数量级的计算效率。所以，理解并用好Buffer是非常重要的！！</p>
+<p><strong>3.3 string VS Buffer</strong></p>
+<p>有了Buffer我们是否需求把所有String的连接，都换成Buffer的连接？那么我们就需要测试一下，String和Buffer做字符串连接时，哪个更快一点？</p>
+<p>下面我们进行字符串连接，循环30万次。</p>
+<pre><code>
+//测试三，Buffer VS string
+var time = 300*1000;
+var txt = "aaa"
+
+var str = "";
+console.time('test5')
+for(var i=0;i&lt;time;i++){
+    str += txt;
+}
+console.timeEnd('test5')
+> test5: 24ms
+
+console.time('test6')
+var buf = new Buffer(time * txt.length)
+var offset = 0;
+for(var i=0;i&lt;time;i++){
+    var end = offset + txt.length;
+    buf.write(txt,offset,end);
+    offset=end;
+}
+console.timeEnd('test6')
+> test6: 85ms
+</code></pre>
+<p>从测试结果，我们可以明显的看到，String对字符串的连接操作，要远快于Buffer的连接操作。所以我们在保存字符串的时候，该用string还是要用string。那么只有在保存非utf-8的字符串以及二进制数据的情况，我们才用Buffer。</p>
+<h2>6. 程序代码</h2>
+<p>本文的程序代码，可以直接从Github上面下载本文项目中的源代码，按照片文章中的介绍学习buffer，下载地址：<a href="https://github.com/bsspirit/nodejs-buffer" target="_blank" ref="nofollow">https://github.com/bsspirit/nodejs-buffer</a></p>
+<p>也可以直接用github命令行来下载：</p>
+<pre><code>
+~ git clone git@github.com:bsspirit/nodejs-buffer.git   # 下载github项目
+~ cd nodejs-buffer                                      # 进入下载目录
+</code></pre>
+<p>关于Node.js的底层，本人接触并不多，未能从V8(C++)的做更深入的研究，仅仅在使用层次上，写出我的总结。对于文中的错误或描述不清楚的地方，还请大牛予以指正！！</p>
+<p>参考文章：</p>
+<ul
+
+
+<li><a href="https://cnodejs.org/topic/5189ff4f63e9f8a54207f60c" target="_blank" ref="nofollow">浅析nodejs的buffer类</a></li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Node.js缓冲模块Buffer" href="http://blog.fens.me/nodejs-buffer/" target="_blank">http://blog.fens.me/nodejs-buffer/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-3924">
+        <div id="dsq-comment-header-3924" class="dsq-comment-header">
+            <cite id="dsq-cite-3924">
+                <span id="dsq-author-user-3924">tianyu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3924" class="dsq-comment-body">
+            <div id="dsq-comment-message-3924" class="dsq-comment-message"><p>请问如何把一个数字如21.生成一个4个byte的小尾段buffer。如把21 变成Buffer</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3927">
+        <div id="dsq-comment-header-3927" class="dsq-comment-header">
+            <cite id="dsq-cite-3927">
+                <span id="dsq-author-user-3927">tianyu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3927" class="dsq-comment-body">
+            <div id="dsq-comment-message-3927" class="dsq-comment-message"><p>buf.writeUInt32LE(value, offset[, noAssert])<br />
+找到方法了，谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3946">
+        <div id="dsq-comment-header-3946" class="dsq-comment-header">
+            <cite id="dsq-cite-3946">
+                <a id="dsq-author-user-3946" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3946" class="dsq-comment-body">
+            <div id="dsq-comment-message-3946" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-buffer/';
+var disqus_identifier = '7813 http://blog.fens.me/?p=7813';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Node.js缓冲模块Buffer";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=7813';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

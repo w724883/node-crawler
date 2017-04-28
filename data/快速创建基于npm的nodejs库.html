@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>快速创建基于npm的nodejs库 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; 快速创建基于npm的nodejs库 Comments Feed" href="http://blog.fens.me/nodejs-npm-package/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Retry优雅的失败重试策略' href='http://blog.fens.me/nodejs-retry/' />
+<link rel='next' title='让Nodejs来管理定时任务later' href='http://blog.fens.me/nodejs-cron-later/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-npm-package/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=4382' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-npm-package%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-npm-package%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="javascript,nodejs,npm,package" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-4382 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>快速创建基于npm的nodejs库</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-4382 post type-post status-publish format-standard hentry category-javascript tag-javascript tag-nodejs tag-npm tag-package">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-npm-package/" title="快速创建基于npm的nodejs库" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Dec 20, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/npm/" rel="tag">npm</a><a href="http://blog.fens.me/tag/package/" rel="tag">package</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-npm-package/#comments"><span class="dsq-postid" data-dsqidentifier="4382 http://blog.fens.me/?p=4382">21 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>快速创建基于npm的nodejs库</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="快速创建基于npm的nodejs库" href="http://blog.fens.me/nodejs-npm-package" target="_blank">http://blog.fens.me/nodejs-npm-package</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-npm.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-npm.png" alt="nodejs-npm" width="600" height="400" class="alignnone size-full wp-image-4410" /></a></p>
+<p><strong>前言</strong></p>
+<p>用Node实现的功能越来越多，代码越来越复杂，我们就开始考虑如何把代码从项目中抽出来，形成单独的类库(模块)管理。就像我们所依赖其他第三方类库一样。</p>
+<p>本文将介绍如何定义开发一个类库，包括命令开发，发布到npm中，让其他人也可以使用。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>npm是什么？</li>
+<li>快速创建包</li>
+<li>创建命令行工具</li>
+<li>本地安装lowercase包</li>
+<li>项目上传到github</li>
+<li>通过npm发布包</li>
+<li>通过npm安装包</li>
+</ol>
+<h2>1. npm是什么？</h2>
+<p>NPM的全称是，是一个NodeJS包管理和分发工具，已经成为了非官方的发布Node模块的标准。</p>
+<p>Nodejs自身提供了基本的模块，但是开发实际应用过程中仅仅依靠这些基本模块则还需要较多的工作。幸运的是，Nodejs库和框架为我们提供了帮助，让我们减少工作量。但是成百上千���库或者框架管理起来又很麻烦，有了NPM，可以很快的找到特定服务要使用的包，进行下载、安装以及管理已经安装的包。</p>
+<p>类似于Java中的Maven，Ubuntu中的apt-get, Ruby中的Gem, Python中pypi等&#8230;</p>
+<p>NPM模块发布页：<a href="https://npmjs.org/" target="_blank" ref="nofollow">https://npmjs.org/</a></p>
+<h2>2. 快速创建包</h2>
+<p>项目描述：读取文件，把所有的大写文字转换成小写文字，控制台输出。</p>
+<p>系统环境：</p>
+<ul>
+<li>win7 64bit</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<p>创建项目</p>
+<pre><code>
+~ D:\workspace\javascript>mkdir nodejs-package && cd nodejs-package
+</code></pre>
+<p>创建项目结构</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package>mkdir bin
+~ D:\workspace\javascript\nodejs-package>touch bin/lowercase
+~ D:\workspace\javascript\nodejs-package>touch bin/lowercase.bat
+~ D:\workspace\javascript\nodejs-package>mkdir test
+~ D:\workspace\javascript\nodejs-package>mkdir test/data
+~ D:\workspace\javascript\nodejs-package>touch test/data/sample.txt
+~ D:\workspace\javascript\nodejs-package>touch lowercase.js
+~ D:\workspace\javascript\nodejs-package>touch example.js
+~ D:\workspace\javascript\nodejs-package>touch README.md
+</code></pre>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-package-folder.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-package-folder.png" alt="nodejs-package-folder" width="275" height="228" class="alignnone size-full wp-image-4390" /></a></p>
+<p>项目结构说明</p>
+<ul>
+<li>bin目录: 用于存放命令的目录</li>
+<li>bin/lowercase文件: Linux命令行可执行文件</li>
+<li>bin/lowercase.bat文件: Win命令行可执行文件</li>
+<li>test目录: 用于存放测试代码的目录</li>
+<li>test/data目录: 用于存放测试数据的目录</li>
+<li>test/data/sample.txt: 测试数据文件</li>
+<li>lowercase.js文件: 核心功能代码文件</li>
+<li>example.js文件: 例子代码文件</li>
+<li>package.json文件: 项目描述及依赖文件</li>
+<li>README.md文件: 项目说明文件</li>
+</ul>
+<p><strong>1). 创建文件：package.json</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package>npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sane defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg> --save` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+name: (nodejs-package) lowercase
+version: (0.0.0) 0.0.1
+description: A demo package
+entry point: (index.js)
+test command:
+git repository:
+keywords:
+author: Conan Zhang
+license: (BSD) MIT
+About to write to D:\workspace\javascript\nodejs-package\package.json:
+
+{
+  "name": "lowercase",
+  "version": "0.0.1",
+  "description": "A demo package",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "moment": "~2.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "Conan Zhang",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
+
+Is this ok? (yes) yes
+npm WARN package.json lowercase@0.0.1 No readme data!
+</code></pre>
+<p><strong>修改文件：package.json</strong></p>
+<pre><code>
+~ vi package.json
+
+{
+    "name": "lowercase_demo",
+    "version": "0.0.1",
+    "description": "A demo package of lowercase",
+    "keywords":[
+        "demo","lowercase"
+    ],
+    "author": "Conan Zhang <bsspirit@gmail.com> (http://blog.fens.me)",
+    "license": "MIT",
+    "main": "lowercase.js",
+    "repository": {
+        "type":"git",
+        "url":"https://github.com/bsspirit/lowercase_demo"
+    },
+    "engines": {
+        "node": ">=v0.10.5"
+    },
+    "readmeFilename": "README.md"
+}
+</code></pre>
+<p><strong>2). 编辑文件：lowercase.js</strong></p>
+<pre><code>
+~ vi lowercase.js
+
+"use strict"
+var fs = require('fs');
+
+exports.lowerCase = function (myfile) {
+    console.log(myfile);
+
+    if (fs.existsSync(myfile)) {
+        var content = fs.readFileSync(myfile, 'utf8');
+        console.log(content.toLowerCase());
+    } else {
+        console.log("File does not exist - " + myfile);
+    }
+}
+</code></pre>
+<p><strong>3). 编辑文件：example.js</strong></p>
+<pre><code>
+~ vi example
+
+"use strict"
+
+var lowercase = require('./lowercase.js');
+var myfile="test/data/sample.txt"
+lowercase.lowerCase(myfile);
+</code></pre>
+<p><strong>4). 编辑文件：test/data/sample.txt</strong></p>
+<pre><code>
+~ vi sample.txt
+
+JAVA
+NODEJS
+PYTHON
+PHP
+.NET
+R
+RUBY
+C
+C++
+GO
+</code></pre>
+<p><strong>5). 运行：example.js</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package>node example.js
+test/data/sample.txt
+java
+nodejs
+python
+php
+.net
+r
+ruby
+c
+c++
+go
+</code></pre>
+<p><strong>6). 编辑文件：README.md</strong></p>
+<pre><code>
+~ vi README.md
+
+lowercase
+========================
+
+A demo package of lowercase
+
+```{bash}
+npm install lowercase_demo
+```
+
+## author
+
+Conan Zhang, http://blog.fens.me
+
+## License
+
+MIT
+</code></pre>
+<h2>3. 创建命令行工具</h2>
+<p><strong>1). 编辑文件：bin/lowercase</strong></p>
+<pre><code>
+~ vi lowercase
+
+#!/usr/bin/env node
+
+var myfile = process.argv.slice(2);
+
+var path = require('path');
+var fs = require('fs');
+var dir = path.dirname(fs.realpathSync(__filename))+"/../";
+require(dir+'lowercase.js').lowerCase(dir+myfile);
+</code></pre>
+<p><strong>2). 编辑文件：bin/lowercase.bat</strong></p>
+<pre><code>
+~ vi lowercase.bat
+
+node.exe bin/lowercase %1
+</code></pre>
+<p><strong>3). 运行lowercase.bat</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package>bin\lowercase.bat test\data\sample.txt
+
+D:\workspace\javascript\nodejs-package>node.exe bin/lowercase test\data\sample.txt
+D:\workspace\javascript\nodejs-package\bin/../test\data\sample.txt
+java
+nodejs
+python
+php
+.net
+r
+ruby
+c
+c++
+go
+</code></pre>
+<h2>4. 本地安装lowercase包</h2>
+<p>新建项目，并安装lowercase依赖库</p>
+<pre><code>
+~ D:\workspace\javascript>mkdir nodejs-package-project && cd nodejs-package-project
+~ D:\workspace\javascript\nodejs-package-project>npm install ..\nodejs-package
+lowercase_demo@0.0.1 node_modules\lowercase_demo
+</code></pre>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-package-project.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-package-project.png" alt="nodejs-package-project" width="261" height="278" class="alignnone size-full wp-image-4404" /></a></p>
+<p>新建运行文件：app.js</p>
+<pre><code>
+~ vi app.js
+
+var lowercase = require('lowercase_demo');
+var myfile="data.txt"
+lowercase.lowerCase(myfile);
+</code></pre>
+<p>数据文件: data.txt</p>
+<pre><code>
+~ vi data.txt
+
+APP
+BACCDADDS
+</code></pre>
+<p>运行app.js</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package-project>node app.js
+data.txt
+app
+baccdadds
+</code></pre>
+<h2>5. 项目上传到github</h2>
+<p>把lowercase_demo库，上传到github。</p>
+<pre><code>
+~ git init
+~ git add .
+~ git commit -m 'init'
+~ git remote add origin git@github.com:bsspirit/lowercase_demo.git
+~ git push origin master
+</code></pre>
+<p>项目github地址：<a href="https://github.com/bsspirit/lowercase_demo" target="_blank" ref="nofollow" >https://github.com/bsspirit/lowercase_demo</a></p>
+<p>注：大家可以基于这个demo项目基础上，继续完成包的开发。</p>
+<h2>5. 通过npm发布包</h2>
+<p>在npm上，注册新用户</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package>npm adduser
+Username: bsspirit
+Password:
+Email: bsspirit@gmail.com
+npm http PUT https://registry.npmjs.org/-/user/org.couchdb.user:bsspirit
+npm http 409 https://registry.npmjs.org/-/user/org.couchdb.user:bsspirit
+npm http GET https://registry.npmjs.org/-/user/org.couchdb.user:bsspirit
+npm http 200 https://registry.npmjs.org/-/user/org.couchdb.user:bsspirit
+npm http PUT https://registry.npmjs.org/-/user/org.couchdb.user:bsspirit/-rev/2-25eae797548e61
+npm http 201 https://registry.npmjs.org/-/user/org.couchdb.user:bsspirit/-rev/2-25eae797548e61
+</code></pre>
+<p>在npm上，发布项目</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package>npm publish
+npm http PUT https://registry.npmjs.org/lowercase_demo
+npm http 201 https://registry.npmjs.org/lowercase_demo
+npm http GET https://registry.npmjs.org/lowercase_demo
+npm http 200 https://registry.npmjs.org/lowercase_demo
+npm http PUT https://registry.npmjs.org/lowercase_demo/-/lowercase_demo-0.0.1.tgz/-rev/1-162a1
+e
+npm http 201 https://registry.npmjs.org/lowercase_demo/-/lowercase_demo-0.0.1.tgz/-rev/1-162a1
+e
+npm http PUT https://registry.npmjs.org/lowercase_demo/0.0.1/-tag/latest
+npm http 201 https://registry.npmjs.org/lowercase_demo/0.0.1/-tag/latest
++ lowercase_demo@0.0.1
+</code></pre>
+<h2>6. 通过npm安装</h2>
+<p>通过npm下载安装</p>
+<pre><code>
+~ D:\workspace\javascript>mkdir nodejs-package-project2 && cd nodejs-package-project2
+~ D:\workspace\javascript\nodejs-package-project2>npm install lowercase_demo
+npm http GET https://registry.npmjs.org/lowercase_demo
+npm http 200 https://registry.npmjs.org/lowercase_demo
+lowercase_demo@0.0.1 node_modules\lowercase_demo
+</code></pre>
+<p>全局安装lowercase_demo</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package-project2>npm install lowercase_demo -g
+npm http GET https://registry.npmjs.org/lowercase_demo
+npm http 304 https://registry.npmjs.org/lowercase_demo
+D:\toolkit\nodejs\lowercase -> D:\toolkit\nodejs\node_modules\lowercase_demo\bin\lowercase
+npm ERR! peerinvalid The package generator-karma does not satisfy its siblings' peerDependenci
+npm ERR! peerinvalid Peer generator-angular@0.4.0 wants generator-karma@~0.5.0
+
+npm ERR! System Windows_NT 6.1.7601
+npm ERR! command "D:\\toolkit\\nodejs\\\\node.exe" "D:\\toolkit\\nodejs\\node_modules\\npm\\bi
+lowercase_demo" "-g"
+npm ERR! cwd D:\workspace\javascript\nodejs-package-project2
+npm ERR! node -v v0.10.5
+npm ERR! npm -v 1.2.19
+npm ERR! code EPEERINVALID
+npm ERR!
+npm ERR! Additional logging details can be found in:
+npm ERR!     D:\workspace\javascript\nodejs-package-project2\npm-debug.log
+npm ERR! not ok code 0
+</code></pre>
+<p>错误不是lowercase_demo的，没有关系。</p>
+<p>执行全局命令：lowercase</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-package-project2>lowercase test\data\sample.txt
+D:\toolkit\nodejs\node_modules\lowercase_demo\bin/../test\data\sample.txt
+java
+nodejs
+python
+php
+.net
+r
+ruby
+c
+c++
+go
+</code></pre>
+<p>注： 关于命令lowercase，因为代码中定义的是相对目录，所以只能访问D:\toolkit\nodejs\node_modules\lowercase_demo\目录的数据文件。</p>
+<p>这样，我们自定义的lowercase_demo库，开发完成，发布到npm官方依赖管理，并且安装成功！整体流程走了一遍发现还是挺简单的。</p>
+<p>你也来动手试试吧！</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="快速创建基于npm的nodejs库" href="http://blog.fens.me/nodejs-npm-package" target="_blank">http://blog.fens.me/nodejs-npm-package</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-1242">
+        <div id="dsq-comment-header-1242" class="dsq-comment-header">
+            <cite id="dsq-cite-1242">
+                <span id="dsq-author-user-1242">lianzi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1242" class="dsq-comment-body">
+            <div id="dsq-comment-message-1242" class="dsq-comment-message"><p>nice post.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="dsq-comment-1243">
+        <div id="dsq-comment-header-1243" class="dsq-comment-header">
+            <cite id="dsq-cite-1243">
+                <a id="dsq-author-user-1243" href="http://www.fens.me" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1243" class="dsq-comment-body">
+            <div id="dsq-comment-message-1243" class="dsq-comment-message"><p>：）</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-1246">
+        <div id="dsq-comment-header-1246" class="dsq-comment-header">
+            <cite id="dsq-cite-1246">
+                <a id="dsq-author-user-1246" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1246" class="dsq-comment-body">
+            <div id="dsq-comment-message-1246" class="dsq-comment-message"><p>过奖了！！:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1987">
+        <div id="dsq-comment-header-1987" class="dsq-comment-header">
+            <cite id="dsq-cite-1987">
+                <span id="dsq-author-user-1987">robermac</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1987" class="dsq-comment-body">
+            <div id="dsq-comment-message-1987" class="dsq-comment-message"><p>去 npmjs.org 搜了下「lowercase_demo」&#8230;惊呆</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1988">
+        <div id="dsq-comment-header-1988" class="dsq-comment-header">
+            <cite id="dsq-cite-1988">
+                <a id="dsq-author-user-1988" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1988" class="dsq-comment-body">
+            <div id="dsq-comment-message-1988" class="dsq-comment-message"><p>那个包是这篇文章的demo，呵呵！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2307">
+        <div id="dsq-comment-header-2307" class="dsq-comment-header">
+            <cite id="dsq-cite-2307">
+                <span id="dsq-author-user-2307">zedtse</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2307" class="dsq-comment-body">
+            <div id="dsq-comment-message-2307" class="dsq-comment-message"><p>博主你好，我想问下npm adduser 里面设置的这个用户怎么管理？我想切换用户怎么办？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2309">
+        <div id="dsq-comment-header-2309" class="dsq-comment-header">
+            <cite id="dsq-cite-2309">
+                <a id="dsq-author-user-2309" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2309" class="dsq-comment-body">
+            <div id="dsq-comment-message-2309" class="dsq-comment-message"><p>输入npm adduser命令时，会提示你用什么用户登陆。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3349">
+        <div id="dsq-comment-header-3349" class="dsq-comment-header">
+            <cite id="dsq-cite-3349">
+                <span id="dsq-author-user-3349">jackey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3349" class="dsq-comment-body">
+            <div id="dsq-comment-message-3349" class="dsq-comment-message"><p>博主你好，我第一次做了个模块，发布成功了。使用npm install安装后发现安装的文件不全。<br />
+模块名：node-geolite2。 安装后，里面少了data目录<br />
+<a href="https://www.npmjs.com/package/node-geolite2" rel="nofollow">https://www.npmjs.com/package/node-geolite2</a></p>
+<p>不知有什么限制？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3352">
+        <div id="dsq-comment-header-3352" class="dsq-comment-header">
+            <cite id="dsq-cite-3352">
+                <a id="dsq-author-user-3352" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3352" class="dsq-comment-body">
+            <div id="dsq-comment-message-3352" class="dsq-comment-message"><p>没有什么限制的，不清楚你的问题原因，根据官方文档再试一下吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://hao.jser.com/archive/7744/' rel='external nofollow' class='url'>图片延迟加载库Layzr &#8212; 好JSER</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4113">
+        <div id="dsq-comment-header-4113" class="dsq-comment-header">
+            <cite id="dsq-cite-4113">
+                <a id="dsq-author-user-4113" href="http://think2011.github.io" target="_blank" rel="nofollow">曾浩</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4113" class="dsq-comment-body">
+            <div id="dsq-comment-message-4113" class="dsq-comment-message"><p>在哪里可以得到npm的那个图标呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4116">
+        <div id="dsq-comment-header-4116" class="dsq-comment-header">
+            <cite id="dsq-cite-4116">
+                <a id="dsq-author-user-4116" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4116" class="dsq-comment-body">
+            <div id="dsq-comment-message-4116" class="dsq-comment-message"><p>google搜索就出来了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4118">
+        <div id="dsq-comment-header-4118" class="dsq-comment-header">
+            <cite id="dsq-cite-4118">
+                <a id="dsq-author-user-4118" href="http://think2011.github.io" target="_blank" rel="nofollow">曾浩</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4118" class="dsq-comment-body">
+            <div id="dsq-comment-message-4118" class="dsq-comment-message"><p><a href="http://shields.io/" rel="nofollow">http://shields.io/</a><br />
+我在这里找到了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4119">
+        <div id="dsq-comment-header-4119" class="dsq-comment-header">
+            <cite id="dsq-cite-4119">
+                <a id="dsq-author-user-4119" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4119" class="dsq-comment-body">
+            <div id="dsq-comment-message-4119" class="dsq-comment-message"><p><a href="https://www.npmjs.com/static/images/npm-logo.svg" rel="nofollow">https://www.npmjs.com/static/images/npm-logo.svg</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4251">
+        <div id="dsq-comment-header-4251" class="dsq-comment-header">
+            <cite id="dsq-cite-4251">
+                <span id="dsq-author-user-4251">pi_dear</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4251" class="dsq-comment-body">
+            <div id="dsq-comment-message-4251" class="dsq-comment-message"><p>博主你好   touch 命令  在 window环境下 可以用 echo代替么</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4252">
+        <div id="dsq-comment-header-4252" class="dsq-comment-header">
+            <cite id="dsq-cite-4252">
+                <a id="dsq-author-user-4252" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4252" class="dsq-comment-body">
+            <div id="dsq-comment-message-4252" class="dsq-comment-message"><p>作用不完全一样</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4253">
+        <div id="dsq-comment-header-4253" class="dsq-comment-header">
+            <cite id="dsq-cite-4253">
+                <span id="dsq-author-user-4253">pi_dear</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4253" class="dsq-comment-body">
+            <div id="dsq-comment-message-4253" class="dsq-comment-message"><p>谢谢博主</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-4259">
+        <div id="dsq-comment-header-4259" class="dsq-comment-header">
+            <cite id="dsq-cite-4259">
+                <span id="dsq-author-user-4259">pi_dear</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4259" class="dsq-comment-body">
+            <div id="dsq-comment-message-4259" class="dsq-comment-message"><p>博主 你好  我最近正在学习 node  有点理不清楚头绪   </p>
+<p>我的目标是  Angularjs + Express4 + Bootstrap3 搭建一个纯净的种子项目   根据您的步奏 感觉很容易上手 </p>
+<p>可是 有几个问题 需要请教您一下 </p>
+<p>1  Jade和ejs  都是属于 模板引擎  和项目冲突么  我们搭建项目的时候 有用到么  用处大么 因为之前的开发从来没有注意过 所以突然出现这么一个概念 一时理解不了 </p>
+<p>2  bower  是用来解决包管理工具的  现实的项目的开发中 我对于这个工具 的理解是可有可无的 那么在实际的开发中 它的用处大么  可能我是从.net平台出来的 好多东西都是</p>
+<p>	微软给做好的 我们平时开发不用考虑那么多  所以转到前端以后 感觉很多的标准  工具   一下蒙圈了 </p>
+<p>3  还有就是部署问题  Nodejs的优势之一就是部署方便 多并发处理能力强  我之前一直使用的是iis  可是我查了一些资料 竟然有iisnode  他的功能就是能够让IIS运行nodejs的代码 这种做法合理么</p>
+<p>	感觉很奇葩的应用   您对这种用法的理解是什么  </p>
+<p>我的问题暂时就这么多了 谢谢博主抽出宝贵的时间 搭建这么一个平台  以及热心的解答问题 谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-4261">
+        <div id="dsq-comment-header-4261" class="dsq-comment-header">
+            <cite id="dsq-cite-4261">
+                <a id="dsq-author-user-4261" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4261" class="dsq-comment-body">
+            <div id="dsq-comment-message-4261" class="dsq-comment-message"><p>种子项目可以用yeoman，自己创���或直接用别人创建好的，http://blog.fens.me/nodejs-yeoman-intro/</p>
+<p>1. 如果你用Anguarjs, Jade和ejs都不需要。<br />
+2. bower是管理前端js代码的，npm管理node代码。<br />
+3. node有自己的管理容器forever, pm2等，不要用IIS这种另类的方案。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-cron-later/' rel='external nofollow' class='url'>让Nodejs来管理定时任务later | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-npm-package/';
+var disqus_identifier = '4382 http://blog.fens.me/?p=4382';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "快速创建基于npm的nodejs库";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=4382';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝���志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语���中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

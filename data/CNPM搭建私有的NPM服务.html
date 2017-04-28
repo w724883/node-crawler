@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>CNPM搭建私有的NPM服务 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; CNPM搭建私有的NPM服务 Comments Feed" href="http://blog.fens.me/nodejs-cnpm-npm/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='NPM下载出错 No compatible version found' href='http://blog.fens.me/nodejs-npm-no-compatible-version/' />
+<link rel='next' title='Nodejs发邮件组件Nodemailer' href='http://blog.fens.me/nodejs-email-nodemailer/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-cnpm-npm/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=7219' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-cnpm-npm%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-cnpm-npm%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="npm,cnpm,nodejs,javascript,registry" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-7219 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语���实践</a> &raquo; </li><li>CNPM搭建私有的NPM服务</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-7219 post type-post status-publish format-standard hentry category-javascript tag-cnpm tag-javascript tag-nodejs tag-npm tag-registry">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-cnpm-npm/" title="CNPM搭建私有的NPM服务" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Sep 2, 2014</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/cnpm/" rel="tag">cnpm</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/npm/" rel="tag">npm</a><a href="http://blog.fens.me/tag/registry/" rel="tag">registry</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-cnpm-npm/#comments"><span class="dsq-postid" data-dsqidentifier="7219 http://blog.fens.me/?p=7219">22 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>CNPM搭建私有的NPM服务</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="CNPM搭建私有的NPM服务" href="http://blog.fens.me/nodejs-cnpm-npm/" target="_blank">http://blog.fens.me/nodejs-cnpm-npm/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/09/nodejs-cnpm-npm.png"><img src="http://blog.fens.me/wp-content/uploads/2014/09/nodejs-cnpm-npm.png" alt="nodejs-cnpm-npm" width="600" height="400" class="alignnone size-full wp-image-7244" /></a></p>
+<p><strong>前言</strong></p>
+<p>随着Nodejs开发的项目越来越多，Node项目管理就成了一个需要思考的问题了。如果所有项目都开源统一用 NPM 进行管理也没什么问题，但总有一些是我们不希望的完全开放的代码，作为企业是核心秘密保留在公司内部，这个时候就需要在公司内网也搭建一套 NPM 依赖管理系统。</p>
+<p>CNPM正好就提供了这个功能。从Github上CNPM的主页看，CNPM由国内Alibaba团队开发维护。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>CNPM是什么？</li>
+<li>搭建CNPM的服务器</li>
+<li>设置私有注册库的三种方法</li>
+<li>CNPM的客户端使用</li>
+</ol>
+<h2>1. CNPM是什么？</h2>
+<p>CNPM 是一个Nodejs的库，致力于打造私有的 NPM 注册服务。当然，除了私有库功能以外，CNPM官网 (<a href="http://cnpmjs.org/" target="_blank" ref="nofollow">http://cnpmjs.org/</a>) 还���供了NPM同步的服务。</p>
+<p>CNPM官方发布的架构图：<br />
+<a href="http://blog.fens.me/wp-content/uploads/2014/09/cnpm-architect.png"><img src="http://blog.fens.me/wp-content/uploads/2014/09/cnpm-architect.png" alt="cnpm-architect" width="480" height="356" class="alignnone size-full wp-image-7224" /></a></p>
+<p>从CNPM的架构图中，我们可以看出CNPM是对NPM做的镜像服务，CNPM会定期同步NPM的资源库，同时CNPM支持发布私有的库，这样就非常方便地集成了公有库和私有库，对于公司内部的开发者来说，基本感觉不到两种库的区别。</p>
+<p>另外，我们使用NPM下载依赖包时，经常性地会遇到一些包下载失败的情况，主要原因了NPM的注册服务器在国外，国内的网络环境访问国外的IP并不是太好。所以，直接配置到国内的NPM镜像，可以减少NPM下载出错机会。</p>
+<p>比如，最近发生的NPM下载时的“No compatible version found”错误，如果不想升级NPM的环境，那么你还选择用CNPM去进行依赖管理，关于错误的详细介绍，请参考文章 <a title="NPM下载出错 No compatible version found" href="http://blog.fens.me/nodejs-npm-no-compatible-version/" target="_blank">NPM下载出错 No compatible version found</a></p>
+<h2>2. 搭建CNPM的服务器</h2>
+<p>从官方文档中，我们看到CNPM服务器环境，只需要Node(0.11.12) + MySQL(>= 0.5.0)，另外我们还需要Linux的环境，接下来就让我们动手自己搭建一个私有NPM的服务器。</p>
+<p>我的系统环境：</p>
+<ul>
+<li>Linux: Ubuntu 12.04.2 64bit Server</li>
+<li>Node: v0.11.2</li>
+<li>Npm: 1.2.21</li>
+<li>MySQL: 5.6.11 MySQL Community Server (GPL)</li>
+<li>IP: 192.168.1.20</li>
+</ul>
+<p>通过github下载项目源代码</p>
+<pre><code>
+# 下载项目，进入目录
+~ git clone https://github.com/cnpm/cnpmjs.org.git
+~ cd cnpmjs.org
+</code></pre>
+<p>在我们开始安装依赖包之前，先要升级NPM的版本，不然会出现“No compatible version found”的错误。</p>
+<pre><code>
+~ sudo npm install npm -g
+/usr/local/bin/npm -> /usr/local/lib/node_modules/npm/bin/npm-cli.js
+npm@2.0.0-beta.0 /usr/local/lib/node_modules/npm
+</code></pre>
+<p>安装项目依赖</p>
+<pre><code>
+~ sudo npm install 
+npm WARN engine koa-generic-session@1.1.3: wanted: {"node":">= 0.11.9"} (current: {"node":"0.11.2","np               m":"2.0.0-beta.0"})
+npm WARN engine koa-redis@0.1.1: wanted: {"node":">= 0.11.9"} (current: {"node":"0.11.2","npm":"2.0.0-               beta.0"})
+npm WARN engine koa-resource-router@0.3.3: wanted: {"node":"> 0.11.4"} (current: {"node":"0.11.2","npm               ":"2.0.0-beta.0"})
+npm WARN engine koa-rt@0.0.2: wanted: {"node":">= 0.11.9"} (current: {"node":"0.11.2","npm":"2.0.0-bet               a.0"})
+npm WARN engine koa-router@3.2.3: wanted: {"node":"> 0.11.4"} (current: {"node":"0.11.2","npm":"2.0.0-               beta.0"})
+npm WARN engine koa-static-cache@1.1.0: wanted: {"node":"> 0.11.4"} (current: {"node":"0.11.2","npm":"               2.0.0-beta.0"})
+npm WARN deprecated lingo@0.0.5: This project is abandoned
+co-read@0.1.0 node_modules/co-read
+
+error-formater@1.0.3 node_modules/error-formater
+└── utility@0.1.16 (address@0.0.3)
+
+multiline@1.0.0 node_modules/multiline
+└── strip-indent@1.0.0 (get-stdin@1.0.0)
+
+jshint@2.5.5 node_modules/jshint
+├── strip-json-comments@0.1.3
+├── underscore@1.6.0
+├── exit@0.1.2
+├── shelljs@0.3.0
+├── minimatch@0.4.0 (sigmund@1.0.0, lru-cache@2.5.0)
+├── console-browserify@1.1.0 (date-now@0.1.4)
+├── cli@0.6.4 (glob@3.2.11)
+└── htmlparser2@3.7.3 (domelementtype@1.1.1, domutils@1.5.0, entities@1.0.0, domhandler@2.2.0, readabl               e-stream@1.1.13)
+
+koa-middlewares@1.2.0 node_modules/koa-middlewares
+├── koa-conditional-get@1.0.2
+├── koa-rt@0.0.2
+├── koa-session@2.0.0
+├── koa-etag@1.3.1 (buffer-crc32@0.2.3)
+├── koa-logger@1.2.2 (passthrough-counter@0.0.1)
+├── koa-compress@1.0.7 (statuses@1.0.4, koa-is-json@1.0.0, compressible@1.1.1)
+├── koa-safe-jsonp@0.2.0 (jsonp-body@0.1.0)
+├── koa-rewrite@1.1.0 (path-to-regexp@0.0.2)
+├── koa-static-cache@1.1.0 (fs-readdir-recursive@0.0.2, compressible@1.1.1, mime-types@1.0.2)
+├── koa-redis@0.1.1 (redis@0.10.3)
+├── koa-router@3.2.3 (koa-compose@2.3.0, methods@1.1.0, path-to-regexp@0.2.1)
+├── koa-bodyparser@1.0.1 (co-body@1.0.0)
+├── koa-favicon@1.1.0 (co-fs@1.2.0)
+├── koa-resource-router@0.3.3 (koa-compose@2.2.0, path-to-regexp@0.0.2, debug@0.7.4, lingo@0.0.5, defa               ults@1.0.0)
+├── koa-generic-session@1.1.3 (buffer-crc32@0.2.3, uid-safe@1.0.1)
+├── koa-csrf@2.1.3 (csrf@2.0.1)
+├── koa-ejs@1.0.1 (ejs@1.0.0, co-fs@1.2.0, is-type-of@0.2.1)
+└── koa-onerror@1.0.3 (swig@1.4.2)
+</code></pre>
+<p>创建MySQL数据库，我本地的MySQL用户名为root，密码是mysql，可以通过下面语句创建。</p>
+<pre><code>
+~ mysql -uroot -pmysql -e 'DROP DATABASE IF EXISTS cnpmjs_test;' &&\
+mysql -uroot -pmysql -e 'CREATE DATABASE cnpmjs_test;' &&\
+mysql -uroot -pmysql 'cnpmjs_test' < docs/db.sql &#038;&#038;\
+mysql -uroot -pmysql 'cnpmjs_test' -e 'show tables;'
++-----------------------+
+| Tables_in_cnpmjs_test |
++-----------------------+
+| dist_dir              |
+| dist_file             |
+| download_total        |
+| module                |
+| module_deps           |
+| module_keyword        |
+| module_log            |
+| module_maintainer     |
+| module_star           |
+| module_unpublished    |
+| tag                   |
+| total                 |
+| user                  |
++-----------------------+
+</code></pre>
+<p>接下来，我们需要在项目的./config/index.js文件中，修改MySQL数据库的用户名和密码。</p>
+<pre><code>
+~ vi ./config/index.js
+
+108   /**
+109    * mysql config
+110    */
+111
+112   mysqlServers: [
+113     {
+114       host: '127.0.0.1',
+115       port: 3306,
+116       user: 'root',
+117       password: 'mysql'
+118     }
+119   ],
+120   mysqlDatabase: 'cnpmjs_test',
+121   mysqlMaxConnections: 4,
+122   mysqlQueryTimeout: 5000,
+123
+</code></pre>
+<p>启动CNPM服务器，默认会打开两个端口，7001用于NPM的注册服务，7002用于Web访问。</p>
+<pre><code>
+~  node --harmony_generators dispatch.js
+[Tue Sep 02 2014 15:17:54 GMT+0800 (CST)] [worker:25211:common/redis.js] Redis config can not found
+[Tue Sep 02 2014 15:17:54 GMT+0800 (CST)] [worker:25211] Server started, registry server listen at 127.0.0.1:7001, web listen at 127.0.0.1:7002, cluster: false
+[Tue Sep 02 2014 15:17:54 GMT+0800 (CST)] [worker:25211] mysql ready, got 13 tables
+</code></pre>
+<p>从日志中看到，这两个端口服务都绑定在127.0.0.1的本地网络中，我们需要修改配置文件 ./config/index.js文件，注释bindingHost一行，对外网开放。</p>
+<pre><code>
+~ vi ./config/index.js
+
+ 39   /*
+ 40    * server configure
+ 41    */
+ 42   registryPort: 7001,
+ 43   webPort: 7002,
+ 44   //bindingHost: '127.0.0.1', // only binding on 127.0.0.1 for local access
+</code></pre>
+<p>第二次，启动CNPM服务器</p>
+<pre><code>
+~ node --harmony_generators dispatch.js
+[Tue Sep 02 2014 15:22:46 GMT+0800 (CST)] [worker:25259:common/redis.js] Redis config can not found
+[Tue Sep 02 2014 15:22:46 GMT+0800 (CST)] [worker:25259] Server started, registry server listen at undefined:7001, web listen at undefined:7002, cluster: false
+[Tue Sep 02 2014 15:22:46 GMT+0800 (CST)] [worker:25259] mysql ready, got 13 tables
+</code></pre>
+<p>通过浏览器访问：http://192.168.1.20:7002，没想到的情况，应用又崩溃了，这个坑深入了！！</p>
+<pre><code>
+[Tue Sep 02 2014 15:29:00 GMT+0800 (CST)] [worker:25404] Server started, registry server listen at undefined:7001, web listen at undefined:7002, cluster: false
+[Tue Sep 02 2014 15:29:00 GMT+0800 (CST)] [worker:25404] mysql ready, got 13 tables
+
+==== JS stack trace =========================================
+
+    2: arguments adaptor frame: 0->1
+Security context: 0x185dd4b5e291 &lt;JS Object>#0#
+    4: /* anonymous */ [/home/conan/nodejs/cnpmjs.org/node_modules/co/index.js:40] (this=0x2a1e646d07e1 &lt;an Object>#1#,done=0x2d36f5fcdd31 &lt;JS Function>#2#)
+    5: /* anonymous */ [/home/conan/nodejs/cnpmjs.org/node_modules/koa/lib/application.js:125] (this=0x2d36f5fab301 &lt;a Server>#3#,req=0x2d36f5fcacc1 &lt;an IncomingMessage>#4#,res=0x2d36f5fcc3f9 &lt;a ServerResponse>#5#)
+    6: emit [events.js:100] (this=0x2d36f5fab301 &lt;a Server>#3#,type=0x8305a126379 &lt;String[7]: request>)
+    7: arguments adaptor frame: 3->1
+    8: onIncoming [_http_server.js:450] (this=0x2d36f5fc8029 &lt;an HTTPParser>#6#,req=0x2d36f5fcacc1 &lt;an IncomingMessage>#4#,shouldKeepAlive=0x185dd4b04161 &lt;true>)
+    
+//省略日志
+</code></pre>
+<p>经过检查发现，是Node版本的问题。重新下载编译安装Node，详细操作请参考文章<a title="准备Nodejs开发环境Ubuntu" href="http://blog.fens.me/nodejs-enviroment/" target="_blank">准备Nodejs开发环境Ubuntu</a>，升级后的版本为</p>
+<ul>
+<li>Node v0.13.0-pre</li>
+<li>NPM 1.4.21</li>
+</ul>
+<p>第三次，启动CNPM服务器。</p>
+<pre><code>
+~ node --harmony_generators dispatch.js
+[Tue Sep 02 2014 16:00:25 GMT+0800 (CST)] [worker:14842:common/redis.js] Redis config can not found
+[Tue Sep 02 2014 16:00:25 GMT+0800 (CST)] [worker:14842] Server started, registry server listen at undefined:7001, web listen at undefined:7002, cluster: false
+[Tue Sep 02 2014 16:00:25 GMT+0800 (CST)] [worker:14842] mysql ready, got 13 tables
+</code></pre>
+<p>通过浏览器访问，CNPM服务：http://192.168.1.20:7002</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/09/cnpm-local.png"><img src="http://blog.fens.me/wp-content/uploads/2014/09/cnpm-local.png" alt="cnpm-local" width="794" height="618" class="alignnone size-full wp-image-7232" /></a></p>
+<p>终于正常了，这样就成功搭建了私有的NPM注册服务。</p>
+<p>搜索一下，我之前在NPM发布的自己的包ape-algorithm，发现没有结果，根据界面提示CNPM应用会自动去NPM上同步。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/09/cnpm-ape-algorithm.png"><img src="http://blog.fens.me/wp-content/uploads/2014/09/cnpm-ape-algorithm.png" alt="cnpm-ape-algorithm" width="781" height="763" class="alignnone size-full wp-image-7236" /></a></p>
+<p>第一次同步操作，会下载很多的包，大家要耐心等待啊。页面不能切换！</p>
+<h2>3. 设置私有注册库的三种方法</h2>
+<p>我们自己搭建的私有服务怎么用呢？</p>
+<p>我们先建一个项目目录</p>
+<pre><code>
+~ /home/conan/nodejs
+~ mkdir nodejs-cnpm && cd nodejs-cnpm
+</code></pre>
+<p><strong>3.1 下载指定私有库</strong></p>
+<p>一种简单的方式就是，下载的时候指定我们自己的私有库，这样就会从我们自己的私有库中下载。如果私有库没有对应的库，CNPM会自动同步到NPM 找到我们要下载的库和版本，先在CNPM中存一份，然后再传给客户端一份，运行原理和Maven的原理一样。</p>
+<p>执行下载的操作</p>
+<pre><code>
+~ npm install ape-algorithm --registry=http://192.168.1.20:7001
+ape-algorithm@0.0.8 node_modules/ape-algorithm
+└── linklist@0.0.3
+
+# 查看下载的库
+~ ls -l
+drwxrwxr-x 3 conan conan 4096  9月  2 16:36 node_modules
+</code></pre>
+<p><strong>3.2 给项目设置私有库</strong></p>
+<p>如果这个项目所有依赖库都从公司内网下载，那么我们可以给整个项目设置私有库，就不需要每次下载的时候单独指定了。</p>
+<p>首先，我们查看项目的默设置，通过npm config list命令。</p>
+<pre><code>
+~ npm config list
+
+; cli configs
+registry = "https://registry.npmjs.org/"
+user-agent = "npm/1.4.21 node/v0.13.0-pre linux x64"
+
+; node bin location = /usr/local/bin/node
+; cwd = /home/conan/nodejs/nodejs-cnpm
+; HOME = /home/conan
+; 'npm config ls -l' to show all defaults.
+</code></pre>
+<p>registry属性是指向NPM的官司位置https://registry.npmjs.org/，我们可以通过npm config set registry命令来修改这个配置。</p>
+<pre><code>
+~ npm config set registry http://192.168.1.20:7001
+
+# 再次查看项目设置
+~ npm config list
+; cli configs
+registry = "http://192.168.1.20:7001/"
+user-agent = "npm/1.4.21 node/v0.13.0-pre linux x64"
+
+; userconfig /home/conan/.npmrc
+registry = "http://192.168.1.20:7001/"
+
+; node bin location = /usr/local/bin/node
+; cwd = /home/conan/nodejs/nodejs-cnpm
+; HOME = /home/conan
+</code></pre>
+<p>这个项目再下载新包时，就会通过我们私有库去下载。</p>
+<p><strong>3.3 给用户设置私有库</strong></p>
+<p>如果我们的开发环境在内网，不允许访问外网，那么我们可以设置全局的NPM库。</p>
+<p>在当前用户所在的根目录，找到.npmrc文件，配置NPM私有库。</p>
+<pre><code>
+~  vi ~/.npmrc
+
+registry=http://192.168.1.20:7001
+</code></pre>
+<p>设置成功后，当前用户的所有NPM下载都会通过私有库来完成。</p>
+<p><strong>3.4 设置淘宝的开放库</strong></p>
+<p>我们除了使用自己的私有库，还可以使用淘宝的NPM库，这样可以有效地避免国内访问国外NPM库，网络不通的问题。</p>
+<p>按照上面的方法，把registry配置为https://registry.npm.taobao.org 就行了。</p>
+<pre><code>
+registry = "https://registry.npm.taobao.org/"
+</code></pre>
+<h2>4. CNPM的客户端使用</h2>
+<p>CNPM 不仅提供服务端的功能，还提供了客户端的访问功能，就像NPM一样。通过全局安装cnpm包，可以完全取代了npm的命令操作了。</p>
+<p>安装cnpm客户端</p>
+<pre><code>
+~ sudo npm install -g cnpm
+
+/usr/local/bin/cnpm -> /usr/local/lib/node_modules/cnpm/bin/cnpm
+/usr/local/bin/cnpm-sync -> /usr/local/lib/node_modules/cnpm/bin/cnpm-sync
+/usr/local/bin/cnpm-check -> /usr/local/lib/node_modules/cnpm/bin/cnpm-check
+/usr/local/bin/cnpm-web -> /usr/local/lib/node_modules/cnpm/bin/cnpm-web
+/usr/local/bin/cnpm-user -> /usr/local/lib/node_modules/cnpm/bin/cnpm-user
+/usr/local/bin/cnpm-doc -> /usr/local/lib/node_modules/cnpm/bin/cnpm-doc
+/usr/local/bin/cnpm-search -> /usr/local/lib/node_modules/cnpm/bin/cnpm-search
+cnpm@1.0.0 /usr/local/lib/node_modules/cnpm
+├── commander@2.3.0
+├── auto-correct@1.0.0
+├── giturl@0.0.3
+├── cross-spawn@0.1.7
+├── colors@0.6.2
+├── bagpipe@0.3.5
+├── open@0.0.5
+├── debug@1.0.4 (ms@0.6.2)
+├── npm-request@0.0.4 (urllib@0.5.11)
+├── npm@2.0.0-beta.2
+└── urllib@0.5.17 (default-user-agent@0.0.1, debug@0.8.1, digest-header@0.0.1)
+</code></pre>
+<p>测试一下，通过cnpm安装gulp包。</p>
+<pre><code>
+~ cnpm install gulp
+
+> node-v8-clone@0.6.2 install /home/conan/nodejs/nodejs-cnpm/node_modules/gulp/node_modules/gulp-util/node_modules/vinyl/node_modules/node-v8-clone
+> node-gyp rebuild
+
+gulp@3.8.7 node_modules/gulp
+├── tildify@0.2.0
+├── interpret@0.3.2
+├── pretty-hrtime@0.2.0
+├── deprecated@0.0.1
+├── archy@0.0.2
+├── minimist@0.2.0
+├── semver@3.0.1
+├── chalk@0.5.0 (escape-string-regexp@1.0.1, ansi-styles@1.1.0, supports-color@0.2.0, has-ansi@0.1.0, strip-ansi@0.3.0)
+├── orchestrator@0.3.0 (sequencify@0.0.7, events@1.0.2, execify@0.0.3)
+├── liftoff@0.12.0 (extend@1.2.1, minimist@0.1.0, resolve@0.7.4, findup-sync@0.1.3)
+├── gulp-util@3.0.1 (lodash._reinterpolate@2.4.1, dateformat@1.0.8-1.2.3, minimist@1.1.0, multipipe@0.1.0, lodash.template@2.4.1, through2@0.6.1, lodash@2.4.1, vinyl@0.4.0)
+└── vinyl-fs@0.3.0 (map-stream@0.1.0, graceful-fs@3.0.2, lodash.defaults@2.4.1, mkdirp@0.5.0, through2@0.5.1, strip-bom@0.3.0, through2-map@1.4.0, glob-watcher@0.0.6, glob-stream@3.1.15, vinyl@0.2.0)
+</code></pre>
+<p>效果同NPM一样，gulp包被成功安装。</p>
+<p>当我们要发布包到NPM的时候，由于CNPM默认同步时间差是30分钟，如果想马上同步，需要手动输入同步的命令。</p>
+<p>同步gulp包。</p>
+<pre><code>
+~ cnpm sync gulp
+
+Start sync ["gulp"].
+sync gulp, PUT http://r.cnpmjs.org/gulp/sync?publish=false&nodeps=false
+logurl: http://cnpmjs.org/sync/gulp#logid=10798
+[2014-09-02 05:18:09] user: anonymous, sync gulp worker start, 1 concurrency, nodeps: false, publish: false
+[2014-09-02 05:18:09] [c#0] [gulp] pkg status: 200, start...
+[2014-09-02 05:18:09]   [gulp] found 15 missing star users
+[2014-09-02 05:18:09]   [gulp] all versions are exists
+[2014-09-02 05:18:09]   [gulp] no versions need to deleted
+[2014-09-02 05:18:09]   [gulp] saving 15 star users
+[2014-09-02 05:18:09]   [gulp] saving 3/187 missing npm users: ["mittya","160mph","vivainio"]
+[2014-09-02 05:18:09] [c#0] [gulp] synced success, 0 versions:
+[2014-09-02 05:18:09] [c#0] setImmediate after, gulp done, start next...
+[2014-09-02 05:18:09] [done] Sync gulp module finished, 1 success, 0 fail
+Success: [ gulp ]
+Fail: [  ]
+sync gulp, PUT https://registry.npm.taobao.org/gulp/sync?publish=false&nodeps=false
+logurl: https://npm.taobao.org/sync/gulp#logid=8354
+[2014-09-02 17:18:13] user: anonymous, sync gulp worker start, 1 concurrency, nodeps: false, publish: false
+[2014-09-02 17:18:14] [c#0] [gulp] pkg status: 200, start...
+[2014-09-02 17:18:14]   [gulp] found 15 missing star users
+[2014-09-02 17:18:14]   [gulp] all versions are exists
+[2014-09-02 17:18:14]   [gulp] saving 15 star users
+[2014-09-02 17:18:14]   [gulp] no versions need to deleted
+[2014-09-02 17:18:15]   [gulp] saving 3/188 missing npm users: ["mittya","160mph","vivainio"]
+[2014-09-02 17:18:15] [c#0] setImmediate after, gulp done, start next...
+[2014-09-02 17:18:15] [c#0] [gulp] synced success, 0 versions:
+[2014-09-02 17:18:15] [done] Sync gulp module finished, 1 success, 0 fail
+Success: [ gulp ]
+Fail: [  ]
+Sync all packages done, successed: ["gulp"], failed: []
+</code></pre>
+<p>这样我们就完全地把CNPM私有库在公司内部用起来了。把包管理的问题解决了，让程序员可以踏踏实实地写代码才是最重要的！！</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="CNPM搭建私有的NPM服务" href="http://blog.fens.me/nodejs-cnpm-npm/" target="_blank">http://blog.fens.me/nodejs-cnpm-npm/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-npm-no-compatible-version/' rel='external nofollow' class='url'>NPM下载出错 No compatible version found | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2482">
+        <div id="dsq-comment-header-2482" class="dsq-comment-header">
+            <cite id="dsq-cite-2482">
+                <span id="dsq-author-user-2482">snowdream</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2482" class="dsq-comment-body">
+            <div id="dsq-comment-message-2482" class="dsq-comment-message"><p>私有化仓库才是企业应用的第一步。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2483">
+        <div id="dsq-comment-header-2483" class="dsq-comment-header">
+            <cite id="dsq-cite-2483">
+                <a id="dsq-author-user-2483" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2483" class="dsq-comment-body">
+            <div id="dsq-comment-message-2483" class="dsq-comment-message"><p>是的</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2491">
+        <div id="dsq-comment-header-2491" class="dsq-comment-header">
+            <cite id="dsq-cite-2491">
+                <span id="dsq-author-user-2491">enboga</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2491" class="dsq-comment-body">
+            <div id="dsq-comment-message-2491" class="dsq-comment-message"><p>支持搭建在windows下吗?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2493">
+        <div id="dsq-comment-header-2493" class="dsq-comment-header">
+            <cite id="dsq-cite-2493">
+                <a id="dsq-author-user-2493" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2493" class="dsq-comment-body">
+            <div id="dsq-comment-message-2493" class="dsq-comment-message"><p>不支持</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2500">
+        <div id="dsq-comment-header-2500" class="dsq-comment-header">
+            <cite id="dsq-cite-2500">
+                <span id="dsq-author-user-2500">enboga</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2500" class="dsq-comment-body">
+            <div id="dsq-comment-message-2500" class="dsq-comment-message"><p>我可以成功跑起来了,可以通过私库安装依赖,但是不知道怎么发布到私库<br />
+node: 0.11.9<br />
+npm:1.3.15</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2492">
+        <div id="dsq-comment-header-2492" class="dsq-comment-header">
+            <cite id="dsq-cite-2492">
+                <span id="dsq-author-user-2492">enboga</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2492" class="dsq-comment-body">
+            <div id="dsq-comment-message-2492" class="dsq-comment-message"><p>如何将自己的包上传到私有库?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2494">
+        <div id="dsq-comment-header-2494" class="dsq-comment-header">
+            <cite id="dsq-cite-2494">
+                <a id="dsq-author-user-2494" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2494" class="dsq-comment-body">
+            <div id="dsq-comment-message-2494" class="dsq-comment-message"><p><a href="http://cnpmjs.org/" rel="nofollow">http://cnpmjs.org/</a><br />
+$ cnpm publish [name]</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2501">
+        <div id="dsq-comment-header-2501" class="dsq-comment-header">
+            <cite id="dsq-cite-2501">
+                <span id="dsq-author-user-2501">enboga</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2501" class="dsq-comment-body">
+            <div id="dsq-comment-message-2501" class="dsq-comment-message"><p>我看官方说只有admin用户才能发布,怎么登录admin后发布?admin密码在哪里可以看?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2503">
+        <div id="dsq-comment-header-2503" class="dsq-comment-header">
+            <cite id="dsq-cite-2503">
+                <a id="dsq-author-user-2503" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2503" class="dsq-comment-body">
+            <div id="dsq-comment-message-2503" class="dsq-comment-message"><p>直接给官方邮箱发信问吧。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-2577">
+        <div id="dsq-comment-header-2577" class="dsq-comment-header">
+            <cite id="dsq-cite-2577">
+                <span id="dsq-author-user-2577">Alex</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2577" class="dsq-comment-body">
+            <div id="dsq-comment-message-2577" class="dsq-comment-message"><p>这个文档真的都没有提及</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2579">
+        <div id="dsq-comment-header-2579" class="dsq-comment-header">
+            <cite id="dsq-cite-2579">
+                <a id="dsq-author-user-2579" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2579" class="dsq-comment-body">
+            <div id="dsq-comment-message-2579" class="dsq-comment-message"><p>整个项目都是开源的，第一可以去问，第二也可以看代码。<br />
+没有文档很正常的，如果你找到解决办法，你写一篇文章的就是文档。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-4" id="dsq-comment-4216">
+        <div id="dsq-comment-header-4216" class="dsq-comment-header">
+            <cite id="dsq-cite-4216">
+                <span id="dsq-author-user-4216">rico</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4216" class="dsq-comment-body">
+            <div id="dsq-comment-message-4216" class="dsq-comment-message"><p><a href="http://www.cnblogs.com/wyzfzu/p/4149310.html" rel="nofollow">http://www.cnblogs.com/wyzfzu/p/4149310.html</a> 这里有配置</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3225">
+        <div id="dsq-comment-header-3225" class="dsq-comment-header">
+            <cite id="dsq-cite-3225">
+                <span id="dsq-author-user-3225">Atomic</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3225" class="dsq-comment-body">
+            <div id="dsq-comment-message-3225" class="dsq-comment-message"><p>npm adduser admin 然后设置邮件为config里的admin邮件即可</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3955">
+        <div id="dsq-comment-header-3955" class="dsq-comment-header">
+            <cite id="dsq-cite-3955">
+                <a id="dsq-author-user-3955" href="http://zmx.im" target="_blank" rel="nofollow">梦轩 张</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3955" class="dsq-comment-body">
+            <div id="dsq-comment-message-3955" class="dsq-comment-message"><p>这篇文章写得不错，很清晰，就等实践了。我很好奇，为什么github上的cnpm没有写清楚呢。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3969">
+        <div id="dsq-comment-header-3969" class="dsq-comment-header">
+            <cite id="dsq-cite-3969">
+                <a id="dsq-author-user-3969" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3969" class="dsq-comment-body">
+            <div id="dsq-comment-message-3969" class="dsq-comment-message"><p>开发者写文档的角度，和使用者写文档的角度是不一样的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3957">
+        <div id="dsq-comment-header-3957" class="dsq-comment-header">
+            <cite id="dsq-cite-3957">
+                <span id="dsq-author-user-3957">Quentin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3957" class="dsq-comment-body">
+            <div id="dsq-comment-message-3957" class="dsq-comment-message"><p>最近公司内部使用npm install时即使设置了taobao的镜像但是仍然很慢。正在寻找解决办法，也想在内部搭建npm镜像，受教了，谢谢。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3968">
+        <div id="dsq-comment-header-3968" class="dsq-comment-header">
+            <cite id="dsq-cite-3968">
+                <a id="dsq-author-user-3968" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3968" class="dsq-comment-body">
+            <div id="dsq-comment-message-3968" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4701">
+        <div id="dsq-comment-header-4701" class="dsq-comment-header">
+            <cite id="dsq-cite-4701">
+                <span id="dsq-author-user-4701">xm guo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4701" class="dsq-comment-body">
+            <div id="dsq-comment-message-4701" class="dsq-comment-message"><p>可以设置不同步npm包？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4758">
+        <div id="dsq-comment-header-4758" class="dsq-comment-header">
+            <cite id="dsq-cite-4758">
+                <a id="dsq-author-user-4758" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4758" class="dsq-comment-body">
+            <div id="dsq-comment-message-4758" class="dsq-comment-message"><p>可以不同步。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-5074">
+        <div id="dsq-comment-header-5074" class="dsq-comment-header">
+            <cite id="dsq-cite-5074">
+                <span id="dsq-author-user-5074">ucoker</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5074" class="dsq-comment-body">
+            <div id="dsq-comment-message-5074" class="dsq-comment-message"><p>你好，在服务器上搭建完CNPM后，在本地用npm login &#8211;registry=https://r.mywebsite.com &#8211;scope=@cnpm 登录后，可以成功获取到私有仓库的包，但是原本npm的会获取失败？ 请问如何共存？ 即公共仓库走npm，私有仓库走cnpm，通过scope来区分。详细问题在 <a href="https://github.com/cnpm/cnpmjs.org/issues/929" rel="nofollow">https://github.com/cnpm/cnpmjs.org/issues/929</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-5084">
+        <div id="dsq-comment-header-5084" class="dsq-comment-header">
+            <cite id="dsq-cite-5084">
+                <a id="dsq-author-user-5084" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5084" class="dsq-comment-body">
+            <div id="dsq-comment-message-5084" class="dsq-comment-message"><p>公有库用npm，私有库用cnpm，命令上分开就行了吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-cnpm-npm/';
+var disqus_identifier = '7219 http://blog.fens.me/?p=7219';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "CNPM搭建私有的NPM服务";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=7219';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

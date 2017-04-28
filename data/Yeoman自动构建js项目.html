@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Yeoman自动构建js项目 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Yeoman自动构建js项目 Comments Feed" href="http://blog.fens.me/nodejs-yeoman-intro/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='bower解决js的依赖管理' href='http://blog.fens.me/nodejs-bower-intro/' />
+<link rel='next' title='Java现实WebSocket' href='http://blog.fens.me/java-websocket-intro/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-yeoman-intro/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=1824' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-yeoman-intro%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-yeoman-intro%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="yeoman,yo,grunt,bower,nodejs,javascript,js" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-1824 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Yeoman自动构建js项目</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-1824 post type-post status-publish format-standard hentry category-javascript tag-bower tag-grunt tag-javascript tag-js tag-nodejs tag-yeoman tag-yo">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-yeoman-intro/" title="Yeoman自动构建js项目" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Aug 19, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/bower/" rel="tag">bower</a><a href="http://blog.fens.me/tag/grunt/" rel="tag">grunt</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/js/" rel="tag">js</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/yeoman/" rel="tag">yeoman</a><a href="http://blog.fens.me/tag/yo/" rel="tag">yo</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-yeoman-intro/#comments"><span class="dsq-postid" data-dsqidentifier="1824 http://blog.fens.me/?p=1824">49 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Yeoman自动构建js项目</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>���载请注明出处：</strong><br />
+<a title="Yeoman自动构建js项目" href="http://blog.fens.me/nodejs-yeoman-intro/" target="_blank">http://blog.fens.me/nodejs-yeoman-intro/</a><br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/yeoman.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/yeoman.png" alt="yeoman" width="600" height="400" class="alignnone size-full wp-image-1844" /></a></p>
+<p><strong>前言</strong><br />
+有一种技术可以提高我们的工作效率，可以让我们专心做我们擅长的事，可以屏蔽复杂性，可以规范我们的架构和我们的代码，可以让我们的享受编程的乐趣。Yeoman可以做到。</p>
+<p>很多年以前，rails刚刚出世，伴随着一个新的名词“脚手架(scaffolding)”出现了。脚手架是一种提高开发效率的工具的代名词。随后，各种编程语言都开始实现自己的“脚手架”工具。Maven重新构造了Java的世界，改变了几千万的开发者对于Java项目构建的认识。Yeoman在Javascript领域正做着同样的事情。</p>
+<p>看着各种工具，各种语言，都在飞跃式的进化。做为一个开发者，我每天都在为变化而惊喜！</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Yeoman介绍</li>
+<li>Yeoman工具包yo命令</li>
+<li>Yeoman工具包yo &#8211; 快速构建一个web项目</li>
+<li>Yeoman工具包bower,grunt的组合用法</li>
+</ol>
+<h2>1. Yeoman介绍</h2>
+<p>Yeoman是Google的团队和外部贡献者团队合作开发的，他的目标是通过Grunt（一个用于开发任务自动化的命令行工具）和Bower（一个HTML、CSS、Javascript和图片等前端资源的包管理器）的包装为开发者创建一个易用的工作流。</p>
+<p>Yeoman主要有三部分组成：yo（脚手架工具）、grunt（构建工具）、bower（包管理器）。这三个工具是分别独立开发的，但是需要配合使用，来实现我们高效的工作流模式。</p>
+<ul>
+<li>yo：在本文中第二节会讲到</li>
+<li>grunt：请参考，<a title="grunt让Nodejs规范起来" href="http://blog.fens.me/nodejs-grunt-intro/" target="_blank">grunt让Nodejs规范起来</a></li>
+<li>bower：请参考，<a title="bower解决js的依赖管理" href="http://blog.fens.me/nodejs-bower-intro/" target="_blank">bower解决js的依赖管理</a></li>
+</ul>
+<h2>2. Yeoman工具包yo命令</h2>
+<p>yo插件都是通过npm, Node.js包管理器安装和管理的.</p>
+<p><strong>我的系统环境</strong></p>
+<ul>
+<li>win7 64bit</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<pre><code>~ D:\workspace\javascript&gt;node -v
+v0.10.5
+
+~ D:\workspace\javascript&gt;npm -v
+1.2.19
+</code></pre>
+<p>在系统中，我们已经安装好了Nodejs和npm。win7安装nodejs请参考文章：<a href="http://blog.fens.me/nodejs-express3/" target="_blank">Nodejs开发框架Express3.0开发手记–从零开始</a></p>
+<p><strong>全局安装yo</strong></p>
+<pre><code>~ D:\workspace\javascript&gt;npm install -g yo</code></pre>
+<p>如果你还没有安装grunt,bower，也需要一起安装</p>
+<pre><code>~ D:\workspace\javascript&gt;npm install -g grunt-cli bower</code></pre>
+<p>接下我们看一下yo命令行操作<br />
+<strong>1). 通过help查看帮助</strong></p>
+<pre><code>
+~ D:\workspace\javascript&gt;yo --help
+Yeoman is a mask worn by the following members of the open-source community:
+
+  Paul Irish, Addy Osmani, Mickael Daniel, Sindre Sorhus, Eric Bidelman,
+  Frederick Ros, Brian Ford, Pascal Hartig, Stephen Sawchuk, and countless
+  other contributors.
+
+Usage: yo GENERATOR [args] [options]
+
+General options:
+  -h, --help     # Print generator's options and usage
+  -f, --force    # Overwrite files that already exist
+
+Please choose a generator below.
+Angular
+  angular:app
+  angular:common
+  angular:constant
+  angular:controller
+  angular:decorator
+  angular:directive
+  angular:factory
+  angular:filter
+  angular:main
+  angular:provider
+  angular:route
+  angular:service
+  angular:value
+  angular:view
+
+Karma
+  karma:app
+
+Mocha
+  mocha:app
+  mocha:generator
+
+Webapp
+  webapp:app
+</code></pre>
+<p>yo的命令很简单：yo GENERATOR，例如：yo webapp， yo angular<br />
+Please choose a generator below: 下面列出了我的系统中，已经安装的generator的库，例如：Angular，Karma，Mocha，Webapp</p>
+<p><strong>2). 查询yo的支持库</strong></p>
+<pre><code>
+~ D:\workspace\javascript&gt;yo
+Yeoman is a mask worn by the following members of the open-source community:
+
+  Paul Irish, Addy Osmani, Mickael Daniel, Sindre Sorhus, Eric Bidelman,
+  Frederick Ros, Brian Ford, Pascal Hartig, Stephen Sawchuk, and countless
+  other contributors.
+
+[?] What would you like to do? (Use arrow keys)
+ &gt; Install a generator
+   Find some help
+   Get me out of here!
+</code></pre>
+<p>命令行会提示，我们想要的操作。这里选择&#8221;Install a generator&#8221;</p>
+<pre><code>
+[?] What would you like to do? Install a generator
+[?] Search NPM for generators:web
+</code></pre>
+<p>系统继续提示，我们要查找的包，我们输入web</p>
+<p><strong>3). 安装generator-webapp库</strong></p>
+<pre><code>
+[?] Here's what I found. Install one? (Use arrow keys)
+ &gt; generator-armadillo
+   generator-bones
+   generator-btapp
+   generator-fe
+   generator-flight
+   generator-hazdev-webapp
+   generator-hbswebapp
+   generator-html5-site
+   generator-jing
+   generator-lessapp
+   generator-nodestrap
+   generator-sails
+   generator-server-configs
+   generator-starter
+   generator-starttter
+   generator-ultimate
+   generator-webapp
+   generator-webapp-bfytw
+   generator-webapp-fintan
+   generator-weblog
+   generator-website
+   Search again
+   Return home
+</code></pre>
+<p>yo列出了，所有在官方已经注册的，web关键字相关的包，我们选择“generator-webapp”</p>
+<p>yo通过npm开始下载generator-webapp安装包</p>
+<pre><code>
+[?] What would you like to do? Install a generator
+[?] Search NPM for generators: web
+[?] Here's what I found. Install one? generator-webapp
+
+generator-webapp@0.2.7 D:\toolkit\nodejs\node_modules\generator-webapp
+├── cheerio@0.12.1 (entities@0.3.0, underscore@1.4.4, htmlparser2@3.1.4, cheerio-select@0.0.3)
+└── yeoman-generator@0.12.3 (dargs@0.1.0, diff@1.0.5, debug@0.7.2, async@0.2.9, mime@1.2.11, mkdirp@0.3.5, isbinaryfi
+le@0.1.9, underscore.string@2.3.3, shelljs@0.1.4, iconv-lite@0.2.11, lodash@1.3.1, rimraf@2.1.4, nopt@2.1.2, cli-table@0
+.2.0, tar@0.1.18, glob@3.2.6, inquirer@0.2.4, request@2.21.0)
+
+I just installed your generator by running:
+    npm install -g generator-webapp
+</code></pre>
+<p>然后，我们退出yo命令行，选择“Get me out of here!”</p>
+<pre><code>
+[?] What would you like to do? Get me out of here!
+
+Bye from us! Chat soon.
+            Addy Osmani
+          Sindre Sorhus
+        Brian Ford
+     Eric Bidelman
+              Paul Irish
+     Mickael Daniel
+          Pasca1 Hartig
+      Stephen S.wchuk
+    Frederick R0s
+</code></pre>
+<p>上面的退出的文字是开发者的名字，很有意思一点是，竖着看最中间一行的文字排列是，yeoman1.0，也就是yeoman这个项目的得名了。</p>
+<p><strong>4). 注：上面的过程，也可以直接用命令</strong></p>
+<pre><code>npm install -g generator-webapp</code></pre>
+<h2>3. Yeoman工具包yo &#8211; 快速构建一个web项目</h2>
+<p>当我们安装了generator-webapp后，我们就可以，以非常优雅的方式来构建工程了。</p>
+<p><strong>1). 创建nodejs-yo目录，并构建webapp工程</strong></p>
+<pre><code>
+~ D:\workspace\javascript&gt;mkdir nodejs-yo
+~ D:\workspace\javascript&gt;cd nodejs-yo
+~ D:\workspace\javascript\nodejs-yo&gt;yo webapp
+
+     _-----_
+    |       |
+    |--(o)--|   .--------------------------.
+   `---------´  |    Welcome to Yeoman,    |
+    ( _´U`_ )   |   ladies and gentlemen!  |
+    /___A___\   '__________________________'
+     |  ~  |
+   __'.___.'__
+ ´   `  |° ´ Y `
+
+Out of the box I include HTML5 Boilerplate, jQuery and Modernizr.
+[?] What more would you like?
+  [ ] Twitter Bootstrap for Sass
+ &gt;[X] RequireJS
+  [X] Autoprefixer for your CSS
+</code></pre>
+<p><strong>对选项的解释：</strong></p>
+<ul>
+<li>Twitter Bootstrap for Sass：SASS是一种CSS的开发工具，提供了许多便利的写法，大大节省了设计者的时间，使得CSS的开发，变得简单和可维护。</li>
+<li>RequireJS 可以帮助用户异步按需的加载 JavaScript 代码，并解决 JavaScript 模块间的依赖关系，提升了前端代码的整体质量和性能。</li>
+<li>Autoprefixer解析CSS文件并且添加浏览器前缀到CSS规则里，使用Can I Use的数据来决定哪些前缀是需要的。</li>
+</ul>
+<p>上面3个选择，由于Sass是基于Ruby的，我本机没有安装ruby，取消Twitter Bootstrap for Sass的勾选。</p>
+<p><strong>2). 查看安装日志：</strong></p>
+<pre><code>
+Out of the box I include HTML5 Boilerplate, jQuery and Modernizr.
+[?] What more would you like? RequireJS, Autoprefixer for your CSS
+   create Gruntfile.js
+   create package.json
+   create .gitignore
+   create .gitattributes
+   create .bowerrc
+   create bower.json
+   create .jshintrc
+   create .editorconfig
+   create app/favicon.ico
+   create app/404.html
+   create app/robots.txt
+   create app/.htaccess
+   create app/styles/main.css
+   create app/scripts/app.js
+   create app/scripts/main.js
+   create app/index.html
+   create app/scripts/hello.coffee
+   invoke   mocha:app
+   create     test\index.html
+   create     test\lib\chai.js
+   create     test\lib\expect.js
+   create     test\lib\mocha\mocha.css
+   create     test\lib\mocha\mocha.js
+   create     test\spec\test.js
+
+I'm all done. Running bower install &amp; npm install for you to install the required dependencies. If this fails, try running the command yourself.
+</code></pre>
+<p>项目骨架已经建好了。还包括了很多的配置文件.gitignore,bower.json,Gruntfile.js,favicon.ico, robots.txt, .htaccess。太神奇了，Cool!!</p>
+<p>一下子装备都齐全了，打仗的事就交给我们自己吧。</p>
+<h2>4. Yeoman工具包bower,grunt的组合用法</h2>
+<p>有关bower的介绍，请参考：<a title="bower解决js的依赖管理" href="http://blog.fens.me/nodejs-bower-intro/" target="_blank">bower解决js的依赖管理</a><br />
+有关grunt的介绍，请参考：<a title="grunt让Nodejs规范起来" href="http://blog.fens.me/nodejs-grunt-intro/" target="_blank">grunt让Nodejs规范起来</a></p>
+<p><strong>1). 使用bower命令查看项目依赖：</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-yo&gt;bower list
+bower check-new     Checking for new versions of the project dependencies..
+nodejs-yo#0.0.0 D:\workspace\javascript\nodejs-yo
+├── jquery#1.9.1 (latest is 2.0.3)
+├── modernizr#2.6.2
+└── requirejs#2.1.8
+</code></pre>
+<p>我们发现生成的webapp中，有4个依赖库，jquery,modernizr,requirejs。</p>
+<p><strong>2). 使用grunt命令执行单元测试</strong></p>
+<pre><code>
+D:\workspace\javascript\nodejs-yo>grunt test
+Running "clean:server" (clean) task
+Cleaning ".tmp"...OK
+
+Running "concurrent:test" (concurrent) task
+
+Running "copy:styles" (copy) task
+
+Running "coffee:dist" (coffee) task
+
+Running "autoprefixer:dist" (autoprefixer) task
+File ".tmp/styles/main.css" created.
+
+Running "connect:test" (connect) task
+Starting connect web server on localhost:9000.
+
+Running "mocha:all" (mocha) task
+Testing: http://localhost:9000/index.html
+
+  .
+
+  1 test complete (107 ms)
+
+>> 1 passed! (0.11s)
+
+Done, without errors.
+</code></pre>
+<p><strong>3). 使用grunt命令启动一个node服务器</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-yo&gt;grunt server
+Running "server" task
+
+Running "clean:server" (clean) task
+
+Running "concurrent:server" (concurrent) task
+    Warning: Running "compass:dist" (compass) task
+Warning: You need to have Ruby and Compass installed and in your system PATH for this task to work. More info: https://g
+ithub.com/gruntjs/grunt-contrib-compass Use --force to continue. Use --force to continue.
+
+    Aborted due to warnings.
+</code></pre>
+<p>启动时，我们发现报错了。由于我没有装Ruby的环境，所以compass:dist的命令不能运行。</p>
+<p>强制启动grunt</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-yo&gt;grunt server --force
+D:\workspace\javascript\nodejs-yo&gt;grunt server --force
+Running "server" task
+
+Running "clean:server" (clean) task
+Cleaning ".tmp"...OK
+
+Running "concurrent:server" (concurrent) task
+
+Running "coffee:dist" (coffee) task
+    Warning: Running "compass:dist" (compass) task
+Warning: You need to have Ruby and Compass installed and in your system PATH for this task to work. More info: https://
+ithub.com/gruntjs/grunt-contrib-compass Use --force to continue. Used --force, continuing.
+
+Running "compass:dist" (compass) task
+Warning: You need to have Ruby and Compass installed and in your system PATH for this task to work. More info: https://
+ithub.com/gruntjs/grunt-contrib-compass Use --force to continue.
+
+Running "copy:styles" (copy) task
+
+Running "autoprefixer:dist" (autoprefixer) task
+File ".tmp/styles/main.css" created.
+
+Running "connect:livereload" (connect) task
+Starting connect web server on localhost:9000.
+
+Running "open:server" (open) task
+
+Running "watch" task
+Waiting...
+</code></pre>
+<p>后台日志显示了“watch”的task，说明代码文件被监控着，如有修改网页会自动更新。</p>
+<p>浏览器被自动打开，http://localhost:9000/<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/yeoman1.png"><img class="alignnone size-full wp-image-1837" alt="yeoman1" src="http://blog.fens.me/wp-content/uploads/2013/08/yeoman1.png" width="863" height="587" /></a></p>
+<p><strong>4). 修改app/index.html代码，增加对canvas的检查。</strong></p>
+<pre><code>
+~ vi app/index.html
+
+&lt;script&gt;
+window.onload = function () {
+if (canvasSupported()) {
+alert('canvas supported');
+}
+};
+
+function canvasSupported() {
+var canvas = document.createElement('canvas');
+return (canvas.getContext &amp;&amp; canvas.getContext('2d'));
+}
+&lt;/script&gt;
+</code></pre>
+<p>浏览器显示：<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/08/yeoman2.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/yeoman2.png" alt="yeoman2" width="491" height="509" class="alignnone size-full wp-image-1840" /></a></p>
+<p><strong>5). 通过bower增加库jquery-pjax</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-yo&gt;bower install jquery-pjax
+bower jquery-pjax#*         not-cached git://github.com/defunkt/jquery-pjax.git#*
+bower jquery-pjax#*            resolve git://github.com/defunkt/jquery-pjax.git#*
+bower jquery-pjax#*           download https://github.com/defunkt/jquery-pjax/archive/v1.7.3.tar.gz
+bower jquery-pjax#*            extract archive.tar.gz
+bower jquery-pjax#*           resolved git://github.com/defunkt/jquery-pjax.git#1.7.3
+bower jquery#&gt;=1.8              cached git://github.com/components/jquery.git#2.0.3
+bower jquery#&gt;=1.8            validate 2.0.3 against git://github.com/components/jquery.git#&gt;=1.8
+bower jquery-pjax#~1.7.3       install jquery-pjax#1.7.3
+
+jquery-pjax#1.7.3 app\bower_components\jquery-pjax
+└── jquery#2.0.3
+
+~ D:\workspace\javascript\nodejs-yo&gt;bower list
+bower check-new     Checking for new versions of the project dependencies..
+nodejs-yo#0.0.0 D:\workspace\javascript\nodejs-yo
+├── jquery#1.9.1 (latest is 2.0.3)
+├─┬ jquery-pjax#1.7.3 extraneous
+│ └── jquery#1.9.1 (2.0.3 available)
+├── modernizr#2.6.2
+└── requirejs#2.1.8
+</code></pre>
+<p>Yeoman已经成功地帮助我们打造出一个项目的原型了，接下来我们可以针对自己的项目，自己熟悉的框架组合，构建一个属于自己的骨架模板，并发布到Yeoman的generator库中。</p>
+<p>后面的内容会更精彩，敬请期待&#8230;！！</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Yeoman自动构建js项目" href="http://blog.fens.me/nodejs-yeoman-intro/" target="_blank">http://blog.fens.me/nodejs-yeoman-intro/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-277">
+        <div id="dsq-comment-header-277" class="dsq-comment-header">
+            <cite id="dsq-cite-277">
+                <span id="dsq-author-user-277">赵小笨</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-277" class="dsq-comment-body">
+            <div id="dsq-comment-message-277" class="dsq-comment-message"><p>条理清楚，赞</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-288">
+        <div id="dsq-comment-header-288" class="dsq-comment-header">
+            <cite id="dsq-cite-288">
+                <span id="dsq-author-user-288">hades</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-288" class="dsq-comment-body">
+            <div id="dsq-comment-message-288" class="dsq-comment-message"><p>不是比较喜欢看这类文章。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-289">
+        <div id="dsq-comment-header-289" class="dsq-comment-header">
+            <cite id="dsq-cite-289">
+                <span id="dsq-author-user-289">hades</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-289" class="dsq-comment-body">
+            <div id="dsq-comment-message-289" class="dsq-comment-message"><p>打错字了，是  还是比较</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-karma-jasmine/' rel='external nofollow' class='url'>Karma和Jasmine自动化单元测试 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/angularjs-yeoman-project/' rel='external nofollow' class='url'>AngularJS从构建项目开始 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-518">
+        <div id="dsq-comment-header-518" class="dsq-comment-header">
+            <cite id="dsq-cite-518">
+                <span id="dsq-author-user-518">miles</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-518" class="dsq-comment-body">
+            <div id="dsq-comment-message-518" class="dsq-comment-message"><p>赞一个，很好。。。把前端框架都很好的介绍了一遍</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-761">
+        <div id="dsq-comment-header-761" class="dsq-comment-header">
+            <cite id="dsq-cite-761">
+                <a id="dsq-author-user-761" href="http://www.crazyleaves.com/" target="_blank" rel="nofollow">叶永仪</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-761" class="dsq-comment-body">
+            <div id="dsq-comment-message-761" class="dsq-comment-message"><p>很清晰，很好，学习了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-763">
+        <div id="dsq-comment-header-763" class="dsq-comment-header">
+            <cite id="dsq-cite-763">
+                <a id="dsq-author-user-763" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-763" class="dsq-comment-body">
+            <div id="dsq-comment-message-763" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-985">
+        <div id="dsq-comment-header-985" class="dsq-comment-header">
+            <cite id="dsq-cite-985">
+                <span id="dsq-author-user-985">Leo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-985" class="dsq-comment-body">
+            <div id="dsq-comment-message-985" class="dsq-comment-message"><p>多谢分享！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1000">
+        <div id="dsq-comment-header-1000" class="dsq-comment-header">
+            <cite id="dsq-cite-1000">
+                <span id="dsq-author-user-1000">ANDIS</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1000" class="dsq-comment-body">
+            <div id="dsq-comment-message-1000" class="dsq-comment-message"><p>我想问下，yeoman只能搭配node使用吗？我想用nginx或者apache之类的。。。。因为后台的rest api已经用python实现了，现在想用angular做个前端，是不是没法用上yeoman了？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1003">
+        <div id="dsq-comment-header-1003" class="dsq-comment-header">
+            <cite id="dsq-cite-1003">
+                <a id="dsq-author-user-1003" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1003" class="dsq-comment-body">
+            <div id="dsq-comment-message-1003" class="dsq-comment-message"><p>yeoman，虽然是基于node的，但只是一个模板项目。<br />
+AngularJS也不一定，要用yeoman去构建。<br />
+没有必要什么都用上，需要什么用什么就行了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1578">
+        <div id="dsq-comment-header-1578" class="dsq-comment-header">
+            <cite id="dsq-cite-1578">
+                <span id="dsq-author-user-1578">Issac</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1578" class="dsq-comment-body">
+            <div id="dsq-comment-message-1578" class="dsq-comment-message"><p>我按照博主的一步步操作，为什么我进入到nodejs-yo里执行yo webapp时，提示：&#8217;yo&#8217; 不是内部或外部命令，也不是可运行的程序或批处理文件。<br />
+是需要配置yo的环境变量吗？不进入nodejs-yo，在workspace下可以执行yo</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1582">
+        <div id="dsq-comment-header-1582" class="dsq-comment-header">
+            <cite id="dsq-cite-1582">
+                <a id="dsq-author-user-1582" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1582" class="dsq-comment-body">
+            <div id="dsq-comment-message-1582" class="dsq-comment-message"><p>yo是一个全局命令， npm install -g yo， 不进入项目，一样可以执行。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-1586">
+        <div id="dsq-comment-header-1586" class="dsq-comment-header">
+            <cite id="dsq-cite-1586">
+                <span id="dsq-author-user-1586">Issac</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1586" class="dsq-comment-body">
+            <div id="dsq-comment-message-1586" class="dsq-comment-message"><p>���谢，回答， 配置完Path 路径后就可以全局执行命令了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-1589">
+        <div id="dsq-comment-header-1589" class="dsq-comment-header">
+            <cite id="dsq-cite-1589">
+                <a id="dsq-author-user-1589" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1589" class="dsq-comment-body">
+            <div id="dsq-comment-message-1589" class="dsq-comment-message"><p>好的，解决就好！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-1597">
+        <div id="dsq-comment-header-1597" class="dsq-comment-header">
+            <cite id="dsq-cite-1597">
+                <span id="dsq-author-user-1597">Issac</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1597" class="dsq-comment-body">
+            <div id="dsq-comment-message-1597" class="dsq-comment-message"><p>同时借助博主的博客给其他学者提个醒，我是因为修改了NPM的globalconfig和globalignorefile所以才导致在全局无法使用yo命令。如果出现和同样的情况不妨通过 npm config set prefix  &#8220;C:Usersyour computer nameAppDataRoamingnpm&#8221; 重新设置一下prefix的目录到npm默认的目录。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-1598">
+        <div id="dsq-comment-header-1598" class="dsq-comment-header">
+            <cite id="dsq-cite-1598">
+                <a id="dsq-author-user-1598" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1598" class="dsq-comment-body">
+            <div id="dsq-comment-message-1598" class="dsq-comment-message"><p>谢谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-1651">
+        <div id="dsq-comment-header-1651" class="dsq-comment-header">
+            <cite id="dsq-cite-1651">
+                <span id="dsq-author-user-1651">skull</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1651" class="dsq-comment-body">
+            <div id="dsq-comment-message-1651" class="dsq-comment-message"><p>想问一楼主，如果 npm config set prefix &#8220;C:Usersyour computer nameAppDataRoamingnpm&#8221; ，“your computer name”忘记改了运行了npm会出错，重装nodejs也没用要怎么办</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-1770">
+        <div id="dsq-comment-header-1770" class="dsq-comment-header">
+            <cite id="dsq-cite-1770">
+                <span id="dsq-author-user-1770">lioff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1770" class="dsq-comment-body">
+            <div id="dsq-comment-message-1770" class="dsq-comment-message"><p>重装没用的 ，你的用户目录项目有个.npmrc 文件 删除掉就好了</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1642">
+        <div id="dsq-comment-header-1642" class="dsq-comment-header">
+            <cite id="dsq-cite-1642">
+                <a id="dsq-author-user-1642" href="http://www.webfing.com" target="_blank" rel="nofollow">king</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1642" class="dsq-comment-body">
+            <div id="dsq-comment-message-1642" class="dsq-comment-message"><p>点赞一个</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1650">
+        <div id="dsq-comment-header-1650" class="dsq-comment-header">
+            <cite id="dsq-cite-1650">
+                <a id="dsq-author-user-1650" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1650" class="dsq-comment-body">
+            <div id="dsq-comment-message-1650" class="dsq-comment-message"><p>多操作几遍，熟了再能保证不出错。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1745">
+        <div id="dsq-comment-header-1745" class="dsq-comment-header">
+            <cite id="dsq-cite-1745">
+                <span id="dsq-author-user-1745">lioff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1745" class="dsq-comment-body">
+            <div id="dsq-comment-message-1745" class="dsq-comment-message"><p>[?] What more would you like?<br />
+  [ ] Twitter Bootstrap for Sass<br />
+ &gt;[X] RequireJS<br />
+  [X] Autoprefixer for your CSS</p>
+<p>弱弱问一句 如何选择和取消上面的选项</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1752">
+        <div id="dsq-comment-header-1752" class="dsq-comment-header">
+            <cite id="dsq-cite-1752">
+                <a id="dsq-author-user-1752" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1752" class="dsq-comment-body">
+            <div id="dsq-comment-message-1752" class="dsq-comment-message"><p>好像是按空格吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1747">
+        <div id="dsq-comment-header-1747" class="dsq-comment-header">
+            <cite id="dsq-cite-1747">
+                <span id="dsq-author-user-1747">lioff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1747" class="dsq-comment-body">
+            <div id="dsq-comment-message-1747" class="dsq-comment-message"><p>楼主，帮忙看一下运行 yo webapp  就一直卡在安装包这里 </p>
+<p>到截图这里就不继续滚了  </p>
+<p>我bootstrap  sass 等依赖选项都没选择 要装这么多依赖包啊。。。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1748">
+        <div id="dsq-comment-header-1748" class="dsq-comment-header">
+            <cite id="dsq-cite-1748">
+                <span id="dsq-author-user-1748">Guest</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1748" class="dsq-comment-body">
+            <div id="dsq-comment-message-1748" class="dsq-comment-message"><p>图没有啊靠</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-1749">
+        <div id="dsq-comment-header-1749" class="dsq-comment-header">
+            <cite id="dsq-cite-1749">
+                <span id="dsq-author-user-1749">lioff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1749" class="dsq-comment-body">
+            <div id="dsq-comment-message-1749" class="dsq-comment-message"><p>grunt-bower-install@1.4.1 node_modulesgrunt-bower-install<br />
+├── wiredep@1.4.4 (chalk@0.1.1, lodash@1.3.1, through2@0.4.2, <a href="mailto:glob@3.2.11">glob@3.2.11</a>)<br />
+└── bower-config@0.5.1 (osenv@0.0.3, graceful-fs@2.0.3, optimist@0.6.1, mout@0.9.1)</p>
+<p><a href="mailto:grunt-mocha@0.4.10">grunt-mocha@0.4.10</a> node_modulesgrunt-mocha<br />
+├── lodash@2.3.0<br />
+├── <a href="mailto:mocha@1.14">mocha@1.14</a>.0 (debug@0.8.1, diff@1.0.7, growl@1.7.0, commander@2.0.0, mkdirp@0.3.5, glob@3.2.3, <a href="mailto:jade@0.26">jade@0.26</a>.3)<br />
+└── grunt-lib-phantomjs@0.4.0 (eventemitter2@0.4.13, <a href="mailto:semver@1.0.14">semver@1.0.14</a>, temporary@0.0.8, phantomjs@1.9.7-8)</p>
+<p>grunt-contrib-imagemin@0.6.1 node_modulesgrunt-contrib-imagemin<br />
+├── pretty-bytes@0.1.1<br />
+├── mkdirp@0.3.5<br />
+├── <a href="mailto:async@0.2.10">async@0.2.10</a><br />
+├── chalk@0.4.0 (strip-ansi@0.1.1, ansi-styles@1.0.0, has-color@0.1.7)<br />
+└── image-min@0.2.3 (filesize@2.0.3, win-spawn@2.0.0, stream-combiner@0.0.4, multipipe@0.0.2, concat-stream@1.4.5, through2@0.4.2, map-key@0.1.4,<br />
+mout@0.9.1, pngquant-bin@0.1.7, gifsicle@0.1.5, jpegtran-bin@0.2.6, optipng-bin@0.3.7)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1753">
+        <div id="dsq-comment-header-1753" class="dsq-comment-header">
+            <cite id="dsq-cite-1753">
+                <a id="dsq-author-user-1753" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1753" class="dsq-comment-body">
+            <div id="dsq-comment-message-1753" class="dsq-comment-message"><p>是不是网络的问题，没下完就断了！重新执行一遍试试！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1758">
+        <div id="dsq-comment-header-1758" class="dsq-comment-header">
+            <cite id="dsq-cite-1758">
+                <span id="dsq-author-user-1758">lioff</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1758" class="dsq-comment-body">
+            <div id="dsq-comment-message-1758" class="dsq-comment-message"><p>不明白yeoman 为什么不把 脚手架命令需要的工具一次安装到本地 ，每次运行脚手架搭建项目都需要联网就 orz 了<br />
+运行 yo angular  前面都跑的很顺畅 又是卡在<br />
+grunt-contrib-imagemin@0.3.0 node_modulesgrunt-contrib-imagemin<br />
+├── <a href="mailto:filesize@1.10">filesize@1.10</a>.0<br />
+├── chalk@0.2.1 (has-color@0.1.7, ansi-styles@0.2.0)<br />
+├── optipng-bin@0.3.7 (chalk@0.4.0, bin-build@0.1.1, bin-wrapper@0.3.4)<br />
+├── pngquant-bin@0.1.7 (chalk@0.4.0, bin-wrapper@0.2.4)<br />
+├── gifsicle@0.1.5 (chalk@0.4.0, bin-wrapper@0.2.4)<br />
+└── jpegtran-bin@0.2.6 (chalk@0.4.0, bin-wrapper@0.2.4)<br />
+ 估计是这个包 影响了</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-1760">
+        <div id="dsq-comment-header-1760" class="dsq-comment-header">
+            <cite id="dsq-cite-1760">
+                <a id="dsq-author-user-1760" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1760" class="dsq-comment-body">
+            <div id="dsq-comment-message-1760" class="dsq-comment-message"><p>中国的网络，其实也是有很多问题的，加个代理或者VPN之类的下载试试呢？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-1754">
+        <div id="dsq-comment-header-1754" class="dsq-comment-header">
+            <cite id="dsq-cite-1754">
+                <a id="dsq-author-user-1754" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1754" class="dsq-comment-body">
+            <div id="dsq-comment-message-1754" class="dsq-comment-message"><p>是的，非常多的依赖包。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1894">
+        <div id="dsq-comment-header-1894" class="dsq-comment-header">
+            <cite id="dsq-cite-1894">
+                <a id="dsq-author-user-1894" href="http://hackervirus.byethost18.com" target="_blank" rel="nofollow">HackerVirus</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1894" class="dsq-comment-body">
+            <div id="dsq-comment-message-1894" class="dsq-comment-message"><p>good articles!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1897">
+        <div id="dsq-comment-header-1897" class="dsq-comment-header">
+            <cite id="dsq-cite-1897">
+                <a id="dsq-author-user-1897" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1897" class="dsq-comment-body">
+            <div id="dsq-comment-message-1897" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2860">
+        <div id="dsq-comment-header-2860" class="dsq-comment-header">
+            <cite id="dsq-cite-2860">
+                <span id="dsq-author-user-2860">jiewenli</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2860" class="dsq-comment-body">
+            <div id="dsq-comment-message-2860" class="dsq-comment-message"><p>楼主你好，我是通过nvm安装���node.js。我用的是root账号。但是执行Yo时，报错说没有权限是什么情况呢？怎么解决呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2862">
+        <div id="dsq-comment-header-2862" class="dsq-comment-header">
+            <cite id="dsq-cite-2862">
+                <a id="dsq-author-user-2862" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2862" class="dsq-comment-body">
+            <div id="dsq-comment-message-2862" class="dsq-comment-message"><p>我不清楚nvm，如果与npm是一样的，那么你安装的yo的时候，是否也是用root安装的呢？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3532">
+        <div id="dsq-comment-header-3532" class="dsq-comment-header">
+            <cite id="dsq-cite-3532">
+                <a id="dsq-author-user-3532" href="http://www.tonylee.pw" target="_blank" rel="nofollow">Tony7Lee</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3532" class="dsq-comment-body">
+            <div id="dsq-comment-message-3532" class="dsq-comment-message"><p>丹哥用过Pjax么，现在大部分前端框架里的路由系统就应该有类似Pjax的组件吧：）</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3534">
+        <div id="dsq-comment-header-3534" class="dsq-comment-header">
+            <cite id="dsq-cite-3534">
+                <a id="dsq-author-user-3534" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3534" class="dsq-comment-body">
+            <div id="dsq-comment-message-3534" class="dsq-comment-message"><p>没用过Pjax，路由基本功能都是类似的，自己写或者用框架都可以。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3630">
+        <div id="dsq-comment-header-3630" class="dsq-comment-header">
+            <cite id="dsq-cite-3630">
+                <span id="dsq-author-user-3630">zhaoyanjing</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3630" class="dsq-comment-body">
+            <div id="dsq-comment-message-3630" class="dsq-comment-message"><p>您好，请问为什么安装了yo后执行yo命令，选择search npm for generators时会抛出异常throw err</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3632">
+        <div id="dsq-comment-header-3632" class="dsq-comment-header">
+            <cite id="dsq-cite-3632">
+                <a id="dsq-author-user-3632" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3632" class="dsq-comment-body">
+            <div id="dsq-comment-message-3632" class="dsq-comment-message"><p>可能是npm或yo版本不匹配造成的吧，升级一下npm试试。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3658">
+        <div id="dsq-comment-header-3658" class="dsq-comment-header">
+            <cite id="dsq-cite-3658">
+                <span id="dsq-author-user-3658">Black</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3658" class="dsq-comment-body">
+            <div id="dsq-comment-message-3658" class="dsq-comment-message"><p>mac下提示：You need to have Ruby and Sass installed and in your PATH for this task to work.怎么解决呢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3659">
+        <div id="dsq-comment-header-3659" class="dsq-comment-header">
+            <cite id="dsq-cite-3659">
+                <a id="dsq-author-user-3659" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3659" class="dsq-comment-body">
+            <div id="dsq-comment-message-3659" class="dsq-comment-message"><p>1. 我没有用过MAC，不清楚Mac的各种问题。</p>
+<p>2. Sass是基于Ruby的，这是个可选组件，如果不需要Sass就不要安装Sass，也就不用安装Ruby了。</p>
+<p>3. 可代替Sass的方案，也有不少。比如 less, stylus （http://blog.fens.me/nodejs-stylus-css/ ）</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-4323">
+        <div id="dsq-comment-header-4323" class="dsq-comment-header">
+            <cite id="dsq-cite-4323">
+                <span id="dsq-author-user-4323">90arther</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4323" class="dsq-comment-body">
+            <div id="dsq-comment-message-4323" class="dsq-comment-message"><p>这就是要ruby跟sass，或者是装了之后没有环境变量，看一下sass的文档install guide.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3920">
+        <div id="dsq-comment-header-3920" class="dsq-comment-header">
+            <cite id="dsq-cite-3920">
+                <span id="dsq-author-user-3920">Ry</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3920" class="dsq-comment-body">
+            <div id="dsq-comment-message-3920" class="dsq-comment-message"><p>我有点疑问，为什么我的windows7系统，下载yo一直不行？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3945">
+        <div id="dsq-comment-header-3945" class="dsq-comment-header">
+            <cite id="dsq-cite-3945">
+                <a id="dsq-author-user-3945" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3945" class="dsq-comment-body">
+            <div id="dsq-comment-message-3945" class="dsq-comment-message"><p>就cnpm试一下，npm有时会超时</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-3949">
+        <div id="dsq-comment-header-3949" class="dsq-comment-header">
+            <cite id="dsq-cite-3949">
+                <span id="dsq-author-user-3949">Ry</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3949" class="dsq-comment-body">
+            <div id="dsq-comment-message-3949" class="dsq-comment-message"><p>非常谢谢，可能是网络问题，我会尝试把你写出来的东西都尝试一次的。</p>
+<p>在 2015-07-03 13:18:07，&#8221;Disqus&#8221;  写道： &#8220;就cnpm试一下，npm有时会超时&#8221;<br />
+| |<br />
+| |  Settings | |<br />
+|   |<br />
+| |<br />
+| |<br />
+|<br />
+A new comment was posted on bsspirit<br />
+|<br />
+|<br />
+|<br />
+|<br />
+| |<br />
+Conan Zhang</p>
+<p>就cnpm试一下，npm有时会超时</p>
+<p>1:18 a.m., Friday July 3 | Other comments by Conan Zhang</p>
+<p>|   |<br />
+|<br />
+|   | Reply to Conan Zhang |   |<br />
+|<br />
+|   |<br />
+|<br />
+| Conan Zhang’s comment is in reply to Ry: |<br />
+|   |<br />
+| |</p>
+<p>我有点疑问，为什么我的windows7系统，下载yo一直不行？</p>
+<p>Read more</p>
+<p>|<br />
+|<br />
+|<br />
+|<br />
+| |<br />
+| |<br />
+|</p>
+<p>You&#8217;re receiving this message because you&#8217;re signed up to receive notifications about replies to disqus_PWi1QlNDZM.<br />
+You can unsubscribe from emails about replies to disqus_PWi1QlNDZM by replying to this email with &#8220;unsubscribe&#8221; or reduce the rate with which these emails are sent by adjusting your notification settings.<br />
+|<br />
+| |<br />
+| |</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3953">
+        <div id="dsq-comment-header-3953" class="dsq-comment-header">
+            <cite id="dsq-cite-3953">
+                <a id="dsq-author-user-3953" href="http://levi.cg.am" target="_blank" rel="nofollow">惟 李</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3953" class="dsq-comment-body">
+            <div id="dsq-comment-message-3953" class="dsq-comment-message"><p>执行yo angular，提示这个错误，求解<br />
+  ⚠ The `/Library/WebServer/app/yo/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-jpegtran/node_modules/jpegtran-bin/vendor/jpegtran` binary doesn&#8217;t seem to work correctly<br />
+  ⚠ jpegtran pre-build test failed<br />
+  ℹ compiling from source<br />
+  ✖ Error: CFLAGS=&#8221;-m32&#8243; LDFLAGS=&#8221;-m32&#8243; ./configure &#8211;disable-shared &#8211;prefix=&#8221;/Library/WebServer/app/yo/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-jpegtran/node_modules/jpegtran-bin/vendor&#8221; &#8211;bindir=&#8221;/Library/WebServer/app/yo/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-jpegtran/node_modules/jpegtran-bin/vendor&#8221; &amp;&amp; make install<br />
+Command failed: /bin/sh -c CFLAGS=&#8221;-m32&#8243; LDFLAGS=&#8221;-m32&#8243; ./configure &#8211;disable-shared &#8211;prefix=&#8221;/Library/WebServer/app/yo/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-jpegtran/node_modules/jpegtran-bin/vendor&#8221; &#8211;bindir=&#8221;/Library/WebServer/app/yo/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-jpegtran/node_modules/jpegtran-bin/vendor&#8221;<br />
+configure: error: cannot find install-sh or install.sh in . ./.. ./../..</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3966">
+        <div id="dsq-comment-header-3966" class="dsq-comment-header">
+            <cite id="dsq-cite-3966">
+                <a id="dsq-author-user-3966" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3966" class="dsq-comment-body">
+            <div id="dsq-comment-message-3966" class="dsq-comment-message"><p>看起来是angular这个模板的问题。你换成Linux环境试试。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-5100">
+        <div id="dsq-comment-header-5100" class="dsq-comment-header">
+            <cite id="dsq-cite-5100">
+                <span id="dsq-author-user-5100">jiafan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5100" class="dsq-comment-body">
+            <div id="dsq-comment-message-5100" class="dsq-comment-message"><p>想问下 mac下 在终端创建express项目 怎么做</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-5118">
+        <div id="dsq-comment-header-5118" class="dsq-comment-header">
+            <cite id="dsq-cite-5118">
+                <a id="dsq-author-user-5118" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5118" class="dsq-comment-body">
+            <div id="dsq-comment-message-5118" class="dsq-comment-message"><p>安装node，用npm安装express，再生成express项目就行了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-yeoman-intro/';
+var disqus_identifier = '1824 http://blog.fens.me/?p=1824';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Yeoman自动构建js项目";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=1824';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

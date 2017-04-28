@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>bower解决js的依赖管理 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; bower解决js的依赖管理 Comments Feed" href="http://blog.fens.me/nodejs-bower-intro/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='grunt让Nodejs规范起来' href='http://blog.fens.me/nodejs-grunt-intro/' />
+<link rel='next' title='Yeoman自动构建js项目' href='http://blog.fens.me/nodejs-yeoman-intro/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-bower-intro/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=1807' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-bower-intro%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-bower-intro%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="bower,nodejs,javascript,js" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-1807 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>bower解决js的依赖管理</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-1807 post type-post status-publish format-standard hentry category-javascript tag-bower tag-javascript tag-js tag-nodejs">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-bower-intro/" title="bower解决js的依赖管理" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Aug 18, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/bower/" rel="tag">bower</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/js/" rel="tag">js</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-bower-intro/#comments"><span class="dsq-postid" data-dsqidentifier="1807 http://blog.fens.me/?p=1807">64 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>bower解决js的依赖管理</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="bower解决js的依赖管理" href="http://blog.fens.me/nodejs-bower-intro/" target="_blank">http://blog.fens.me/nodejs-bower-intro/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/bower.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/bower.png" alt="bower" width="600" height="400" class="alignnone size-full wp-image-1821" /></a></p>
+<p><strong>前言</strong><br />
+一个新的web项目开始，我们总是很自然地去下载需要用到的js类库文件，比如jQuery，去官网下载名为jquery-1.10.2.min.js文件，放到我们的项目里。当项目又需要bootstrap的时候，我们会重复刚才的工作，去bootstrap官网下载对应的类库。如果bootstrap所依赖的jQuery并不是1.10.2，而是2.0.3时，我们会再重新下载一个对应版本的jQuery替换原来的。</p>
+<p>包管理是个复杂的问题，我们要知道谁依赖谁，还要明确哪个版本依赖哪个版本。这些对于开发人员来说，负担过重了。bower作为一个js依赖管理的工具，提供一种理想包管理方式，借助了npm的一些思想，为我们提供一个舒服的开发环境。</p>
+<p>你要还不动起手来试试bower，那你一定不会知道，前端开发是件多么享受的事。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>bower介绍</li>
+<li>bower安装</li>
+<li>bower命令</li>
+<li>bower使用</li>
+<li>用bower提交自己类库</li>
+</ol>
+<h2>1. bower介绍</h2>
+<p>Bower 是 twitter 推出的一款包管理工具，基于nodejs的模块化思想，把功能分散到各个模块中，让模块和模块之间存在联系，通过 Bower 来管理模块间的这种联系。</p>
+<p>包管理工具一般有以下的功能：</p>
+<ul>
+<li>注册机制：每个包需要确定一个唯一的 ID 使得搜索和下载的时候能够正确匹配，所以包管理工具需要维护注册信息，可以依赖其他平台。</li>
+<li>文件存储：确定文件存放的位置，下载的时候可以找到，当然这个地址在网络上是可访问的。</li>
+<li>上传下载：这是工具的主要功能，能提高包使用的便利性。比如想用 jquery 只需要 install 一下就可以了，不用到处找下载。上传并不是必备的，根据文件存储的位置而定，但需要有一定的机制保障。</li>
+<li>依赖分析：这也是包管理工具主要解决的问题之一，既然包之间是有联系的，那么下载的时候就需要处理他们之间的依赖。下载一个包的时候也需要下载依赖的包。</li>
+</ul>
+<p>功能介绍，摘自文章：<a href="http://chuo.me/2013/02/twitter-bower.html" target="_blank" rel="nofollow">http://chuo.me/2013/02/twitter-bower.html</a></p>
+<h2>2. bower安装</h2>
+<p>bower插件是通过npm, Node.js包管理器安装和管理的.</p>
+<p><strong>我的系统环境</strong></p>
+<ul>
+<li>win7 64bit</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<pre><code>~ D:\workspace\javascript&gt;node -v
+v0.10.5
+
+~ D:\workspace\javascript&gt;npm -v
+1.2.19
+</code></pre>
+<p>在系统中，我们已经安装好了Nodejs和npm。win7安装nodejs请参考文章：<a href="http://blog.fens.me/nodejs-express3/" target="_blank">Nodejs开发框架Express3.0开发手记–从零开始</a></p>
+<p><strong>安装bower </strong><br />
+全局安装bower</p>
+<pre><code>
+~ D:\workspace\javascript>npm install bower -g
+</code></pre>
+<p>新建一个express3的项目nodejs-bower</p>
+<pre><code>
+~ D:\workspace\javascript>express -e nodejs-bower
+~ D:\workspace\javascript>cd nodejs-bower && npm install
+</code></pre>
+<h2>3. bower命令</h2>
+<p>bower安装后，我们就可以用bower这个命令了。</p>
+<pre><code>~ D:\workspace\javascript\nodejs-bower>bower
+Usage:
+    bower <command> [<args>] [<options>]
+Commands:
+    cache                   Manage bower cache
+    help                    Display help information about Bower
+    home                    Opens a package homepage into your favorite browser
+    info                    Info of a particular package
+    init                    Interactively create a bower.json file
+    install                 Install a package locally
+    link                    Symlink a package folder
+    list                    List local packages
+    lookup                  Look up a package URL by name
+    prune                   Removes local extraneous packages
+    register                Register a package
+    search                  Search for a package by name
+    update                  Update a local package
+    uninstall               Remove a local package
+Options:
+    -f, --force             Makes various commands more forceful
+    -j, --json              Output consumable JSON
+    -l, --log-level         What level of logs to report
+    -o, --offline           Do not hit the network
+    -q, --quiet             Only output important information
+    -s, --silent            Do not output anything, besides errors
+    -V, --verbose           Makes output more verbose
+    --allow-root            Allows running commands as root
+See 'bower help <command>' for more information on a specific command.
+</code></pre>
+<p>Commands，列出了bower支持的各种命令。</p>
+<ul>
+<li>cache:bower缓存管理</li>
+<li>help:显示Bower命令的帮助信息</li>
+<li>home:通过浏览器打开一个包的github发布页</li>
+<li>info:查看包的信息</li>
+<li>init:创建bower.json文件</li>
+<li>install:安装包到项目</li>
+<li>link:在本地bower库建立一个项目链接</li>
+<li>list:列出项目已安装的包</li>
+<li>lookup:根据包名查询包的URL</li>
+<li>prune:删除项目无关的包</li>
+<li>register:注册一个包</li>
+<li>search:搜索包</li>
+<li>update:更新项目的包</li>
+<li>uninstall:删除项目的包</li>
+</ul>
+<h2>4. bower使用</h2>
+<p><strong>1). 安装jQuery到项目nodejs-bower</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower install jquery
+bower jquery#*              not-cached git://github.com/components/jquery.git#*
+bower jquery#*                 resolve git://github.com/components/jquery.git#*
+bower jquery#*                download https://github.com/components/jquery/archive/2.0.3.tar.gz
+bower jquery#*                 extract archive.tar.gz
+bower jquery#*                resolved git://github.com/components/jquery.git#2.0.3
+bower jquery#~2.0.3            install jquery#2.0.3
+
+jquery#2.0.3 bower_components\jquery
+</code></pre>
+<p>通过执行命令，我们可以看到jQuery的最新版本被下载，并安装到项目的bower_components\jquery目录</p>
+<p>查看bower_components/jquery目录，发现了3个文件。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>ls bower_components/jquery -a
+.  ..  .bower.json  component.json  jquery.js
+</code></pre>
+<p>同样地，我们的项目还需要d3的类库</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower install d3
+bower d3#*                  not-cached git://github.com/mbostock/d3.git#*
+bower d3#*                     resolve git://github.com/mbostock/d3.git#*
+bower d3#*                    download https://github.com/mbostock/d3/archive/v3.2.8.tar.gz
+bower d3#*                     extract archive.tar.gz
+bower d3#*                    resolved git://github.com/mbostock/d3.git#3.2.8
+bower d3#~3.2.8                install d3#3.2.8
+
+d3#3.2.8 bower_components\d3
+</code></pre>
+<p>非常方便，下载并安装完成！</p>
+<p><strong>2). 查看项目中已导入的类库</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower list
+bower check-new     Checking for new versions of the project dependencies..
+nodejs-bower#0.0.0 D:\workspace\javascript\nodejs-bower
+├── d3#3.2.8
+└── jquery#2.0.3
+</code></pre>
+<p><strong>3). 安装bootstrap库，并查看依赖情况</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower install bootstrap
+bower bootstrap#*               cached git://github.com/twbs/bootstrap.git#3.0.0-rc1
+bower bootstrap#*             validate 3.0.0-rc1 against git://github.com/twbs/bootstrap.git#*
+bower jquery#>= 1.9.0           cached git://github.com/components/jquery.git#2.0.3
+bower jquery#>= 1.9.0         validate 2.0.3 against git://github.com/components/jquery.git#>= 1.9.0
+bower bootstrap#~3.0.0-rc1     install bootstrap#3.0.0-rc1
+
+bootstrap#3.0.0-rc1 bower_components\bootstrap
+└── jquery#2.0.3
+
+~ D:\workspace\javascript\nodejs-bower>bower list
+bower check-new     Checking for new versions of the project dependencies..
+nodejs-bower#0.0.0 D:\workspace\javascript\nodejs-bower
+├─┬ bootstrap#3.0.0-rc1 extraneous
+│ └── jquery#2.0.3
+├── d3#3.2.8
+└── jquery#2.0.3
+</code></pre>
+<p>我们发现bootstrap，对jquery是有依赖的。</p>
+<p><strong>4). 删除jQuery库，破坏依赖关系</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower uninstall jquery
+bower conflict      bootstrap depends on jquery
+Continue anyway? (y/n) y
+bower uninstall     jquery
+
+~ D:\workspace\javascript\nodejs-bower>bower list
+bower check-new     Checking for new versions of the project dependencies..
+nodejs-bower#0.0.0 D:\workspace\javascript\nodejs-bower
+├─┬ bootstrap#3.0.0-rc1 extraneous
+│ └── jquery missing
+├── d3#3.2.8
+└── jquery missing
+</code></pre>
+<p><strong>5). 安装低版本的jQuery，制造不版本兼容</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower install jquery#1.7.2
+bower jquery#~2.0.3             cached git://github.com/components/jquery.git#2.0.3
+bower jquery#~2.0.3           validate 2.0.3 against git://github.com/components/jquery.git#~2.0.3
+bower jquery#>= 1.9.0           cached git://github.com/components/jquery.git#2.0.3
+bower jquery#>= 1.9.0         validate 2.0.3 against git://github.com/components/jquery.git#>= 1.9.0
+bower jquery#1.7.2              cached git://github.com/components/jquery.git#1.7.2
+bower jquery#1.7.2            validate 1.7.2 against git://github.com/components/jquery.git#1.7.2
+
+Unable to find a suitable version for jquery, please choose one:
+    1) jquery#1.7.2 which resolved to 1.7.2
+    2) jquery#~2.0.3 which resolved to 2.0.3 and has nodejs-bower as dependants
+    3) jquery#>= 1.9.0 which resolved to 2.0.3 and has bootstrap#3.0.0-rc1 as dependants
+
+Prefix the choice with ! to persist it to bower.json
+
+Choice: 1
+bower jquery#1.7.2             install jquery#1.7.2
+
+jquery#1.7.2 bower_components\jquery
+
+~ D:\workspace\javascript\nodejs-bower>bower list
+bower check-new     Checking for new versions of the project dependencies..
+nodejs-bower#0.0.0 D:\workspace\javascript\nodejs-bower
+├─┬ bootstrap#3.0.0-rc1 extraneous
+│ └── jquery#1.7.2 incompatible with >= 1.9.0 (2.0.3 available)
+├── d3#3.2.8
+└── jquery#1.7.2 incompatible with ~2.0.3 (2.0.3 available)
+</code></pre>
+<p>我们可以清楚的看到bower，很明确的告诉了我们，jquery和bootstrap是不兼容的，强大之处大家应该有所体会。</p>
+<p><strong>6).升级jQuery，让版本兼容</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower update jquery
+bower jquery#~2.0.3             cached git://github.com/components/jquery.git#2.0.3
+bower jquery#~2.0.3           validate 2.0.3 against git://github.com/components/jquery.git#~2.0.3
+bower jquery#>= 1.9.0           cached git://github.com/components/jquery.git#2.0.3
+bower jquery#>= 1.9.0         validate 2.0.3 against git://github.com/components/jquery.git#>= 1.9.0
+bower jquery#~2.0.3            install jquery#2.0.3
+
+jquery#2.0.3 bower_components\jquery
+
+~ D:\workspace\javascript\nodejs-bower>bower list
+bower check-new     Checking for new versions of the project dependencies..
+nodejs-bower#0.0.0 D:\workspace\javascript\nodejs-bower
+├─┬ bootstrap#3.0.0-rc1 extraneous
+│ └── jquery#2.0.3
+├── d3#3.2.8
+└── jquery#2.0.3
+</code></pre>
+<p>多么智能，一键搞定，这才是高效的开发。</p>
+<p><strong>7). 查看本地bower已经缓存的类库</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower cache list
+bootstrap=git://github.com/twbs/bootstrap.git#3.0.0-rc1
+d3=git://github.com/mbostock/d3.git#3.2.8
+jquery=git://github.com/components/jquery.git#1.7.2
+jquery=git://github.com/components/jquery.git#2.0.3
+</code></pre>
+<p><strong>8). 查看D3库信息</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower info d3
+d3
+
+  Versions:
+    - 3.2.8
+    - 3.2.7
+    - 3.2.6
+    - 3.2.5
+    - 3.2.4
+    - 3.2.3
+    ...
+</code></pre>
+<p><strong>9). 查看dojo库的url</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower lookup dojo
+dojo git://github.com/dojo/dojo.git
+</code></pre>
+<p><strong>10). 用浏览器打开dojo的发布主页</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower home dojo
+bower dojo#*                not-cached git://github.com/dojo/dojo.git#*
+bower dojo#*                   resolve git://github.com/dojo/dojo.git#*
+bower dojo#*                  download https://github.com/dojo/dojo/archive/1.9.1.tar.gz
+bower dojo#*                   extract archive.tar.gz
+bower dojo#*                  resolved git://github.com/dojo/dojo.git#1.9.1
+</code></pre>
+<p>浏览器自动打开：https://github.com/dojo/dojo</p>
+<p><strong>11). 查询包含dojo的类库</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower search dojo
+Search results:
+
+    dojo git://github.com/dojo/dojo.git
+    dojox git://github.com/dojo/dojox.git
+    dojo-util git://github.com/dojo/util.git
+    dojo-bootstrap git://github.com/samvdb/Dojo-Bootstrap
+</code></pre>
+<p>真是方便实用的技术。</p>
+<h2>5. 用bower提交自己类库</h2>
+<p><strong>1). 生成bower.json配置文件</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower init
+bower existing      The existing bower.json file will be used and filled in
+[?] name: nodejs-bower
+[?] version: 0.0.0
+[?] main file:
+[?] set currently installed components as dependencies? No
+[?] add commonly ignored files to ignore list? Yes
+</code></pre>
+<p>查看生成的文件bower.json</p>
+<pre><code>
+{
+  "name": "nodejs-bower",
+  "version": "0.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "git://github.com/mbostock/d3.git#~3.2.8",
+    "jquery": "git://github.com/components/jquery.git#~2.0.3"
+  }
+}
+</code></pre>
+<p><strong>2). 在github创建一个资源库：nodejs-bower</strong><br />
+<strong>3). 本地工程绑定github</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>git init
+Initialized empty Git repository in D:/workspace/javascript/nodejs-bower/.git/
+
+~ D:\workspace\javascript\nodejs-bower>git add .
+~ D:\workspace\javascript\nodejs-bower>git commit -m "first commit"
+# On branch master
+#
+# Initial commit
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       app.js
+#       bower.json
+#       bower_components/
+#       node_modules/
+#       package.json
+#       public/
+#       routes/
+#       views/
+nothing added to commit but untracked files present (use "git add" to track)
+
+~ D:\workspace\javascript\nodejs-bower>git remote add origin https://github.com/bsspirit/nodejs-bower
+
+~ D:\workspace\javascript\nodejs-bower>git push -u origin master
+Counting objects: 565, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (516/516), done.
+Writing objects: 100% (565/565), 803.08 KiB, done.
+Total 565 (delta 26), reused 0 (delta 0)
+To https://github.com/bsspirit/nodejs-bower
+ * [new branch]      master -> master
+Branch master set up to track remote branch master from origin.
+</code></pre>
+<p><strong>4). 注册到bower官方类库</strong></p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-bower>bower register nodejs-bower git@github.com:bsspirit/nodejs-bower.git
+bower                          convert Converted git@github.com:bsspirit/nodejs-bower.git to git://github.com/bsspirit/n
+odejs-bower.git
+bower nodejs-bower#*           resolve git://github.com/bsspirit/nodejs-bower.git#*
+bower nodejs-bower#*          checkout master
+bower nodejs-bower#*          resolved git://github.com/bsspirit/nodejs-bower.git#af3ceaac07
+Registering a package will make it visible and installable via the registry (https://bower.herokuapp.com), continue? (y/
+n)                    y
+bower nodejs-bower            register git://github.com/bsspirit/nodejs-bower.git
+
+Package nodejs-bower registered successfully!
+All valid semver tags on git://github.com/bsspirit/nodejs-bower.git will be available as versions.
+To publish a new version, you just need release a valid semver tag.
+
+Run bower info nodejs-bower to list the package versions.
+</code></pre>
+<p><strong>5). 查询我们自己的包</strong></p>
+<pre><code>
+D:\workspace\javascript\nodejs-bower>bower search nodejs-bower
+Search results:
+
+    nodejs-bower git://github.com/bsspirit/nodejs-bower.git
+</code></pre>
+<p><strong>6). 安装我们自己的包</strong></p>
+<pre><code>
+D:\workspace\javascript\nodejs-bower>bower install nodejs-bower
+bower nodejs-bower#*            cached git://github.com/bsspirit/nodejs-bower.git#af3ceaac07
+bower nodejs-bower#*          validate af3ceaac07 against git://github.com/bsspirit/nodejs-bower.git#*
+bower nodejs-bower#*           install nodejs-bower#af3ceaac07
+
+nodejs-bower#af3ceaac07 bower_components\nodejs-bower
+├── d3#3.2.8
+└── jquery#2.0.3
+</code></pre>
+<p>其实模块化，版本依赖，开发类库，发布类库，安装类库，都是一条命令！还能再简单一点么！快把项目���块化，然后分享给大家吧！！未来是属于开发者的。</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="bower解决js的依赖管理" href="http://blog.fens.me/nodejs-bower-intro/" target="_blank">http://blog.fens.me/nodejs-bower-intro/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-yeoman-intro/' rel='external nofollow' class='url'>Yeoman自动构建js项目 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-jasmine-bdd/' rel='external nofollow' class='url'>jasmine行为驱动,测试先行 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/angularjs-ngtable-update/' rel='external nofollow' class='url'>ngTable动态更新的三种方式 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-416">
+        <div id="dsq-comment-header-416" class="dsq-comment-header">
+            <cite id="dsq-cite-416">
+                <span id="dsq-author-user-416">lijunzhou</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-416" class="dsq-comment-body">
+            <div id="dsq-comment-message-416" class="dsq-comment-message"><p>感谢楼主的分享，非常受用。<br />
+有一个小问题，可能初学者会需要。bower是要依赖git的，所以本地需要安装git，并且正确的配置环境变量。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-417">
+        <div id="dsq-comment-header-417" class="dsq-comment-header">
+            <cite id="dsq-cite-417">
+                <a id="dsq-author-user-417" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-417" class="dsq-comment-body">
+            <div id="dsq-comment-message-417" class="dsq-comment-message"><p>是的！在本地环境需要提前安装好git。</p>
+<p>win安装git: 可以用msysgit，下载exe安装文件<br />
+Linux ubuntu安装git: apt-get install git</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2180">
+        <div id="dsq-comment-header-2180" class="dsq-comment-header">
+            <cite id="dsq-cite-2180">
+                <span id="dsq-author-user-2180">ssskkk</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2180" class="dsq-comment-body">
+            <div id="dsq-comment-message-2180" class="dsq-comment-message"><p>你好，具体怎么弄呢，环境变量什么的都已经设了，还是不行</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-3739">
+        <div id="dsq-comment-header-3739" class="dsq-comment-header">
+            <cite id="dsq-cite-3739">
+                <span id="dsq-author-user-3739">ljc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3739" class="dsq-comment-body">
+            <div id="dsq-comment-message-3739" class="dsq-comment-message"><p>电脑重启了吗？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-highcharts/' rel='external nofollow' class='url'>用Highcharts轻松构建交互性图表 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-685">
+        <div id="dsq-comment-header-685" class="dsq-comment-header">
+            <cite id="dsq-cite-685">
+                <span id="dsq-author-user-685">taffy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-685" class="dsq-comment-body">
+            <div id="dsq-comment-message-685" class="dsq-comment-message"><p>运行bower install jquery时，总是报bower retry         Request to <a href="https://bower.herokuapp.com/packages/jquery" rel="nofollow">https://bower.herokuapp.com/packages/jquery</a> faile<br />
+d with ETIMEDOUT，没有找到解决方案，请问这是什么问题？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-686">
+        <div id="dsq-comment-header-686" class="dsq-comment-header">
+            <cite id="dsq-cite-686">
+                <a id="dsq-author-user-686" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-686" class="dsq-comment-body">
+            <div id="dsq-comment-message-686" class="dsq-comment-message"><p>你检查你的网络，是不是能正常访问github</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-688">
+        <div id="dsq-comment-header-688" class="dsq-comment-header">
+            <cite id="dsq-cite-688">
+                <span id="dsq-author-user-688">taffy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-688" class="dsq-comment-body">
+            <div id="dsq-comment-message-688" class="dsq-comment-message"><p>可以正常访问。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-691">
+        <div id="dsq-comment-header-691" class="dsq-comment-header">
+            <cite id="dsq-cite-691">
+                <a id="dsq-author-user-691" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-691" class="dsq-comment-body">
+            <div id="dsq-comment-message-691" class="dsq-comment-message"><p>bower是完全依赖于github的，http协议或者git协议</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-693">
+        <div id="dsq-comment-header-693" class="dsq-comment-header">
+            <cite id="dsq-cite-693">
+                <span id="dsq-author-user-693">taffy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-693" class="dsq-comment-body">
+            <div id="dsq-comment-message-693" class="dsq-comment-message"><p>多谢，问题已经解决，我没有设置gitproxy。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-694">
+        <div id="dsq-comment-header-694" class="dsq-comment-header">
+            <cite id="dsq-cite-694">
+                <a id="dsq-author-user-694" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-694" class="dsq-comment-body">
+            <div id="dsq-comment-message-694" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-1759">
+        <div id="dsq-comment-header-1759" class="dsq-comment-header">
+            <cite id="dsq-cite-1759">
+                <span id="dsq-author-user-1759">Roy Shen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1759" class="dsq-comment-body">
+            <div id="dsq-comment-message-1759" class="dsq-comment-message"><p>设了代理，还是没用</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-1761">
+        <div id="dsq-comment-header-1761" class="dsq-comment-header">
+            <cite id="dsq-cite-1761">
+                <a id="dsq-author-user-1761" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1761" class="dsq-comment-body">
+            <div id="dsq-comment-message-1761" class="dsq-comment-message"><p>? 本地安装了git客户端没有？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-1768">
+        <div id="dsq-comment-header-1768" class="dsq-comment-header">
+            <cite id="dsq-cite-1768">
+                <span id="dsq-author-user-1768">Roy Shen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1768" class="dsq-comment-body">
+            <div id="dsq-comment-message-1768" class="dsq-comment-message"><p>装了，用的Git Bash这个东西吗~我是在装angular-phonecat这个官方种子项目的时候，进行到npm install安装依赖时出现的这个etimedout错</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-1774">
+        <div id="dsq-comment-header-1774" class="dsq-comment-header">
+            <cite id="dsq-cite-1774">
+                <a id="dsq-author-user-1774" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1774" class="dsq-comment-body">
+            <div id="dsq-comment-message-1774" class="dsq-comment-message"><p>npm的源，中国有时候不稳定。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2179">
+        <div id="dsq-comment-header-2179" class="dsq-comment-header">
+            <cite id="dsq-cite-2179">
+                <span id="dsq-author-user-2179">ssskkk</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2179" class="dsq-comment-body">
+            <div id="dsq-comment-message-2179" class="dsq-comment-message"><p>你好，请问你如何解决这问题的</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2181">
+        <div id="dsq-comment-header-2181" class="dsq-comment-header">
+            <cite id="dsq-cite-2181">
+                <span id="dsq-author-user-2181">Roy Shen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2181" class="dsq-comment-body">
+            <div id="dsq-comment-message-2181" class="dsq-comment-message"><p>== 没解决，我到现在没用bower成功操作过任何东西~好像是我公司电脑的某些防火墙配置之类的问题</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2210">
+        <div id="dsq-comment-header-2210" class="dsq-comment-header">
+            <cite id="dsq-cite-2210">
+                <span id="dsq-author-user-2210">ssskkk</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2210" class="dsq-comment-body">
+            <div id="dsq-comment-message-2210" class="dsq-comment-message"><p>oo,谢谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-2810">
+        <div id="dsq-comment-header-2810" class="dsq-comment-header">
+            <cite id="dsq-cite-2810">
+                <span id="dsq-author-user-2810">Roy Shen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2810" class="dsq-comment-body">
+            <div id="dsq-comment-message-2810" class="dsq-comment-message"><p>偶然间搞定了，在.bowerrc中设下代理：{<br />
+    &#8220;proxy&#8221;:&#8221;http://:&#8221;,<br />
+    &#8220;https-proxy&#8221;:&#8221;http://:&#8221;<br />
+}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-2815">
+        <div id="dsq-comment-header-2815" class="dsq-comment-header">
+            <cite id="dsq-cite-2815">
+                <a id="dsq-author-user-2815" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2815" class="dsq-comment-body">
+            <div id="dsq-comment-message-2815" class="dsq-comment-message"><p>看来还是网络访问github的问题</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-3601">
+        <div id="dsq-comment-header-3601" class="dsq-comment-header">
+            <cite id="dsq-cite-3601">
+                <span id="dsq-author-user-3601">Andre Geng</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3601" class="dsq-comment-body">
+            <div id="dsq-comment-message-3601" class="dsq-comment-message"><p>请问，国内有啥好的bower代理么</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-3603">
+        <div id="dsq-comment-header-3603" class="dsq-comment-header">
+            <cite id="dsq-cite-3603">
+                <a id="dsq-author-user-3603" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3603" class="dsq-comment-body">
+            <div id="dsq-comment-message-3603" class="dsq-comment-message"><p>bower完全是依赖于github吧，主要是看你到github的接入速度。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-4185">
+        <div id="dsq-comment-header-4185" class="dsq-comment-header">
+            <cite id="dsq-cite-4185">
+                <span id="dsq-author-user-4185">carson hu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4185" class="dsq-comment-body">
+            <div id="dsq-comment-message-4185" class="dsq-comment-message"><p>我也遇到相同的问题，如何设置gitproxy？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-4196">
+        <div id="dsq-comment-header-4196" class="dsq-comment-header">
+            <cite id="dsq-cite-4196">
+                <a id="dsq-author-user-4196" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4196" class="dsq-comment-body">
+            <div id="dsq-comment-message-4196" class="dsq-comment-message"><p>修改 .bowerrc 文件</p>
+<p>    {<br />
+      &#8220;proxy&#8221;: &#8220;http://proxy.mysite.com:8080&#8221;,<br />
+      &#8220;https-proxy&#8221;: &#8220;http://proxy.mysite.com:8080&#8221;<br />
+    }</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-949">
+        <div id="dsq-comment-header-949" class="dsq-comment-header">
+            <cite id="dsq-cite-949">
+                <a id="dsq-author-user-949" href="http://www.ceclinux.org/" target="_blank" rel="nofollow">ceclinux</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-949" class="dsq-comment-body">
+            <div id="dsq-comment-message-949" class="dsq-comment-message"><p>感谢～</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-950">
+        <div id="dsq-comment-header-950" class="dsq-comment-header">
+            <cite id="dsq-cite-950">
+                <a id="dsq-author-user-950" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-950" class="dsq-comment-body">
+            <div id="dsq-comment-message-950" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/angularjs-express3-bootstrap3/' rel='external nofollow' class='url'>快速搭建Web环境 Angularjs + Express3 + Bootstrap3 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1628">
+        <div id="dsq-comment-header-1628" class="dsq-comment-header">
+            <cite id="dsq-cite-1628">
+                <span id="dsq-author-user-1628">Jason</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1628" class="dsq-comment-body">
+            <div id="dsq-comment-message-1628" class="dsq-comment-message"><p>很详细，适合新手！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1631">
+        <div id="dsq-comment-header-1631" class="dsq-comment-header">
+            <cite id="dsq-cite-1631">
+                <a id="dsq-author-user-1631" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1631" class="dsq-comment-body">
+            <div id="dsq-comment-message-1631" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1663">
+        <div id="dsq-comment-header-1663" class="dsq-comment-header">
+            <cite id="dsq-cite-1663">
+                <a id="dsq-author-user-1663" href="http://www.webfing.com" target="_blank" rel="nofollow">king</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1663" class="dsq-comment-body">
+            <div id="dsq-comment-message-1663" class="dsq-comment-message"><p>如何先初始化了bower.json文件:bower init。 后续有包要加入，想自动写入到bower.json里。可以在安装包时添加save参数: bower install packagename &#8211;save .</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2367">
+        <div id="dsq-comment-header-2367" class="dsq-comment-header">
+            <cite id="dsq-cite-2367">
+                <span id="dsq-author-user-2367">Yue</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2367" class="dsq-comment-body">
+            <div id="dsq-comment-message-2367" class="dsq-comment-message"><p>刚好遇到这个问题，正解！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/bootstrap-angularjs-navbar/' rel='external nofollow' class='url'>Angular结合Bootstrap3的导航菜单 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2417">
+        <div id="dsq-comment-header-2417" class="dsq-comment-header">
+            <cite id="dsq-cite-2417">
+                <span id="dsq-author-user-2417">Jack</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2417" class="dsq-comment-body">
+            <div id="dsq-comment-message-2417" class="dsq-comment-message"><p>请问bower是否可以安装两个版本的jquery,1.7.2版一直在用,而且兼容性是最好的,但bootstrap最低也要jquery1.9.0版,请问是否可以既安装1.7.2版又可以安装2.0版?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2418">
+        <div id="dsq-comment-header-2418" class="dsq-comment-header">
+            <cite id="dsq-cite-2418">
+                <a id="dsq-author-user-2418" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2418" class="dsq-comment-body">
+            <div id="dsq-comment-message-2418" class="dsq-comment-message"><p>一个项目只能安装一个版本的同名的库。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3088">
+        <div id="dsq-comment-header-3088" class="dsq-comment-header">
+            <cite id="dsq-cite-3088">
+                <span id="dsq-author-user-3088">aiyp1314</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3088" class="dsq-comment-body">
+            <div id="dsq-comment-message-3088" class="dsq-comment-message"><p>#1.2<br />
+#~1.2.3<br />
+#^1.2.3<br />
+#&gt;=1.2.3 &lt;2.0  </p>
+<p>这种版本号各是什么意思</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3098">
+        <div id="dsq-comment-header-3098" class="dsq-comment-header">
+            <cite id="dsq-cite-3098">
+                <a id="dsq-author-user-3098" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3098" class="dsq-comment-body">
+            <div id="dsq-comment-message-3098" class="dsq-comment-message"><p>这里有解释，一共16条规则<br />
+<a href="https://docs.npmjs.com/files/package.json" rel="nofollow">https://docs.npmjs.com/files/package.json</a></p>
+<p>version Must match version exactly<br />
+&gt;version Must be greater than version<br />
+&gt;=version etc<br />
+&lt;version<br />
+=version1 &lt;=version2.<br />
+range1 || range2 Passes if either range1 or range2 are satisfied.<br />
+git&#8230; See &#039;Git URLs as Dependencies&#039; below<br />
+user/repo See &#039;GitHub URLs&#039; below<br />
+tag A specific version tagged and published as tag See npm-tag(1)<br />
+path/path/path See Local Paths below</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3136">
+        <div id="dsq-comment-header-3136" class="dsq-comment-header">
+            <cite id="dsq-cite-3136">
+                <a id="dsq-author-user-3136" href="https://github.com/yanhaijing" target="_blank" rel="nofollow">yanhaijing</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3136" class="dsq-comment-body">
+            <div id="dsq-comment-message-3136" class="dsq-comment-message"><p>mark</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3661">
+        <div id="dsq-comment-header-3661" class="dsq-comment-header">
+            <cite id="dsq-cite-3661">
+                <span id="dsq-author-user-3661">maxwheel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3661" class="dsq-comment-body">
+            <div id="dsq-comment-message-3661" class="dsq-comment-message"><p>正在学习中~ 有个最简单的问题请教：用bower下载了的内容存在bower_components中，但是怎么在页面中链接呢？比如jquery，不能写成/bower_components/jquery/src/jquery.js吧。<br />
+难道是要自己配置index.js么？还是手动copy资源到public下的目录？ ~ 谢谢</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3662">
+        <div id="dsq-comment-header-3662" class="dsq-comment-header">
+            <cite id="dsq-cite-3662">
+                <a id="dsq-author-user-3662" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3662" class="dsq-comment-body">
+            <div id="dsq-comment-message-3662" class="dsq-comment-message"><p>一般有2种方法：</p>
+<p>1. 直接使用bower_components的路径，你可以修改bower的配置文件，把bower_components改名为static或者其他什么的。</p>
+<p>2. 在项目发布之前，进行打包处理。通过grunt或gulp脚本，把js,html,css统一打包生成一个dist文件夹，仅用于部署。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3665">
+        <div id="dsq-comment-header-3665" class="dsq-comment-header">
+            <cite id="dsq-cite-3665">
+                <span id="dsq-author-user-3665">maxwheel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3665" class="dsq-comment-body">
+            <div id="dsq-comment-message-3665" class="dsq-comment-message"><p>回复好快~ 貌似直接用/bower_components的确不行 我用的express4 一直找不到。 在public下建立了一个目录链接到bower_components下倒是可以了。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-3667">
+        <div id="dsq-comment-header-3667" class="dsq-comment-header">
+            <cite id="dsq-cite-3667">
+                <a id="dsq-author-user-3667" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3667" class="dsq-comment-body">
+            <div id="dsq-comment-message-3667" class="dsq-comment-message"><p>1. 在根目录下建立  .bowerrc 文件，可以设置bower包的路径。</p>
+<p>2. bower_components目录，需要在node里，设置static路径，对http开发才能用。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-3668">
+        <div id="dsq-comment-header-3668" class="dsq-comment-header">
+            <cite id="dsq-cite-3668">
+                <span id="dsq-author-user-3668">maxwheel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3668" class="dsq-comment-body">
+            <div id="dsq-comment-message-3668" class="dsq-comment-message"><p>是的，不过我在app.js模仿着写了app.use(express.static(path.join(__dirname, &#8216;bower_components&#8217;)));<br />
+然后就把这个下当根目录来用了…… 也就开发可用……</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-3676">
+        <div id="dsq-comment-header-3676" class="dsq-comment-header">
+            <cite id="dsq-cite-3676">
+                <a id="dsq-author-user-3676" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3676" class="dsq-comment-body">
+            <div id="dsq-comment-message-3676" class="dsq-comment-message"><p>这样就行了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-3683">
+        <div id="dsq-comment-header-3683" class="dsq-comment-header">
+            <cite id="dsq-cite-3683">
+                <span id="dsq-author-user-3683">maxwheel</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3683" class="dsq-comment-body">
+            <div id="dsq-comment-message-3683" class="dsq-comment-message"><p>嗯感谢~学到很多</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-3686">
+        <div id="dsq-comment-header-3686" class="dsq-comment-header">
+            <cite id="dsq-cite-3686">
+                <a id="dsq-author-user-3686" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3686" class="dsq-comment-body">
+            <div id="dsq-comment-message-3686" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-4121">
+        <div id="dsq-comment-header-4121" class="dsq-comment-header">
+            <cite id="dsq-cite-4121">
+                <span id="dsq-author-user-4121">Lincoln</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4121" class="dsq-comment-body">
+            <div id="dsq-comment-message-4121" class="dsq-comment-message"><p>配置好了以后，那直接连接这个目录吗</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3750">
+        <div id="dsq-comment-header-3750" class="dsq-comment-header">
+            <cite id="dsq-cite-3750">
+                <span id="dsq-author-user-3750">YY</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3750" class="dsq-comment-body">
+            <div id="dsq-comment-message-3750" class="dsq-comment-message"><p>很好的bower指引，看了一遍，感觉棒棒哒！~！~</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3752">
+        <div id="dsq-comment-header-3752" class="dsq-comment-header">
+            <cite id="dsq-cite-3752">
+                <a id="dsq-author-user-3752" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3752" class="dsq-comment-body">
+            <div id="dsq-comment-message-3752" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3910">
+        <div id="dsq-comment-header-3910" class="dsq-comment-header">
+            <cite id="dsq-cite-3910">
+                <span id="dsq-author-user-3910">玉雄 白</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3910" class="dsq-comment-body">
+            <div id="dsq-comment-message-3910" class="dsq-comment-message"><p>使用bower管理的依赖，提交git的时候，下载的bower_components下的文件应该是不提交的吧？那更新代码的人，怎么知道使用了哪些库呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3941">
+        <div id="dsq-comment-header-3941" class="dsq-comment-header">
+            <cite id="dsq-cite-3941">
+                <a id="dsq-author-user-3941" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3941" class="dsq-comment-body">
+            <div id="dsq-comment-message-3941" class="dsq-comment-message"><p>在bower.json里配置依赖关系。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4022">
+        <div id="dsq-comment-header-4022" class="dsq-comment-header">
+            <cite id="dsq-cite-4022">
+                <span id="dsq-author-user-4022">boy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4022" class="dsq-comment-body">
+            <div id="dsq-comment-message-4022" class="dsq-comment-message"><p>是把所有包都 加在这里吗?  &#8220;dependencies&#8221;:   还是有其它的key?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4043">
+        <div id="dsq-comment-header-4043" class="dsq-comment-header">
+            <cite id="dsq-cite-4043">
+                <a id="dsq-author-user-4043" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4043" class="dsq-comment-body">
+            <div id="dsq-comment-message-4043" class="dsq-comment-message"><p>dependencies就行，只加载你直接依赖的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4726">
+        <div id="dsq-comment-header-4726" class="dsq-comment-header">
+            <cite id="dsq-cite-4726">
+                <a id="dsq-author-user-4726" href="http://www.allheart.cn" target="_blank" rel="nofollow">Fuchao Zheng</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4726" class="dsq-comment-body">
+            <div id="dsq-comment-message-4726" class="dsq-comment-message"><p>如果不用脚手架的话，你习惯用 &#8211;save 还是先写 conf文件？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4773">
+        <div id="dsq-comment-header-4773" class="dsq-comment-header">
+            <cite id="dsq-cite-4773">
+                <a id="dsq-author-user-4773" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4773" class="dsq-comment-body">
+            <div id="dsq-comment-message-4773" class="dsq-comment-message"><p>demo项目，通常会用 &#8211;save。<br />
+生产项目，肯定是写好conf文件。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4952">
+        <div id="dsq-comment-header-4952" class="dsq-comment-header">
+            <cite id="dsq-cite-4952">
+                <span id="dsq-author-user-4952">TimLiu1</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4952" class="dsq-comment-body">
+            <div id="dsq-comment-message-4952" class="dsq-comment-message"><p>我设置代理还是不行，我通过git下载东西是通过git clone git@github而通过git clone <a href="http://github无法下载，是不是我的git是ssh协议的原因" rel="nofollow">http://github无法下载，是不是我的git是ssh协议的原因</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4954">
+        <div id="dsq-comment-header-4954" class="dsq-comment-header">
+            <cite id="dsq-cite-4954">
+                <a id="dsq-author-user-4954" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4954" class="dsq-comment-body">
+            <div id="dsq-comment-message-4954" class="dsq-comment-message"><p>是不是写错了，选择HTTPS</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-5362">
+        <div id="dsq-comment-header-5362" class="dsq-comment-header">
+            <cite id="dsq-cite-5362">
+                <span id="dsq-author-user-5362">lu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5362" class="dsq-comment-body">
+            <div id="dsq-comment-message-5362" class="dsq-comment-message"><p>自己运行注册命令时提示<br />
+The package you are trying to register is marked as private</p>
+<p>是由于bower.json中：<br />
+  &#8220;private&#8221;: true,引起的</p>
+<p>自己做个记录</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-5366">
+        <div id="dsq-comment-header-5366" class="dsq-comment-header">
+            <cite id="dsq-cite-5366">
+                <a id="dsq-author-user-5366" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5366" class="dsq-comment-body">
+            <div id="dsq-comment-message-5366" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-5412">
+        <div id="dsq-comment-header-5412" class="dsq-comment-header">
+            <cite id="dsq-cite-5412">
+                <span id="dsq-author-user-5412">Louis Liu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5412" class="dsq-comment-body">
+            <div id="dsq-comment-message-5412" class="dsq-comment-message"><p>bower依赖添加了，用wiredep注入index.html，但是jquery的没有自动注入，于是在overrides里添加了&#8221;jquery&#8221;: {<br />
+      &#8220;main&#8221;: &#8220;dist/jquery.min.js&#8221;<br />
+    }，依然无效，请问是什么原因</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-5415">
+        <div id="dsq-comment-header-5415" class="dsq-comment-header">
+            <cite id="dsq-cite-5415">
+                <a id="dsq-author-user-5415" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5415" class="dsq-comment-body">
+            <div id="dsq-comment-message-5415" class="dsq-comment-message"><p>抱歉我没有遇到过这个问题，查一下官方文档bower关于overrides的用法吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-bower-intro/';
+var disqus_identifier = '1807 http://blog.fens.me/?p=1807';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "bower解决js的依赖管理";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=1807';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

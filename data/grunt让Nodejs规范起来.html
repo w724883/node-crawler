@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>grunt让Nodejs规范起来 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; grunt让Nodejs规范起来 Comments Feed" href="http://blog.fens.me/nodejs-grunt-intro/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Nodejs与R跨平台通信' href='http://blog.fens.me/r-rserve-nodejs/' />
+<link rel='next' title='bower解决js的依赖管理' href='http://blog.fens.me/nodejs-bower-intro/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-grunt-intro/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=1783' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-grunt-intro%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-grunt-intro%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="grunt,nodejs,javascript" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-1783 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>grunt让Nodejs规范起来</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-1783 post type-post status-publish format-standard hentry category-javascript tag-grunt tag-javascript tag-nodejs">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-grunt-intro/" title="grunt让Nodejs规范起来" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Aug 17, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/grunt/" rel="tag">grunt</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-grunt-intro/#comments"><span class="dsq-postid" data-dsqidentifier="1783 http://blog.fens.me/?p=1783">35 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>grunt让Nodejs规范起来</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="grunt让Nodejs规范起来" href="http://blog.fens.me/nodejs-grunt-intro/" target="_blank">http://blog.fens.me/nodejs-grunt-intro/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/08/grunt.png"><img src="http://blog.fens.me/wp-content/uploads/2013/08/grunt.png" alt="grunt" width="600" height="400" class="alignnone size-full wp-image-1801" /></a></p>
+<p><strong>前言</strong><br />
+一个应用开发到一定阶段，普遍会遇到一个问题。当功能越来越多，代码量越来越大，bug修复越来越频繁，开发人员一波一波的交替，&#8230;..应该用会向着越来越不可控发展。我们不能再准确估计新功能的开发时间，也不知道一个bug修复后是否会引发另一个bug出现。所有的程序开发，都会面临着这样的问题。</p>
+<p>C/C++程序通过makefile管理编译测试打包的过程，Java程序通过Maven,Ant实现项目构建管理功能，Python有pip，Ruby有gem。在Nodejs的领域，我们同样需要一个项目构建工具，这就是Grunt。Grunt可以执行像压缩, 编译, 单元测试, 代码检查以及打包发布的任务。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Grunt介绍</li>
+<li>Grunt安装</li>
+<li>Grunt使用</li>
+<li>Grunt常用插件：<br />
+1).grunt-contrib-uglify：压缩js代码<br />
+2).grunt-contrib-concat：合并js文件<br />
+3).grunt-contrib-qunit：单元测试<br />
+4).grunt-contrib-jshint：js代码检查<br />
+5).grunt-contrib-watch：文件监控
+</li>
+</ol>
+<h2>1. Grunt���绍</h2>
+<p>Grunt是一个自动化的项目构建工具. 如果你需要重复的执行像压缩, 编译, 单元测试, 代码检查以及打包发布的任务. 那么你可以使用Grunt来处理这些任务, 你所需要做的只是配置好Grunt, 这样能很大程度的简化你的工作.</p>
+<p>如果在团队中使用Grunt, 你只需要与其他人员约定好使用Grunt应该规避的问题, 就能够很方便的自动化的处理大部分的常见工作任务, 你所付出的努力几乎为0.</p>
+<h2>2. Grunt安装</h2>
+<p>Grunt和Grunt插件都是通过npm, Node.js包管理器安装和管理的.</p>
+<p><strong>我的系统环境</strong></p>
+<ul>
+<li>win7 64bit</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<pre><code>~ D:\workspace\javascript&gt;node -v
+v0.10.5
+
+~ D:\workspace\javascript&gt;npm -v
+1.2.19
+</code></pre>
+<p>在系统中，我们已经安装好了Nodejs和npm。win7安装nodejs请参考文章：<a href="http://blog.fens.me/nodejs-express3/" target="_blank">Nodejs开发框架Express3.0开发手记–从零开始</a></p>
+<p><strong>安装grunt-cli</strong><br />
+grunt-cli并不grunt，grunt-cli的作用是管理本地各版本的grunt，让命令行可以直接执行grunt命令。</p>
+<p>下面全局安装grunt-cli(-g)</p>
+<pre><code>
+~ D:\workspace\javascript&gt;npm install -g grunt-cli
+
+D:\toolkit\nodejs\grunt -&gt; D:\toolkit\nodejs\node_modules\grunt-cli\bin\grunt
+grunt-cli@0.1.9 D:\toolkit\nodejs\node_modules\grunt-cli
+├── resolve@0.3.1
+├── nopt@1.0.10 (abbrev@1.0.4)
+└── findup-sync@0.1.2 (lodash@1.0.1, glob@3.1.21)
+</code></pre>
+<p>我们看到grunt-cli似乎做了一个软件链接，把grunt脚本复制到nodejs安装根目录里。</p>
+<p>接下来全局安装grunt</p>
+<pre><code>
+~ D:\workspace\javascript&gt;npm install -g grunt
+
+~ D:\workspace\javascript&gt;grunt
+grunt-cli: The grunt command line interface. (v0.1.9)
+
+Fatal error: Unable to find local grunt.
+
+If you're seeing this message, either a Gruntfile wasn't found or grunt
+hasn't been installed locally to your project. For more information about
+installing and configuring grunt, please see the Getting Started guide:
+
+http://gruntjs.com/getting-started
+</code></pre>
+<p>执行grunt命令，我们发现系统报错了，提示不能加载本地库。因为，grunt命令执行，是需要当前目录中包括package.json和Gruntfile.js两个文件。</p>
+<p>package.json，是npm项目配置文件<br />
+Gruntfile.js，是专门用来配置grunt的配置文件</p>
+<p>接下来，我们创建一个express3的项目。</p>
+<pre><code>
+~ D:\workspace\javascript&gt;express -e nodejs-grunt
+~ D:\workspace\javascript&gt;cd nodejs-grunt &amp;&amp; npm install	 
+~ D:\workspace\javascript\nodejs-grunt&gt;npm install grunt --save-dev
+</code></pre>
+<p>安装-save-dev，就可以，直接把grunt作为devDependencies写入的package.json中。</p>
+<pre><code>
+~ vi package.json
+
+{
+  "name": "nodejs-grunt",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.2.2",
+    "ejs": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+  }
+}
+</code></pre>
+<p>然后，我们再执行grunt，系统提示缺少Gruntfile文件</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;grunt
+A valid Gruntfile could not be found. Please see the getting started guide for
+more information on how to configure grunt: http://gruntjs.com/getting-started
+Fatal error: Unable to find Gruntfile.
+</code></pre>
+<p>创建Gruntfile文件</p>
+<pre><code>
+~ vi Gruntfile.js
+
+module.exports = function(grunt) {
+  // Project configuration.
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    uglify: {
+      options: {
+        banner: '/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today("yyyy-mm-dd") %&gt; */\n'
+      },
+      build: {
+        src: 'src/&lt;%= pkg.name %&gt;.js',
+        dest: 'build/&lt;%= pkg.name %&gt;.min.js'
+      }
+    }
+  });
+  // Load the plugin that provides the "uglify" task.
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  // Default task(s).
+  grunt.registerTask('default', ['uglify']);
+};
+</code></pre>
+<p>再次运行grunt，这时提示是grunt-contrib-uglify包找不到，是Gruntfile.js配置文件中的错误了。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;grunt
+&gt;&gt; Local Npm module "grunt-contrib-uglify" not found. Is it installed?
+Warning: Task "uglify" not found. Use --force to continue.
+</code></pre>
+<p>我们编辑package.js, 在devDependencies中增加grunt-contrib-uglify的依赖库</p>
+<pre><code>
+~ vi package.js
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.2.2",
+    "ejs": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1"
+    "grunt-contrib-uglify": "~0.1.1"
+  }
+}
+
+~ D:\workspace\javascript\nodejs-grunt&gt;npm install
+</code></pre>
+<p>我们创建两个目录src和build，和nodejs-grunt.js的文件</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;mkdir src
+~ D:\workspace\javascript\nodejs-grunt&gt;mkdir build
+
+~ D:\workspace\javascript\nodejs-grunt&gt;vi src/nodejs-grunt.js
+var sayHello = function(name){
+	return "Hello " + name;
+}
+</code></pre>
+<p>我们再执行grunt</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;grunt
+Running "uglify:build" (uglify) task
+File "build/nodejs-grunt.min.js" created.
+Uncompressed size: 59 bytes.
+Compressed size: 40 bytes gzipped (43 bytes minified).
+
+Done, without errors.
+</code></pre>
+<p>grunt运行正常，并且执行了uglify:build的任务。打开build/nodejs-grunt.min.js文件</p>
+<pre><code>~ D:\workspace\javascript\nodejs-grunt&gt;vi build/nodejs-grunt.min.js
+
+/*! nodejs-grunt 2013-08-17 */
+var sayHello=function(l){return"Hello "+l};
+</code></pre>
+<p>我们可以看到一个新生成的压缩文件nodejs-grunt.min.js。</p>
+<p>上面的例子，是一个js文件压缩的例子。</p>
+<h2>3. Grunt使用</h2>
+<p>我们可以通过help帮助，看一下grunt怎么用。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;grunt --help
+Grunt: The JavaScript Task Runner (v0.4.1)
+
+Usage
+ grunt [options] [task [task ...]]
+
+Options
+    --help, -h  Display this help text.
+        --base  Specify an alternate base path. By default, all file paths are
+                relative to the Gruntfile. (grunt.file.setBase) *
+    --no-color  Disable colored output.
+   --gruntfile  Specify an alternate Gruntfile. By default, grunt looks in the
+                current or parent directories for the nearest Gruntfile.js or
+                Gruntfile.coffee file.
+   --debug, -d  Enable debugging mode for tasks that support it.
+       --stack  Print a stack trace when exiting with a warning or fatal error.
+   --force, -f  A way to force your way past warnings. Want a suggestion? Don't
+                use this option, fix your code.
+       --tasks  Additional directory paths to scan for task and "extra" files.
+                (grunt.loadTasks) *
+         --npm  Npm-installed grunt plugins to scan for task and "extra" files.
+                (grunt.loadNpmTasks) *
+    --no-write  Disable writing files (dry run).
+ --verbose, -v  Verbose mode. A lot more information output.
+ --version, -V  Print the grunt version. Combine with --verbose for more info.
+  --completion  Output shell auto-completion rules. See the grunt-cli
+                documentation for more information.
+
+Options marked with * have methods exposed via the grunt API and should instead
+be specified inside the Gruntfile wherever possible.
+
+Available tasks
+        uglify  Minify files with UglifyJS. *
+       default  Alias for "uglify" task.
+
+Tasks run in the order specified. Arguments may be passed to tasks that accept
+them by using colons, like "lint:files". Tasks marked with * are "multi tasks"
+and will iterate over all sub-targets if no argument is specified.
+
+The list of available tasks may change based on tasks directories or grunt
+plugins specified in the Gruntfile or via command-line options.
+
+For more information, see http://gruntjs.com/
+</code></pre>
+<p>有两方面是我们需要注意的：</p>
+<ol>
+<li>Options: grunt支持的命令</li>
+<li>Available tasks: 当目录可执行的任务</li>
+</ol>
+<h2>4. Grunt常用插件</h2>
+<ul>
+<li>grunt-contrib-uglify：压缩js代码</li>
+<li>grunt-contrib-concat：合并js文件</li>
+<li>grunt-contrib-qunit：单元测试</li>
+<li>grunt-contrib-jshint：js代码检查</li>
+<li>grunt-contrib-watch：监控文件修改并重新执行注册的任务</li>
+</ul>
+<p><strong>1). grunt-contrib-uglify：是执行压缩JS代码的任务</strong><br />
+具体操作请查看&#8221;2.Grunt安装&#8221;，</p>
+<p><strong>2). grunt-contrib-concat：是执行合并文件的任务。</strong><br />
+插件安装及更新到配置</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;npm install grunt-contrib-concat --save-dev
+</code></pre>
+<p>修改Gruntfile.js文件</p>
+<pre><code>
+grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    concat:{
+      options: {
+        //定义一个字符串插入没个文件之间用于连接输出
+        separator: ';'
+      },
+      dist: {
+          src: ['src/*.js'],
+          dest: 'build/<%= pkg.name %>.cat.js'
+      }
+    },
+  });
+grunt.loadNpmTasks('grunt-contrib-qunit');
+grunt.registerTask('default', ['uglify','concat']);
+</code></pre>
+<p>在src目录，新增加文件src/sayBye.js</p>
+<pre><code>
+~ vi src/sayBye.js
+
+var sayBye = function(name){
+	return "Bye " + name;
+}
+</code></pre>
+<p>执行concat任务</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;grunt concat
+Running "concat:dist" (concat) task
+File "build/nodejs-grunt.cat.js" created.
+
+Done, without errors.
+</code></pre>
+<p>查看生成的文件build/nodejs-grunt.cat.js</p>
+<pre><code>
+~ vi build/nodejs-grunt.cat.js
+
+var sayHello = function(name){
+	return "Hello " + name;
+};var sayBye = function(name){
+	return "Bye " + name;
+}
+</code></pre>
+<p>两个文件完全的合并。</p>
+<p><strong>3). grunt-contrib-qunit：是执行QUint单元测试的任务。</strong></p>
+<p>插件安装及更新到配置</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt&gt;npm install grunt-contrib-qunit --save-dev
+</code></pre>
+<p>修改Gruntfile.js文件</p>
+<pre><code>
+grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    qunit: {
+      files: ['test/*.html']
+    }
+  });
+grunt.loadNpmTasks('grunt-contrib-qunit');
+grunt.registerTask('default', ['uglify','concat','qunit']);
+</code></pre>
+<p>创建一个test目录，并编写用于测试的qunit.html文件</p>
+<pre><code>
+~ mkdir test
+~ vi test/qunit.html
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+&lt;link rel="stylesheet" href="http://github.com/jquery/qunit/raw/master/qunit/qunit.css" type="text/css" media="screen" /&gt;
+&lt;script type="text/javascript" src="http://github.com/jquery/qunit/raw/master/qunit/qunit.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+test("hello", function() {
+ok(true, "world");
+});
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1 id="qunit-header"&gt;QUnit example&lt;/h1&gt;
+&lt;h2 id="qunit-banner"&gt;&lt;/h2&gt;
+&lt;h2 id="qunit-userAgent"&gt;&lt;/h2&gt;
+&lt;ol id="qunit-tests"&gt;&lt;/ol&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>执行qunit命令</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt>grunt qunit
+Running "qunit:files" (qunit) task
+Testing test/qunit.html .OK
+>> 1 assertions passed (67ms)
+
+Done, without errors.
+</code></pre>
+<p>完成单元测试！！</p>
+<p><strong>4). grunt-contrib-jshint：是执行代码验证的任务</strong><br />
+插件安装及更新到配置</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt>npm install grunt-contrib-jshint --save-dev
+</code></pre>
+<p>修改Gruntfile.js文件</p>
+<pre><code>
+grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    jshint: {
+        files: ['gruntfile.js', 'src/*.js', 'build/*.js'],
+        options: {
+            globals: {
+                exports: true
+            }
+        }
+    }
+  });
+grunt.loadNpmTasks('grunt-contrib-jshint');
+grunt.registerTask('default', ['uglify','concat','qunit','jshint']);
+</code></pre>
+<p>执行jshint代码检查</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt>grunt jshint
+Running "jshint:files" (jshint) task
+Linting src/nodejs-grunt.js ...ERROR
+[L3:C2] W033: Missing semicolon.
+}
+Linting build/nodejs-grunt.cat.js ...ERROR
+[L5:C2] W033: Missing semicolon.
+}
+Linting build/nodejs-grunt.min.js ...ERROR
+[L2:C42] W033: Missing semicolon.
+var sayHello=function(l){return"Hello "+l};
+
+Warning: Task "jshint:files" failed. Use --force to continue.
+
+Aborted due to warnings.
+</code></pre>
+<p>好多的错误啊，细看一下，都是&#8221;丢失分号&#8221;的错误。</p>
+<pre><code>
+~ vi src/sayBye.js
+var sayBye = function(name){
+	return "Bye " + name;
+};
+</code></pre>
+<p>增加最后一行的分号，解决上面的错误。</p>
+<p><strong>5). grunt-contrib-watch，是监控指定文件被修改，重新启动已注册的任务</strong><br />
+我感觉这个插入，就点类似于supervisor的功能。</p>
+<p>插件安装及更新到配置</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt>npm install grunt-contrib-watch --save-dev
+</code></pre>
+<p>修改Gruntfile.js文件</p>
+<pre><code>
+grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    watch: {
+        files: ['<%= jshint.files %>'],
+        tasks: ['jshint', 'qunit']
+    }
+  });
+grunt.loadNpmTasks('grunt-contrib-watch');
+grunt.registerTask('default', ['uglify','concat','qunit','jshint']);
+</code></pre>
+<p>执行watch任务</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-grunt>grunt watch
+Running "watch" task
+Waiting...OK
+
+#手动修改src/sayBye.js文件，下面watch的任务被触发
+>> File "src\sayBye.js" changed.
+
+Running "jshint:files" (jshint) task
+Linting src/sayBye.js ...ERROR
+[L3:C2] W033: Missing semicolon.
+}
+Linting build/nodejs-grunt.cat.js ...ERROR
+[L3:C3] W032: Unnecessary semicolon.
+};;var sayBye = function(name){
+Linting build/nodejs-grunt.min.js ...ERROR
+[L2:C42] W033: Missing semicolon.
+var sayHello=function(l){return"Hello "+l};
+
+Warning: Task "jshint:files" failed. Use --force to continue.
+
+Aborted due to warnings.
+Completed in 0.770s at Sat Aug 17 2013 20:49:15 GMT+0800 (中国标准时间) - Waiting...
+</code></pre>
+<p>上面介绍的5个任务，可能是我们比较常用配置的任务，大家也可以按照需要指定自己的任务。</p>
+<p>下面贴上所最终的package.json和Gruntfile.js文件代码</p>
+<p><strong>package.json</strong></p>
+<pre><code>
+{
+  "name": "nodejs-grunt",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.2.2",
+    "ejs": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.1.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-qunit": "~0.2.2",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-watch": "~0.5.2"
+  }
+}
+</code></pre>
+<p><strong>Gruntfile.js</strong></p>
+<pre><code>
+module.exports = function(grunt) {
+
+  // Project configuration.
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      build: {
+        src: 'src/<%= pkg.name %>.js',
+        dest: 'build/<%= pkg.name %>.min.js'
+      }
+    },
+    concat:{
+      options: {
+        //定义一个字符串插入没个文件之间用于连接输出
+        separator: ';'
+      },
+      dist: {
+          src: ['src/*.js'],
+          dest: 'build/<%= pkg.name %>.cat.js'
+      }
+    },
+    qunit: {
+      files: ['test/*.html']
+    },
+    jshint: {
+        files: ['gruntfile.js', 'src/*.js', 'build/*.js'],
+        options: {
+            globals: {
+                exports: true
+            }
+        }
+    },
+    watch: {
+        files: ['<%= jshint.files %>'],
+        tasks: ['jshint', 'qunit']
+    }
+  });
+
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+
+  // Default task(s).
+  grunt.registerTask('default', ['uglify','concat','qunit','jshint']);
+
+};
+</code></pre>
+<p><strong>转载请注明出处：</strong><br />
+<a title="grunt让Nodejs规范起来" href="http://blog.fens.me/nodejs-grunt-intro/" target="_blank">http://blog.fens.me/nodejs-grunt-intro/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-yeoman-intro/' rel='external nofollow' class='url'>Yeoman自动构建js项目 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-karma-jasmine/' rel='external nofollow' class='url'>Karma和Jasmine自动化单元测试 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-406">
+        <div id="dsq-comment-header-406" class="dsq-comment-header">
+            <cite id="dsq-cite-406">
+                <a id="dsq-author-user-406" href="http://hidoos.me/" target="_blank" rel="nofollow">hidoos</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-406" class="dsq-comment-body">
+            <div id="dsq-comment-message-406" class="dsq-comment-message"><p>grunt很强大啊！使用yeoman可以搭建项目框架，就更方便了，不过感觉grunt学起来挺复杂的，yeoman就更复杂了！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-407">
+        <div id="dsq-comment-header-407" class="dsq-comment-header">
+            <cite id="dsq-cite-407">
+                <a id="dsq-author-user-407" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-407" class="dsq-comment-body">
+            <div id="dsq-comment-message-407" class="dsq-comment-message"><p>grunt只是一个自动化管理工具，本身并不复杂，复杂度可能源于第三方的插件。</p>
+<p>比如单元测试，要用到karma, jasmine等插件，你可能不熟悉karam, jasmine。这些其实并不属于grunt。</p>
+<p>yeoman也很简单就是，构建一个项目模板。同样地，需要第三方的插件来支持。http://blog.fens.me/nodejs-yeoman-intro/</p>
+<p>所以，我们可以理解为，grunt和yeoman是管理第三方插件的工具。当你的项目足够大，用到几十个，几百个第三方插件的时候。grunt,yeoman能非常优雅的管理好项目。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-673">
+        <div id="dsq-comment-header-673" class="dsq-comment-header">
+            <cite id="dsq-cite-673">
+                <span id="dsq-author-user-673">taffy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-673" class="dsq-comment-body">
+            <div id="dsq-comment-message-673" class="dsq-comment-message"><p>最近在用grunt，文档讲的很清楚，从头至尾走了一遍，有收获。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-674">
+        <div id="dsq-comment-header-674" class="dsq-comment-header">
+            <cite id="dsq-cite-674">
+                <a id="dsq-author-user-674" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-674" class="dsq-comment-body">
+            <div id="dsq-comment-message-674" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-879">
+        <div id="dsq-comment-header-879" class="dsq-comment-header">
+            <cite id="dsq-cite-879">
+                <span id="dsq-author-user-879">Paul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-879" class="dsq-comment-body">
+            <div id="dsq-comment-message-879" class="dsq-comment-message"><p>张哥, 有个问题请教一下, 为什么服务器上grunt启动后, 只能在服务器本地访问, 外网不能访问呢?</p>
+<p>我在弄reveal.js, grunt启动后, 外网打不开, 但在服务器wget是可以拿到文件的. 还是nodejs初学者, 还请指教</p>
+<p>code:<br />
+	// Serve presentation locally<br />
+	grunt.registerTask( &#8216;serve&#8217;, [ &#8216;connect&#8217;, &#8216;watch&#8217; ] );</p>
+<p>grunt serve &#8211;port 8001</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-880">
+        <div id="dsq-comment-header-880" class="dsq-comment-header">
+            <cite id="dsq-cite-880">
+                <a id="dsq-author-user-880" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-880" class="dsq-comment-body">
+            <div id="dsq-comment-message-880" class="dsq-comment-message"><p>1. grunt主要被用在开发环境，不适合部署在生产环境，因为性能不太好。<br />
+2. 对外网的服务器，直接用node吧</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-881">
+        <div id="dsq-comment-header-881" class="dsq-comment-header">
+            <cite id="dsq-cite-881">
+                <span id="dsq-author-user-881">Paul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-881" class="dsq-comment-body">
+            <div id="dsq-comment-message-881" class="dsq-comment-message"><p>好的, 谢谢, 虽不明但觉厉, 以后常来学习 😉</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1750">
+        <div id="dsq-comment-header-1750" class="dsq-comment-header">
+            <cite id="dsq-cite-1750">
+                <span id="dsq-author-user-1750">Chris Tam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1750" class="dsq-comment-body">
+            <div id="dsq-comment-message-1750" class="dsq-comment-message"><p>npm install -g grunt这个应该可以不用安装了，Grunt.js 0.4之后，其不再使用全局方式安装整个Grunt.js，而是在全局安装Grunt.js Client，然后在当前项目中安装Grunt，来避免未来不同项目对Grunt不同版本的依赖关系。</p>
+<p>如果安装了之前的版本，可以使用npm的命令来删除掉原来的Grunt.js。</p>
+<p>npm uninstall -g grunt</p>
+<p>然后安装Grunt.js Client：</p>
+<p>npm install -g grunt-cli</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1755">
+        <div id="dsq-comment-header-1755" class="dsq-comment-header">
+            <cite id="dsq-cite-1755">
+                <a id="dsq-author-user-1755" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1755" class="dsq-comment-body">
+            <div id="dsq-comment-message-1755" class="dsq-comment-message"><p>文章快一年了，可能会有了一些变化！等我有时间，再用新版本做一遍吧。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-3366">
+        <div id="dsq-comment-header-3366" class="dsq-comment-header">
+            <cite id="dsq-cite-3366">
+                <span id="dsq-author-user-3366">箜箜</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3366" class="dsq-comment-body">
+            <div id="dsq-comment-message-3366" class="dsq-comment-message"><p>还没时间吗?  一路error下来&#8230;&#8230;&#8230;&#8230;.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-3376">
+        <div id="dsq-comment-header-3376" class="dsq-comment-header">
+            <cite id="dsq-cite-3376">
+                <a id="dsq-author-user-3376" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3376" class="dsq-comment-body">
+            <div id="dsq-comment-message-3376" class="dsq-comment-message"><p>实在不好意思，还是没有时间更新这里。<br />
+我建议你可以选择用gulp，配置文件用js取代了json结构，比grunt要简单一些，我现在项目都转到gulp了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-3407">
+        <div id="dsq-comment-header-3407" class="dsq-comment-header">
+            <cite id="dsq-cite-3407">
+                <span id="dsq-author-user-3407">箜 箜</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3407" class="dsq-comment-body">
+            <div id="dsq-comment-message-3407" class="dsq-comment-message"><p>那 希望博主 来一篇  gulp 的教程~~</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-3410">
+        <div id="dsq-comment-header-3410" class="dsq-comment-header">
+            <cite id="dsq-cite-3410">
+                <a id="dsq-author-user-3410" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3410" class="dsq-comment-body">
+            <div id="dsq-comment-message-3410" class="dsq-comment-message"><p>嗯，有时间就写。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-2852">
+        <div id="dsq-comment-header-2852" class="dsq-comment-header">
+            <cite id="dsq-cite-2852">
+                <span id="dsq-author-user-2852">anna miu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2852" class="dsq-comment-body">
+            <div id="dsq-comment-message-2852" class="dsq-comment-message"><p>嗯，卸载了。。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-uglifyjs2-js/' rel='external nofollow' class='url'>用UglifyJS2合并压缩混淆JS代码 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2349">
+        <div id="dsq-comment-header-2349" class="dsq-comment-header">
+            <cite id="dsq-cite-2349">
+                <span id="dsq-author-user-2349">mokingone</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2349" class="dsq-comment-body">
+            <div id="dsq-comment-message-2349" class="dsq-comment-message"><p>文章写的很清楚，学习了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2352">
+        <div id="dsq-comment-header-2352" class="dsq-comment-header">
+            <cite id="dsq-cite-2352">
+                <a id="dsq-author-user-2352" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2352" class="dsq-comment-body">
+            <div id="dsq-comment-message-2352" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2687">
+        <div id="dsq-comment-header-2687" class="dsq-comment-header">
+            <cite id="dsq-cite-2687">
+                <span id="dsq-author-user-2687">QuenTine</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2687" class="dsq-comment-body">
+            <div id="dsq-comment-message-2687" class="dsq-comment-message"><p>你好，我用了yeoman的angular-fullstack插件创建了一个项目，按照网上流传的方式配置了webstorm的运行设置（就是把Javascript file 里写grunt路径、参数写grunt参数的那个），运行可以启动服务器，但是debug就不能启动，停在&#8221;concurrent:server&#8221; (concurrent) task上。（</p>
+<p>前面是：</p>
+<p>Running &#8220;serve&#8221; task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/Gruntfile.js</p>
+<p>Running &#8220;clean:server&#8221; (clean) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-contrib-clean/tasks/clean.js</p>
+<p>Running &#8220;env:all&#8221; (env) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-env/tasks/env.js</p>
+<p>Running &#8220;injector:less&#8221; (injector) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-asset-injector/tasks/injector.js<br />
+Missing option `template`, using `dest` as template instead<br />
+Injecting less files (4 files)<br />
+&gt;&gt; Nothing changed</p>
+<p>Running &#8220;concurrent:server&#8221; (concurrent) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-concurrent/tasks/concurrent.js</p>
+<p>如果是run，下一个自动执行的是：</p>
+<p>    Running &#8220;coffee:server&#8221; (coffee) task<br />
+    [D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-contrib-coffee/tasks/coffee.js<br />
+    File .tmp/app/account/account.js created.<br />
+    File .tmp/app/account/account.js.map created (source map).<br />
+    File .tmp/app/account/login/login.js created.<br />
+    File .tmp/app/account/login/login.js.map created (source map).<br />
+    File .tmp/app/account/settings/settings.js created.<br />
+    File .tmp/app/account/settings/settings.js.map created (source map).<br />
+    File .tmp/app/account/signup/signup.js created.<br />
+    File .tmp/app/account/signup/signup.js.map created (source map).<br />
+    File .tmp/app/admin/admin.js created.<br />
+    File .tmp/app/admin/admin.js.map created (source map).<br />
+    File .tmp/app/app.js created.<br />
+    File .tmp/app/app.js.map created (source map).<br />
+    File .tmp/app/main/main.js created.<br />
+    File .tmp/app/main/main.js.map created (source map).<br />
+    File .tmp/components/auth/auth.js created.<br />
+    File .tmp/components/auth/auth.js.map created (source map).<br />
+    File .tmp/components/auth/user.js created.<br />
+    File .tmp/components/auth/user.js.map created (source map).<br />
+    File .tmp/components/modal/modal.js created.<br />
+    File .tmp/components/modal/modal.js.map created (source map).<br />
+    File .tmp/components/mongoose-error/mongoose-error.js created.<br />
+    File .tmp/components/mongoose-error/mongoose-error.js.map created (source map).<br />
+    File .tmp/components/navbar/navbar.js created.<br />
+    File .tmp/components/navbar/navbar.js.map created (source map).<br />
+    File .tmp/components/socket/socket.js created.<br />
+    File .tmp/components/socket/socket.js.map created (source map).</p>
+<p>    Done, without errors.</p>
+<p>    Execution Time (2014-10-17 12:58:40 UTC)<br />
+    loading tasks  236ms  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 34%<br />
+    coffee:server  451ms  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 66%<br />
+    Total 688ms</p>
+<p>    Running &#8220;jade:compile&#8221; (jade) task<br />
+    [D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-contrib-jade/tasks/jade.js<br />
+    File .tmp/app/account/login/login.html created.<br />
+    File .tmp/app/account/settings/settings.html created.<br />
+    File .tmp/app/account/signup/signup.html created.<br />
+    File .tmp/app/admin/admin.html created.<br />
+    File .tmp/app/main/main.html created.<br />
+    File .tmp/components/modal/modal.html created.<br />
+    File .tmp/components/navbar/navbar.html created.</p>
+<p>    Done, without errors.</p>
+<p>    Execution Time (2014-10-17 12:58:40 UTC)<br />
+    loading tasks  179ms  ▇▇▇▇▇▇▇▇▇▇▇▇ 24%<br />
+    jade:compile   553ms  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 75%<br />
+    Total 733ms</p>
+<p>    Running &#8220;less:server&#8221; (less) task<br />
+    [D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-contrib-less/tasks/less.js<br />
+    File .tmp/app/app.css created: 0 B → 149.29 kB</p>
+<p>    Done, without errors.</p>
+<p>    Execution Time (2014-10-17 12:58:40 UTC)<br />
+    loading tasks  333ms  ▇▇▇▇▇▇▇▇▇▇▇▇▇ 26%<br />
+    less:server    967ms  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 74%<br />
+    Total 1.3s</p>
+<p>Running &#8220;injector:scripts&#8221; (injector) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-asset-injector/tasks/injector.js<br />
+Missing option `template`, using `dest` as template instead<br />
+Injecting js files (13 files)<br />
+&gt;&gt; Nothing changed</p>
+<p>Running &#8220;injector:less&#8221; (injector) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-asset-injector/tasks/injector.js<br />
+Missing option `template`, using `dest` as template instead<br />
+Injecting less files (4 files)<br />
+&gt;&gt; Nothing changed</p>
+<p>Running &#8220;injector:css&#8221; (injector) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-asset-injector/tasks/injector.js<br />
+Missing option `template`, using `dest` as template instead<br />
+&gt;&gt; Nothing changed</p>
+<p>Running &#8220;wiredep:target&#8221; (wiredep) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-wiredep/tasks/wiredep.js</p>
+<p>Running &#8220;autoprefixer:dist&#8221; (autoprefixer) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-autoprefixer/tasks/autoprefixer.js<br />
+File .tmp/app/app.css created.</p>
+<p>Running &#8220;express:dev&#8221; (express) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-express-server/tasks/express.js<br />
+Starting background Express server<br />
+debugger listening on port 5858<br />
+Express server listening on 9000, in development mode</p>
+<p>Running &#8220;wait&#8221; task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/Gruntfile.js<br />
+&gt;&gt; Waiting for server reload&#8230;<br />
+finished populating users<br />
+Done waiting!</p>
+<p>Running &#8220;open:server&#8221; (open) task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-open/tasks/open.js</p>
+<p>Running &#8220;watch&#8221; task<br />
+[D] Task source: /home/quentine/WebstormProjects/paotuanke/node_modules/grunt-contrib-watch/tasks/watch.js<br />
+Waiting&#8230;<br />
+）</p>
+<p>请问如何解决。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2692">
+        <div id="dsq-comment-header-2692" class="dsq-comment-header">
+            <cite id="dsq-cite-2692">
+                <a id="dsq-author-user-2692" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2692" class="dsq-comment-body">
+            <div id="dsq-comment-message-2692" class="dsq-comment-message"><p>你说的这个插入没有用过，你需要自己查看源代码解决问题。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2696">
+        <div id="dsq-comment-header-2696" class="dsq-comment-header">
+            <cite id="dsq-cite-2696">
+                <span id="dsq-author-user-2696">QuenTine</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2696" class="dsq-comment-body">
+            <div id="dsq-comment-message-2696" class="dsq-comment-message"><p>谢谢张哥</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-2698">
+        <div id="dsq-comment-header-2698" class="dsq-comment-header">
+            <cite id="dsq-cite-2698">
+                <a id="dsq-author-user-2698" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2698" class="dsq-comment-body">
+            <div id="dsq-comment-message-2698" class="dsq-comment-message"><p>也没帮上什么，多交流。  🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3103">
+        <div id="dsq-comment-header-3103" class="dsq-comment-header">
+            <cite id="dsq-cite-3103">
+                <span id="dsq-author-user-3103">pbwei</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3103" class="dsq-comment-body">
+            <div id="dsq-comment-message-3103" class="dsq-comment-message"><p>vi /build/nodejs-grunt.min.js<br />
+这一步错误 应改为 vi build/nodejs-grunt.min.js</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3106">
+        <div id="dsq-comment-header-3106" class="dsq-comment-header">
+            <cite id="dsq-cite-3106">
+                <a id="dsq-author-user-3106" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3106" class="dsq-comment-body">
+            <div id="dsq-comment-message-3106" class="dsq-comment-message"><p>同学很仔细，我已经修改了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3233">
+        <div id="dsq-comment-header-3233" class="dsq-comment-header">
+            <cite id="dsq-cite-3233">
+                <span id="dsq-author-user-3233">kika</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3233" class="dsq-comment-body">
+            <div id="dsq-comment-message-3233" class="dsq-comment-message"><p>hi, Conan, 请教一个问题，grunt.registerTask注册一个自定义任务，执行该任务时如果有报错，grunt如何输出这个错误。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3234">
+        <div id="dsq-comment-header-3234" class="dsq-comment-header">
+            <cite id="dsq-cite-3234">
+                <a id="dsq-author-user-3234" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3234" class="dsq-comment-body">
+            <div id="dsq-comment-message-3234" class="dsq-comment-message"><p>默认就会把错误日志输出了</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3315">
+        <div id="dsq-comment-header-3315" class="dsq-comment-header">
+            <cite id="dsq-cite-3315">
+                <span id="dsq-author-user-3315">ziyun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3315" class="dsq-comment-body">
+            <div id="dsq-comment-message-3315" class="dsq-comment-message"><p>Uglification failed. Use &#8211;force to continue<br />
+老师，这个是怎么回事呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3322">
+        <div id="dsq-comment-header-3322" class="dsq-comment-header">
+            <cite id="dsq-cite-3322">
+                <a id="dsq-author-user-3322" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3322" class="dsq-comment-body">
+            <div id="dsq-comment-message-3322" class="dsq-comment-message"><p>加个参数吧&#8211;force运行</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3324">
+        <div id="dsq-comment-header-3324" class="dsq-comment-header">
+            <cite id="dsq-cite-3324">
+                <span id="dsq-author-user-3324">lenchs</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3324" class="dsq-comment-body">
+            <div id="dsq-comment-message-3324" class="dsq-comment-message"><p>PhantomJS timed out, possibly due to a missing QUnit start() call.单元测试报这个错，解决不了，有没有方法？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3339">
+        <div id="dsq-comment-header-3339" class="dsq-comment-header">
+            <cite id="dsq-cite-3339">
+                <a id="dsq-author-user-3339" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3339" class="dsq-comment-body">
+            <div id="dsq-comment-message-3339" class="dsq-comment-message"><p>这个不是grunt的问题，检查QUnit 的文档，看文档说明操作。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3766">
+        <div id="dsq-comment-header-3766" class="dsq-comment-header">
+            <cite id="dsq-cite-3766">
+                <span id="dsq-author-user-3766">Grubbyhunter</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3766" class="dsq-comment-body">
+            <div id="dsq-comment-message-3766" class="dsq-comment-message"><p>4 里面 2)这里应该是楼主笔误吧，<br />
+grunt.loadNpmTasks(&#8216;grunt-contrib-qunit&#8217;);<br />
+应该是<br />
+grunt.loadNpmTasks(&#8216;grunt-contrib-concat&#8217;);</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3985">
+        <div id="dsq-comment-header-3985" class="dsq-comment-header">
+            <cite id="dsq-cite-3985">
+                <span id="dsq-author-user-3985">Peach</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3985" class="dsq-comment-body">
+            <div id="dsq-comment-message-3985" class="dsq-comment-message"><p>执行sudo npm install -g gulp时出现如下错误：<br />
+npm WARN engine gulp@3.9.0: wanted: {&#8220;node&#8221;:&#8221;&gt;= 0.9&#8243;} (current: {&#8220;node&#8221;:&#8221;0.13.0-pre&#8221;,&#8221;npm&#8221;:&#8221;2.11.3&#8243;})<br />
+npm ERR! Linux 3.13.0-48-generic<br />
+npm ERR! argv &#8220;/usr/local/bin/node&#8221; &#8220;/usr/local/bin/npm&#8221; &#8220;install&#8221; &#8220;-g&#8221; &#8220;gulp&#8221;<br />
+npm ERR! node v0.13.0-pre<br />
+npm ERR! npm  v2.11.3<br />
+npm ERR! code ETARGET</p>
+<p>npm ERR! notarget No compatible version found: vinyl-fs@&#8217;&gt;=0.3.0 &lt;0.4.0&#039;<br />
+npm ERR! notarget Valid install targets:<br />
+npm ERR! notarget [&quot;0.0.1&quot;,&quot;0.0.2&quot;,&quot;0.1.0&quot;,&quot;1.0.0&quot;]<br />
+npm ERR! notarget<br />
+npm ERR! notarget This is most likely not a problem with npm itself.<br />
+npm ERR! notarget In most cases you or one of your dependencies are requesting<br />
+npm ERR! notarget a package version that doesn&#039;t exist.<br />
+npm ERR! notarget<br />
+npm ERR! notarget It was specified as a dependency of &#039;gulp&#039;<br />
+npm ERR! notarget<br />
+有人知道为什么吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4028">
+        <div id="dsq-comment-header-4028" class="dsq-comment-header">
+            <cite id="dsq-cite-4028">
+                <a id="dsq-author-user-4028" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4028" class="dsq-comment-body">
+            <div id="dsq-comment-message-4028" class="dsq-comment-message"><p>网络不通。用换个网络或者用cnpm试试。CNPM介绍http://blog.fens.me/nodejs-cnpm-npm/</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-grunt-intro/';
+var disqus_identifier = '1783 http://blog.fens.me/?p=1783';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "grunt让Nodejs规范起来";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=1783';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

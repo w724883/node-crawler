@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Jekyll在github上构建免费的Web应用 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Jekyll在github上构建免费的Web应用 Comments Feed" href="http://blog.fens.me/jekyll-bootstarp-github/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='用Highcharts轻松构建交互性图表' href='http://blog.fens.me/nodejs-highcharts/' />
+<link rel='next' title='tty.js打通浏览器与Linux的通道' href='http://blog.fens.me/nodejs-linux-sh-tty/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/jekyll-bootstarp-github/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=3471' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fjekyll-bootstarp-github%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fjekyll-bootstarp-github%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="jekyll,bootstarp,git,github,win7,ruby,gem" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-3471 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Jekyll在github上构建免费的Web应用</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-3471 post type-post status-publish format-standard hentry category-javascript category-356 tag-bootstarp tag-gem tag-git tag-github tag-jekyll tag-ruby tag-win7">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/jekyll-bootstarp-github/" title="Jekyll在github上构建免费的Web应用" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Nov 6, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/bootstarp/" rel="tag">bootstarp</a><a href="http://blog.fens.me/tag/gem/" rel="tag">gem</a><a href="http://blog.fens.me/tag/git/" rel="tag">git</a><a href="http://blog.fens.me/tag/github/" rel="tag">github</a><a href="http://blog.fens.me/tag/jekyll/" rel="tag">jekyll</a><a href="http://blog.fens.me/tag/ruby/" rel="tag">ruby</a><a href="http://blog.fens.me/tag/win7/" rel="tag">win7</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/jekyll-bootstarp-github/#comments"><span class="dsq-postid" data-dsqidentifier="3471 http://blog.fens.me/?p=3471">18 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Jekyll在github上构建免费的Web应用</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Jekyll在github上构建免费的Web应用" href="http://blog.fens.me/jekyll-bootstarp-github/" target="_blank">http://blog.fens.me/jekyll-bootstarp-github/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-github.png"><img src="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-github.png" alt="jekyll-github" width="600" height="400" class="alignnone size-full wp-image-3513" /></a></p>
+<p><strong>前言</strong></p>
+<p>程序员会写程序是基本技能，程序员会写文档是更高的能力。用简单的图形表达架构，用流畅语言描述业务，用专业的文笔写成报告，看似简单的要求，但对于普通的程序员来说都是一种挑战。</p>
+<p>有时候我们纠结的不是怎么组织文字，而是怎么排版，用哪种字体，居中还是靠右放置？如何能保持多人撰写文档的统一风格？</p>
+<p>Jekyll可以帮助我们标准化文档结构，文档样式，文档过程。剩下就是提升自己的知识基础了。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Jekyll介绍</li>
+<li>安装Ruby</li>
+<li>安装Jekyll</li>
+<li>用Jekyll构建基于bootstrap模板</li>
+<li>发布到Github</li>
+</ol>
+<h2>1. Jekyll介绍</h2>
+<p>Jekyll是一个静态站点生成器，它会根据网页源码生成静态文件。它提供了模板、变量、插件等功能，可以用来生成整个网站。</p>
+<p>Jekyll生成的站点，可以直接发布到github上面，这样我们就有了一个免费的，无限流量的，有人维护的属于我们的自己的web网站。Jekyll是基于Ruby的程序，可以通过gem来下载安装。</p>
+<p>Jekyll官方文档：<a href="http://jekyllrb.com/" target="_blank" ref="nofollow">http://jekyllrb.com/</a></p>
+<h2>2. 安装Ruby</h2>
+<p>我的系统环境</p>
+<ul>
+<li>win7 64bit</li>
+</ul>
+<p>下载Ruby 2.0.0-p247 (x64): <a href="http://rubyinstaller.org/downloads/" target="_blank" ref="nofollow">http://rubyinstaller.org/downloads/</a></p>
+<p>安装Ruby，再安装RubyGems</p>
+<pre><code>
+~ D:\workspace\ruby>ruby --version
+ruby 2.0.0p247 (2013-06-27) [x64-mingw32]
+
+~ D:\workspace\ruby>gem update --system
+Updating rubygems-update
+Fetching: rubygems-update-2.1.10.gem (100%)
+Successfully installed rubygems-update-2.1.10
+Parsing documentation for rubygems-update-2.1.10
+Installing ri documentation for rubygems-update-2.1.10
+Installing darkfish documentation for rubygems-update-2.1.10
+Installing RubyGems 2.1.10
+RubyGems 2.1.10 installed
+Parsing documentation for rubygems-2.1.10
+Installing ri documentation for rubygems-2.1.10
+</code></pre>
+<h2>3. 安装Jekyll</h2>
+<p>安装jekll</p>
+<pre><code>
+~ D:\workspace\ruby>gem install jekyll
+ERROR:  Could not find a valid gem 'jekyll' (>= 0), here is why:
+          Unable to download data from https://rubygems.org/ - SSL_connect returned=1 errno=0 state=SSLv3 read server ce
+rtificate B: certificate verify failed (https://rubygems.global.ssl.fastly.net/quick/Marshal.4.8/jekyll-1.3.0.gemspec.rz
+)
+ERROR:  Possible alternatives: jekyll
+</code></pre>
+<p>问题1：下载认证文件</p>
+<pre><code>
+~ D:\workspace\ruby>curl http://curl.haxx.se/ca/cacert.pem -o cacert.pem
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  223k  100  223k    0     0  82478      0  0:00:02  0:00:02 --:--:-- 94724
+
+# 移动到Ruby安装目录
+~ D:\workspace\ruby>mv cacert.pem D:\toolkit\Ruby200\bin
+</code></pre>
+<p>设置环境变量</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/11/ruby-ssl.png"><img src="http://blog.fens.me/wp-content/uploads/2013/11/ruby-ssl.png" alt="ruby-ssl" width="383" height="401" class="alignnone size-full wp-image-3481" /></a></p>
+<p>新打开一个命令行，再安装jekll</p>
+<pre><code>
+~ D:\workspace\ruby>gem install jekyll
+ERROR:  Error installing jekyll:
+        The 'fast-stemmer' native gem requires installed build tools.
+
+Please update your PATH to include build tools or download the DevKit
+from 'http://rubyinstaller.org/downloads' and follow the instructions
+at 'http://github.com/oneclick/rubyinstaller/wiki/Development-Kit'
+</code></pre>
+<p>问题2：安装Devkit，下载DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe：<a href="http://rubyinstaller.org/downloads/" target="_blank" ref="nofollow">http://rubyinstaller.org/downloads/</a></p>
+<p>解压到目录：D:\toolkit\devkit</p>
+<p>运行msys.bat，打开ruby命令行，再安装jekll</p>
+<pre><code>
+Administrator@PC201304202140 ~
+$ gem install jekyll
+Building native extensions.  This could take a while...
+Successfully installed fast-stemmer-1.0.2
+Fetching: classifier-1.3.3.gem (100%)
+Successfully installed classifier-1.3.3
+Fetching: rb-fsevent-0.9.3.gem (100%)
+Successfully installed rb-fsevent-0.9.3
+Fetching: ffi-1.9.3-x64-mingw32.gem (100%)
+Successfully installed ffi-1.9.3-x64-mingw32
+Fetching: rb-inotify-0.9.2.gem (100%)
+Successfully installed rb-inotify-0.9.2
+Fetching: rb-kqueue-0.2.0.gem (100%)
+Successfully installed rb-kqueue-0.2.0
+Fetching: listen-1.3.1.gem (100%)
+Successfully installed listen-1.3.1
+Fetching: syntax-1.0.0.gem (100%)
+Successfully installed syntax-1.0.0
+Fetching: maruku-0.6.1.gem (100%)
+Successfully installed maruku-0.6.1
+Fetching: yajl-ruby-1.1.0.gem (100%)
+Building native extensions.  This could take a while...
+Successfully installed yajl-ruby-1.1.0
+Fetching: posix-spawn-0.3.6.gem (100%)
+Building native extensions.  This could take a while...
+Successfully installed posix-spawn-0.3.6
+Fetching: pygments.rb-0.5.4.gem (100%)
+Successfully installed pygments.rb-0.5.4
+Fetching: highline-1.6.20.gem (100%)
+Successfully installed highline-1.6.20
+Fetching: commander-4.1.5.gem (100%)
+Successfully installed commander-4.1.5
+Fetching: safe_yaml-0.9.7.gem (100%)
+Successfully installed safe_yaml-0.9.7
+Fetching: colorator-0.1.gem (100%)
+Successfully installed colorator-0.1
+Fetching: redcarpet-2.3.0.gem (100%)
+Building native extensions.  This could take a while...
+Successfully installed redcarpet-2.3.0
+Fetching: jekyll-1.3.0.gem (100%)
+Successfully installed jekyll-1.3.0
+Parsing documentation for classifier-1.3.3
+Installing ri documentation for classifier-1.3.3
+Parsing documentation for colorator-0.1
+Installing ri documentation for colorator-0.1
+Parsing documentation for commander-4.1.5
+Installing ri documentation for commander-4.1.5
+Parsing documentation for fast-stemmer-1.0.2
+unable to convert "\x90" from ASCII-8BIT to UTF-8 for lib/stemmer.so, skipping
+Installing ri documentation for fast-stemmer-1.0.2
+Parsing documentation for ffi-1.9.3-x64-mingw32
+Installing ri documentation for ffi-1.9.3-x64-mingw32
+Parsing documentation for highline-1.6.20
+Installing ri documentation for highline-1.6.20
+Parsing documentation for jekyll-1.3.0
+Installing ri documentation for jekyll-1.3.0
+Parsing documentation for listen-1.3.1
+Installing ri documentation for listen-1.3.1
+Parsing documentation for maruku-0.6.1
+Couldn't find file to include 'MaRuKu.txt' from lib/maruku.rb
+Installing ri documentation for maruku-0.6.1
+Parsing documentation for posix-spawn-0.3.6
+Installing ri documentation for posix-spawn-0.3.6
+Parsing documentation for pygments.rb-0.5.4
+Installing ri documentation for pygments.rb-0.5.4
+Parsing documentation for rb-fsevent-0.9.3
+Installing ri documentation for rb-fsevent-0.9.3
+Parsing documentation for rb-inotify-0.9.2
+Installing ri documentation for rb-inotify-0.9.2
+Parsing documentation for rb-kqueue-0.2.0
+Installing ri documentation for rb-kqueue-0.2.0
+Parsing documentation for redcarpet-2.3.0
+unable to convert "\x90" from ASCII-8BIT to UTF-8 for lib/redcarpet.so, skipping
+
+Installing ri documentation for redcarpet-2.3.0
+Parsing documentation for safe_yaml-0.9.7
+Installing ri documentation for safe_yaml-0.9.7
+Parsing documentation for syntax-1.0.0
+Installing ri documentation for syntax-1.0.0
+Parsing documentation for yajl-ruby-1.1.0
+unable to convert "\x90" from ASCII-8BIT to UTF-8 for lib/yajl/yajl.so, skipping
+
+Installing ri documentation for yajl-ruby-1.1.0
+18 gems installed
+</code></pre>
+<p>这样就安装好了jekyll。</p>
+<p>查看jekyll命令行帮助</p>
+<pre><code>
+$ jekyll
+  NAME:
+    jekyll
+
+  DESCRIPTION:
+    Jekyll is a blog-aware, static site generator in Ruby
+
+  COMMANDS:
+    build                Build your site
+    default
+    docs                 Launch local server with docs for Jekyll v1.3.0
+    doctor               Search site and print specific deprecation warnings
+    help                 Display global or [command] help documentation.
+    import               Import your old blog to Jekyll
+    new                  Creates a new Jekyll site scaffold in PATH
+    serve                Serve your site locally
+
+  ALIASES:
+    hyde                 doctor
+    server               serve
+
+  GLOBAL OPTIONS:
+    -s, --source [DIR]
+        Source directory (defaults to ./)
+    -d, --destination [DIR]
+        Destination directory (defaults to ./_site)
+    --safe
+        Safe mode (defaults to false)
+    -p, --plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]
+        Plugins directory (defaults to ./_plugins)
+    --layouts DIR
+        Layouts directory (defaults to ./_layouts)
+    -h, --help
+        Display help documentation
+    -v, --version
+        Display version information
+    -t, --trace
+        Display backtrace when an error occurs
+</code></pre>
+<h2>4. 用Jekyll构建基于bootstrap模板</h2>
+<p>下载jekyll-bootstrap的模板项目</p>
+<pre><code>
+#从github下载模板
+Administrator@PC201304202140 /d/workspace/ruby
+$ git clone https://github.com/plusjade/jekyll-bootstrap.git jekyll
+Cloning into 'jekyll'...
+remote: Counting objects: 1898, done.
+remote: Compressing objects: 100% (1061/1061), done.
+remote: Total 1898 (delta 850), reused 1729 (delta 723)
+Receiving objects: 100% (1898/1898), 575.45 KiB | 184 KiB/s, done.
+Resolving deltas: 100% (850/850), done.
+
+#进入项目目录
+Administrator@PC201304202140 /d/workspace/ruby
+$ cd jekyll/
+
+#查看目录模板
+Administrator@PC201304202140 /d/workspace/ruby/jekyll
+$ ls
+404.html          _config.yml  _plugins      atom.xml         pages.html
+History.markdown  _drafts      _posts        categories.html  rss.xml
+README.md         _includes    archive.html  changelog.md     sitemap.txt
+Rakefile          _layouts     assets        index.md         tags.html
+
+#启动服务
+Administrator@PC201304202140 /d/workspace/ruby/jekyll
+$ jekyll serve
+Configuration file: d:/workspace/ruby/jekyll/_config.yml
+            Source: d:/workspace/ruby/jekyll
+       Destination: d:/workspace/ruby/jekyll/_site
+      Generating... done.
+    Server address: http://0.0.0.0:4000
+  Server running... press ctrl-c to stop.
+</code></pre>
+<p>打开浏览器，http://localhost:4000/</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-bootstrap-web.png"><img src="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-bootstrap-web.png" alt="jekyll-bootstrap-web" width="833" height="753" class="alignnone size-full wp-image-3487" /></a></p>
+<p>通过几条命令，基于bootstrap风格的模板就构建好了。</p>
+<h2>4. Jekyll的基本使用</h2>
+<ul>
+<li>编写新文章(Post)</li>
+<li>编写新页面(Page)</li>
+</ul>
+<p><strong>1). 编写新文章(Create a Post)</strong><br />
+通过命令生成文章</p>
+<pre><code>
+~ D:\workspace\ruby\jekyll>rake post title="Hello World"
+Creating new post: ./_posts/2013-11-06-hello-world.md
+</code></pre>
+<p>查看文件：2013-11-06-hello-world.md</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-post.png"><img src="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-post.png" alt="jekyll-post" width="668" height="342" class="alignnone size-full wp-image-3494" /></a></p>
+<p>编辑文件：2013-11-06-hello-world.md</p>
+<pre><code>
+~ vi ./_posts/2013-11-06-hello-world.md
+
+---
+layout: post
+title: "Hello World"
+description: ""
+category: ""
+tags: []
+---
+{% include JB/setup %}
+
+## 第一页，jekyll的开始
+
+Jekyll is a parsing engine bundled as a ruby gem used to build static websites from
+dynamic components such as templates, partials, liquid code, markdown, etc. Jekyll is known as "a simple, blog aware, static site generator".
+
+### 博客文章：[用Jekyll构建基于bootstrap系统](http://blog.fens.me/jekyll-bootstarp-doc/)
+
+程序员会写程序是基本技能，程序员会写文档是更高的能力。用简单的图形表达架构，用流畅语言描述业务，用专业的文笔写成报告，看似简单的要求，但对于普通的程序员来说都是一种挑战。
+
+有时候我们纠结的不是怎么组织文字，而是怎么排版，用哪种字体，居中还是靠右放置？如何能保持多人撰写文档的统一风格？
+
+Jekyll可以帮助我们标准化文档结构，文档样式，文档过程。剩下就是提升自己的知识基础了。
+
+</code></pre>
+<p>保存后，启动服务器。</p>
+<pre><code>
+Administrator@PC201304202140 /d/workspace/ruby/jekyll
+$ jekyll serve
+Configuration file: d:/workspace/ruby/jekyll/_config.yml
+            Source: d:/workspace/ruby/jekyll
+       Destination: d:/workspace/ruby/jekyll/_site
+      Generating... Error reading file d:/workspace/ruby/jekyll/_posts/2013-11-0
+6-hello-world.md: invalid byte sequence in GBK
+error: invalid byte sequence in GBK. Use --trace to view backtrace
+</code></pre>
+<p>发现中文的GBK编码报错。</p>
+<p>找到jekyll安装目录，修改convertible.rb文件，第38行</p>
+<pre><code>
+~ vi D:\toolkit\Ruby200\lib\ruby\gems\2.0.0\gems\jekyll-1.3.0\lib\jekyll\convertible.rb
+
+#第38行，替换为下面内容
+self.content = File.read_with_options(File.join(base, name), :encoding => "utf-8")
+</code></pre>
+<p>重启服务器</p>
+<pre><code>
+Administrator@PC201304202140 /d/workspace/ruby/jekyll
+$ jekyll serve
+Configuration file: d:/workspace/ruby/jekyll/_config.yml
+            Source: d:/workspace/ruby/jekyll
+       Destination: d:/workspace/ruby/jekyll/_site
+      Generating...
+ ___________________________________________________________________________
+| Maruku tells you:
++---------------------------------------------------------------------------
+| Could not find ref_id = "httpblogfensmejekyllbootstarpdoc" for md_link(["http:
+//blog.fens.me/jekyll-bootstarp-doc/"],"httpblogfensmejekyllbootstarpdoc")
+| Available refs are []
++---------------------------------------------------------------------------
+!d:/toolkit/Ruby200/lib/ruby/gems/2.0.0/gems/maruku-0.6.1/lib/maruku/errors_mana
+gement.rb:49:in `maruku_error'
+!d:/toolkit/Ruby200/lib/ruby/gems/2.0.0/gems/maruku-0.6.1/lib/maruku/output/to_h
+tml.rb:715:in `to_html_link'
+!d:/toolkit/Ruby200/lib/ruby/gems/2.0.0/gems/maruku-0.6.1/lib/maruku/output/to_h
+tml.rb:970:in `block in array_to_html'
+!d:/toolkit/Ruby200/lib/ruby/gems/2.0.0/gems/maruku-0.6.1/lib/maruku/output/to_h
+tml.rb:961:in `each'
+!d:/toolkit/Ruby200/lib/ruby/gems/2.0.0/gems/maruku-0.6.1/lib/maruku/output/to_h
+tml.rb:961:in `array_to_html'
+\___________________________________________________________________________
+Not creating a link for ref_id = "httpblogfensmejekyllbootstarpdoc".done.
+    Server address: http://0.0.0.0:4000
+  Server running... press ctrl-c to stop.
+</code></pre>
+<p>错误解决！</p>
+<p>打开浏览器：http://localhost:4000/2013/11/06/hello-world/</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-post-hello-world.png"><img src="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-post-hello-world.png" alt="jekyll-post-hello-world" width="735" height="675" class="alignnone size-full wp-image-3498" /></a></p>
+<p><strong>2). 编写新页面(Create a Page)</strong><br />
+通过命令生成页面</p>
+<pre><code>
+~ D:\workspace\ruby\jekyll>rake page name="about.md"
+mkdir -p .
+Creating new page: ./about.md
+
+~ D:\workspace\ruby\jekyll>rake page name="pages/about"
+mkdir -p ./pages/about
+Creating new page: ./pages/about/index.html
+</code></pre>
+<p>同样，我们编辑文件，重启jekyii服务就行了。</p>
+<h2>5. 发布到Github</h2>
+<p>在github网站，我们创建一个新的库，jekyll-demo</p>
+<p>把jekll项目，添加到jekyll-demo</p>
+<pre><code>
+~ D:\workspace\ruby\jekyll>git remote set-url origin git@github.com:bsspirit/jekyll-demo.git
+
+~ D:\workspace\ruby\jekyll>git add .
+~ D:\workspace\ruby\jekyll>git commit -m 'new_post'
+[master 1fc298e] 'new_post'
+ 4 files changed, 36 insertions(+)
+ create mode 100644 _posts/2013-11-06-hello-world.md
+ create mode 100644 about.md
+ create mode 100644 pages/about/index.html
+
+~ D:\workspace\ruby\jekyll>git push origin master
+Counting objects: 916, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (431/431), done.
+Writing objects: 100% (916/916), 297.68 KiB, done.
+Total 916 (delta 437), reused 879 (delta 422)
+To git@github.com:bsspirit/jekyll-demo.git
+ * [new branch]      master -> master
+</code></pre>
+<p>新建一个gh-pages分支，用于发布项目</p>
+<pre><code>
+~ git branch gh-pages
+~ git checkout gh-pages
+</code></pre>
+<p>修改文件：_config.yml，设置base_path</p>
+<pre><code>
+~ vi _config.yml
+
+production_url : http://bsspirit.github.io
+BASE_PATH : /jekyll-demo
+</code></pre>
+<p>发布项目</p>
+<pre><code>
+~ git add .
+~ git commit -m 'deploy'
+~ git push origin gh-pages
+</code></pre>
+<p>发布需要10分钟，10分钟后，在github上面浏览项目，<a href="http://bsspirit.github.io/jekyll-demo" target="_blank" ref="nofollow">http://bsspirit.github.io/jekyll-demo</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-bootstrap-github.png"><img src="http://blog.fens.me/wp-content/uploads/2013/11/jekyll-bootstrap-github.png" alt="jekyll-bootstrap-github" width="833" height="677" class="alignnone size-full wp-image-3505" /></a></p>
+<p>项目地址的格式为：</p>
+<pre><code>http://[username].github.io/[projectname]/</code></pre>
+<p>这样我们就可以通过github构建免费的web应用了。</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Jekyll在github上构建免费的Web应用" href="http://blog.fens.me/jekyll-bootstarp-github/" target="_blank">http://blog.fens.me/jekyll-bootstarp-github/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a>, <a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" rel="category tag">其他语言</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-579">
+        <div id="dsq-comment-header-579" class="dsq-comment-header">
+            <cite id="dsq-cite-579">
+                <span id="dsq-author-user-579">jia58960</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-579" class="dsq-comment-body">
+            <div id="dsq-comment-message-579" class="dsq-comment-message"><p>你这个博客也是用的jekyll吗</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-580">
+        <div id="dsq-comment-header-580" class="dsq-comment-header">
+            <cite id="dsq-cite-580">
+                <a id="dsq-author-user-580" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-580" class="dsq-comment-body">
+            <div id="dsq-comment-message-580" class="dsq-comment-message"><p>博客不是jekyll</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-770">
+        <div id="dsq-comment-header-770" class="dsq-comment-header">
+            <cite id="dsq-cite-770">
+                <span id="dsq-author-user-770">moonkey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-770" class="dsq-comment-body">
+            <div id="dsq-comment-message-770" class="dsq-comment-message"><p>那个像资源管理器一样的软件是什么呀，好方便的样子！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-771">
+        <div id="dsq-comment-header-771" class="dsq-comment-header">
+            <cite id="dsq-cite-771">
+                <a id="dsq-author-user-771" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-771" class="dsq-comment-body">
+            <div id="dsq-comment-message-771" class="dsq-comment-message"><p>WebStorm<br />
+<a href="http://blog.fens.me/series-angular/" rel="nofollow">http://blog.fens.me/series-angular/</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-773">
+        <div id="dsq-comment-header-773" class="dsq-comment-header">
+            <cite id="dsq-cite-773">
+                <span id="dsq-author-user-773">moonkey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-773" class="dsq-comment-body">
+            <div id="dsq-comment-message-773" class="dsq-comment-message"><p>多谢~</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-948">
+        <div id="dsq-comment-header-948" class="dsq-comment-header">
+            <cite id="dsq-cite-948">
+                <span id="dsq-author-user-948">farmost_east</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-948" class="dsq-comment-body">
+            <div id="dsq-comment-message-948" class="dsq-comment-message"><p>我用javascript做了一个小的网页游戏，有图片和音乐，请问怎么能够布置在托管在github上的jekyll博客里呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-951">
+        <div id="dsq-comment-header-951" class="dsq-comment-header">
+            <cite id="dsq-cite-951">
+                <a id="dsq-author-user-951" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-951" class="dsq-comment-body">
+            <div id="dsq-comment-message-951" class="dsq-comment-message"><p>不好意思，我没有开发过jekyII的插件，不太���楚如何部署。<br />
+你查一下，插件开发吧。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-952">
+        <div id="dsq-comment-header-952" class="dsq-comment-header">
+            <cite id="dsq-cite-952">
+                <span id="dsq-author-user-952">farmost_east</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-952" class="dsq-comment-body">
+            <div id="dsq-comment-message-952" class="dsq-comment-message"><p>谢谢，另外我发现在github page的博客的标题和内容都不能再搜索引擎里搜到。这该怎么办？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-953">
+        <div id="dsq-comment-header-953" class="dsq-comment-header">
+            <cite id="dsq-cite-953">
+                <a id="dsq-author-user-953" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-953" class="dsq-comment-body">
+            <div id="dsq-comment-message-953" class="dsq-comment-message"><p>搜索引擎收录要3个月左右，坚持原创，做好SEO，会被收录的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-1366">
+        <div id="dsq-comment-header-1366" class="dsq-comment-header">
+            <cite id="dsq-cite-1366">
+                <span id="dsq-author-user-1366">fangge</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1366" class="dsq-comment-body">
+            <div id="dsq-comment-message-1366" class="dsq-comment-message"><p>hihi 你好 我现在也是win7 64bit 可是我看ruby官网上下载的最多也就是1.8.6的 请问你是从哪里下载2.0的？？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1367">
+        <div id="dsq-comment-header-1367" class="dsq-comment-header">
+            <cite id="dsq-cite-1367">
+                <a id="dsq-author-user-1367" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1367" class="dsq-comment-body">
+            <div id="dsq-comment-message-1367" class="dsq-comment-message"><p><a href="http://cache.ruby-lang.org/pub/ruby/" rel="nofollow">http://cache.ruby-lang.org/pub/ruby/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/hexo-blog-github/' rel='external nofollow' class='url'>Hexo在github上构建免费的Web应用 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2512">
+        <div id="dsq-comment-header-2512" class="dsq-comment-header">
+            <cite id="dsq-cite-2512">
+                <span id="dsq-author-user-2512">pj yuan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2512" class="dsq-comment-body">
+            <div id="dsq-comment-message-2512" class="dsq-comment-message"><p>你好，按照你所说的步骤做的，但是现在由于jekyll版本更新（2.4.0），在解决中文乱码时出现了问题，不能正常解决了。希望能够指点指点啊？谢谢！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2513">
+        <div id="dsq-comment-header-2513" class="dsq-comment-header">
+            <cite id="dsq-cite-2513">
+                <a id="dsq-author-user-2513" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2513" class="dsq-comment-body">
+            <div id="dsq-comment-message-2513" class="dsq-comment-message"><p>不好意思，不用jekyll很久了，你去ruby社区问问吧。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3467">
+        <div id="dsq-comment-header-3467" class="dsq-comment-header">
+            <cite id="dsq-cite-3467">
+                <span id="dsq-author-user-3467">yao</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3467" class="dsq-comment-body">
+            <div id="dsq-comment-message-3467" class="dsq-comment-message"><p>你好 curl <a href="http://curl.haxx.se/ca/cacert.pem" rel="nofollow">http://curl.haxx.se/ca/cacert.pem</a> -o cacert.pem 获取不到证书怎么破&#8230;.T.T</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3471">
+        <div id="dsq-comment-header-3471" class="dsq-comment-header">
+            <cite id="dsq-cite-3471">
+                <a id="dsq-author-user-3471" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3471" class="dsq-comment-body">
+            <div id="dsq-comment-message-3471" class="dsq-comment-message"><p>我运行的没有问题。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-3726">
+        <div id="dsq-comment-header-3726" class="dsq-comment-header">
+            <cite id="dsq-cite-3726">
+                <span id="dsq-author-user-3726">ted</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3726" class="dsq-comment-body">
+            <div id="dsq-comment-message-3726" class="dsq-comment-message"><p>我也不行啊 能运行后截个图么？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-3732">
+        <div id="dsq-comment-header-3732" class="dsq-comment-header">
+            <cite id="dsq-cite-3732">
+                <a id="dsq-author-user-3732" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3732" class="dsq-comment-body">
+            <div id="dsq-comment-message-3732" class="dsq-comment-message"><p>翻墙</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/jekyll-bootstarp-github/';
+var disqus_identifier = '3471 http://blog.fens.me/?p=3471';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Jekyll在github上构建免费的Web应用";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=3471';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Browserify 跑在浏览器上的Node程序 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Browserify 跑在浏览器上的Node程序 Comments Feed" href="http://blog.fens.me/nodejs-browserify/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='30秒制作幻灯片 Cleaver' href='http://blog.fens.me/nodejs-slide-cleaver/' />
+<link rel='next' title='R语言构建websocket服务器' href='http://blog.fens.me/r-websocket-websockets/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-browserify/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=4250' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-browserify%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-browserify%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="javascript,nodejs,npm,browserify" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-4250 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Browserify 跑在浏览器上的Node程序</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-4250 post type-post status-publish format-standard hentry category-javascript tag-browserify tag-javascript tag-nodejs tag-npm">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-browserify/" title="Browserify 跑在浏览器上的Node程序" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Dec 5, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/browserify/" rel="tag">browserify</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/npm/" rel="tag">npm</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-browserify/#comments"><span class="dsq-postid" data-dsqidentifier="4250 http://blog.fens.me/?p=4250">30 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Browserify 跑在浏览器上的Node程序</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Browserify 跑在浏览器上的Node程序" href="http://blog.fens.me/nodejs-browserify/" target="_blank">http://blog.fens.me/nodejs-browserify/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-browserify.png"><img src="http://blog.fens.me/wp-content/uploads/2013/12/nodejs-browserify.png" alt="nodejs-browserify" width="600" height="400" class="alignnone size-full wp-image-4269" /></a></p>
+<p><strong>前言</strong></p>
+<p>Nodejs的出现，为Javascript开辟了一条新的大路，让Javascript获得了新生。虽然Nodejs也基于Javascript语法和解释器，但是前后端各自有各自的库，无法重用真的很不舒服。</p>
+<p>Browserify 通过预编译的方法，让Javascript前端可以直接使用Node后端的程序。我们可以用一套代码完成前后端，不仅工作量变少了，程序重用性增强，还可以直接在浏览器中使用大量的NPM第三方开源库的功能。</p>
+<p>Web时代，将是我们创新与创造的新起点。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Browserify介绍</li>
+<li>Browserify安装</li>
+<li>Browserify命令行参数</li>
+<li>在浏览器中运行Nodejs程序</li>
+<li>在浏览器中模块化调用Nodejs程序</li>
+</ol>
+<h2>1. Browserify介绍</h2>
+<p>Browserify的出现可以让Nodejs模块跑在浏览器中，用require()的语法格式来组织前端的代码，加载npm的模块。在浏览器中，调用browserify编译后的代码，同样写在&lt;script&gt;标签中。</p>
+<p>用 Browserify 的操作，分为3个步骤。</p>
+<ul>
+<li>1. 写node程序或者模块</li>
+<li>2. 用Browserify 预编译成 bundle.js</li>
+<li>3. 在HTML页面中加载bundle.js</li>
+</ul>
+<p>Browserify 的发布页：<a target="_blank" ref="nofollow" href="http://browserify.org/">http://browserify.org/</a></p>
+<h2>2. Browserify安装</h2>
+<p>系统环境</p>
+<ul>
+<li>win7 64bit</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<p>Browserify安装</p>
+<pre><code>
+~ D:\workspace\javascript&gt;mkdir nodejs-browserify &amp;&amp; cd nodejs-browserify
+
+browserify@2.36.1 node_modules\browserify
+├── inherits@1.0.0
+├── deep-equal@0.1.0
+├── duplexer@0.1.1
+├── shell-quote@0.0.1
+├── parents@0.0.2
+├── through@2.3.4
+├── stream-combiner@0.0.2 (duplexer@0.0.4)
+├── deps-sort@0.1.1 (minimist@0.0.5)
+├── optimist@0.5.2 (wordwrap@0.0.2)
+├── browser-resolve@1.2.1 (resolve@0.6.1)
+├── JSONStream@0.6.4 (jsonparse@0.0.5, through@2.2.7)
+├── syntax-error@0.0.1 (esprima@0.9.9)
+├── concat-stream@1.0.1 (bops@0.0.6)
+├── insert-module-globals@1.3.1 (process@0.5.1, commondir@0.0.1, duplexer@0.0.4, through@2.2.7, JSONStream@0.4.4, lex
+ical-scope@0.0.14)
+├── module-deps@1.1.0 (minimist@0.0.5, resolve@0.6.1, detective@2.1.2)
+├── browser-pack@1.1.0 (combine-source-map@0.3.0)
+├── umd@1.3.1 (rfile@1.0.0, ruglify@1.0.0, uglify-js@2.4.6)
+└── browser-builtins@2.0.5 (constants-browserify@0.0.1, os-browserify@0.1.1, console-browserify@1.0.1, vm-browserify@
+0.0.1, punycode@1.2.3, buffer-browserify@0.2.2, crypto-browserify@1.0.9, http-browserify@0.1.14, zlib-browserify@0.0.3)
+</code></pre>
+<p>全局安装，安装过程提示错误。不过没有关系！</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-browserify&gt;npm install browserify -g
+
+D:\toolkit\nodejs\browserify -&gt; D:\toolkit\nodejs\node_modules\browserify\bin\cmd.js
+npm ERR! peerinvalid The package generator-karma does not satisfy its siblings' peerDependencies requirements!
+npm ERR! peerinvalid Peer generator-angular@0.4.0 wants generator-karma@~0.5.0
+
+npm ERR! System Windows_NT 6.1.7601
+npm ERR! command "D:\\toolkit\\nodejs\\\\node.exe" "D:\\toolkit\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "
+browserify" "-g"
+npm ERR! cwd D:\workspace\javascript\nodejs-browserify
+npm ERR! node -v v0.10.5
+npm ERR! npm -v 1.2.19
+npm ERR! code EPEERINVALID
+npm ERR!
+npm ERR! Additional logging details can be found in:
+npm ERR!     D:\workspace\javascript\nodejs-browserify\npm-debug.log
+npm ERR! not ok code 0
+</code></pre>
+<h2>3. Browserify命令行参数</h2>
+<p>使用Browserify命令正常。</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-browserify&gt;browserify
+Usage: browserify [entry files] {OPTIONS}
+
+Standard Options:
+
+    --outfile, -o  Write the browserify bundle to this file.
+                   If unspecified, browserify prints to stdout.
+
+    --require, -r  A module name or file to bundle.require()
+                   Optionally use a colon separator to set the target.
+
+      --entry, -e  An entry point of your app
+
+     --ignore, -i  Omit a file from the output bundle.
+
+   --external, -x  Reference a file from another bundle.
+
+  --transform, -t  Use a transform module on top-level files.
+
+    --command, -c  Use a transform command on top-level files.
+
+  --standalone -s  Generate a UMD bundle for the supplied export name.
+                   This bundle works with other module systems and sets the name
+                   given as a window global if no module system is found.
+
+       --debug -d  Enable source maps that allow you to debug your files
+                   separately.
+
+       --help, -h  Show this message
+
+For advanced options, type `browserify --help advanced`.
+
+Specify a parameter.
+</code></pre>
+<ul>
+<li>&#8211;outfile, -o: browserify日志打印到文件</li>
+<li>&#8211;require, -r: 绑定模块名或文件，用逗号分隔</li>
+<li>&#8211;entry, -e: 应用程序的入口</li>
+<li>&#8211;ignore, -i: 省略输出</li>
+<li>&#8211;external, -x: 从其他绑定引入文件</li>
+<li>&#8211;transform, -t: 对上层文件进行转换</li>
+<li>&#8211;command, -c: 对上层文件使用转换命令</li>
+<li>&#8211;standalone -s: 生成一个UMB的绑定的接口，提供给其他模块使用。</li>
+<li>&#8211;debug -d: 激活source maps调试文件</li>
+<li>&#8211;help, -h: 显示帮助信息</li>
+</ul>
+<p>高级命令：</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-browserify&gt;browserify --help advanced
+Advanced Options:
+
+  --insert-globals, --ig, --fast    [default: false]
+
+    Skip detection and always insert definitions for process, global,
+    __filename, and __dirname.
+
+    benefit: faster builds
+    cost: extra bytes
+
+  --detect-globals, --dg            [default: true]
+
+    Detect the presence of process, global, __filename, and __dirname and define
+    these values when present.
+
+    benefit: npm modules more likely to work
+    cost: slower builds
+
+  --ignore-missing, --im            [default: false]
+
+    Ignore `require()` statements that don't resolve to anything.
+
+  --noparse=FILE
+
+    Don't parse FILE at all. This will make bundling much, much faster for giant
+    libs like jquery or threejs.
+
+  --deps
+
+    Instead of standard bundle output, print the dependency array generated by
+    module-deps.
+
+  --list
+
+    Print each file in the dependency graph. Useful for makefiles.
+
+  --extension=EXTENSION
+
+    Consider files with specified EXTENSION as modules, this option can used
+    multiple times.
+</code></pre>
+<ul>
+<li>&#8211;insert-globals, &#8211;ig, &#8211;fast: 跳过检查，定义全局变量。[default:false]</li>
+<li>&#8211;detect-globals, &#8211;dg: 检查全局变量是否存在。 [default:true]&lt;</li>
+<li>&#8211;ignore-missing, &#8211;im: 忽略require()函数。[default: false]</li>
+<li>&#8211;noparse=FILE: 不解析文件，直接build。</li>
+<li>&#8211;deps: 打印完整输出日志</li>
+<li>&#8211;list: 打印每个文件的依赖关系</li>
+<li>&#8211;extension=EXTENSION: 指名扩展名的文件做为模块加载，允许多次设置</li>
+</ul>
+<h2>4. Browserify使用：在浏览器中运行Nodejs程序</h2>
+<p>新建4个文件：</p>
+<ul>
+<li>multiply.js: 乘法计算</li>
+<li>square.js: 平方计算，依赖multiply.js</li>
+<li>index.js: node启动程序，调用square.js</li>
+<li>index.html: 用于显示的HTML网页</li>
+</ul>
+<p>新建文件：multiply.js</p>
+<pre><code>
+~ vi multiply.js
+
+module.exports = function (a, b) {
+    console.log("js:multiply");
+    return a * b;
+};
+</code></pre>
+<p>新建文件：square.js</p>
+<pre><code>
+~ vi square.js
+
+var multiply = require('./multiply');
+module.exports = function (n) {
+    console.log("js:square");
+    return multiply(n, n);
+};
+</code></pre>
+<p>新建文件：index.js</p>
+<pre><code>
+~ vi index.js
+
+var square = require('./square');
+console.log("js:index");
+console.log(square(125));
+</code></pre>
+<p>在node环境中运行</p>
+<pre><code>
+~ node index.js
+js:index
+js:square
+js:multiply
+15625
+</code></pre>
+<p>用browserify编译index.js文件到bundle.js</p>
+<pre><code>
+~ browserify index.js &gt; bundle.js
+</code></pre>
+<p>新建文件：index.html</p>
+<pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Browserify&lt;/title&gt;
+&lt;style&gt;input{width:50px;}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Browserify&lt;/h1&gt;
+&lt;script src="bundle.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>在index.html中，我们加载刚才生成的bundle.js文件。</p>
+<p>在浏览器中预览效果：</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/12/browserify-console.png"><img class="alignnone size-full wp-image-4258" alt="browserify-console" src="http://blog.fens.me/wp-content/uploads/2013/12/browserify-console.png" width="635" height="385" /></a></p>
+<h2>5. 在浏览器中模块化调用Nodejs函数</h2>
+<p>新建文件：</p>
+<ul>
+<li>multiply.js: 同上面的文件</li>
+<li>module.html: 用于显示的HTML网页</li>
+</ul>
+<p>查看文件：multiply.js</p>
+<pre><code>
+~ vi multiply.js
+
+module.exports = function (a, b) {
+    console.log("js:multiply");
+    return a * b;
+};
+</code></pre>
+<p>用browserify编译multiply.js文件到bundle.js，作为模块</p>
+<pre><code>~ browserify -r ./multiply.js &gt; bundle.js</code></pre>
+<p>新建文件：module.html</p>
+<pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Browserify&lt;/title&gt;
+&lt;style&gt;input{width:50px;}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form&gt;
+&lt;p&gt;
+&lt;input type="text" id="x" value="2"/&gt; * &lt;input type="text" id="y" value="3" /&gt; = &lt;span id="result"&gt;&lt;/span&gt;
+&lt;/p&gt;
+&lt;input type="button" onclick="add()" value="M1"/&gt;
+&lt;input type="button" onclick="add2()" value="M2"/&gt;
+&lt;/form&gt;
+&lt;script src="bower_components/jquery/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="bundle.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+function add(){
+var x = parseInt($('#x').val());
+var y = parseInt($('#y').val());
+console.log(x*y);
+$('#result').text(x*y);
+}
+
+var m = require('./multiply.js');
+function add2(){
+var x = parseInt($('#x').val());
+var y = parseInt($('#y').val());
+console.log(m);
+console.log(x*y);
+$('#result').text(m(x,y));
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>在浏览器中打开：<br />
+<a href="http://blog.fens.me/wp-content/uploads/2013/12/browserify-click.png"><img class="alignnone size-full wp-image-4265" alt="browserify-click" src="http://blog.fens.me/wp-content/uploads/2013/12/browserify-click.png" width="745" height="537" /></a></p>
+<ul>
+<li>点击M1，通过add1函数计算出6</li>
+<li>点击M2，通过add2函数，调用bundle.js中的multiply.js的函数，计算出6</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Browserify 跑在浏览器上的Node程序" href="http://blog.fens.me/nodejs-browserify/" target="_blank">http://blog.fens.me/nodejs-browserify/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-709">
+        <div id="dsq-comment-header-709" class="dsq-comment-header">
+            <cite id="dsq-cite-709">
+                <span id="dsq-author-user-709">jiyinyiyong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-709" class="dsq-comment-body">
+            <div id="dsq-comment-message-709" class="dsq-comment-message"><p>建议增加 watchify.. 另外一般调试的话,  &#8211;debug 参数是必开的.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-710">
+        <div id="dsq-comment-header-710" class="dsq-comment-header">
+            <cite id="dsq-cite-710">
+                <a id="dsq-author-user-710" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-710" class="dsq-comment-body">
+            <div id="dsq-comment-message-710" class="dsq-comment-message"><p>watchify，是另外一个项目吧？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-711">
+        <div id="dsq-comment-header-711" class="dsq-comment-header">
+            <cite id="dsq-cite-711">
+                <span id="dsq-author-user-711">jiyinyiyong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-711" class="dsq-comment-body">
+            <div id="dsq-comment-message-711" class="dsq-comment-message"><p>其实就是 browserify &#8211;watch-files</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-712">
+        <div id="dsq-comment-header-712" class="dsq-comment-header">
+            <cite id="dsq-cite-712">
+                <a id="dsq-author-user-712" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-712" class="dsq-comment-body">
+            <div id="dsq-comment-message-712" class="dsq-comment-message"><p>watch还是用grunt好点吧</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-713">
+        <div id="dsq-comment-header-713" class="dsq-comment-header">
+            <cite id="dsq-cite-713">
+                <span id="dsq-author-user-713">jiyinyiyong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-713" class="dsq-comment-body">
+            <div id="dsq-comment-message-713" class="dsq-comment-message"><p>这个是作者定制的 watch 功能, 比 Grunt 用起来性能高.<br />
+当然这主要适合用在命令行里, Grunt 就是写在构建脚本里好处</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-3357">
+        <div id="dsq-comment-header-3357" class="dsq-comment-header">
+            <cite id="dsq-cite-3357">
+                <a id="dsq-author-user-3357" href="https://github.com/yanhaijing" target="_blank" rel="nofollow">yanhaijing</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3357" class="dsq-comment-body">
+            <div id="dsq-comment-message-3357" class="dsq-comment-message"><p>都说道自动化工具了，那还不用grunt。。。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1194">
+        <div id="dsq-comment-header-1194" class="dsq-comment-header">
+            <cite id="dsq-cite-1194">
+                <span id="dsq-author-user-1194">penJunTan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1194" class="dsq-comment-body">
+            <div id="dsq-comment-message-1194" class="dsq-comment-message"><p>之前只关注到 AMD 在浏览器端优化方案: r.js<br />
+这个 commonJs 在浏览器端解决方案 browserify 看来更有野心啊</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1197">
+        <div id="dsq-comment-header-1197" class="dsq-comment-header">
+            <cite id="dsq-cite-1197">
+                <a id="dsq-author-user-1197" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1197" class="dsq-comment-body">
+            <div id="dsq-comment-message-1197" class="dsq-comment-message"><p>确实，browserify 很有野心的。如果能完全打通 browser和node，又会带来了一种新的思路。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-1599">
+        <div id="dsq-comment-header-1599" class="dsq-comment-header">
+            <cite id="dsq-cite-1599">
+                <span id="dsq-author-user-1599">Annie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1599" class="dsq-comment-body">
+            <div id="dsq-comment-message-1599" class="dsq-comment-message"><p>你好。看你上面的说明，是不是 browserify 是将 node 的模块直接拿到浏览器上用，而不是 browserify 另外去实现了一套跟 node 一样的模块放到浏览器用？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1600">
+        <div id="dsq-comment-header-1600" class="dsq-comment-header">
+            <cite id="dsq-cite-1600">
+                <a id="dsq-author-user-1600" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1600" class="dsq-comment-body">
+            <div id="dsq-comment-message-1600" class="dsq-comment-message"><p>你好。<br />
+1. 通过browserify的封装，可以直接让node程序运行在浏览器中。<br />
+2. browserify其实是把原node的程序自动重新改写了，把所有的依赖都压缩到1个文件中，变成一个纯的js文件，在浏览器中运行。</p>
+<p>3. browserify封装是自动完成的，我们只需要执行一条命令就可以了，</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1601">
+        <div id="dsq-comment-header-1601" class="dsq-comment-header">
+            <cite id="dsq-cite-1601">
+                <span id="dsq-author-user-1601">Annie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1601" class="dsq-comment-body">
+            <div id="dsq-comment-message-1601" class="dsq-comment-message"><p>那调用通过 browserfiy 自动重新改写的 node 模块（比如 buffer）会有性能上的差异吗？因为我们知道 node 是可以直接调用到 native 的 c 的部分，不知道 browserify 的调用层次是怎样的？封装后的性能有没有影响到？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-1602">
+        <div id="dsq-comment-header-1602" class="dsq-comment-header">
+            <cite id="dsq-cite-1602">
+                <a id="dsq-author-user-1602" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1602" class="dsq-comment-body">
+            <div id="dsq-comment-message-1602" class="dsq-comment-message"><p>1. 这种封装只是function call，没有性能的差异。<br />
+2. native的调用都是基于v8，也不应该有差异。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2152">
+        <div id="dsq-comment-header-2152" class="dsq-comment-header">
+            <cite id="dsq-cite-2152">
+                <span id="dsq-author-user-2152">mityburner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2152" class="dsq-comment-body">
+            <div id="dsq-comment-message-2152" class="dsq-comment-message"><p>用楼主的方法，报了个错Uncaught ReferenceError: require is not defined</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2154">
+        <div id="dsq-comment-header-2154" class="dsq-comment-header">
+            <cite id="dsq-cite-2154">
+                <a id="dsq-author-user-2154" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2154" class="dsq-comment-body">
+            <div id="dsq-comment-message-2154" class="dsq-comment-message"><p>问题描述不清楚，哪里出了错？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-2166">
+        <div id="dsq-comment-header-2166" class="dsq-comment-header">
+            <cite id="dsq-cite-2166">
+                <span id="dsq-author-user-2166">mityburner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2166" class="dsq-comment-body">
+            <div id="dsq-comment-message-2166" class="dsq-comment-message"><p>问题解决了，是编译的问题。谢谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2387">
+        <div id="dsq-comment-header-2387" class="dsq-comment-header">
+            <cite id="dsq-cite-2387">
+                <span id="dsq-author-user-2387">cc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2387" class="dsq-comment-body">
+            <div id="dsq-comment-message-2387" class="dsq-comment-message"><p>browserify 对浏览器的兼容情况不知道怎么样？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2391">
+        <div id="dsq-comment-header-2391" class="dsq-comment-header">
+            <cite id="dsq-cite-2391">
+                <a id="dsq-author-user-2391" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2391" class="dsq-comment-body">
+            <div id="dsq-comment-message-2391" class="dsq-comment-message"><p>你可以在官网找到浏览器兼容介绍，http://browserify.org/<br />
+IE(7,8,9,10), chrome(14,15,16),FF(10,11,12,13),Opera(10,11), Safari(5.0, 5.1)  主流基本都支持</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2941">
+        <div id="dsq-comment-header-2941" class="dsq-comment-header">
+            <cite id="dsq-cite-2941">
+                <span id="dsq-author-user-2941">rambo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2941" class="dsq-comment-body">
+            <div id="dsq-comment-message-2941" class="dsq-comment-message"><p>楼主  可以在浏览器上访问fs模块不？ 哈哈</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2944">
+        <div id="dsq-comment-header-2944" class="dsq-comment-header">
+            <cite id="dsq-cite-2944">
+                <a id="dsq-author-user-2944" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2944" class="dsq-comment-body">
+            <div id="dsq-comment-message-2944" class="dsq-comment-message"><p>我没试过，理论上是不行的，浏览器没有本地文件系统的访问权限。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-3356">
+        <div id="dsq-comment-header-3356" class="dsq-comment-header">
+            <cite id="dsq-cite-3356">
+                <a id="dsq-author-user-3356" href="https://github.com/yanhaijing" target="_blank" rel="nofollow">yanhaijing</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3356" class="dsq-comment-body">
+            <div id="dsq-comment-message-3356" class="dsq-comment-message"><p>肯定不行哈，你要知道browserify做的工作就是预编译，查找依赖，前置的一个过程</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3369">
+        <div id="dsq-comment-header-3369" class="dsq-comment-header">
+            <cite id="dsq-cite-3369">
+                <a id="dsq-author-user-3369" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3369" class="dsq-comment-body">
+            <div id="dsq-comment-message-3369" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3617">
+        <div id="dsq-comment-header-3617" class="dsq-comment-header">
+            <cite id="dsq-cite-3617">
+                <span id="dsq-author-user-3617">cc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3617" class="dsq-comment-body">
+            <div id="dsq-comment-message-3617" class="dsq-comment-message"><p>请教下，browserify 的模块能异步加么？所有模块都打包成一个文件可能会很大呀。。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3624">
+        <div id="dsq-comment-header-3624" class="dsq-comment-header">
+            <cite id="dsq-cite-3624">
+                <a id="dsq-author-user-3624" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3624" class="dsq-comment-body">
+            <div id="dsq-comment-message-3624" class="dsq-comment-message"><p>写文章时候，browserify 所有代码都是打包到一起的；我没有注意后来有没有优化。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-3681">
+        <div id="dsq-comment-header-3681" class="dsq-comment-header">
+            <cite id="dsq-cite-3681">
+                <span id="dsq-author-user-3681">NiKaWaLi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3681" class="dsq-comment-body">
+            <div id="dsq-comment-message-3681" class="dsq-comment-message"><p>$(&#8216;#result&#8217;).text(m(x,y)); 这一行报错：Uncaught Type Error: undefined  is not a function.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3682">
+        <div id="dsq-comment-header-3682" class="dsq-comment-header">
+            <cite id="dsq-cite-3682">
+                <span id="dsq-author-user-3682">NiKaWaLi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3682" class="dsq-comment-body">
+            <div id="dsq-comment-message-3682" class="dsq-comment-message"><p>已解决， var m = require(&#8216;./multiply.js&#8217;);&#8212;-&gt;var m = require(&#8216;/multiply.js&#8217;); 路径问题</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3685">
+        <div id="dsq-comment-header-3685" class="dsq-comment-header">
+            <cite id="dsq-cite-3685">
+                <a id="dsq-author-user-3685" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3685" class="dsq-comment-body">
+            <div id="dsq-comment-message-3685" class="dsq-comment-message"><p>刚看到，解决就好。:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3956">
+        <div id="dsq-comment-header-3956" class="dsq-comment-header">
+            <cite id="dsq-cite-3956">
+                <span id="dsq-author-user-3956">newebug</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3956" class="dsq-comment-body">
+            <div id="dsq-comment-message-3956" class="dsq-comment-message"><p>预编译后函数和参数都被优化成a,b,c,d了，楼主有什么关于浏览器调试好的建议吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3970">
+        <div id="dsq-comment-header-3970" class="dsq-comment-header">
+            <cite id="dsq-cite-3970">
+                <a id="dsq-author-user-3970" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3970" class="dsq-comment-body">
+            <div id="dsq-comment-message-3970" class="dsq-comment-message"><p>chrome按F12，FireFox的Firebug。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-5151">
+        <div id="dsq-comment-header-5151" class="dsq-comment-header">
+            <cite id="dsq-cite-5151">
+                <span id="dsq-author-user-5151">pc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5151" class="dsq-comment-body">
+            <div id="dsq-comment-message-5151" class="dsq-comment-message"><p>C:UsersadminDesktopnode&gt;browserify -r .multiply.js &gt;  bundel.js<br />
+Error: Cannot find module &#8216;C:UsersadminDesktopnodemultiply.js&#8217; from &#8216;C:Use<br />
+rsadminDesktopnode&#8217;<br />
+    at C:UsersadminAppDataRoamingnpmnode_modulesbrowserifynode_modulesr<br />
+esolvelibasync.js:55:21<br />
+    at load (C:UsersadminAppDataRoamingnpmnode_modulesbrowserifynode_mod<br />
+ulesresolvelibasync.js:69:43)<br />
+    at onex (C:UsersadminAppDataRoamingnpmnode_modulesbrowserifynode_mod<br />
+ulesresolvelibasync.js:92:31)<br />
+    at C:UsersadminAppDataRoamingnpmnode_modulesbrowserifynode_modulesr<br />
+esolvelibasync.js:22:47<br />
+    at FSReqWrap.oncomplete (fs.js:82:15)</p>
+<p>模块是存在的，但是编译的时候确报找不到，求楼主解答</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-5155">
+        <div id="dsq-comment-header-5155" class="dsq-comment-header">
+            <cite id="dsq-cite-5155">
+                <a id="dsq-author-user-5155" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5155" class="dsq-comment-body">
+            <div id="dsq-comment-message-5155" class="dsq-comment-message"><p>browserify -r ./multiply.js &gt; bundel.js</p>
+<p>是不是路径的问题？！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-browserify/';
+var disqus_identifier = '4250 http://blog.fens.me/?p=4250';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Browserify 跑在浏览器上的Node程序";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=4250';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

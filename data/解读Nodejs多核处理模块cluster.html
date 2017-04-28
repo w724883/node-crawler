@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>解读Nodejs多核处理模块cluster | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; 解读Nodejs多核处理模块cluster Comments Feed" href="http://blog.fens.me/nodejs-core-cluster/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Nodejs服务器管理模块forever' href='http://blog.fens.me/nodejs-server-forever/' />
+<link rel='next' title='用Maven构建Hadoop项目' href='http://blog.fens.me/hadoop-maven-eclipse/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-core-cluster/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=2670' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-core-cluster%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-core-cluster%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,cluster,siege,load balance" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-2670 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript���言实践</a> &raquo; </li><li>解读Nodejs多核处理模块cluster</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-2670 post type-post status-publish format-standard hentry category-javascript category-19 tag-cluster tag-load-balance tag-nodejs tag-siege">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-core-cluster/" title="解读Nodejs多核处理模块cluster" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Sep 28, 2013</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/cluster/" rel="tag">cluster</a><a href="http://blog.fens.me/tag/load-balance/" rel="tag">load balance</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/siege/" rel="tag">siege</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-core-cluster/#comments"><span class="dsq-postid" data-dsqidentifier="2670 http://blog.fens.me/?p=2670">14 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>解读Nodejs多核处理模块cluster</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="解读Nodejs多核处理模块cluster" href="http://blog.fens.me/nodejs-core-cluster/" target="_blank">http://blog.fens.me/nodejs-core-cluster/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2013/09/nodejs-cluster.png"><img src="http://blog.fens.me/wp-content/uploads/2013/09/nodejs-cluster.png" alt="nodejs-cluster" width="600" height="400" class="alignnone size-full wp-image-2692" /></a></p>
+<p><strong>前言</strong><br />
+大家都知道nodejs是一个单进程单线程的服务器引擎，不管有多么的强大硬件，只能利用到单个CPU进行计算。所以，有人开发了第三方的cluster，让node可以利用多核CPU实现并行。</p>
+<p>随着nodejs的发展，让nodejs上生产环境，就必须是支持多进程多核处理！在V0.6.0版本，Nodejs内置了cluster的特性。自此，Nodejs终于可以作为一个独立的应用开发解决方案，映入大家眼帘了。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>cluster介绍</li>
+<li>cluster的简单使用</li>
+<li>cluster的工作原理</li>
+<li>cluster的API</li>
+<li>master和worker的通信</li>
+<li>用cluster实现负载均衡(Load Balance) &#8212; win7失败</li>
+<li>用cluster实现负载均衡(Load Balance) &#8212; ubuntu成功</li>
+<li>cluster负载均衡策略的测试</li>
+</ol>
+<h2>1. cluster介绍</h2>
+<p>cluster是一个nodejs内置的模块，用于nodejs多核处理。cluster模块，可以帮助我们���化多进程并行化程序的开发难度，轻松构建一个用于负载均衡的集群。</p>
+<h2>2. cluster的简单使用</h2>
+<p><strong>我的系统环境</strong></p>
+<ul>
+<li>win7 64bit</li>
+<li>Nodejs:v0.10.5</li>
+<li>Npm:1.2.19</li>
+</ul>
+<p>在win的环境中，我们通过cluster启动多核的node提供web服务。</p>
+<p>新建工程目录：</p>
+<pre><code>
+~ D:\workspace\javascript>mkdir nodejs-cluster && cd nodejs-cluster
+</code></pre>
+<p>新建文件：app.js</p>
+<pre><code>
+~ vi app.js
+
+var cluster = require('cluster');
+var http = require('http');
+var numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+    console.log("master start...");
+
+    // Fork workers.
+    for (var i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
+
+    cluster.on('listening',function(worker,address){
+        console.log('listening: worker ' + worker.process.pid +', Address: '+address.address+":"+address.port);
+    });
+
+    cluster.on('exit', function(worker, code, signal) {
+        console.log('worker ' + worker.process.pid + ' died');
+    });
+} else {
+    http.createServer(function(req, res) {
+        res.writeHead(200);
+        res.end("hello world\n");
+    }).listen(0);
+}
+</code></pre>
+<p>在控制台启动node程序</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-cluster>node app.js
+
+master start...
+listening: worker 2368, Address: 0.0.0.0:57132
+listening: worker 1880, Address: 0.0.0.0:57132
+listening: worker 1384, Address: 0.0.0.0:57132
+listening: worker 1652, Address: 0.0.0.0:57132
+</code></pre>
+<p>master是总控节点，worker是运行节点。然后根据CPU的数量，启动worker。我本地是双核双通道的CPU，所以被检测为4核，启动了4个worker。</p>
+<h2>3. cluster的工作原理</h2>
+<p>每个worker进程通过使用child_process.fork()函数，基于IPC（Inter-Process Communication，进程间通信），实现与master进程间通信。</p>
+<p>当worker使用server.listen（...）函数时 ，将参数序列传递给master进程。如果master进程已经匹配workers，会将传递句柄给工人。如果master没有匹配好worker，那么会创建一个worker，再传递并句柄传递给worker。</p>
+<p>在边界条件，有3个有趣的行为：<br />
+注：下面server.listen()，是对底层“http.Server-->net.Server”类的调用。</p>
+<ul>
+<li>1. server.listen({fd: 7}):在master和worker通信过程，通过传递文件，master会监听“文件描述为7”，而不是传递“文件描述为7”的引用。 </li>
+<li>2. server.listen(handle):master和worker通信过程，通过handle函数进行通信，而不用进程联系</li>
+<li>3. server.listen(0):在master和worker通信过程，集群中的worker会打开一个随机端口共用，通过socket通信，像上例中的57132</li>
+</ul>
+<p>当多个进程都在 accept() 同样的资源的时候，操作系统的负载均衡非常高效。Node.js没有路由逻辑，worker之间没有共享状态。所以，程序要设计得简单一些，比如基于内存的session。</p>
+<p>因为workers都是独力运行的，根据程序的需要，它们可以被独立删除或者重启，worker并不相互影响。只要还有workers存活，则master将继续接收连接。Node不会自动维护workers的数目。我们可以建立自己的连接池。</p>
+<h2>4. cluster的API</h2>
+<p>官网地址：<a href="http://nodejs.org/api/cluster.html#cluster_cluster" target="_blank" ref="nofollow">http://nodejs.org/api/cluster.html#cluster_cluster</a></p>
+<p><strong>cluster对象</strong><br />
+cluster的各种属性和函数</p>
+<ul>
+<li>cluster.setttings:配置集群参数对象</li>
+<li>cluster.isMaster:判断是不是master节点</li>
+<li>cluster.isWorker:判断是不是worker节点</li>
+<li>Event: 'fork': 监听创建worker进程事件</li>
+<li>Event: 'online': 监听worker创建成功事件</li>
+<li>Event: 'listening': 监听worker向master状态事件</li>
+<li>Event: 'disconnect': 监听worker断线事件</li>
+<li>Event: 'exit': 监听worker退出事件</li>
+<li>Event: 'setup': 监听setupMaster事件</li>
+<li>cluster.setupMaster([settings]): 设置集群参数</li>
+<li>cluster.fork([env]): 创建worker进程</li>
+<li>cluster.disconnect([callback]): 关闭worket进程</li>
+<li>cluster.worker: 获得当前的worker对象</li>
+<li>cluster.workers: 获得集群中所有存活的worker对象</li>
+</ul>
+<p><strong>worker对象</strong><br />
+worker的各种属性和函数：可以通过cluster.workers, cluster.worket获得。</p>
+<ul>
+<li>worker.id: 进程ID号</li>
+<li>worker.process: ChildProcess对象</li>
+<li>worker.suicide: 在disconnect()后，判断worker是否自杀</li>
+<li>worker.send(message, [sendHandle]): master给worker发送消息。注：worker给发master发送消息要用process.send(message)</li>
+<li>worker.kill([signal='SIGTERM']): 杀死指定的worker，别名destory()</li>
+<li>worker.disconnect(): 断开worker连接，让worker自杀</li>
+<li>Event: 'message': 监听master和worker的message事件</li>
+<li>Event: 'online': 监听指定的worker创建成功事件</li>
+<li>Event: 'listening': 监听master向worker状态事件</li>
+<li>Event: 'disconnect': 监听worker断线事件</li>
+<li>Event: 'exit': 监听worker退出事件</li>
+</ul>
+<h2>5. master和worker的通信</h2>
+<p>实现cluster的API，让master和worker相互通信。</p>
+<p>新建文件: cluster.js</p>
+<pre><code>
+~ vi cluster.js
+
+var cluster = require('cluster');
+var http = require('http');
+var numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+    console.log('[master] ' + "start master...");
+
+    for (var i = 0; i < numCPUs; i++) {
+        var wk = cluster.fork();
+        wk.send('[master] ' + 'hi worker' + wk.id);
+    }
+
+    cluster.on('fork', function (worker) {
+        console.log('[master] ' + 'fork: worker' + worker.id);
+    });
+
+    cluster.on('online', function (worker) {
+        console.log('[master] ' + 'online: worker' + worker.id);
+    });
+
+    cluster.on('listening', function (worker, address) {
+        console.log('[master] ' + 'listening: worker' + worker.id + ',pid:' + worker.process.pid + ', Address:' + address.address + ":" + address.port);
+    });
+
+    cluster.on('disconnect', function (worker) {
+        console.log('[master] ' + 'disconnect: worker' + worker.id);
+    });
+
+    cluster.on('exit', function (worker, code, signal) {
+        console.log('[master] ' + 'exit worker' + worker.id + ' died');
+    });
+
+    function eachWorker(callback) {
+        for (var id in cluster.workers) {
+            callback(cluster.workers[id]);
+        }
+    }
+
+    setTimeout(function () {
+        eachWorker(function (worker) {
+            worker.send('[master] ' + 'send message to worker' + worker.id);
+        });
+    }, 3000);
+
+    Object.keys(cluster.workers).forEach(function(id) {
+        cluster.workers[id].on('message', function(msg){
+            console.log('[master] ' + 'message ' + msg);
+        });
+    });
+
+} else if (cluster.isWorker) {
+    console.log('[worker] ' + "start worker ..." + cluster.worker.id);
+
+    process.on('message', function(msg) {
+        console.log('[worker] '+msg);
+        process.send('[worker] worker'+cluster.worker.id+' received!');
+    });
+
+    http.createServer(function (req, res) {
+            res.writeHead(200, {"content-type": "text/html"});
+            res.end('worker'+cluster.worker.id+',PID:'+process.pid);
+    }).listen(3000);
+
+}
+</code></pre>
+<p>控制台日志：</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-cluster>node cluster.js
+
+[master] start master...
+[worker] start worker ...1
+[worker] [master] hi worker1
+[worker] start worker ...2
+[worker] [master] hi worker2
+[master] fork: worker1
+[master] fork: worker2
+[master] fork: worker3
+[master] fork: worker4
+[master] online: worker1
+[master] online: worker2
+[master] message [worker] worker1 received!
+[master] message [worker] worker2 received!
+[master] listening: worker1,pid:6068, Address:0.0.0.0:3000
+[master] listening: worker2,pid:1408, Address:0.0.0.0:3000
+[master] online: worker3
+[worker] start worker ...3
+[worker] [master] hi worker3
+[master] message [worker] worker3 received!
+[master] listening: worker3,pid:3428, Address:0.0.0.0:3000
+[master] online: worker4
+[worker] start worker ...4
+[worker] [master] hi worker4
+[master] message [worker] worker4 received!
+[master] listening: worker4,pid:6872, Address:0.0.0.0:3000
+[worker] [master] send message to worker1
+[worker] [master] send message to worker2
+[worker] [master] send message to worker3
+[worker] [master] send message to worker4
+[master] message [worker] worker1 received!
+[master] message [worker] worker2 received!
+[master] message [worker] worker3 received!
+[master] message [worker] worker4 received!
+</code></pre>
+<h2>6. 用cluster实现负载均衡(Load Balance) -- win7失败</h2>
+<p>新建文件: server.js</p>
+<pre><code>
+~ vi server.js
+
+var cluster = require('cluster');
+var http = require('http');
+var numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+    console.log('[master] ' + "start master...");
+
+    for (var i = 0; i < numCPUs; i++) {
+         cluster.fork();
+    }
+
+    cluster.on('listening', function (worker, address) {
+        console.log('[master] ' + 'listening: worker' + worker.id + ',pid:' + worker.process.pid + ', Address:' + address.address + ":" + address.port);
+    });
+
+} else if (cluster.isWorker) {
+    console.log('[worker] ' + "start worker ..." + cluster.worker.id);
+    http.createServer(function (req, res) {
+        console.log('worker'+cluster.worker.id);
+        res.end('worker'+cluster.worker.id+',PID:'+process.pid);
+    }).listen(3000);
+}
+</code></pre>
+<p>启动服务器：</p>
+<pre><code>
+~ D:\workspace\javascript\nodejs-cluster>node server.js
+[master] start master...
+[worker] start worker ...1
+[worker] start worker ...2
+[master] listening: worker1,pid:1536, Address:0.0.0.0:3000
+[master] listening: worker2,pid:5920, Address:0.0.0.0:3000
+[worker] start worker ...3
+[master] listening: worker3,pid:7156, Address:0.0.0.0:3000
+[worker] start worker ...4
+[master] listening: worker4,pid:2868, Address:0.0.0.0:3000
+worker4
+worker4
+worker4
+worker4
+worker4
+worker4
+worker4
+worker4
+</code></pre>
+<p>用curl工具访问</p>
+<pre><code>
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+C:\Users\Administrator>curl localhost:3000
+worker4,PID:2868
+</code></pre>
+<p>我们发现了cluster在win中的bug，只用到worker4。果断切换到Linux测试。</p>
+<h2>7. 用cluster实现负载均衡(Load Balance) -- ubuntu成功</h2>
+<p>Linux的系统环境</p>
+<ul>
+<li>Linux: Ubuntu 12.04.2 64bit Server</li>
+<li>Node: v0.11.2</li>
+<li>Npm: 1.2.21</li>
+</ul>
+<p>构建项目:不多解释</p>
+<pre><code>
+~ cd :/home/conan/nodejs/
+~ mkdir nodejs-cluster && cd nodejs-cluster
+~ vi server.js
+
+var cluster = require('cluster');
+var http = require('http');
+var numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+    console.log('[master] ' + "start master...");
+
+    for (var i = 0; i < numCPUs; i++) {
+         cluster.fork();
+    }
+
+    cluster.on('listening', function (worker, address) {
+        console.log('[master] ' + 'listening: worker' + worker.id + ',pid:' + worker.process.pid + ', Address:' + address.address + ":" + address.port);
+    });
+
+} else if (cluster.isWorker) {
+    console.log('[worker] ' + "start worker ..." + cluster.worker.id);
+    http.createServer(function (req, res) {
+        console.log('worker'+cluster.worker.id);
+        res.end('worker'+cluster.worker.id+',PID:'+process.pid);
+    }).listen(3000);
+}
+</code></pre>
+<p>启动服务器</p>
+<pre><code>
+conan@conan-deskop:~/nodejs/nodejs-cluster$ node server.js
+[master] start master...
+[worker] start worker ...1
+[master] listening: worker1,pid:2925, Address:0.0.0.0:3000
+[worker] start worker ...3
+[master] listening: worker3,pid:2931, Address:0.0.0.0:3000
+[worker] start worker ...4
+[master] listening: worker4,pid:2932, Address:0.0.0.0:3000
+[worker] start worker ...2
+[master] listening: worker2,pid:2930, Address:0.0.0.0:3000
+worker4
+worker2
+worker1
+worker3
+worker4
+worker2
+worker1
+</code></pre>
+<p>用curl工具访问</p>
+<pre><code>
+C:\Users\Administrator>curl 192.168.1.20:3000
+worker4,PID:2932
+C:\Users\Administrator>curl 192.168.1.20:3000
+worker2,PID:2930
+C:\Users\Administrator>curl 192.168.1.20:3000
+worker1,PID:2925
+C:\Users\Administrator>curl 192.168.1.20:3000
+worker3,PID:2931
+C:\Users\Administrator>curl 192.168.1.20:3000
+worker4,PID:2932
+C:\Users\Administrator>curl 192.168.1.20:3000
+worker2,PID:2930
+C:\Users\Administrator>curl 192.168.1.20:3000
+worker1,PID:2925
+</code></pre>
+<p>在Linux环境中，cluster是运行正确的！！！</p>
+<h2>8. cluster负载均衡策略的测试</h2>
+<p>我们在Linux下面，完成测试，用过测试软件： siege</p>
+<p>安装siege</p>
+<pre><code>~ sudo apt-get install siege</code></pre>
+<p>启动node cluster</p>
+<pre><code>~ node server.js > server.log</code></pre>
+<p>运行siege启动命令,每秒50个并发请求。</p>
+<pre><code>
+~ sudo siege -c 50 http://localhost:3000
+
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.01 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.01 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.02 secs:      16 bytes ==> /
+HTTP/1.1 200   0.00 secs:      16 bytes ==> /
+HTTP/1.1 200   0.02 secs:      16 bytes ==> /
+HTTP/1.1 200   0.01 secs:      16 bytes ==> /
+HTTP/1.1 200   0.01 secs:      16 bytes ==> /
+.....
+
+^C
+Lifting the server siege...      done.                                                                Transactions:                    3760 hits
+Availability:                 100.00 %
+Elapsed time:                  39.66 secs
+Data transferred:               0.06 MB
+Response time:                  0.01 secs
+Transaction rate:              94.81 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                    1.24
+Successful transactions:        3760
+Failed transactions:               0
+Longest transaction:            0.20
+Shortest transaction:           0.00
+
+FILE: /var/siege.log
+You can disable this annoying message by editing
+the .siegerc file in your home directory; change
+the directive 'show-logfile' to false.
+</code></pre>
+<p>我们统计结果，执行3760次请求，消耗39.66秒，每秒处理94.81次请求。</p>
+<p>查看server.log文件, </p>
+<pre><code>
+~  ls -l
+total 64
+-rw-rw-r-- 1 conan conan   756  9月 28 15:48 server.js
+-rw-rw-r-- 1 conan conan 50313  9月 28 16:26 server.log
+
+~ tail server.log
+worker4
+worker1
+worker2
+worker4
+worker1
+worker2
+worker4
+worker3
+worker2
+worker1
+</code></pre>
+<p>最后，用R语言分析一下:server.log</p>
+<pre><code>
+~ R 
+
+> df<-read.table(file="server.log",skip=9,header=FALSE)
+> summary(df)
+       V1
+ worker1:1559
+ worker2:1579
+ worker3:1570
+ worker4:1535
+</code></pre>
+<p>我们看到，请求被分配到worker数据量相当。所以，cluster的负载均衡的策略，应该是随机分配的。</p>
+<p>好了，我们又学了一个很有用的技能！利用cluster可以构建出多核应用，充分的利用多CPU带业的性能吧！！</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="解读Nodejs多核处理模块cluster" href="http://blog.fens.me/nodejs-core-cluster/" target="_blank">http://blog.fens.me/nodejs-core-cluster/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a>, <a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" rel="category tag">架构设计</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-769">
+        <div id="dsq-comment-header-769" class="dsq-comment-header">
+            <cite id="dsq-cite-769">
+                <span id="dsq-author-user-769">balbo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-769" class="dsq-comment-body">
+            <div id="dsq-comment-message-769" class="dsq-comment-message"><p>&#8220;通过handle函数进行通信&#8221;, handle不是函数把？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-772">
+        <div id="dsq-comment-header-772" class="dsq-comment-header">
+            <cite id="dsq-cite-772">
+                <a id="dsq-author-user-772" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-772" class="dsq-comment-body">
+            <div id="dsq-comment-message-772" class="dsq-comment-message"><p>handle是一个回调函数</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-787">
+        <div id="dsq-comment-header-787" class="dsq-comment-header">
+            <cite id="dsq-cite-787">
+                <span id="dsq-author-user-787">balbo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-787" class="dsq-comment-body">
+            <div id="dsq-comment-message-787" class="dsq-comment-message"><p>server.listen(handle, [callback])#<br />
+handle Object<br />
+callback Function</p>
+<p>The handle object can be set to either a server or socket (anything<br />
+with an underlying _handle member), or a {fd: } object.</p>
+<p>This will cause the server to accept connections on the specified<br />
+handle, but it is presumed that the file descriptor or handle has<br />
+already been bound to a port or domain socket.</p>
+<p>没看出来handle是一个回调函数, 不知道是不是参考的地方不对还是还没理解, 麻烦博主指点一下.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-798">
+        <div id="dsq-comment-header-798" class="dsq-comment-header">
+            <cite id="dsq-cite-798">
+                <a id="dsq-author-user-798" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-798" class="dsq-comment-body">
+            <div id="dsq-comment-message-798" class="dsq-comment-message"><p>你好，不好意思，我上次回答没有经过认真思考。</p>
+<p>handle应该是一个对象，如你贴的API所示。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-799">
+        <div id="dsq-comment-header-799" class="dsq-comment-header">
+            <cite id="dsq-cite-799">
+                <span id="dsq-author-user-799">balbo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-799" class="dsq-comment-body">
+            <div id="dsq-comment-message-799" class="dsq-comment-message"><p>呵呵 非常喜欢你的文章 正在看你另外一篇关于angularjs的文章</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-800">
+        <div id="dsq-comment-header-800" class="dsq-comment-header">
+            <cite id="dsq-cite-800">
+                <a id="dsq-author-user-800" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-800" class="dsq-comment-body">
+            <div id="dsq-comment-message-800" class="dsq-comment-message"><p>过奖，我只是把我用到的记录下来。不然自己也都忘了！<br />
+angularjs是非常好的框架，我已经离不开了！:-)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1419">
+        <div id="dsq-comment-header-1419" class="dsq-comment-header">
+            <cite id="dsq-cite-1419">
+                <span id="dsq-author-user-1419">JK</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1419" class="dsq-comment-body">
+            <div id="dsq-comment-message-1419" class="dsq-comment-message"><p>win7可用apache的ab工具进行负载均衡测试，不太直观，但还可以用，我的node v0.10.25 win7 32位，负载均衡没有问题。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-1539">
+        <div id="dsq-comment-header-1539" class="dsq-comment-header">
+            <cite id="dsq-cite-1539">
+                <span id="dsq-author-user-1539">owenhong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1539" class="dsq-comment-body">
+            <div id="dsq-comment-message-1539" class="dsq-comment-message"><p>用cluster实现负载均衡(Load Balance) &#8212; win7失败，，，，这个消息对我们这些用win server的简直是个彻底的打击啊，我用楼主的方法进行了同样的测试，确实每次访问的进程永远是最后一个，其他进程没有执行，无解啊，不知道楼主找到在win下cluster修复的方法了没，希望分享下。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-1560">
+        <div id="dsq-comment-header-1560" class="dsq-comment-header">
+            <cite id="dsq-cite-1560">
+                <a id="dsq-author-user-1560" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1560" class="dsq-comment-body">
+            <div id="dsq-comment-message-1560" class="dsq-comment-message"><p>不要在win上搞。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2942">
+        <div id="dsq-comment-header-2942" class="dsq-comment-header">
+            <cite id="dsq-cite-2942">
+                <span id="dsq-author-user-2942">czc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2942" class="dsq-comment-body">
+            <div id="dsq-comment-message-2942" class="dsq-comment-message"><p>win7上并发访问进行负载均衡测试，还是没问题的，每个进程都会运行。但如果低频率访问，结果确实是只有最后一个进程在运行。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2945">
+        <div id="dsq-comment-header-2945" class="dsq-comment-header">
+            <cite id="dsq-cite-2945">
+                <a id="dsq-author-user-2945" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2945" class="dsq-comment-body">
+            <div id="dsq-comment-message-2945" class="dsq-comment-message"><p>如果你实验成功，那很好啊，cluster模块进步了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4790">
+        <div id="dsq-comment-header-4790" class="dsq-comment-header">
+            <cite id="dsq-cite-4790">
+                <span id="dsq-author-user-4790">madison</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4790" class="dsq-comment-body">
+            <div id="dsq-comment-message-4790" class="dsq-comment-message"><p>win7上100个并发以上才会开始有负载均衡</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4831">
+        <div id="dsq-comment-header-4831" class="dsq-comment-header">
+            <cite id="dsq-cite-4831">
+                <a id="dsq-author-user-4831" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4831" class="dsq-comment-body">
+            <div id="dsq-comment-message-4831" class="dsq-comment-message"><p>你已经测试过了？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-core-cluster/';
+var disqus_identifier = '2670 http://blog.fens.me/?p=2670';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "解读Nodejs多核处理模块cluster";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=2670';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善���能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

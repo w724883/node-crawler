@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>restify构建REST服务 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; restify构建REST服务 Comments Feed" href="http://blog.fens.me/nodejs-restify/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Nodejs异步异常处理domain' href='http://blog.fens.me/nodejs-core-domain/' />
+<link rel='next' title='用MapReduce实现矩阵乘法' href='http://blog.fens.me/hadoop-mapreduce-matrix/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-restify/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=4826' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-restify%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-restify%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="rest,nodejs,javascript,restify,curl,json" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-4826 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>restify构建REST服务</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-4826 post type-post status-publish format-standard hentry category-javascript tag-curl tag-javascript tag-json tag-nodejs tag-rest tag-restify">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-restify/" title="restify构建REST服务" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Jan 13, 2014</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/curl/" rel="tag">curl</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/json/" rel="tag">JSON</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/rest/" rel="tag">rest</a><a href="http://blog.fens.me/tag/restify/" rel="tag">restify</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-restify/#comments"><span class="dsq-postid" data-dsqidentifier="4826 http://blog.fens.me/?p=4826">26 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>restify构建REST服务</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="restify构建REST服务" href="http://blog.fens.me/nodejs-restify/" target="_blank">http://blog.fens.me/nodejs-restify/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/01/nodejs-restify.png"><img src="http://blog.fens.me/wp-content/uploads/2014/01/nodejs-restify.png" alt="nodejs-restify" width="600" height="400" class="alignnone size-full wp-image-4862" /></a></p>
+<p><strong>前言</strong></p>
+<p>随着互联网应用的兴起，web2.0时代的到来，越来越多的人，选择用REST编程来代替原来的页面渲染。REST以资源为中心的web服务，分离了展现层和服务层，让前端和后端程序员能更专注于自己擅长的领域。</p>
+<p>restify让REST变得如此简单！</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>什么是REST?</li>
+<li>restify介绍</li>
+<li>restify安装</li>
+<li>restify服务端API</li>
+<li>restify客户端API</li>
+</ol>
+<h2>1. 什么是REST?</h2>
+<p>REST(Representational State Transfer表述性状态转移)是一种针对网络应用的设计和开发方式，可以降低开发的复杂性，提高系统的可伸缩性。</p>
+<p>REST 定义了一组体系架构原则，您可以根据这些原则设计以系统资源为中心的 Web 服务，包括使用不同语言编写的客户端如何通过 HTTP 处理和传输资源状态。 如果考虑使用它的 Web 服务的数量，REST 近年来已经成为最主要的 Web 服务设计模式。 事实上，REST 对 Web 的影响非常大，由于其使用相当方便，已经普遍地取代了基于 SOAP 和 WSDL 的接口设计。</p>
+<p>REST中的资源所指的不是数据，而是数据和表现形式的组合，比如“最新访问的10位会员”和“最活跃的10位会员”在数据上可能有重叠或者完全相同，而由于他们的表现形式不同，所以被归为不同的资源，这也就是为什么REST的全名是Representational State Transfer的原因。资源标识符就是URI(Uniform Resource Identifier)，不管是图片，Word还是视频文件，甚至只是一种虚拟的服务，也不管你是xml格式、txt文件格式还是其它文件格式，全部通过 URI对资源进行唯一的标识。</p>
+<p>文字介绍，摘自: <a href="http://baike.baidu.com/view/1077487.htm" target="_blank" ref="nofollow">http://baike.baidu.com/view/1077487.htm</a></p>
+<h2>2. restify介绍</h2>
+<p>restify是一个基于Nodejs的REST应用框架，支持服务器端和客户端。restify比起express更专注于REST服务，去掉了express中的template, render等功能，同时强化了REST协议使用，版本化支持，HTTP的异常处理。</p>
+<p>restify提供了DTrace功能，为程序调式带来新的便利！</p>
+<p>restifty的发布页：<a href="http://mcavage.me/node-restify/" target="_blank" ref="nofollow">http://mcavage.me/node-restify/</a></p>
+<h2>3. restify安装</h2>
+<p>系统环境</p>
+<ul>
+<li>Linux: Ubuntu 12.04 LTS 64bit</li>
+<li>node: v0.6.12</li>
+<li>npm: 1.1.4</li>
+</ul>
+<p>创建项目</p>
+<pre><code>
+~ cd /home/conan/nodejs
+~ mkdir nodejs-restify && cd nodejs-restify
+
+~ sudo npm install restify
+restify@2.6.1 node_modules/restify
+├── assert-plus@0.1.4
+├── once@1.3.0
+├── deep-equal@0.0.0
+├── escape-regexp-component@1.0.2
+├── qs@0.6.5
+├── tunnel-agent@0.3.0
+├── keep-alive-agent@0.0.1
+├── lru-cache@2.3.1
+├── node-uuid@1.4.0
+├── negotiator@0.3.0
+├── mime@1.2.11
+├── semver@2.2.1
+├── spdy@1.14.12
+├── backoff@2.3.0
+├── formidable@1.0.14
+├── csv@0.3.6
+├── dtrace-provider@0.2.8
+├── verror@1.3.6 (extsprintf@1.0.2)
+├── bunyan@0.22.0 (mv@0.0.5)
+└── http-signature@0.10.0 (assert-plus@0.1.2, asn1@0.1.11,ctype@0.5.2)
+</code></pre>
+<p>创建一个简单的rest服务</p>
+<p>新建文件：app.js</p>
+<pre><code>
+~ vi app.js
+
+var restify = require('restify');
+
+function respond(req, res, next) {
+  res.send('hello ' + req.params.name);
+}
+
+var server = restify.createServer();
+server.get('/hello/:name', respond);
+server.head('/hello/:name', respond);
+
+server.listen(3900, function() {
+  console.log('%s listening at %s', server.name, server.url);
+});
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node app.js
+restify listening at http://0.0.0.0:3900
+</code></pre>
+<p>使用curl访问测试</p>
+<pre><code>
+#空路径
+~ curl localhost:3900
+{"code":"ResourceNotFound","message":"/ does not exist"
+
+#正常GET请求
+~ curl localhost:3900/hello/conan
+"hello conan"
+
+#设置content-type, 返回包括header信息
+~ curl -i localhost:3900/hello/conan -H 'accept:text/plain'
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 11
+Date: Mon, 13 Jan 2014 08:31:30 GMT
+Connection: keep-alive
+
+hello conan
+
+#设置connection:close, 返回包括header信息
+~  curl -i localhost:3900/hello/conan -H 'connection:close'
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 13
+Date: Mon, 13 Jan 2014 08:29:38 GMT
+Connection: close
+
+hello conan
+</code></pre>
+<p>我们看到用restify创建REST服务非常的容易，接下来我们将深入学习restify的API。</p>
+<h2>4. restify服务端API</h2>
+<ul>
+<li>restify.createServer(): 创建服务器</li>
+<li>server.use(): 注册handler</li>
+<li>server.get(): 路由控制</li>
+<li>server.formatters: 设置content-type</li>
+<li>异常处理</li>
+<li>socket.IO集成/li>
+<li>Server API</li>
+<li>组件管理</li>
+<li>Request API</li>
+<li>Response API</li>
+</ul>
+<p><strong>1). restify.createServer(): 创建服务器</strong></p>
+<p>创建服务器代码</p>
+<pre><code>
+var restify = require('restify');
+
+var server = restify.createServer({
+  certificate: ...,
+  key: ...,
+  name: 'MyApp',
+});
+
+server.listen(8080);
+</code></pre>
+<p>服务器创建参数</p>
+<ul>
+<li>certificate: string, HTTPS服务器的证书</li>
+<li>key: string, HTTPS服务器的证书key</li>
+<li>formatters: object, 自定义的response的content-type</li>
+<li>log: object, 服务器日志，可以配合bunyan一起使用</li>
+<li>name: string, 服务器的response header</li>
+<li>spdy: Object, 允许集成node-spdy服务器</li>
+<li>version: string, 路由版本</li>
+<li>responseTimeHeader: string, X-Response-Time</li>
+<li>responseTimeFormatter: function, 格式化header的值</li>
+</ul>
+<p><strong>2). server.use(): 注册handler</strong></p>
+<p>注册服务器控制组件，按照代码顺序执行，需要放在路由代码之前。</p>
+<p><strong>3). server.get(): 路由控制</strong></p>
+<p>REST响应G请求：</p>
+<ul>
+<li>server.get(): 响应GET请求</li>
+<li>server.post(): 响应POST请求</li>
+<li>server.put(): 响应PUT请求</li>
+<li>server.head(): 响应HEAD请求</li>
+<li>server.del(): 响应DELETE请求</li>
+</ul>
+<p>路由控制代码</p>
+<pre><code>
+ function send(req, res, next) {
+   res.send('hello ' + req.params.name);
+   return next();
+ }
+
+ server.post('/hello', function create(req, res, next) {
+   res.send(201, Math.random().toString(36).substr(3, 8));
+   return next();
+ });
+ server.put('/hello', send);
+ server.get(/^\/([a-zA-Z0-9_\.~-]+)\/(.*)/, send);
+ server.head('/hello/:name', send);
+ server.del('hello/:name', function rm(req, res, next) {
+   res.send(204);
+   return next();
+ });
+</code></pre>
+<p><strong>4). server.formatters: 设置Response的content-type</strong></p>
+<p>content-type类型</p>
+<ul>
+<li>application/json</li>
+<li>text/plain</li>
+<li>application/octet-stream</li>
+</ul>
+<p>增加自定义的content-type:application/foo</p>
+<pre><code>
+var server = restify.createServer({
+  formatters: {
+    'application/foo': function formatFoo(req, res, body) {
+      if (body instanceof Error)
+        return body.stack;
+
+      if (Buffer.isBuffer(body))
+        return body.toString('base64');
+
+      return util.inspect(body);
+    }
+  }
+});
+</code></pre>
+<p>显式的设置Response的content-type</p>
+<pre><code>
+res.setHeader('content-type', 'application/foo');
+res.send({hello: 'world'});
+</code></pre>
+<p><strong>5). 异常处理</strong></p>
+<p>异常处理代码</p>
+<pre><code>
+var server = restify.createServer();
+server.get('/hello/:name', function(req, res, next) {
+  return next(new restify.InvalidArgumentError("I just don't like you"));
+});
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ curl -i localhost:3900/err/conan
+
+HTTP/1.1 409 Conflict
+Content-Type: application/json
+Content-Length: 60
+Date: Mon, 13 Jan 2014 11:06:26 GMT
+Connection: keep-alive
+</code></pre>
+<p>RestError的内置的异常类型：</p>
+<ul>
+<li>BadDigestError: 400</li>
+<li>BadMethodError: 405</li>
+<li>InternalError: 500</li>
+<li>InvalidArgumentError: 409</li>
+<li>InvalidContentError: 400</li>
+<li>InvalidCredentialsError: 401</li>
+<li>InvalidHeaderError: 400</li>
+<li>InvalidVersionError: 400</li>
+<li>MissingParameterError: 409</li>
+<li>NotAuthorizedError: 403</li>
+<li>RequestExpiredError: 400</li>
+<li>RequestThrottledError: 429</li>
+<li>ResourceNotFoundError: 404</li>
+<li>WrongAcceptError: 406</li>
+</ul>
+<p>自定义异常:MyError, errorCode:418</p>
+<pre><code>
+var restify = require('restify');
+var util = require('util');
+
+function MyError(message) {
+  restify.RestError.call(this, {
+    restCode: 'MyError'
+    statusCode: 418,
+    message: message,
+    constructorOpt: MyError
+  });
+  this.name = 'MyError';
+};
+util.inherits(MyError, restify.RestError);
+</code></pre>
+<p><strong>6). Socket.IO集成</strong></p>
+<p>服务器端集成代码</p>
+<pre><code>
+var server = restify.createServer();
+var io = socketio.listen(server);
+
+server.get('/', function indexHTML(req, res, next) {
+    fs.readFile(__dirname + '/index.html', function (err, data) {
+        if (err) {
+            next(err);
+            return;
+        }
+
+        res.setHeader('Content-Type', 'text/html');
+        res.writeHead(200);
+        res.end(data);
+        next();
+});
+
+
+io.sockets.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+            console.log(data);
+    });
+});
+
+server.listen(8080, function () {
+    console.log('socket.io server listening at %s', server.url);
+});
+</code></pre>
+<p><strong>7). Server API</strong></p>
+<p>Events事件监听：</p>
+<ul>
+<li>NotFound: 404 handler</li>
+<li>MethodNotAllowed: 405 handler</li>
+<li>VersionNotAllowed: 400 handler</li>
+<li>UnsupportedMediaType: 415 handler</li>
+<li>after: 在所有handler之后执行</li>
+<li>uncaughtException: 未处理的异常</li>
+</ul>
+<p>注: uncaughtException的处理，可以参考文章, <a title="Nodejs异步异常处理domain" target="_blank" href="http://blog.fens.me/nodejs-core-domain/ ‎">Nodejs异步异常处理domain</a></p>
+<p>Properties配置属性：</p>
+<ul>
+<li>name: string, 服务器名字</li>
+<li>version: string, 路由默认版本</li>
+<li>log: Object, 日志对象</li>
+<li>acceptable: Array(String), content-types列表</li>
+<li>url: string, 服务器信息</li>
+</ul>
+<p>Methods函数：</p>
+<ul>
+<li>address(): 绑定地址</li>
+<li>listen(port, [host], [callback]): 启动服务器</li>
+<li>close(): 停止服务器</li>
+<li>pre(): 在路由之前触发的组件</li>
+<li>use(): 注册组件 </li>
+</ul>
+<p><strong>8). 组件管理</strong></p>
+<p>restify已支持的组件</p>
+<ul>
+<li>Accept header parsing: 解析aceept header，返回客户端</li>
+<li>Authorization header parsing: HTTP Basic Auth认证</li>
+<li>Date header parsing: 数据头解析</li>
+<li>JSONP support: JSONP请求</li>
+<li>Gzip Response: 设置accept-encoding:gzip</li>
+<li>Query string parsing: 解析URL参数</li>
+<li>Body parsing (JSON/URL-encoded/multipart form): 解析内容</li>
+<li>Static file serving: 静态文件处理</li>
+<li>Throttling: 优化服务器性能配置</li>
+<li>Conditional request handling: 设置请求条件</li>
+<li>Audit logger: 日志记录</li>
+</ul>
+<p>注册组件server.use()</p>
+<pre><code>
+var server = restify.createServer();
+server.use(restify.acceptParser(server.acceptable));
+server.use(restify.authorizationParser());
+server.use(restify.dateParser());
+server.use(restify.queryParser());
+server.use(restify.jsonp());
+server.use(restify.gzipResponse());
+server.use(restify.bodyParser());
+server.get(/\/docs\/public\/?.*/, restify.serveStatic({
+  directory: './public'
+}));
+server.use(restify.throttle({
+  burst: 100,
+  rate: 50,
+  ip: true,
+  overrides: {
+    '192.168.1.1': {
+      rate: 0,        // unlimited
+      burst: 0
+    }
+  }
+}));
+server.use(function setETag(req, res, next) {
+  res.header('ETag', 'myETag');
+  res.header('Last-Modified', new Date());
+});
+server.use(restify.conditionalRequest());
+server.on('after', restify.auditLogger({
+  log: bunyan.createLogger({
+    name: 'audit',
+    stream: process.stdout
+  })
+}));
+</code></pre>
+<p><strong>9). Request API</strong></p>
+<p>对node内核API：http.ServerRequest的封装</p>
+<p><strong>10). Response API</strong></p>
+<p>对node内核API：http.ServerResponse的封装</p>
+<h2>5. restify客户端API</h2>
+<ul>
+<li>JsonClient: 收application/json, 发application/json</li>
+<li>StringClient: 收text/plain, 发url-encoded request </li>
+<li>HttpClient: 封装http/https</li>
+</ul>
+<p>新建服务器端测试程序</p>
+<pre><code>
+var restify = require('restify');
+var server = restify.createServer();
+server.use(restify.acceptParser(server.acceptable));
+server.use(restify.authorizationParser());
+server.use(restify.dateParser());
+server.use(restify.queryParser());
+server.use(restify.jsonp());
+server.use(restify.gzipResponse());
+server.use(restify.bodyParser());
+
+# 用于处理JsonClient请求
+server.get('/json/v1',function(req,res,next){
+  var a = {name:'conan',blog:'blog.fens.me'}
+  res.send(a);
+});
+
+# 用于处理StringClient请求
+server.get('/json/v2',function(req,res,next){
+  var a = {name:'conan',blog:'blog.fens.me'}
+  res.send(JSON.stringify(a));
+});
+
+
+server.listen(3900, function() {
+  console.log('%s listening at %s', server.name, server.url);
+});
+</code></pre>
+<p><strong>1). JsonClient</strong></p>
+<p>curl请求</p>
+<pre><code>
+~ curl -i http://localhost:3900/json/v1
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 38
+Date: Mon, 13 Jan 2014 12:09:36 GMT
+Connection: keep-alive
+
+{"name":"conan","blog":"blog.fens.me"}
+</code></pre>
+<p>创建文件：jsonclient.js</p>
+<pre><code>
+~ vi jsonclient.js
+
+var restify = require('restify');
+
+var client = restify.createJsonClient({
+  url: 'http://localhost:3900'
+});
+
+client.get('/json/v1', function(err, req, res, obj) {
+  if(err) console.log(err)
+  console.log(JSON.stringify(obj, null, 2));
+});
+</code></pre>
+<p>运行程序：</p>
+<pre><code>
+~ node jsonclient.js
+{
+  "name": "conan",
+  "blog": "blog.fens.me"
+}
+</code></pre>
+<p><strong>2). StringClient</strong></p>
+<p>curl请求</p>
+<pre><code>
+~ curl -i http://localhost:3900/json/v2 -H 'accept:text/plain'
+
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 38
+Date: Mon, 13 Jan 2014 12:10:07 GMT
+Connection: keep-alive
+
+{"name":"conan","blog":"blog.fens.me"}
+</code></pre>
+<p>创建文件：stringclient.js</p>
+<pre><code>
+~ vi stringclient.js
+
+var restify = require('restify');
+
+var client = restify.createStringClient({
+  url: 'http://localhost:3900'
+});
+
+client.get('/json/v2', function(err, req, res, obj) {
+  if(err) console.log(err)
+  console.log(JSON.stringify(obj, null, 2));
+});
+</code></pre>
+<p>运行程序：</p>
+<pre><code>
+~ node stringclient.js
+"{\"name\":\"conan\",\"blog\":\"blog.fens.me\"}"
+</code></pre>
+<p><strong>3). HttpClient</strong></p>
+<p>创建文件: httpclient.js</p>
+<pre><code>
+~ vi httpclient.js
+
+var restify = require('restify');
+
+var client = restify.createClient({
+  url: 'http://localhost:3900'
+});
+
+client.get('/json/v1', function(err, req) {
+
+  req.on('result', function(err, res) {
+    res.body = '';
+    res.setEncoding('utf8');
+    res.on('data', function(chunk) {
+      res.body += chunk;
+    });
+
+    res.on('end', function() {
+      console.log(res.body);
+    });
+});
+});
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node httpclient.js
+{"name":"conan","blog":"blog.fens.me"}
+</code></pre>
+<p>我们已经全面了解的了restify包，接下就可以快速构建我们自己的REST服务了���Node实现如此之简单，让原来Java程序员如何生存呢？！</p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="restify构建REST服务" href="http://blog.fens.me/nodejs-restify/" target="_blank">http://blog.fens.me/nodejs-restify/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-1763">
+        <div id="dsq-comment-header-1763" class="dsq-comment-header">
+            <cite id="dsq-cite-1763">
+                <span id="dsq-author-user-1763">Dc Zhu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1763" class="dsq-comment-body">
+            <div id="dsq-comment-message-1763" class="dsq-comment-message"><p>好像用express也可以啊。不过好像很少见用express的朋友用put 和 delete</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1764">
+        <div id="dsq-comment-header-1764" class="dsq-comment-header">
+            <cite id="dsq-cite-1764">
+                <a id="dsq-author-user-1764" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1764" class="dsq-comment-body">
+            <div id="dsq-comment-message-1764" class="dsq-comment-message"><p>是的，和express类似，这个框架向restful更友好。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-2096">
+        <div id="dsq-comment-header-2096" class="dsq-comment-header">
+            <cite id="dsq-cite-2096">
+                <a id="dsq-author-user-2096" href="http://www.nodepie.com" target="_blank" rel="nofollow">qinyang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2096" class="dsq-comment-body">
+            <div id="dsq-comment-message-2096" class="dsq-comment-message"><p>楼主，我最近也在用restify，但是遇到bodyParser无法正常解析问题</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-2105">
+        <div id="dsq-comment-header-2105" class="dsq-comment-header">
+            <cite id="dsq-cite-2105">
+                <a id="dsq-author-user-2105" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2105" class="dsq-comment-body">
+            <div id="dsq-comment-message-2105" class="dsq-comment-message"><p>是不是由于包升级造成的不兼容？ bodyParser应该是connect包的中间件吧，参考这里看一下：http://blog.fens.me/nodejs-connect/</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2263">
+        <div id="dsq-comment-header-2263" class="dsq-comment-header">
+            <cite id="dsq-cite-2263">
+                <span id="dsq-author-user-2263">whilefor</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2263" class="dsq-comment-body">
+            <div id="dsq-comment-message-2263" class="dsq-comment-message"><p>这个程序好像是官网API GUIDE一个example</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2336">
+        <div id="dsq-comment-header-2336" class="dsq-comment-header">
+            <cite id="dsq-cite-2336">
+                <span id="dsq-author-user-2336">cc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2336" class="dsq-comment-body">
+            <div id="dsq-comment-message-2336" class="dsq-comment-message"><p>博主，如果进行用户验证，不适用basic auth，采取什么方式比较合适？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2338">
+        <div id="dsq-comment-header-2338" class="dsq-comment-header">
+            <cite id="dsq-cite-2338">
+                <a id="dsq-author-user-2338" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2338" class="dsq-comment-body">
+            <div id="dsq-comment-message-2338" class="dsq-comment-message"><p>basic auth都是早期站点使用的，有安全问题。一般都是自已实现登陆验证。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2351">
+        <div id="dsq-comment-header-2351" class="dsq-comment-header">
+            <cite id="dsq-cite-2351">
+                <span id="dsq-author-user-2351">cc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2351" class="dsq-comment-body">
+            <div id="dsq-comment-message-2351" class="dsq-comment-message"><p>如果在站点前期，api的用户验证，在手机客户端的情况下，如果使用token作为每次查询的凭证是否合适，不走https。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2354">
+        <div id="dsq-comment-header-2354" class="dsq-comment-header">
+            <cite id="dsq-cite-2354">
+                <a id="dsq-author-user-2354" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2354" class="dsq-comment-body">
+            <div id="dsq-comment-message-2354" class="dsq-comment-message"><p>你可用OAuth协议，现在大部分的开放API都是这么做的。<br />
+登陆验证最好用https，如果不用token可能会泄露，另外GFW会查询所有明文，可能会有风险。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-2366">
+        <div id="dsq-comment-header-2366" class="dsq-comment-header">
+            <cite id="dsq-cite-2366">
+                <span id="dsq-author-user-2366">cc</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2366" class="dsq-comment-body">
+            <div id="dsq-comment-message-2366" class="dsq-comment-message"><p>明了了，谢博主！</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-roadmap/' rel='external nofollow' class='url'>Nodejs学习路线图 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-2602">
+        <div id="dsq-comment-header-2602" class="dsq-comment-header">
+            <cite id="dsq-cite-2602">
+                <a id="dsq-author-user-2602" href="http://willin.wang/" target="_blank" rel="nofollow">Willin Wang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2602" class="dsq-comment-body">
+            <div id="dsq-comment-message-2602" class="dsq-comment-message"><p>mark</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4275">
+        <div id="dsq-comment-header-4275" class="dsq-comment-header">
+            <cite id="dsq-cite-4275">
+                <a id="dsq-author-user-4275" href="http://ivydom.com" target="_blank" rel="nofollow">ivydom</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4275" class="dsq-comment-body">
+            <div id="dsq-comment-message-4275" class="dsq-comment-message"><p>woc</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3111">
+        <div id="dsq-comment-header-3111" class="dsq-comment-header">
+            <cite id="dsq-cite-3111">
+                <a id="dsq-author-user-3111" href="http://weakish.github.io/" target="_blank" rel="nofollow">weakish</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3111" class="dsq-comment-body">
+            <div id="dsq-comment-message-3111" class="dsq-comment-message"><p>&gt; ~ sudo npm install restify</p>
+<p>Why `sudo`?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-3330">
+        <div id="dsq-comment-header-3330" class="dsq-comment-header">
+            <cite id="dsq-cite-3330">
+                <a id="dsq-author-user-3330" href="http://gongtao.me/" target="_blank" rel="nofollow">Kevin</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3330" class="dsq-comment-body">
+            <div id="dsq-comment-message-3330" class="dsq-comment-message"><p>学习啦，谢谢分享</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-3337">
+        <div id="dsq-comment-header-3337" class="dsq-comment-header">
+            <cite id="dsq-cite-3337">
+                <a id="dsq-author-user-3337" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3337" class="dsq-comment-body">
+            <div id="dsq-comment-message-3337" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4276">
+        <div id="dsq-comment-header-4276" class="dsq-comment-header">
+            <cite id="dsq-cite-4276">
+                <span id="dsq-author-user-4276">henry</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4276" class="dsq-comment-body">
+            <div id="dsq-comment-message-4276" class="dsq-comment-message"><p>很详细，感谢分享！！</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4277">
+        <div id="dsq-comment-header-4277" class="dsq-comment-header">
+            <cite id="dsq-cite-4277">
+                <a id="dsq-author-user-4277" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4277" class="dsq-comment-body">
+            <div id="dsq-comment-message-4277" class="dsq-comment-message"><p>：-）</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4899">
+        <div id="dsq-comment-header-4899" class="dsq-comment-header">
+            <cite id="dsq-cite-4899">
+                <span id="dsq-author-user-4899">muzi_xiangxiang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4899" class="dsq-comment-body">
+            <div id="dsq-comment-message-4899" class="dsq-comment-message"><p>怎么判断用户发出的是get还是del呢？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4908">
+        <div id="dsq-comment-header-4908" class="dsq-comment-header">
+            <cite id="dsq-cite-4908">
+                <a id="dsq-author-user-4908" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4908" class="dsq-comment-body">
+            <div id="dsq-comment-message-4908" class="dsq-comment-message"><p>通过header可以知道。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4919">
+        <div id="dsq-comment-header-4919" class="dsq-comment-header">
+            <cite id="dsq-cite-4919">
+                <span id="dsq-author-user-4919">muzi_xiangxiang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4919" class="dsq-comment-body">
+            <div id="dsq-comment-message-4919" class="dsq-comment-message"><p>谢谢</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-4918">
+        <div id="dsq-comment-header-4918" class="dsq-comment-header">
+            <cite id="dsq-cite-4918">
+                <span id="dsq-author-user-4918">muzi_xiangxiang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4918" class="dsq-comment-body">
+            <div id="dsq-comment-message-4918" class="dsq-comment-message"><p>怎么配置2个路由<br />
+app.use(&#8216;/&#8217;, routes);<br />
+app.use(&#8216;/layer&#8217;,layers);<br />
+访问localhost调用routes的方法，访问localhost/layer调用layers的方法</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4924">
+        <div id="dsq-comment-header-4924" class="dsq-comment-header">
+            <cite id="dsq-cite-4924">
+                <a id="dsq-author-user-4924" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4924" class="dsq-comment-body">
+            <div id="dsq-comment-message-4924" class="dsq-comment-message"><p>应该是这样的。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-4925">
+        <div id="dsq-comment-header-4925" class="dsq-comment-header">
+            <cite id="dsq-cite-4925">
+                <span id="dsq-author-user-4925">muzi_xiangxiang</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4925" class="dsq-comment-body">
+            <div id="dsq-comment-message-4925" class="dsq-comment-message"><p>我试了下 这样在express模版可以但是在restify提示不是一个function</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-4933">
+        <div id="dsq-comment-header-4933" class="dsq-comment-header">
+            <cite id="dsq-cite-4933">
+                <a id="dsq-author-user-4933" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4933" class="dsq-comment-body">
+            <div id="dsq-comment-message-4933" class="dsq-comment-message"><p>看一下restify的例子是怎么实现的吧，本文写的时间比较早了，有可能API变了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-5063">
+        <div id="dsq-comment-header-5063" class="dsq-comment-header">
+            <cite id="dsq-cite-5063">
+                <span id="dsq-author-user-5063">superchen</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5063" class="dsq-comment-body">
+            <div id="dsq-comment-message-5063" class="dsq-comment-message"><p>请问配置多个Router的问题，你解决了吗？</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-restify/';
+var disqus_identifier = '4826 http://blog.fens.me/?p=4826';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "restify构建REST服务";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=4826';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

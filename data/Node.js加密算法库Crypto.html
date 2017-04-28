@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Node.js加密算法库Crypto | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Node.js加密算法库Crypto Comments Feed" href="http://blog.fens.me/nodejs-crypto/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Marked高效的Markdown解析器' href='http://blog.fens.me/nodejs-markdown-marked/' />
+<link rel='next' title='Node.js缓冲模块Buffer' href='http://blog.fens.me/nodejs-buffer/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-crypto/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=7790' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-crypto%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-crypto%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="nodejs,javascript,crypto,md5,sha,rsa,cipher,decipher,hash,sha1,hmac,salt,pbkdf2" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-7790 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Node.js加密算法库Crypto</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-7790 post type-post status-publish format-standard hentry category-javascript tag-cipher tag-crypto tag-decipher tag-hash tag-hmac tag-javascript tag-md5 tag-nodejs tag-pbkdf2 tag-rsa tag-salt tag-sha tag-sha1">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-crypto/" title="Node.js加密算法库Crypto" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Mar 2, 2015</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/cipher/" rel="tag">cipher</a><a href="http://blog.fens.me/tag/crypto/" rel="tag">crypto</a><a href="http://blog.fens.me/tag/decipher/" rel="tag">decipher</a><a href="http://blog.fens.me/tag/hash/" rel="tag">hash</a><a href="http://blog.fens.me/tag/hmac/" rel="tag">hmac</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/md5/" rel="tag">md5</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/pbkdf2/" rel="tag">pbkdf2</a><a href="http://blog.fens.me/tag/rsa/" rel="tag">rsa</a><a href="http://blog.fens.me/tag/salt/" rel="tag">salt</a><a href="http://blog.fens.me/tag/sha/" rel="tag">sha</a><a href="http://blog.fens.me/tag/sha1/" rel="tag">sha1</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-crypto/#comments"><span class="dsq-postid" data-dsqidentifier="7790 http://blog.fens.me/?p=7790">7 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Node.js加密算法库Crypto</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比���PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 创业者，程序员(Java,R,Javascript)</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Node.js加密算法库Crypto" href="http://blog.fens.me/nodejs-crypto/" target="_blank">http://blog.fens.me/nodejs-crypto/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2015/03/crypto.png"><img src="http://blog.fens.me/wp-content/uploads/2015/03/crypto.png" alt="crypto" width="600" height="400" class="alignnone size-full wp-image-7810" /></a></p>
+<p><strong>前言</strong></p>
+<p>密码技术是互联网应用的一项最基本的技术之一，主要保证了数据的安全。安全定义是多维度的，通过不可逆的hash算法可以保证登陆密码的安全；通过非对称的加密算法，可以保证数据存储的安全性；通过数字签名，可以验证数据在传输过程中是否被篡改。</p>
+<p>我们要做互联网应用，数据���全性一个是不容忽视的问题。不然可能会造成，如CSDN的100万用户明文密码被泄露事情；携程网，100万用户个人信息泄露事情等。</p>
+<p>Node.js的Crypto库就提供各种加密算法，可以非常方便地让我们使用密码技术，解决应用开发中的问题。</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>Crypto介绍</li>
+<li>Hash算法</li>
+<li>Hmac算法</li>
+<li>加密和解密算法</li>
+<li>签名和验证算法</li>
+<li>salt算法</li>
+<li>程序代码</li>
+</ol>
+<h2>1. Crypto介绍</h2>
+<p>Crypto库是随Nodejs内核一起打包发布的，主要提供了加密、解密、签名、验证等功能。Crypto利用OpenSSL库来实现它的加密技术，它提供OpenSSL中的一系列哈希方法，包括hmac、cipher、decipher、签名和验证等方法的封装。</p>
+<p>Crypto官方文档：<a href="http://nodejs.org/api/crypto.html" target="_blank">http://nodejs.org/api/crypto.html</a></p>
+<h2>2. Hash算法</h2>
+<p>哈希算法，是指将任意长度的二进制值映射为较短的固定长度的二进制值，这个小的二进制值称为哈希值。哈希值是一段数据唯一且极其紧凑的数值表示形式。如果散列一段明文而且哪怕只更改该段落的一个字母，随后的哈希都将产生不同的值。要找到散列为同一个值的两个不同的输入，在计算上是不可能的，所以数据的哈希值可以检验数据的完整性。一般用于快速查找和加密算法。</p>
+<p>通常我们对 登陆密码，都是使用Hash算法进行加密，典型的哈希算法包括 &#8216;md5&#8242;,&#8217;sha&#8217;,&#8217;sha1&#8242;,&#8217;sha256&#8242;,&#8217;sha512&#8242;,&#8217;RSA-SHA&#8217;。下面我们就做一下算法的测试。</p>
+<p>系统环境</p>
+<ul>
+<li>Win7 64bit</li>
+<li>Nodejs:v0.10.31</li>
+<li>Npm:1.4.23</li>
+</ul>
+<p>创建项目</p>
+<pre><code>
+~ cd D:\workspace\javascript>
+~ D:\workspace\javascript>mkdir nodejs-crypto && cd nodejs-crypto
+</code></pre>
+<p>新建文件hash.js，打印出所支持的hash算法。</p>
+<pre><code>
+~ vi hash.js
+
+var crypto = require('crypto');  # 加载crypto库
+console.log(crypto.getHashes()); # 打印支持的hash算法
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node hash.js
+
+[ 'DSA',
+  'DSA-SHA',
+  'DSA-SHA1',
+  'DSA-SHA1-old',
+  'RSA-MD4',
+  'RSA-MD5',
+  'RSA-MDC2',
+  'RSA-RIPEMD160',
+  'RSA-SHA',
+  'RSA-SHA1',
+  'RSA-SHA1-2',
+  'RSA-SHA224',
+  'RSA-SHA256',
+  'RSA-SHA384',
+  'RSA-SHA512',
+  'dsaEncryption',
+  'dsaWithSHA',
+  'dsaWithSHA1',
+  'dss1',
+  'ecdsa-with-SHA1',
+  'md4',
+  'md4WithRSAEncryption',
+  'md5',
+  'md5WithRSAEncryption',
+  'mdc2',
+  'mdc2WithRSA',
+  'ripemd',
+  'ripemd160',
+  'ripemd160WithRSA',
+  'rmd160',
+  'sha',
+  'sha1',
+  'sha1WithRSAEncryption',
+  'sha224',
+  'sha224WithRSAEncryption',
+  'sha256',
+  'sha256WithRSAEncryption',
+  'sha384',
+  'sha384WithRSAEncryption',
+  'sha512',
+  'sha512WithRSAEncryption',
+  'shaWithRSAEncryption',
+  'ssl2-md5',
+  'ssl3-md5',
+  'ssl3-sha1',
+  'whirlpool' ]
+</code></pre>
+<p>我们看到支持Hash真是不少，究竟怎么选择适合，我也说不清楚。以我对算法的理解，我会以加密计算时间和编码长度，做选择的依据。下面就简单地比较一下几种常见算法。</p>
+<p>编辑hash.js文件</p>
+<pre><code>
+~ vi hash.js
+
+///////////////////////////
+// Hash算法
+///////////////////////////
+var crypto = require('crypto')
+    ,fs = require('fs');
+
+function hashAlgorithm(algorithm){
+    var s1 = new Date();
+
+    var filename = "package.json";
+    var txt = fs.ReadStream(filename);
+
+    var shasum = crypto.createHash(algorithm);
+    txt.on('data', function(d) {
+        shasum.update(d);
+    });
+
+    txt.on('end', function() {
+        var d = shasum.digest('hex');
+        var s2 = new Date();
+
+        console.log(algorithm+','+(s2-s1) +'ms,'+ d);
+    });
+}
+
+function doHash(hashs){
+    hashs.forEach(function(name){
+        hashAlgorithm(name);
+    })
+}
+
+//var algs = crypto.getHashes();
+var algs = [ 'md5','sha','sha1','sha256','sha512','RSA-SHA','RSA-SHA1','RSA-SHA256','RSA-SHA512'];
+doHash(algs);
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node hash.js
+
+md5,6ms,85cd416f811574bd4bdb61b241266670
+sha,18ms,b1fc6647fa4fdb4b1b394f8dc7856ac140e2fbdb
+sha1,20ms,0777e65066dca985569fa892fa88e21b45dc656d
+sha256,21ms,5e4aea76f93ee87f422fcbd9458edad0e33ddf256d5d93bcc47977e33cb1654c
+sha512,23ms,94249ec2f83b006354774dd8f8ec81125ea9e1e00f94393d8b20bbd7678e63db53fab6af125e139f9257fd7dbb6c69474e443d059903a9cb2dded03a94c8143
+RSA-SHA,24ms,b1fc6647fa4fdb4b1b394f8dc7856ac140e2fbdb
+RSA-SHA1,25ms,0777e65066dca985569fa892fa88e21b45dc656d
+RSA-SHA256,26ms,5e4aea76f93ee87f422fcbd9458edad0e33ddf256d5d93bcc47977e33cb1654c
+RSA-SHA512,26ms,94249ec2f83b006354774dd8f8ec81125ea9e1e00f94393d8b20bbd7678e63db53fab6af125e139f9257fd7dbb6c69474e4433d059903a9cb2dded03a94c8143
+</code></pre>
+<p>输出以逗号分隔，分别是算法名、时间、密文。最常见的md5，密文长度最短，计算时间也最少；sha和sha1比较接近；sha512密文最长，计算时间也最长。</p>
+<p>由于md5已经有了大量的字典库，对于安全级别一般的网站用sha1吧；如果安全级别要求很高，CPU配置也很牛，可以考虑用sha512。</p>
+<h2>3. Hmac算法</h2>
+<p>HMAC是密钥相关的哈希运算消息认证码（Hash-based Message Authentication Code）,HMAC运算利用哈希算法，以一个密钥和一个消息为输入，生成一个消息摘要作为输出。HMAC可以有效防止一些类似md5的彩虹表等攻击，比如一些常见的密码直接MD5存入数据库的，可能被反向破解。</p>
+<p>定义HMAC需要一个加密用散列函数（表示为H，可以是MD5或者SHA-1）和一个密钥K。我们用B来表示数据块的字节数。（以上所提到的散列函数的分割数据块字长B=64），用L来表示散列函数的输出数据字节数（MD5中L=16,SHA-1中L=20）。鉴别密钥的长度可以是小于等于数据块字长的任何正整数值。应用程序中使用的密钥长度若是比B大，则首先用使用散列函数H作用于它，然后用H输出的L长度字符串作为在HMAC中实际使用的密钥。一般情况下，推荐的最小密钥K长度是L个字节。</p>
+<p>由于HMAC就是使用散列函数，所以我们同样选择上面的几种算法进行测试。新建文件hmac.js。</p>
+<pre><code>
+~ vi hmac.js
+
+///////////////////////////
+// Hmac算法
+///////////////////////////
+
+var crypto = require('crypto')
+    ,fs = require('fs');
+
+function hmacAlgorithm(algorithm,key){
+    var s1 = new Date();
+
+    var filename = "package.json";
+    var txt = fs.ReadStream(filename);
+
+    var shasum = crypto.createHmac(algorithm,key);
+    txt.on('data', function(d) {
+        shasum.update(d);
+    });
+
+    txt.on('end', function() {
+        var d = shasum.digest('hex');
+        var s2 = new Date();
+
+        console.log(algorithm+','+(s2-s1) +'ms,'+ d);
+    });
+}
+
+function doHmac(hashs,key){
+    console.log("\nKey : %s", key);
+    console.log("============================");
+    hashs.forEach(function(name){
+        hmacAlgorithm(name,key);
+    })
+}
+
+//var algs = crypto.getHashes();
+var algs = [ 'md5','sha','sha1','sha256','sha512','RSA-SHA','RSA-SHA1','RSA-SHA256','RSA-SHA512'];
+
+// 短KEY的测试
+setTimeout(function(){
+    doHmac(algs,"abc");
+},1)
+
+// 长KEY的测试
+setTimeout(function(){
+    var key = "jifdkd;adkfaj^&fjdifefdafda,ijjifdkd;adkfaj^&fjdifefdafdaljifdkd;adkfaj^&fjdifefdafda";
+    doHmac(algs,key);
+},2*1000)
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node hmac.js
+Key : abc
+============================
+md5,6ms,bf106a077abcfa0fffe6ec0da039545b
+sha,6ms,a43a00981346ac64bb7b6fb0641b72a101fb04a5
+sha1,6ms,aead69a72da77d0615a854dda1086d885807574a
+sha256,7ms,98ac955cb2205ba01a6337951d0ed3fd9b68753544cf81275eced365da57fc5d
+sha512,8ms,054f37e34b55a19e64a7f88fb60b1122dc0a30e9864ca28d01d61115b13c74de292ab66e85bf007e1a463a52d7c30fdff174618ef954401bc9c2c3318e762c8f
+RSA-SHA,10ms,a43a00981346ac64bb7b6fb0641b72a101fb04a5
+RSA-SHA1,11ms,aead69a72da77d0615a854dda1086d885807574a
+RSA-SHA256,12ms,98ac955cb2205ba01a6337951d0ed3fd9b68753544cf81275eced365da57fc5d
+RSA-SHA512,13ms,054f37e34b55a19e64a7f88fb60b1122dc0a30e9864ca28d01d61115b13c74de292ab66e85bf007e1a463a52d7c30fdff174618ef954401bc9c2c3318e762c8f
+
+Key : jifdkd;adkfaj^&fjdifefdafda,ijjifdkd;adkfaj^&fjdifefdafdaljifdkd;adkfaj^&fjdifefdafda
+============================
+md5,5ms,164a8fee6e37bb3e40a9d5dff5c2fd66
+sha,5ms,ba06f536856553c3756aa36254a63ef35e225d38
+sha1,7ms,f3a89b0a5ee8a55c2bb6a861748d43e9d44dc489
+sha256,7ms,f2df911f40e74b2b9bb3d53a7ca4b78d438d511e015d4b50431eaea65339380d
+sha512,8ms,5b4b57386b1fcc4f1945c47788bf38c013e1cde356fc15e1f946e6bf6738b5dc52ecf17b3ddc80b2ff21f985a1a707df9357fe305e9aa143da073d2cafd794dc
+RSA-SHA,11ms,ba06f536856553c3756aa36254a63ef35e225d38
+RSA-SHA1,12ms,f3a89b0a5ee8a55c2bb6a861748d43e9d44dc489
+RSA-SHA256,14ms,f2df911f40e74b2b9bb3d53a7ca4b78d438d511e015d4b50431eaea65339380d
+RSA-SHA512,16ms,5b4b57386b1fcc4f1945c47788bf38c013e1cde356fc15e1f946e6bf6738b5dc52ecf17b3ddc80b2ff21f985a1a707df9357fe305e9aa143da073d2cafd794dc
+</code></pre>
+<p>通过比对短key和长key，在编码比较长的算法上面会有一些影响。由于Hmac有了第二参数key，所以会比单独的hash加密登陆密码，有更好的安全性上的保证。</p>
+<p>对于网站登陆密码的设计，我们可以做成2个字段存储，用password字段存密文，passkey字段存储key，把算法直接封装到程序里面。</p>
+<pre><code>
+{
+  username: 'xxxx'
+  password: 'aead69a72da77d0615a854dda1086d885807574a',
+  passkey:'abc'
+}
+</code></pre>
+<p>就算数据库被攻击，黑客也只是拿了密文和key，密码明文并没有被泄露。并且在不知道加密算法的情况下，也很难通过彩虹表进行攻击。</p>
+<h2>4. 加密和解密算法</h2>
+<p>对于登陆密码来说，是不需要考虑解密的，通常都会用不可逆的算法，像md5,sha-1等。但是，对于有安全性要求的数据来说，我们是需要加密存储，然后解密使用的，这时需要用到可逆的加密算法。对于这种基于KEY算法，可以分为对称加密和不对称加密。</p>
+<ul>
+<li>对称加密算法的原理很容易理解，通信一方用KEK加密明文，另一方收到之后用同样的KEY来解密就可以得到明文。</li>
+<li>不对称加密算法，使用两把完全不同但又是完全匹配的一对Key:公钥和私钥。在使用不对称加密算法加密文件时，只有使用匹配的一对公钥和私钥，才能完成对明文的加密和解密过程。</li>
+</ul>
+<p>对于这种类型的操作，Crypto包也提供了大量的算法支持。新建文件cipher.js，打印出所支持的算法。</p>
+<pre><code>
+~ vi cipher.js
+
+var crypto = require('crypto');
+console.log(crypto.getCiphers());
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node cipher.js
+
+[ 'CAST-cbc',
+  'aes-128-cbc',
+  'aes-128-cbc-hmac-sha1',
+  'aes-128-cfb',
+  'aes-128-cfb1',
+  'aes-128-cfb8',
+  'aes-128-ctr',
+  'aes-128-ecb',
+  'aes-128-gcm',
+  'aes-128-ofb',
+  'aes-128-xts',
+  'aes-192-cbc',
+  'aes-192-cfb',
+  'aes-192-cfb1',
+  'aes-192-cfb8',
+  'aes-192-ctr',
+  'aes-192-ecb',
+  'aes-192-gcm',
+  'aes-192-ofb',
+  'aes-256-cbc',
+  'aes-256-cbc-hmac-sha1',
+  'aes-256-cfb',
+  'aes-256-cfb1',
+  'aes-256-cfb8',
+  'aes-256-ctr',
+  'aes-256-ecb',
+  'aes-256-gcm',
+  'aes-256-ofb',
+  'aes-256-xts',
+  'aes128',
+  'aes192',
+  'aes256',
+  'bf',
+  'bf-cbc',
+  'bf-cfb',
+  'bf-ecb',
+  'bf-ofb',
+  'blowfish',
+  'camellia-128-cbc',
+  'camellia-128-cfb',
+  'camellia-128-cfb1',
+  'camellia-128-cfb8',
+  'camellia-128-ecb',
+  'camellia-128-ofb',
+  'camellia-192-cbc',
+  'camellia-192-cfb',
+  'camellia-192-cfb1',
+  'camellia-192-cfb8',
+  'camellia-192-ecb',
+  'camellia-192-ofb',
+  'camellia-256-cbc',
+  'camellia-256-cfb',
+  'camellia-256-cfb1',
+  'camellia-256-cfb8',
+  'camellia-256-ecb',
+  'camellia-256-ofb',
+  'camellia128',
+  'camellia192',
+  'camellia256',
+  'cast',
+  'cast-cbc',
+  'cast5-cbc',
+  'cast5-cfb',
+  'cast5-ecb',
+  'cast5-ofb',
+  'des',
+  'des-cbc',
+  'des-cfb',
+  'des-cfb1',
+  'des-cfb8',
+  'des-ecb',
+  'des-ede',
+  'des-ede-cbc',
+  'des-ede-cfb',
+  'des-ede-ofb',
+  'des-ede3',
+  'des-ede3-cbc',
+  'des-ede3-cfb',
+  'des-ede3-cfb1',
+  'des-ede3-cfb8',
+  'des-ede3-ofb',
+  'des-ofb',
+  'des3',
+  'desx',
+  'desx-cbc',
+  'id-aes128-GCM',
+  'id-aes192-GCM',
+  'id-aes256-GCM',
+  'idea',
+  'idea-cbc',
+  'idea-cfb',
+  'idea-ecb',
+  'idea-ofb',
+  'rc2',
+  'rc2-40-cbc',
+  'rc2-64-cbc',
+  'rc2-cbc',
+  'rc2-cfb',
+  'rc2-ecb',
+  'rc2-ofb',
+  'rc4',
+  'rc4-40',
+  'rc4-hmac-md5',
+  'seed',
+  'seed-cbc',
+  'seed-cfb',
+  'seed-ecb',
+  'seed-ofb' ]
+</code></pre>
+<p>同样地，在这么一大堆的算法面前，完全不知道如何去选择。我还是以加密和解密的计算时间为参考指标，选出几个常见的算法进行测试。</p>
+<pre><code>
+///////////////////////////
+// 加密解密算法
+///////////////////////////
+var crypto = require('crypto')
+    ,fs = require('fs');
+
+//加密
+function cipher(algorithm, key, buf ,cb){
+    var encrypted = "";
+    var cip = crypto.createCipher(algorithm, key);
+    encrypted += cip.update(buf, 'binary', 'hex');
+    encrypted += cip.final('hex');
+    cb(encrypted);
+}
+
+//解密
+function decipher(algorithm, key, encrypted,cb){
+    var decrypted = "";
+    var decipher = crypto.createDecipher(algorithm, key);
+    decrypted += decipher.update(encrypted, 'hex', 'binary');
+    decrypted += decipher.final('binary');
+    cb(decrypted);
+}
+
+function cipherDecipherFile(filename,algorithm, key){
+    fs.readFile(filename, "utf-8",function (err, data) {
+        if (err) throw err;
+        var s1 = new Date();
+
+        cipher(algorithm, key,data,function(encrypted){
+            var s2 = new Date();
+            console.log('cipher:'+algorithm+','+(s2-s1) +'ms');
+
+            decipher(algorithm, key,encrypted,function(txt){
+                var s3 = new Date();
+                console.log('decipher:'+algorithm+','+(s3-s2) +'ms');
+//                console.log(txt);
+            });
+        });
+    });
+}
+
+//console.log(crypto.getCiphers());
+var algs = ['blowfish','aes-256-cbc','cast','des','des3','idea','rc2','rc4','seed'];
+var key = "abc";
+var filename = "book.pdf";//"package.json";
+algs.forEach(function(name){
+    cipherDecipherFile(filename,name,key);
+})
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node cipher.js
+
+cipher:blowfish,46ms
+decipher:blowfish,95ms
+cipher:des,67ms
+decipher:des,104ms
+cipher:idea,54ms
+decipher:idea,88ms
+cipher:rc4,16ms
+decipher:rc4,44ms
+cipher:des3,158ms
+decipher:des3,193ms
+cipher:aes-256-cbc,19ms
+decipher:aes-256-cbc,47ms
+cipher:cast,46ms
+decipher:cast,82ms
+cipher:seed,64ms
+decipher:seed,98ms
+cipher:rc2,104ms
+decipher:rc2,99ms
+</code></pre>
+<p>输出一共3列，第一列，cipher(加密)，decipher(解密)；第二列，���算法名称；第三列是计算时间。</p>
+<p>在选中的这几个算法中，rc4和aes-256-cbc是表现不错的算法，加密和解密时间都比较短，加密时间:解密时间=1:3；其他的算法，总体时间相对较长，有的加密时间:解密时间=1:1。所以，怎么选算法，另外的一个标准就要看业务需求了。如果业务上，解密操作的次数远大于加密操作的次数，而且是在服务器计算，那么我们最好找到，加密时间:解密时间=N:1，N>1的算法；如果加密在服务器端，解密在客户端完成，那么aes-256-cbc算法的计算时间比例就非常适合了。</p>
+<h2>5. 签名和验证算法</h2>
+<p>我们除了对数据进行加密和解密，还需要判断数据在传输过程中，是否真实际和完整，是否被篡改了。那么就需要用到签名和验证的算法，利用不对称加密算法，通过私钥进行数字签名，公钥验证数据的真实性。</p>
+<p>数字签名的制作和验证过程，如下图所示。</p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2015/03/screenshot.62.png"><img src="http://blog.fens.me/wp-content/uploads/2015/03/screenshot.62.png" alt="screenshot.62" width="888" height="674" class="alignnone size-full wp-image-7805" /></a></p>
+<p>下面我们用程序，来现实图中的操作流程，由于证书是我们自己制作的，不打算对外公开，没有到CA进行认证，所以下过程将不包括公钥伪造，再到CA认证的过程。</p>
+<p>首先，我们要用openSSL命令先生成，私钥server.pem和公钥cert.pem。</p>
+<pre><code>
+# 生成私钥
+~ D:\workspace\javascript\nodejs-crypto>openssl genrsa  -out server.pem 1024
+Generating RSA private key, 1024 bit long modulus
+..................++++++
+..................++++++
+e is 65537 (0x10001)
+
+# 生成公钥
+~ D:\workspace\javascript\nodejs-crypto>openssl req -key server.pem -new -x509 -out cert.pem
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:
+State or Province Name (full name) [Some-State]:
+Locality Name (eg, city) []:
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (eg, YOUR name) []:
+Email Address []:
+</code></pre>
+<p>接下来，我们利用生成私钥生成数学签名，然后再用公钥验证数据，是否被篡改。新建文件signer.js。</p>
+<pre><code>
+~ vi signer.js
+
+///////////////////////////
+// 签名验证算法
+// openssl genrsa  -out server.pem 1024
+// openssl req -key server.pem -new -x509 -out cert.pem
+///////////////////////////
+
+var crypto = require('crypto')
+    ,fs = require('fs');
+
+function signer(algorithm,key,data){
+    var sign = crypto.createSign(algorithm);
+    sign.update(data);
+    sig = sign.sign(key, 'hex');
+    return sig;
+}
+
+function verify(algorithm,pub,sig,data){
+    var verify = crypto.createVerify(algorithm);
+    verify.update(data);
+    return verify.verify(pubkey, sig, 'hex')
+}
+
+var algorithm = 'RSA-SHA256';
+var data = "abcdef";   //传输的数据
+var privatePem = fs.readFileSync('server.pem');
+var key = privatePem.toString();
+var sig = signer(algorithm,key,data); //数字签名
+
+var publicPem = fs.readFileSync('cert.pem');
+var pubkey = publicPem.toString();
+console.log(verify(algorithm,pubkey,sig,data));         //验证数据，通过公钥、数字签名 =》是原始数据
+console.log(verify(algorithm,pubkey,sig,data+"2"));    //验证数据，通过公钥、数字签名  =》不是原始数据
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node signer.js
+true
+false
+</code></pre>
+<p>两行输出结果，第一行验证的结果是true，表示数据在传输过程中，没有被篡改；第二行验证的结果是false，表示数据在传输过程中被篡改，不是原始的数据。当然，如何保证私钥和公钥的匹配，需要CA第三方来认证，与Crypto库无关本文不再介绍。</p>
+<h2>6. salt算法</h2>
+<p>我们知道，如果直接对密码进行散列，那么黑客可以对通过获得这个密码散列值，然后通过查散列值字典（例如MD5密码破解网站），得到某用户的密码。</p>
+<p>盐（Salt），在密码学中，是指通过在密码任意固定位置插入特定的字符串，让散列后的结果和使用原始密码的散列结果不相符，这种过程称之为“加盐”。加盐后的散列值，可以极大的降低由于用户数据被盗而带来的密码泄漏风险，即使通过彩虹表寻找到了散列后的数值所对应的原始内容，但是由于经过了加盐，插入的字符串扰乱了真正的密码，使得获得真实密码的概率大大降低。</p>
+<p>加盐的实现过程通常是在需要散列的字段的特定位置增加特定的字符，打乱原始的字串，使其生成的散列结果产生变化。比如，用户使用了一个密码：</p>
+<pre><code>
+123465
+</code></pre>
+<p>经过MD5散列后，可以得出结果：</p>
+<pre><code>
+3d9188577cc9bfe9291ac66b5cc872b7
+</code></pre>
+<p>但是由于用户密码位数不足，短密码的散列结果很容易被彩虹表破解，因此，在用户的密码末尾添加特定字串：</p>
+<pre><code>
+123465abcdefghijklmnopqrstuvwxyz
+</code></pre>
+<p>因此，加盐后的密码位数更长了，散列的结果也发生了变化：</p>
+<pre><code>
+27e20c64ccb8cce9ad68b8ccff6252cf
+</code></pre>
+<p>新建文件salt.js，实现上面的程序。</p>
+<pre><code>
+~ vi salt.js
+
+//////////////////////////////
+// salt算法
+//////////////////////////////
+var crypto = require('crypto');
+var md5 = crypto.createHash('md5');
+var txt = "123465";
+
+md5.update(txt);
+console.log(md5.digest('hex'));
+
+md5 = crypto.createHash('md5');
+var salt = "abcdefghijklmnopqrstuvwxyz";
+md5.update(txt+salt);
+console.log(md5.digest('hex'));
+</code></pre>
+<p>我们可以不用自己动手加盐，而使用crypto.pbkdf2()函数，默认会调用hmac算法，用sha1的散列函数，并且可以设置迭代次数和密文长度。具体的使用代码如下。</p>
+<pre><code>
+~ vi salt.js
+
+var crypto = require('crypto');
+var txt = "123465";
+var salt = "abcdefghijklmnopqrstuvwxyz";
+
+// 生成密文，默认HMAC函数是sha1算法
+crypto.pbkdf2(txt, salt, 4096, 256, function (err,hash) {
+    if (err) { throw err; }
+    console.log(hash.toString('hex'));
+})
+</code></pre>
+<p>运行程序，生成256位的密文。</p>
+<pre><code>
+~ node salt.js
+
+29c7de002d942ebcbf3afe05f3eb0ff620f0515fe6b8f19176736273cd70805afdfcc828a6f227152dfa4d0c4f96da184fbd060d4d4c86a5deb8d704699c3e8653acdb0e5bc3e584e0890a44206bb2926f0289fc8e0abe49fd1876461fcc50f06dc7991c4b93cc4e80076529c73b2f2c56f16b5b319368edf017f3d3583a33aa44fd30f89801f0d8877eb8262925f5fdc40a5c57f1b275e5674784dca635c75bc58b6c22264e0f29e363eb25dedf1a242429084e3e17d344b59cab3b9723db03ee4838b632786d1a9eb968f2523404286e5d0a41a1707577650cc3cc2f1ab65714a4cb31f068e4aefa259c6be68174e0a475d5610168305a4935a14bb221a516
+</code></pre>
+<p>如果加盐每次都是固定的值也会不安全，我们还可以利用随机randomBytes()函数，配合pbkdf2()函数，让每次都是不同的salt，生成安全级别更高的密文。</p>
+<pre><code>
+~ vi salt.js
+
+//通过伪随机码生成salt，进行加密
+crypto.randomBytes(128, function (err, salt) {
+    if (err) { throw err;}
+    salt = salt.toString('hex');
+    console.log(salt); //生成salt
+
+    crypto.pbkdf2(txt, salt, 4096, 256, function (err,hash) {
+        if (err) { throw err; }
+        hash = hash.toString('hex');
+        console.log(hash);//生成密文
+    })
+})
+</code></pre>
+<p>运行程序</p>
+<pre><code>
+~ node salt.js
+
+# 随机生成的salt
+78e59de99f16697e3eb684dcfa8efa086db0940c7cd47d33f9311e3bfcf9d58bf30915f54b3f72793b5c8568d32f1f15c55cc87affd043d96f1ed1f56c25a8054b3d83a306636f3b9e3bc9e48c3303aff54da006f92e370023165857fce0a1d1ff0b89178ae8c1416747275daba25652ea864d52a80427658ea69dbe500a7261
+
+# 通过salt生成的密文
+48943eb51ea702b436f95bf1dacc7f64bc41cf7cfa4cb40d101d5550c28caafc58ca720934352238430634f21fd5a6a4ef63fe5828c2665362e9902adc0305f93d2523fbd28521ad00947a74ff8229f63ad5796f2e12677cbed6af02b9973ee0187a69ad67e86790471d95f18d6d2c43ef904f7d17a5d8264f8236f227363a016ae2c14559c17236d540e06c5fd443af740721897f76bdbd9711c8499d7a34cae2e917f900fc364f72f9afaf301845c6e0b5c37def949b4af62336a39dbd1e829405d6189536092c7769a5d7e427b8e97419988da4e1bad49c69f25ac4e96f74a0ce3eab9e1433277568105b1dcc0cf9e1f9c91a7ed391c5825eefcd71ef5ca1
+</code></pre>
+<p>我们把salt和密文一起进行存储，保证用户密码的安全性。</p>
+<h2>7. 程序代码</h2>
+<p>本文的程序代码，可以直接从Github上面下载本文项目中的源代码，按照片文章中的介绍学习Crypto，下载地址：<a href="https://github.com/bsspirit/nodejs-crypto" target="_blank" ref="nofollow">https://github.com/bsspirit/nodejs-crypto</a></p>
+<p>也可以直接用github命令行来下载：</p>
+<pre><code>
+~ git clone git@github.com:bsspirit/nodejs-crypto.git   # 下载github项目
+~ cd nodejs-crypto                                      # 进入下载目录
+</code></pre>
+<p>最后要声明一下：本人对密码技术理解不深，本文所涉及的密码技术仅仅是Crypto库在应用上的，文中观点不对或描述不清楚的地方，还请专家来指正！！</p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://cnodejs.org/topic/504061d7fef591855112bab5">浅谈nodejs中的Crypto模块</a></li>
+<li><a href="https://cnodejs.org/topic/5043b97ffef591855138b4e0">浅谈nodejs中的Crypto模块（补完）</a></li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Node.js加密算法库Crypto" href="http://blog.fens.me/nodejs-crypto/" target="_blank">http://blog.fens.me/nodejs-crypto/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-3457">
+        <div id="dsq-comment-header-3457" class="dsq-comment-header">
+            <cite id="dsq-cite-3457">
+                <span id="dsq-author-user-3457">荣 肖</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3457" class="dsq-comment-body">
+            <div id="dsq-comment-message-3457" class="dsq-comment-message"><p>着色下代码吧，看得要眼花了。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3458">
+        <div id="dsq-comment-header-3458" class="dsq-comment-header">
+            <cite id="dsq-cite-3458">
+                <a id="dsq-author-user-3458" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3458" class="dsq-comment-body">
+            <div id="dsq-comment-message-3458" class="dsq-comment-message"><p>呵呵，好。</p>
+<p>先对照着github看吧<br />
+<a href="https://github.com/bsspirit/nodejs-crypto" rel="nofollow">https://github.com/bsspirit/nodejs-crypto</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3710">
+        <div id="dsq-comment-header-3710" class="dsq-comment-header">
+            <cite id="dsq-cite-3710">
+                <span id="dsq-author-user-3710">kivi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3710" class="dsq-comment-body">
+            <div id="dsq-comment-message-3710" class="dsq-comment-message"><p>菜鸟飘过，写的真的很详细了！非常感谢博主的分享</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3717">
+        <div id="dsq-comment-header-3717" class="dsq-comment-header">
+            <cite id="dsq-cite-3717">
+                <a id="dsq-author-user-3717" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3717" class="dsq-comment-body">
+            <div id="dsq-comment-message-3717" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-4503">
+        <div id="dsq-comment-header-4503" class="dsq-comment-header">
+            <cite id="dsq-cite-4503">
+                <span id="dsq-author-user-4503">李</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4503" class="dsq-comment-body">
+            <div id="dsq-comment-message-4503" class="dsq-comment-message"><p>菜鸟飘过，看了博主的代码，大概理解，但是我发现 用私钥加密的密文，只能进行比对了，不能通过公钥 解析么？。。难道是我哪里理解有错误？。。不懂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-4975">
+        <div id="dsq-comment-header-4975" class="dsq-comment-header">
+            <cite id="dsq-cite-4975">
+                <span id="dsq-author-user-4975">田淮仁</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4975" class="dsq-comment-body">
+            <div id="dsq-comment-message-4975" class="dsq-comment-message"><p>确实好文~ 结合nodeJS官方API一起看. 学习效率挺高的</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4976">
+        <div id="dsq-comment-header-4976" class="dsq-comment-header">
+            <cite id="dsq-cite-4976">
+                <a id="dsq-author-user-4976" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4976" class="dsq-comment-body">
+            <div id="dsq-comment-message-4976" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-crypto/';
+var disqus_identifier = '7790 http://blog.fens.me/?p=7790';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Node.js加密算法库Crypto";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=7790';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>

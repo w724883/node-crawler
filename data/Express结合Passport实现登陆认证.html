@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Express结合Passport实现登陆认证 | 粉丝日志</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://blog.fens.me/xmlrpc.php" />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Feed" href="http://blog.fens.me/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Comments Feed" href="http://blog.fens.me/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="粉丝日志 &raquo; Express结合Passport实现登陆认证 Comments Feed" href="http://blog.fens.me/nodejs-express-passport/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/blog.fens.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.4"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='default-css'  href='http://blog.fens.me/wp-content/themes/silesia/style.css' type='text/css' media='all' />
+<!--[if IE 7]>
+<link rel='stylesheet' id='silesia-ie7-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie7.css' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 6]>
+<link rel='stylesheet' id='silesia-ie6-css'  href='http://blog.fens.me/wp-content/themes/silesia/ie6.css' type='text/css' media='all' />
+<![endif]-->
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/jquery.cycle.all.min.js'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-content/themes/silesia/js/load.js'></script>
+<link rel='https://api.w.org/' href='http://blog.fens.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.fens.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.fens.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='快速搭建Web环境 Angularjs + Express3 + Bootstrap3' href='http://blog.fens.me/angularjs-express3-bootstrap3/' />
+<link rel='next' title='Passport现实社交网络OAuth登陆' href='http://blog.fens.me/nodejs-oauth-passport/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel="canonical" href="http://blog.fens.me/nodejs-express-passport/" />
+<link rel='shortlink' href='http://blog.fens.me/?p=5359' />
+<link rel="alternate" type="application/json+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-express-passport%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://blog.fens.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fblog.fens.me%2Fnodejs-express-passport%2F&#038;format=xml" />
+<meta name="template" content="silesia 1.0.6" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="keywords" content="javascript,nodejs,passport,authenticate,认证,登陆" />
+<meta name="description" content="跨界的IT博客，核心IT技术包括：Hadoop, R, RHadoop, Nodejs, AngularJS, KVM, NoSQL, IT金融" />
+<link href="http://blog.fens.me/wp-content/uploads/2013/05/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://blog.fens.me/wp-content/themes/silesia/functions/css/shortcodes.css" media="screen" /><script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/functions/js/shortcode.js"></script><style type="text/css">
+	#header {
+		background-color: #F7F7F7;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #30353A;
+	}
+	#header .tagline {
+		color: #BBBBBB;
+	}
+	#main-nav {
+		background-color: #527F8D;
+	}
+	#main-nav, #main-nav a#control, #link-sidebar h2 {
+		color: #ffffff;
+	}
+	#link-sidebar a, #main-nav a#control:hover {
+		color: #D8F1FA;
+	}
+	#link-sidebar ul li.widget a:hover {
+		color: #ffffff;
+	}
+	.hentry h2, .hentry h2 a, .singlepage .post h2, .singlepage .page.comments h2 {
+		color: #434343;
+	}
+	.p-cont .entry, .singlepage .entry {
+		color: #4D4D4F;
+	}
+	.post a, .page.comments a {
+		color: #0E73B8;
+	}
+	.post a:hover, .page.comments a:hover, .hentry h2 a:hover {
+		color: #ff0505;
+	}
+	#sidebar h2 {
+		color: #4D4D4F;
+	}
+	#sidebar {
+		color: #555555;
+	}
+	#sidebar a {
+		color: #0E73B8;
+	}
+	#sidebar a:hover {
+		color: #ff0505;
+	}
+</style><style type="text/css">
+    #header .triangle {border-left: 7px solid #527F8D;}
+  </style><!--[if IE 6]>
+    <script type="text/javascript" src="http://blog.fens.me/wp-content/themes/silesia/js/ie6/warning.js"></script>
+    <script type="text/javascript" charset="utf-8">/*<![CDATA[*/window.onload=function(){e("http://blog.fens.me/wp-content/themes/silesia/js/ie6/")}/*]]>*/</script>
+<![endif]-->		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+</head>
+
+<body class="post-template-default single single-post postid-5359 single-format-standard custom-background">
+<div id="main-nav">
+  <div id="link-sidebar">
+    <ul>
+                      <li class="widget png_scale" id="widget_categories">
+          <h2 class="blocktitle"><span>Categories</span></h2>	
+          <ul>
+              	<li class="cat-item cat-item-9"><a href="http://blog.fens.me/category/datagurucn/" >Dataguru作业</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://blog.fens.me/category/hadoop-action/" >Hadoop实践</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://blog.fens.me/category/it%e7%9b%b8%e5%85%b3%e7%9f%a5%e8%af%86/" >IT相关知识</a>
+</li>
+	<li class="cat-item cat-item-55"><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" >Javascript语言实践</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.fens.me/category/java-lang/" >JAVA语言实践</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://blog.fens.me/category/r-lang/" >R语言实践</a>
+</li>
+	<li class="cat-item cat-item-217"><a href="http://blog.fens.me/category/seo%e4%bc%98%e5%8c%96/" >SEO优化</a>
+</li>
+	<li class="cat-item cat-item-356"><a href="http://blog.fens.me/category/%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80/" >其他语言</a>
+</li>
+	<li class="cat-item cat-item-774"><a href="http://blog.fens.me/category/%e5%88%9b%e4%b8%9a/" >创业</a>
+</li>
+	<li class="cat-item cat-item-233"><a href="http://blog.fens.me/category/%e5%8f%af%e8%a7%86%e5%8c%96%e6%8a%80%e6%9c%af/" >可视化技术</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://blog.fens.me/category/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f/" >操作系统</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e5%ba%93/" >数据库</a>
+</li>
+	<li class="cat-item cat-item-30"><a href="http://blog.fens.me/category/%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98/" >数据挖掘</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://blog.fens.me/category/%e6%99%92%e7%b2%89%e4%b8%9d/" >晒粉丝</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://blog.fens.me/category/%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1/" >架构设计</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://blog.fens.me/category/%e6%b4%bb%e5%8a%a8%e8%81%9a%e4%bc%9a/" >活动聚会</a>
+</li>
+	<li class="cat-item cat-item-598"><a href="http://blog.fens.me/category/%e6%b8%b8%e6%88%8f/" >游戏</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://blog.fens.me/category/%e7%a8%8b%e5%ba%8f%e7%ae%97%e6%b3%95/" >程序算法</a>
+</li>
+	<li class="cat-item cat-item-117"><a href="http://blog.fens.me/category/%e7%bd%91%e7%bb%9c%e6%8a%80%e6%9c%af/" >网络技术</a>
+</li>
+	<li class="cat-item cat-item-76"><a href="http://blog.fens.me/category/%e8%99%9a%e6%8b%9f%e5%8c%96%e5%ae%9e%e8%b7%b5/" >虚拟化实践</a>
+</li>
+	<li class="cat-item cat-item-184"><a href="http://blog.fens.me/category/%e9%87%91%e8%9e%8d/" >金融</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://blog.fens.me/category/%e9%9d%a2%e8%af%95/" >面试</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://blog.fens.me/category/%e9%bb%91%e5%ae%a2%e6%94%bb%e9%98%b2/" >黑客攻防</a>
+</li>
+          </ul>		
+        </li>
+                <li id="twitterWidget" class="widget png_scale">	
+          <div id="twitter">
+            <h2 class="blocktitle"><span>Twitter Updates</span></h2>		<ul id="twitter_update_list"><li></li></ul>
+            <!--<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>-->
+            <!--<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/nattywp.json?callback=twitterCallback2&amp;count=1"></script>-->
+            <div class="dasheddivider"></div>
+            <p align="right"><a href="http://www.twitter.com/nattywp/" class="rightlink png_crop">Follow us on Twitter</a></p>
+        </div>
+        </li>   
+           
+    </ul>
+  </div>
+  <a id="control" href="#">+</a>
+</div>
+
+<div id="main-wrapper">
+<div id="header">
+  <div class="wrapper">
+    <div class="triangle"></div>
+    <div class="logo-block">
+    <div class="logo">
+    <ul><li><a class="logo-title shadowed" href="http://blog.fens.me" rel="home" title="粉丝日志">粉丝日志</a></li></ul> 
+    </div>
+  <div class="tagline">跨界的IT博客|Hadoop家族, R, RHadoop, Nodejs, AngularJS, NoSQL, IT金融</div></div>
+  
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="cnt" class="wrapper">
+  <div class="top">
+    <ul id="crumbs"><li class="first"><a href="http://blog.fens.me" id="home-img"></a></li><li><a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/">Javascript语言实践</a> &raquo; </li><li>Express结合Passport实现登陆认证</li></ul><div style="float:right;margin-right:10px;font-size:14px;"><ul style="list-style-type: none;"><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://www.fens.me/" target="_blank">@晒粉丝</a></li><li style="list-style-type: none;float: left;line-height: 24px;margin: 0 7px;"><a href="http://apps.weibo.com/chinaweatherapp" target="_blank">@每日中国天气</a></li></ul></div>    <div class="clear"></div>            
+  </div> <!-- END top -->
+
+
+<!-- END Header --><div class="narrowcolumn singlepage">
+              <div class="post-5359 post type-post status-publish format-standard hentry category-javascript tag-authenticate tag-javascript tag-nodejs tag-passport tag-497 tag-496">
+         <div class="post-meta">
+          <a href="http://blog.fens.me/nodejs-express-passport/" title="Express结合Passport实现登陆认证" class="ms"></a>
+          <h5>Posted:</h5>
+          <span class="date">Feb 10, 2014</span>
+          <h5>Tags:</h5><div class="tags"><a href="http://blog.fens.me/tag/authenticate/" rel="tag">authenticate</a><a href="http://blog.fens.me/tag/javascript/" rel="tag">Javascript</a><a href="http://blog.fens.me/tag/nodejs/" rel="tag">nodejs</a><a href="http://blog.fens.me/tag/passport/" rel="tag">passport</a><a href="http://blog.fens.me/tag/%e7%99%bb%e9%99%86/" rel="tag">登陆</a><a href="http://blog.fens.me/tag/%e8%ae%a4%e8%af%81/" rel="tag">认证</a></div>          <h5>Comments:</h5>
+          <span class="comment"><a href="http://blog.fens.me/nodejs-express-passport/#comments"><span class="dsq-postid" data-dsqidentifier="5359 http://blog.fens.me/?p=5359">39 Comments</span></a></span>
+                   </div>
+         
+         <div class="p-cont">
+            <h2>Express结合Passport实现登陆认证</h2>
+            <div class="entry">
+                            <p><a title="从零开始nodejs系列文章" href="http://blog.fens.me/series-nodejs/" target="_blank">从零开始nodejs系列文章</a>，将介绍如何利Javascript做为服务端脚本，通过Nodejs框架web开发。Nodejs框架是基于V8的引擎，是目前速度最快的Javascript引擎。chrome浏览器就基于V8，同时打开20-30个网页都很流畅。Nodejs标准的web开发框架Express，可以帮助我们迅速建立web站点，比起PHP的开发效率更高，而且学习曲线更低。非常适合小型网站，个性化网站，我们自己的Geek网站！！</p>
+<p><strong>关于作者</strong></p>
+<ul>
+<li>张丹(Conan), 程序员Java,R,PHP,Javascript</li>
+<li>weibo：@Conan_Z</li>
+<li>blog: <a title="粉丝日志|跨界的IT博客" href="http://blog.fens.me/" target="_blank">http://blog.fens.me</a></li>
+<li>email: bsspirit@gmail.com</li>
+</ul>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Express结合Passport实现登陆认证" href="http://blog.fens.me/nodejs-express-passport/" target="_blank">http://blog.fens.me/nodejs-express-passport/</a></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/02/nodejs-passport.png"><img src="http://blog.fens.me/wp-content/uploads/2014/02/nodejs-passport.png" alt="nodejs-passport" width="600" height="400" class="alignnone size-full wp-image-5380" /></a></p>
+<p><strong>前言</strong></p>
+<p>登陆认证，是每个应用都需要的基础功能。但很多的时候，却都被大家所忽略，不仅安全漏洞严重，而且代码紧耦合，混乱不堪。</p>
+<p>Passport项目，正是为了解决登陆认证的事情，让认证模块更透明，减少耦合！</p>
+<p><strong>目录</strong></p>
+<ol>
+<li>什么是认证(Authentication)？</li>
+<li>Passport项目介绍</li>
+<li>Express结合Passport实现登陆认证</li>
+</ol>
+<h2>1. 什么是登陆认证(Authentication)？</h2>
+<p>认证又称“验证”、“鉴权”，是指通过一定的手段，完成对用户身份的确认。身份���证的方法有很多，基本上可分为：基于共享密钥的身份验证、基于生物学特征的身份验证和基于公开密钥加密算法的身份验证。</p>
+<p>登陆认证，是用户在访问应用或者网站时，通过是先注册的用户名和密码，告诉应用使用者的身份，从而获得访问权限的一种操作。</p>
+<p>几乎所有的应用都需要登陆认证！</p>
+<h2>2. Passport项目介绍</h2>
+<p>Passport项目是一个基于Nodejs的认证中间件。Passport目的只是为了“登陆认证”，因此，代码干净，易维护，可以方便地集成到其他的应用中。</p>
+<p>Web应用一般有2种登陆认证的形式：</p>
+<ul>
+<li>用户名和密码认证登陆</li>
+<li>OAuth认证登陆</li>
+</ul>
+<p>Passport可以根据应用程序的特点，配置不同的认证机制。本文将介绍，用户名和密码的认证登陆。</p>
+<p>项目网站：<a href="http://passportjs.org/" target="_blank">http://passportjs.org/</a></p>
+<h2>3. Express结合Passport实现登陆认证</h2>
+<p>系统环境：</p>
+<ol>
+<li>Win7 64bit 旗舰版</li>
+<li>node v0.10.5</li>
+<li>npm 1.2.19</li>
+</ol>
+<p><strong>1). 新建项目</strong></p>
+<pre><code>
+D:\workspace\javascript&gt;express -e nodejs-passport
+D:\workspace\javascript&gt;cd nodejs-passport &amp;&amp; npm install
+D:\workspace\javascript\nodejs-passport&gt;npm install passport
+D:\workspace\javascript\nodejs-passport&gt;npm install passport-local
+</code></pre>
+<p><strong>2). 实现Session的认证：</strong></p>
+<ul>
+<li>启用connet的session中间件</li>
+<li>connet的session中间件，同时依赖于connect的cookieParser中间件</li>
+<li>配置passport中间件</li>
+</ul>
+<p>关于connect框架的详细说明，请参考文章：<a title="Nodejs基础中间件Connect" href="http://blog.fens.me/nodejs-connect/" target="_blank">Nodejs基础中间件Connect</a></p>
+<p>修改app.js</p>
+<pre><code>
+app.use(express.cookieParser())
+app.use(express.session({secret: 'blog.fens.me', cookie: { maxAge: 60000 }}));
+app.use(passport.initialize());
+app.use(passport.session());
+</code></pre>
+<p><strong>3). 定义认证策略：</strong></p>
+<p>LocalStrategy策略，用于匹配本地环境的用户名和密码，可以扩展这个策略，通过数据库的方式进行匹配。</p>
+<p>修改app.js</p>
+<pre><code>
+var passport = require('passport')
+    , LocalStrategy = require('passport-local').Strategy;
+
+passport.use('local', new LocalStrategy(
+    function (username, password, done) {
+        var user = {
+            id: '1',
+            username: 'admin',
+            password: 'pass'
+        }; // 可以配置通过数据库方式读取登陆账号
+
+        if (username !== user.username) {
+            return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (password !== user.password) {
+            return done(null, false, { message: 'Incorrect password.' });
+        }
+
+        return done(null, user);
+    }
+));
+
+passport.serializeUser(function (user, done) {//保存user对象
+    done(null, user);//可以通过数据库方式操作
+});
+
+passport.deserializeUser(function (user, done) {//删除user对象
+    done(null, user);//可以通过数据库方式操作
+});
+</code></pre>
+<p><strong>4). 路由控制和登陆认证</strong></p>
+<p>路由页面</p>
+<ul>
+<li>/: 首页，用于登陆，未登陆用户只能访问首页</li>
+<li>/login: 登陆请求，用户登陆时，POST到登陆请求，认证成功跳到用户页，认证失败回到首页</li>
+<li>/users: 用户页，用户通过登陆认证后，可以访问用户页</li>
+<li>/logout: 登出请求，用户退出系统，GET到登出请求，页面自动跳回首页</li>
+</ul>
+<p>修改app.js</p>
+<pre><code>
+app.get('/', routes.index);
+app.post('/login',
+    passport.authenticate('local', {
+        successRedirect: '/users',
+        failureRedirect: '/'
+    }));
+
+app.all('/users', isLoggedIn);
+app.get('/users', user.list);
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+
+    res.redirect('/');
+}
+</code></pre>
+<p><strong>5). 运行程序</strong></p>
+<p><a href="http://blog.fens.me/wp-content/uploads/2014/02/passport-login.png"><img class="alignnone size-full wp-image-5370" alt="passport-login" src="http://blog.fens.me/wp-content/uploads/2014/02/passport-login.png" width="1324" height="657" /></a></p>
+<p>运行日志</p>
+<pre><code>
+D:\workspace\javascript\nodejs-passport&gt;node app.js
+Express server listening on port 3000
+POST /login 302 389ms - 68b
+GET /users 200 2ms - 50b
+GET /logout 302 2ms - 58b
+GET / 200 7ms - 540b
+GET /stylesheets/style.css 304 6ms
+POST /login 302 2ms - 58b
+GET / 200 2ms - 540b
+GET /stylesheets/style.css 304 2ms
+</code></pre>
+<p><strong>6). 完整的代码</strong></p>
+<ul>
+<li>app.js代码</li>
+<li>index.ejs代码</li>
+<li>user.js代码</li>
+</ul>
+<p>app.js代码</p>
+<pre><code>
+var express = require('express')
+    , routes = require('./routes')
+    , user = require('./routes/user')
+    , http = require('http')
+    , path = require('path')
+    , app = express();
+
+var passport = require('passport')
+    , LocalStrategy = require('passport-local').Strategy;
+
+app.set('port', process.env.PORT || 3000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(express.cookieParser())
+app.use(express.session({secret: 'blog.fens.me', cookie: { maxAge: 60000 }}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+
+if ('development' == app.get('env')) {
+    app.use(express.errorHandler());
+}
+
+passport.use('local', new LocalStrategy(
+    function (username, password, done) {
+        var user = {
+            id: '1',
+            username: 'admin',
+            password: 'pass'
+        }; // 可以配置通过数据库方式读取登陆账号
+
+        if (username !== user.username) {
+            return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (password !== user.password) {
+            return done(null, false, { message: 'Incorrect password.' });
+        }
+
+        return done(null, user);
+    }
+));
+
+passport.serializeUser(function (user, done) {//保存user对象
+    done(null, user);//可以通过数据库方式操作
+});
+
+passport.deserializeUser(function (user, done) {//删除user对象
+    done(null, user);//可以通过数据库方式操作
+});
+
+app.get('/', routes.index);
+app.post('/login',
+    passport.authenticate('local', {
+        successRedirect: '/users',
+        failureRedirect: '/'
+    }));
+
+app.all('/users', isLoggedIn);
+app.get('/users', user.list);
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+http.createServer(app).listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
+});
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+
+    res.redirect('/');
+}
+</code></pre>
+<p>index.ejs代码</p>
+<pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;
+&lt;link rel='stylesheet' href='/stylesheets/style.css' /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Login&lt;/h1&gt;
+&lt;form action="/login" method="post"&gt;
+&lt;div&gt;
+&lt;label&gt;Username:&lt;/label&gt;
+&lt;input type="text" name="username"/&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label&gt;Password:&lt;/label&gt;
+&lt;input type="password" name="password"/&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;input type="submit" value="Log In"/&gt;
+&lt;/div&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>user.js代码</p>
+<pre><code>
+exports.list = function (req, res) {
+var html = "&lt;h2&gt;你好, " + req.user.username + "&lt;/h2&gt;&lt;a href='/logout'&gt;退出&lt;/a&gt;";
+res.send(html);
+};
+</code></pre>
+<p>通过Passport中间件，我们就把登陆认证和应用程序分离了出来，从而保证了更清晰代码结构。当然，我们也可不用Passport，在Express中直接实现登陆认证，可以参考文章：<a href="http://blog.fens.me/nodejs-express3/" target="_blank" title="Nodejs开发框架Express3.0开发手记–从零开始">Nodejs开发框架Express3.0开发手记–从零开始</a></p>
+<p><strong>转载请注明出处：</strong><br />
+<a title="Express结合Passport实现登陆认证" href="http://blog.fens.me/nodejs-express-passport/" target="_blank">http://blog.fens.me/nodejs-express-passport/</a></p>
+<p><img src="http://blog.fens.me/wp-content/uploads/2016/04/pay50.png" alt="打赏作者" width="600" height="400" class="alignnone size-full wp-image-8388"></p>
+              <div class="clear"></div>
+                            <p class="inner-meta">This entry was posted in <a href="http://blog.fens.me/category/javascript%e8%af%ad%e8%a8%80%e5%ae%9e%e8%b7%b5/" rel="category tag">Javascript语言实践</a></p>              
+            </div>
+            <!-- 广告 -->
+            <div id="ads"></div>        
+            <div class="post comments" id="comments">              
+                
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-1606">
+        <div id="dsq-comment-header-1606" class="dsq-comment-header">
+            <cite id="dsq-cite-1606">
+                <span id="dsq-author-user-1606">owen hong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1606" class="dsq-comment-body">
+            <div id="dsq-comment-message-1606" class="dsq-comment-message"><p>我现在正在做登录，但是有个权限控制的问题，楼主的路由app.all(&#8216;/users&#8217;, isLoggedIn);每个页面通过这个段代码来控制是否登录，如果页面过多的情况下，那不是每个页面都需要在他之前写一个<br />
+app.all(&#8216;/users&#8217;, isLoggedIn);来判断是否登录，《nodejs实战指南》登录判断就是那么做的，有没有更简洁的方法来判断</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1609">
+        <div id="dsq-comment-header-1609" class="dsq-comment-header">
+            <cite id="dsq-cite-1609">
+                <a id="dsq-author-user-1609" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1609" class="dsq-comment-body">
+            <div id="dsq-comment-message-1609" class="dsq-comment-message"><p>这个问题有两种解决办法：<br />
+1. 所以需要登陆验证的页面，统一用/auth/xxx，这样的路径格式，代码只需要对/auth/* 路径做控制就行了。<br />
+2. 路径用正则表达式来匹配， 比如：&#8217;^[user|member|auth]$&#8217;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-1608">
+        <div id="dsq-comment-header-1608" class="dsq-comment-header">
+            <cite id="dsq-cite-1608">
+                <span id="dsq-author-user-1608">owen hong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1608" class="dsq-comment-body">
+            <div id="dsq-comment-message-1608" class="dsq-comment-message"><p>你上面的案例我感觉不科学啊，登录表单的内容怎么提交到后台你都没有设置local接收呀，req.body.username没有这句话后台怎么操作呢，难道passport这个模块本身就有接收了吗，求解释</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-1610">
+        <div id="dsq-comment-header-1610" class="dsq-comment-header">
+            <cite id="dsq-cite-1610">
+                <a id="dsq-author-user-1610" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1610" class="dsq-comment-body">
+            <div id="dsq-comment-message-1610" class="dsq-comment-message"><p>1. 在local里，可以自己增加读取数据库的代码。<br />
+2. POST后，直接就传到了passport的模块里，passport已经封装好了，自己看源代码。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-1612">
+        <div id="dsq-comment-header-1612" class="dsq-comment-header">
+            <cite id="dsq-cite-1612">
+                <span id="dsq-author-user-1612">owen hong</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-1612" class="dsq-comment-body">
+            <div id="dsq-comment-message-1612" class="dsq-comment-message"><p>请教下，你上面的例子我已经跑起来了，都没什么问题，但是现在就是如果报错了之后不是会判断验证后弹出return done(null, false, { message: &#8216;Incorrect username.&#8217; });对应的消息吗，但是不知道为什么报错后不会显示错误信息呢，而直接跳转到了failureRedirect: &#8216;/admin/login&#8217;设置的页面中，这个倒不是问题，不知道能否做到跳转页面后以json的形式返回数据来，尝试了下因为passport插件不能使用res,req所以不知道怎么处理</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-2628">
+        <div id="dsq-comment-header-2628" class="dsq-comment-header">
+            <cite id="dsq-cite-2628">
+                <span id="dsq-author-user-2628">jackey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2628" class="dsq-comment-body">
+            <div id="dsq-comment-message-2628" class="dsq-comment-message"><p>是否可以理解未local 类型的验证时， 表单post请求中必须包含username， password？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2630">
+        <div id="dsq-comment-header-2630" class="dsq-comment-header">
+            <cite id="dsq-cite-2630">
+                <a id="dsq-author-user-2630" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2630" class="dsq-comment-body">
+            <div id="dsq-comment-message-2630" class="dsq-comment-message"><p>对，默认是这两个字段名，如果你需要修改，中间封装一层或者改一下passport的原代码。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2055">
+        <div id="dsq-comment-header-2055" class="dsq-comment-header">
+            <cite id="dsq-cite-2055">
+                <span id="dsq-author-user-2055">Philipp Li</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2055" class="dsq-comment-body">
+            <div id="dsq-comment-message-2055" class="dsq-comment-message"><p>如果登录的时候需要将username和password与数据库进行匹配，怎样将参数传给passport</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2060">
+        <div id="dsq-comment-header-2060" class="dsq-comment-header">
+            <cite id="dsq-cite-2060">
+                <a id="dsq-author-user-2060" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2060" class="dsq-comment-body">
+            <div id="dsq-comment-message-2060" class="dsq-comment-message"><p>在代码验证username和password的，增加数据访问就行了。<br />
+passport.use(&#8216;local&#8217;, new LocalStrategy(</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2063">
+        <div id="dsq-comment-header-2063" class="dsq-comment-header">
+            <cite id="dsq-cite-2063">
+                <span id="dsq-author-user-2063">Philipp Li</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2063" class="dsq-comment-body">
+            <div id="dsq-comment-message-2063" class="dsq-comment-message"><p>已经实现了，原来参数默认是直接传过去的</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2064">
+        <div id="dsq-comment-header-2064" class="dsq-comment-header">
+            <cite id="dsq-cite-2064">
+                <a id="dsq-author-user-2064" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2064" class="dsq-comment-body">
+            <div id="dsq-comment-message-2064" class="dsq-comment-message"><p>嗯。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2573">
+        <div id="dsq-comment-header-2573" class="dsq-comment-header">
+            <cite id="dsq-cite-2573">
+                <span id="dsq-author-user-2573">rookie</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2573" class="dsq-comment-body">
+            <div id="dsq-comment-message-2573" class="dsq-comment-message"><p>您好，我想请问，我登录之后，用户信息保存在session里，之后每个页面都要显示<br />
+用户名(用户名是header的一块),那我怎么做合适呢，还是每个页面通过session往前段传</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2575">
+        <div id="dsq-comment-header-2575" class="dsq-comment-header">
+            <cite id="dsq-cite-2575">
+                <a id="dsq-author-user-2575" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2575" class="dsq-comment-body">
+            <div id="dsq-comment-message-2575" class="dsq-comment-message"><p>每个面页，都要从后端传这个值到前端。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2910">
+        <div id="dsq-comment-header-2910" class="dsq-comment-header">
+            <cite id="dsq-cite-2910">
+                <span id="dsq-author-user-2910">hsinlu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2910" class="dsq-comment-body">
+            <div id="dsq-comment-message-2910" class="dsq-comment-message"><p>您好，如何实现RSA前台用公钥对输入密码加密，nodejs接收后，再根据私钥解密</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2916">
+        <div id="dsq-comment-header-2916" class="dsq-comment-header">
+            <cite id="dsq-cite-2916">
+                <a id="dsq-author-user-2916" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2916" class="dsq-comment-body">
+            <div id="dsq-comment-message-2916" class="dsq-comment-message"><p>标准的passport好像没有提供这个功能，你需要用插件。<br />
+比如：https://github.com/bergie/passport-saml</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-2948">
+        <div id="dsq-comment-header-2948" class="dsq-comment-header">
+            <cite id="dsq-cite-2948">
+                <span id="dsq-author-user-2948">jakey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2948" class="dsq-comment-body">
+            <div id="dsq-comment-message-2948" class="dsq-comment-message"><p>我遇到一个问题，使用passport登陆后，session在redis中生成了。后续进行其他url访问时，它又会生成个另外的session（未验证过的）。请教大神有无思路啊<br />
+认证是生成了这个有user认证的session<br />
+127.0.0.1:6379[2]&gt; GET sess:fCohB0Jtgn_1KDlpzz5WcRmR89RbDQie</p>
+<p>&#8220;{&#8220;cookie&#8221;:{&#8220;originalMaxAge&#8221;:null,&#8221;expires&#8221;:null,&#8221;httpOnly&#8221;:true,&#8221;path&#8221;:&#8221;/&#8221;},&#8221;passport&#8221;:{&#8220;user&#8221;:1014503}}&#8221;</p>
+<p>进行其他链接访问时，有产生了这个session，<br />
+127.0.0.1:6379[2]&gt; get sess:2FQQp28zNRcrt9PbgcuRjB1sIDCVVQ7Z</p>
+<p>&#8220;{&#8220;cookie&#8221;:{&#8220;originalMaxAge&#8221;:null,&#8221;expires&#8221;:null,&#8221;httpOnly&#8221;:true,&#8221;path&#8221;:&#8221;/&#8221;},&#8221;passport&#8221;:{}}&#8221;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-2951">
+        <div id="dsq-comment-header-2951" class="dsq-comment-header">
+            <cite id="dsq-cite-2951">
+                <a id="dsq-author-user-2951" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2951" class="dsq-comment-body">
+            <div id="dsq-comment-message-2951" class="dsq-comment-message"><p>程序可以这样设计。用户登陆后，生成一个状态码active=TRUE，保存这个状态码到redis，每个请求都要检查这个状态码；用户登出或超时，这个状态码active=FALSE。</p>
+<p>你需要确认，你使用框架生成的session是不是同理等于状态码，如果是则用，如果不是则不用。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-2967">
+        <div id="dsq-comment-header-2967" class="dsq-comment-header">
+            <cite id="dsq-cite-2967">
+                <span id="dsq-author-user-2967">jakey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2967" class="dsq-comment-body">
+            <div id="dsq-comment-message-2967" class="dsq-comment-message"><p>多谢，找到原因了，是客户端cookie功能未打开。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-2968">
+        <div id="dsq-comment-header-2968" class="dsq-comment-header">
+            <cite id="dsq-cite-2968">
+                <a id="dsq-author-user-2968" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2968" class="dsq-comment-body">
+            <div id="dsq-comment-message-2968" class="dsq-comment-message"><p>🙂</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-2949">
+        <div id="dsq-comment-header-2949" class="dsq-comment-header">
+            <cite id="dsq-cite-2949">
+                <span id="dsq-author-user-2949">jakey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-2949" class="dsq-comment-body">
+            <div id="dsq-comment-message-2949" class="dsq-comment-message"><p>补充下中间件加载顺序哈</p>
+<p>    this.http.use(morgan(&#8216;dev&#8217;));</p>
+<p>    this.http.use(cookieParser());</p>
+<p>    this.http.use(bodyParser.urlencoded({extended: true}));</p>
+<p>    this.http.use(bodyParser.json());</p>
+<p>    this.http.use(methodOverride());</p>
+<p>    this.http.use(compress());</p>
+<p>    this.http.use(session({</p>
+<p>        secret: &#8220;xxxxxx&#8221;,</p>
+<p>        cookie: { maxAge: 60000 },</p>
+<p>        name: &#8220;xxx.xxxxxx&#8221;,</p>
+<p>        store: new RedisStore(opts.session_redis),</p>
+<p>        proxy: true,</p>
+<p>        resave: true,</p>
+<p>        saveUninitialized: true</p>
+<p>    }));</p>
+<p>    this.http.use(passport.initialize());</p>
+<p>    this.http.use(passport.session());</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3716">
+        <div id="dsq-comment-header-3716" class="dsq-comment-header">
+            <cite id="dsq-cite-3716">
+                <span id="dsq-author-user-3716">lyp0110</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3716" class="dsq-comment-body">
+            <div id="dsq-comment-message-3716" class="dsq-comment-message"><p>请问我怎么做出客户端cookie记住一周或者一个月功能？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3722">
+        <div id="dsq-comment-header-3722" class="dsq-comment-header">
+            <cite id="dsq-cite-3722">
+                <a id="dsq-author-user-3722" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3722" class="dsq-comment-body">
+            <div id="dsq-comment-message-3722" class="dsq-comment-message"><p>app.use(express.session({secret: &#8216;blog.fens.me&#8217;, cookie: { maxAge: 60000 }}))</p>
+<p>maxAge设置就行了，保证主程序不重启。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-3723">
+        <div id="dsq-comment-header-3723" class="dsq-comment-header">
+            <cite id="dsq-cite-3723">
+                <span id="dsq-author-user-3723">lyp0110</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3723" class="dsq-comment-body">
+            <div id="dsq-comment-message-3723" class="dsq-comment-message"><p>app.use(express.session({secret: &#8216;blog.fens.me&#8217;, cookie: { maxAge: 60000 }}))  如果这样设置的话是不是session和cookie的超时时间是一样的啊？如果session超时了，就算是cookie设置了很长时间，还是需要重新登录，是不是这样？另外secret这个值需要加密吗？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3729">
+        <div id="dsq-comment-header-3729" class="dsq-comment-header">
+            <cite id="dsq-cite-3729">
+                <a id="dsq-author-user-3729" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3729" class="dsq-comment-body">
+            <div id="dsq-comment-message-3729" class="dsq-comment-message"><p>是的，对于node来说session和cookie是一个东西，和PHP机制是一样的，和JAVA是完全不同的。一个在服务端存储，一个在客户端存储，两个要匹配才能保证一直登陆有效。</p>
+<p>secret 加上吧，不过这里加密只是一种很初级的加密手段，黑客真想攻击，也是很容易的。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-3827">
+        <div id="dsq-comment-header-3827" class="dsq-comment-header">
+            <cite id="dsq-cite-3827">
+                <span id="dsq-author-user-3827">yf z (追随)</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3827" class="dsq-comment-body">
+            <div id="dsq-comment-message-3827" class="dsq-comment-message"><p>我的node服务器要和restful的java服务器通信，所以用户信息不在这里，也不能序列化到session和反序列化，还有什么解决方案呢，暂时只想到在new Strategy中用可以过期的用户信息生成的token来控制过期，也避免重复请求服务器。还有一个问题就是，res.redirect，为什么返回到页面一个对象，显示undefined，手动点击链接重定向，这是什么问题。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-3841">
+        <div id="dsq-comment-header-3841" class="dsq-comment-header">
+            <cite id="dsq-cite-3841">
+                <a id="dsq-author-user-3841" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3841" class="dsq-comment-body">
+            <div id="dsq-comment-message-3841" class="dsq-comment-message"><p>没看懂的你的问题。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-3843">
+        <div id="dsq-comment-header-3843" class="dsq-comment-header">
+            <cite id="dsq-cite-3843">
+                <span id="dsq-author-user-3843">yf z (追随)</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-3843" class="dsq-comment-body">
+            <div id="dsq-comment-message-3843" class="dsq-comment-message"><p>解决了。都是看了别人的帖子，所以对序列化以及反序列化产生了误解。至于redirect是把render的参数写到redirect所以出错了。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-4170">
+        <div id="dsq-comment-header-4170" class="dsq-comment-header">
+            <cite id="dsq-cite-4170">
+                <span id="dsq-author-user-4170">zhangguoruiwo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4170" class="dsq-comment-body">
+            <div id="dsq-comment-message-4170" class="dsq-comment-message"><p>routes = require(&#8216;./routes&#8217;)这有点问题，没有给出index文件，我是菜鸟</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-4171">
+        <div id="dsq-comment-header-4171" class="dsq-comment-header">
+            <cite id="dsq-cite-4171">
+                <a id="dsq-author-user-4171" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4171" class="dsq-comment-body">
+            <div id="dsq-comment-message-4171" class="dsq-comment-message"><p>默认会找到 routes目录 下面的index文件。</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-4173">
+        <div id="dsq-comment-header-4173" class="dsq-comment-header">
+            <cite id="dsq-cite-4173">
+                <span id="dsq-author-user-4173">zhangguoruiwo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4173" class="dsq-comment-body">
+            <div id="dsq-comment-message-4173" class="dsq-comment-message"><p>哦哦，json文件中的依赖项是自己一个个添加的吗？谢谢帮我解惑</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4175">
+        <div id="dsq-comment-header-4175" class="dsq-comment-header">
+            <cite id="dsq-cite-4175">
+                <span id="dsq-author-user-4175">zhangguoruiwo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4175" class="dsq-comment-body">
+            <div id="dsq-comment-message-4175" class="dsq-comment-message"><p>我知道为什么报错了，因为我装的express4 ，与3有很大不同，所以要装中间件，但是问题又来了，他怎说我的routes下的index.js文件中的router.get(&#8216;/&#8217;, function(req, res, next)有问题 ，错误类型Cannot call method &#8216;get&#8217; of undefined</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-5" id="dsq-comment-4188">
+        <div id="dsq-comment-header-4188" class="dsq-comment-header">
+            <cite id="dsq-cite-4188">
+                <a id="dsq-author-user-4188" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4188" class="dsq-comment-body">
+            <div id="dsq-comment-message-4188" class="dsq-comment-message"><p>express4和express3有很大的不一样。你可以先用express3运行，本文的例子，等通过了，再切换到express4去开发自己的应用。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even depth-3" id="dsq-comment-4174">
+        <div id="dsq-comment-header-4174" class="dsq-comment-header">
+            <cite id="dsq-cite-4174">
+                <span id="dsq-author-user-4174">zhangguoruiwo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4174" class="dsq-comment-body">
+            <div id="dsq-comment-message-4174" class="dsq-comment-message"><p>不知道为啥我这总是报模块没安装的那种错误，Most middleware (like favicon) is no longer bundled with Express</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-3" id="dsq-comment-4530">
+        <div id="dsq-comment-header-4530" class="dsq-comment-header">
+            <cite id="dsq-cite-4530">
+                <span id="dsq-author-user-4530">xuehanxin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4530" class="dsq-comment-body">
+            <div id="dsq-comment-message-4530" class="dsq-comment-message"><p>routes目录下不是放路由的么，请问下，那个index.ejs是放在route下么</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-4" id="dsq-comment-4540">
+        <div id="dsq-comment-header-4540" class="dsq-comment-header">
+            <cite id="dsq-cite-4540">
+                <a id="dsq-author-user-4540" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4540" class="dsq-comment-body">
+            <div id="dsq-comment-message-4540" class="dsq-comment-message"><p>index.ejs，是用于渲染HTML的模板</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-4529">
+        <div id="dsq-comment-header-4529" class="dsq-comment-header">
+            <cite id="dsq-cite-4529">
+                <span id="dsq-author-user-4529">xuehanxin</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4529" class="dsq-comment-body">
+            <div id="dsq-comment-message-4529" class="dsq-comment-message"><p>不鞥理解诶</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-4415">
+        <div id="dsq-comment-header-4415" class="dsq-comment-header">
+            <cite id="dsq-cite-4415">
+                <span id="dsq-author-user-4415">云烟</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4415" class="dsq-comment-body">
+            <div id="dsq-comment-message-4415" class="dsq-comment-message"><p>请问博主是否可以写一篇关于node RBAC用户权限控制的文章？</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-4418">
+        <div id="dsq-comment-header-4418" class="dsq-comment-header">
+            <cite id="dsq-cite-4418">
+                <a id="dsq-author-user-4418" href="http://blog.fens.me/" target="_blank" rel="nofollow">Conan Zhang</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-4418" class="dsq-comment-body">
+            <div id="dsq-comment-message-4418" class="dsq-comment-message"><p>我之前找过一个node RBAC的包，当时没有特别好���。最近可能没有时间，写这方面的文章。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="post pingback">
+        <p>Pingback: <a href='http://blog.fens.me/nodejs-oauth-passport/' rel='external nofollow' class='url'>Passport现实社交网络OAuth登陆 | 粉丝日志</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://blog.fens.me/nodejs-express-passport/';
+var disqus_identifier = '5359 http://blog.fens.me/?p=5359';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'bsspirit';
+var disqus_title = "Express结合Passport实现登陆认证";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=5359';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+            </div>
+          </div>
+       </div>
+    
+</div> <!-- END Narrowcolumn -->
+
+<div id="sidebar" class="profile">
+ <ul>
+<li id="widget_nav_menu" class="widget png_scale"><h2 class="blocktitle"><span>站内导航</span></h2><div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-2328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2328"><a href="http://blog.fens.me/series-r/">R的极客理想系列文章</a></li>
+<li id="menu-item-2329" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2329"><a href="http://blog.fens.me/series-nodejs/">从零开始nodejs系列文章</a></li>
+<li id="menu-item-2338" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2338"><a href="http://blog.fens.me/series-it-finance/">用IT技术玩金融系列文章</a></li>
+<li id="menu-item-6505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6505"><a href="http://blog.fens.me/series-meeting/">跨界知识聚会系列文章</a></li>
+<li id="menu-item-2339" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2339"><a href="http://blog.fens.me/series-hadoop-family/">Hadoop家族系列文章</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2337"><a href="http://blog.fens.me/series-angular/">AngularJS体验式编程系列文章</a></li>
+<li id="menu-item-2331" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2331"><a href="http://blog.fens.me/series-rhadoop/">RHadoop实践系列文章</a></li>
+<li id="menu-item-2330" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2330"><a href="http://blog.fens.me/series-java/">无所不能的Java系列文章</a></li>
+<li id="menu-item-2336" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2336"><a href="http://blog.fens.me/series-ubuntu/">ubuntu实用工具系列文章</a></li>
+<li id="menu-item-2332" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2332"><a href="http://blog.fens.me/series-r-nosql/">R利剑NoSQL系列文章</a></li>
+<li id="menu-item-2334" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2334"><a href="http://blog.fens.me/series-mongodb/">MongoDB部署实验系列文章</a></li>
+<li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2335"><a href="http://blog.fens.me/series-hadoop-cloud/">让Hadoop跑在云端系列文章</a></li>
+<li id="menu-item-2333" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2333"><a href="http://blog.fens.me/series-vps/">自己搭建VPS系列文章</a></li>
+<li id="menu-item-5469" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5469"><a href="http://blog.fens.me/series-architect/">架构师的信仰系列文章</a></li>
+<li id="menu-item-4163" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4163"><a href="http://blog.fens.me/series-algorithm/">算法为王系列文章</a></li>
+<li id="menu-item-8189" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8189"><a href="http://blog.fens.me/series-seo/">我的博客我的SEO系列文章</a></li>
+<li id="menu-item-2340" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2340"><a href="http://blog.fens.me/series-visualisation/">创造可视化系列文章</a></li>
+<li id="menu-item-7694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7694"><a href="http://blog.fens.me/series-startup/">创业者的囧境系列文章</a></li>
+<li id="menu-item-8842" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8842"><a href="http://blog.fens.me/tasks/">写作计划列表</a></li>
+<li id="menu-item-2342" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2342"><a href="http://blog.fens.me/about/">关于站长</a></li>
+<li id="menu-item-8175" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8175"><a href="http://blog.fens.me/ad/">投放广告</a></li>
+</ul></div></li><li id="widget_recent_comments" class="widget png_scale"><h2 class="blocktitle"><span>最新评论</span></h2><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Rachel Wijaya</span> on <a href="http://blog.fens.me/hexo-blog-github/#comment-5579">Hexo在github上构建免费的Web应用</a></li><li class="recentcomments"><span class="comment-author-link">Vincent</span> on <a href="http://blog.fens.me/hadoop-mapreduce-matrix/#comment-5576">用MapReduce实现矩阵乘法</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://www.flyfishonline.com/' rel='external nofollow' class='url'>BabyGo</a></span> on <a href="http://blog.fens.me/r-docker/#comment-5572">当R语言遇上Docker</a></li><li class="recentcomments"><span class="comment-author-link">xp Wan</span> on <a href="http://blog.fens.me/linux-mysql-install/#comment-5571">在Ubuntu中安装MySQL</a></li><li class="recentcomments"><span class="comment-author-link">Kang Ji</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5566">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5565">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link">唐國淯</span> on <a href="http://blog.fens.me/finance-pairs-trading/#comment-5559">R语言构建配对交易量化模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/architect-next/' rel='external nofollow' class='url'>技术大牛如何寻找下一个风口 | 粉丝日志</a></span> on <a href="http://blog.fens.me/series-architect/#comment-5534">架构师的信仰系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨俊林</span> on <a href="http://blog.fens.me/nodejs-email-nodemailer/#comment-5526">Nodejs发邮件组件Nodemailer</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5520">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link">Sam Hu</span> on <a href="http://blog.fens.me/nodejs-core-domain/#comment-5517">Nodejs异步异常处理domain</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/startup-registration/#comment-5512">新公司注册流程</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://github.com/lgh06' rel='external nofollow' class='url'>HapLeo</a></span> on <a href="http://blog.fens.me/series-it-finance/#comment-5511">用IT技术玩金融系列文章</a></li><li class="recentcomments"><span class="comment-author-link">杨镇铭</span> on <a href="http://blog.fens.me/r-multi-linear-regression/#comment-5508">R语言解读多元线性回归模型</a></li><li class="recentcomments"><span class="comment-author-link"><a href='http://blog.fens.me/' rel='external nofollow' class='url'>Conan Zhang</a></span> on <a href="http://blog.fens.me/r-apply/#comment-5507">掌握R语言中的apply函数族</a></li></ul></li>		<li id="widget_recent_entries" class="widget png_scale">		<h2 class="blocktitle"><span>最新文章</span></h2>		<ul>
+					<li>
+				<a href="http://blog.fens.me/architect-next/">技术大牛如何寻找下一个风口</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/architect-algorithm/">算法，如何改变命运</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/angular2-init/">Angular2新的体验</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-capm/">R语言解读资本资产定价模型CAPM</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/finance-mojie/">用数据解读摩羯智投</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-softcon-20161210/">2016中国软件技术大会:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-iais-20161125/">2016IAIS人工智能产业论坛:用R语言进行投资组合管理</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-cdas-20160903/">2016CDAS中国数据分析师行业峰会:如何用R语言进行量化分析</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-docker/">当R语言遇上Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/linux-docker-install/">在Ubuntu中安装Docker</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-ar/">R语言解读自回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-quant-packages/">R语言量化投资常用包总结</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-cpp-rcpp/">R语言跨界调用C++</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-multi-linear-regression/">R语言解读多元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-linear-regression/">R语言解读一元线性回归模型</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-word-jiebar/">R语言中文分词包jiebaR</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/meeting-hellobi-20160701/">2016天善智能交流会第22场: R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-finance/">R语言为量化而生</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-data-table/">超高性能数据处理包data.table</a>
+						</li>
+					<li>
+				<a href="http://blog.fens.me/r-apply/">掌握R语言中的apply函数族</a>
+						</li>
+				</ul>
+		</li>		 
+</ul></div>
+<div class="clear"></div>
+
+<div id="footer">
+<div class="lt">Copyright &copy; 2017 All rights reserved.</div>
+<div class="rt">Designed by <img src="http://blog.fens.me/wp-content/themes/silesia/images/natty-logo.png" width="82" height="17" valign="3px" class="png" alt="NattyWP" align="middle" /></div>		
+<div class="clear"></div>			
+</div>
+    
+</div>  
+<div class="clear"></div>
+</div><!-- END main wrapper -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'bsspirit';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script><script type="text/javascript" charset="utf-8">/*<![CDATA[*/ 
+    jQuery(document).ready(function() {
+        jQuery(".slideshow").cycle({
+          fx: "turnDown",
+          timeout: 6000,
+          speed: 1000,
+          prev: "#left-arrow",
+          next: "#right-arrow",
+          pagerEvent: "click",
+          pauseOnPagerHover: true,
+          cleartypeNoBg: true });						
+      });
+      /*]]>*/</script><script type='text/javascript' src='http://blog.fens.me/wp-includes/js/comment-reply.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://blog.fens.me/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+ 
+<script type="text/javascript" src="http://www.fens.me/js/ads.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/google.js"></script>
+<script type="text/javascript" src="http://www.fens.me/js/baidu.js"></script>
+
+</body>
+</html>
